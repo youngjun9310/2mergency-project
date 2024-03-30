@@ -1,26 +1,70 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
+import { Repository } from 'typeorm';
+import { Groups } from './entities/group.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class GroupsService {
-  create(createGroupDto: CreateGroupDto) {
-    return 'This action adds a new group';
+  constructor(@InjectRepository(Groups) private groupRepository : Repository<Groups>){}
+  async create(createGroupDto: CreateGroupDto) {
+    const { title, content, category } = createGroupDto;
+
+    const groupcreate = await this.groupRepository.create({
+      title,
+      content,
+      category
+    })
+
+    await this.groupRepository.save(groupcreate);
+    
+    return groupcreate;
   }
 
-  findAll() {
-    return `This action returns all groups`;
+  async findAll() {
+    return await this.groupRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} group`;
+  async findOne(groupId: number) {
+    const groups = await this.groupRepository.findOne({ where : { groupId } });
+
+    if(!groups){
+      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    }
+
+    
+
+    return groups;
   }
 
-  update(id: number, updateGroupDto: UpdateGroupDto) {
-    return `This action updates a #${id} group`;
+  async update(groupId: number, updateGroupDto: UpdateGroupDto) {
+    const { title, content, category, isPublic } = updateGroupDto;
+    const groups = await this.groupRepository.findOne({ where : { groupId }});
+
+    if(!groups){
+      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    }
+
+    const groupupdate = await this.groupRepository.update(groupId,{
+      title,
+      content,
+      category,
+      isPublic
+    })
+    
+    return groupupdate;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} group`;
+  async remove(groupId: number) {
+    const groups = await this.groupRepository.findOne({ where : { groupId }});
+
+    if(!groups){
+      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    }
+
+    const groupdelete = await this.groupRepository.delete(groupId);
+
+    return groupdelete;
   }
 }

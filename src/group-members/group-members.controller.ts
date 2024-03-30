@@ -2,15 +2,12 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GroupMembersService } from './group-members.service';
 import { CreateGroupMemberDto } from './dto/create-group-member.dto';
 import { UpdateGroupMemberDto } from './dto/update-group-member.dto';
+import { User } from 'src/users/utils/userInfo.decorator';
+import { Users } from 'src/users/entities/user.entity';
 
 @Controller('group-members')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
-
-  @Post()
-  create(@Body() createGroupMemberDto: CreateGroupMemberDto) {
-    return this.groupMembersService.create(createGroupMemberDto);
-  }
 
   @Get()
   findAll() {
@@ -18,17 +15,17 @@ export class GroupMembersController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.groupMembersService.findOne(+id);
+  findOne(@Param('id') groupMemberId: number) {
+    return this.groupMembersService.findOne(groupMemberId);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateGroupMemberDto: UpdateGroupMemberDto) {
-    return this.groupMembersService.update(+id, updateGroupMemberDto);
+  update(@Param('id') groupMemberId: number, @Body() updateGroupMemberDto: UpdateGroupMemberDto, @User() user : Users, userId : bigint) {
+    return this.groupMembersService.groupinvite(groupMemberId, user, userId ,updateGroupMemberDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.groupMembersService.remove(+id);
+  remove(@Param('id') groupMemberId: number) {
+    return this.groupMembersService.remove(groupMemberId);
   }
 }
