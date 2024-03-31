@@ -1,4 +1,4 @@
-import { Category } from "src/groups/types/groupCategory.type";
+import { Category } from "src/types/Category.type";
 import { PostComments } from "src/post-comments/entities/post-comment.entity";
 import { Users } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";

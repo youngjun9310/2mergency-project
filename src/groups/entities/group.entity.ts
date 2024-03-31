@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-import { Category } from "../types/groupCategory.type";
+import { Category } from "../../types/Category.type";
 import { Users } from "src/users/entities/user.entity";
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
@@ -31,9 +31,7 @@ export class Groups {
     updatedAt : Date;
     
 
-    @ManyToOne(() => Users, (users) => users.groups, {
-        onDelete : 'CASCADE'
-    })
+    @ManyToOne(() => Users)
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
