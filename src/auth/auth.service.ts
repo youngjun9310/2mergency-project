@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import { RegisterDto } from './dto/register.dto';
+import { Repository } from 'typeorm';
+import { Users } from 'src/users/entities/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(
+    @InjectRepository(Users) 
+    private userRepository : Repository<Users>,
+    private readonly jwtService : JwtService){}
+  async create(registerDto: RegisterDto) {
+    const { nickname, email, password, address } = registerDto;
+    const user = await this.userRepository.findOne({ where : { email }});
+    const usernickname = await this.userRepository.findOne({ where : { nickname }});
+
+
+    if(user || usernickname){
+      throw new ConflictException("이미 존재하는 유저입니다.");
+    }
+
+    const usercreate = await this.userRepository.create({
+      nickname,
+      email,
+      password,
+      address
+    })
+
+    await this.userRepository.save(usercreate);
+
+    return usercreate;
   }
 
-  findAll() {
-    return `This action returns all auth`;
+  async login (email : string, password : string) {
+    const user = await this.userRepository.findOne({ where : { email },
+    select : ['userId', 'email', 'password'] })
+
+    if(user === null) {
+      throw new NotFoundException("유저가 존재하지 않습니다.");
+    }
+
+    if(password !== user.password) {
+      throw new NotFoundException("패스워드가 일치하지 않습니다.");
+    }
+
+    const payload = { email, user };
+    console.log(payload)
+        return {
+          access_token: this.jwtService.sign(payload),
+        };
+      }
+      
+
+  async findEmail (email : string, password : string) {
+    const useremail = await this.userRepository.findOne({ where : { email },
+    select : ['password'] });
+
+    return useremail;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
-
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
-  }
 }

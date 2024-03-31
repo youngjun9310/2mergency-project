@@ -2,8 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GroupMembersService } from './group-members.service';
 import { CreateGroupMemberDto } from './dto/create-group-member.dto';
 import { UpdateGroupMemberDto } from './dto/update-group-member.dto';
-import { User } from 'src/users/utils/userInfo.decorator';
+import { User } from 'src/utils/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
+
 
 @Controller('group-members')
 export class GroupMembersController {

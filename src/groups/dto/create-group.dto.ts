@@ -1,5 +1,5 @@
 import { IsEnum, IsNotEmpty, IsString } from "class-validator";
-import { Category } from "../types/groupCategory.type";
+import { Category } from "../../types/Category.type";
 
 export class CreateGroupDto {
 

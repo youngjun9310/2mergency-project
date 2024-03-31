@@ -18,8 +18,8 @@ export class Schedules {
     @Column({ type : 'text', nullable : false })
     content : string;
 
-    @Column({ type : 'date', nullable : true })
-    scheduleDate? : Date;
+    @Column({ type : 'date', nullable : false })
+    scheduleDate : Date;
     
     @CreateDateColumn({ type : 'timestamp' })
     createdAt : Date;
