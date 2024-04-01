@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ScheduleDto } from './dto/create-schedule.dto';
+import { ScheduleDto } from './dto/schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
