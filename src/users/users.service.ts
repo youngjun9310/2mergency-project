@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Repository } from 'typeorm';
@@ -13,18 +13,27 @@ export class UsersService {
   }
 
   findAll() {
-    return `This action returns all users`;
+    return this.userRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(userId: string) {
+    return this.userRepository.findOne({ where : { userId }});
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(userId: string, updateUserDto: UpdateUserDto) {
+    return this.userRepository.findOne({ where : { userId }});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(userId: string) {
+    return ;
   }
+
+  async findByEmail (email : string) {
+    const user = await this.userRepository.findOne({ where : { email } });
+    if(user){
+      throw new Error("유저가 존재하지 않습니다.");
+    }
+    return user;
+  }
+
 }
