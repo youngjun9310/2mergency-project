@@ -7,7 +7,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
-import { testguard } from './guard/testguard';
 
 @Module({
   imports : [TypeOrmModule.forFeature([Users]),
@@ -21,7 +20,7 @@ import { testguard } from './guard/testguard';
   }),
 ],
   controllers: [AuthController],
-  providers: [AuthService, testguard],
+  providers: [AuthService],
   exports : [AuthService]
 })
 export class AuthModule {}

@@ -1,6 +1,5 @@
 import { Follows } from "src/follows/entities/follow.entity";
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
-import { Groups } from "src/groups/entities/group.entity";
 import { PostComments } from "src/post-comments/entities/post-comment.entity";
 import { Posts } from "src/posts/entities/posts.entity";
 import { Records } from "src/records/entities/record.entity";
@@ -15,8 +14,8 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 
 export class Users {
     
-    @PrimaryGeneratedColumn()
-    userId : number;
+    @PrimaryGeneratedColumn('uuid')
+    userId : string;
 
     @Column({ type : 'varchar', nullable : false, unique : true })
     nickname : string;
@@ -60,9 +59,6 @@ export class Users {
 
     @OneToMany(() => PostComments, (postComments) => postComments.users)
     postComments : PostComments[];
-
-    @OneToMany(() => Groups, (groups) => groups.users)
-    groups : Groups[];
 
     @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
     groupMembers : GroupMembers[];
