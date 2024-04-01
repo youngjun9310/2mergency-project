@@ -1,5 +1,6 @@
 import { Groups } from 'src/groups/entities/group.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
+import { Category } from 'src/types/Category.type';
 import { Users } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -18,6 +19,15 @@ import {
 export class Schedules {
   @PrimaryGeneratedColumn()
   scheduleId: number;
+
+  @Column({ type: 'int', nullable: false })
+  groupId: number;
+
+  @Column({ type: 'int', nullable: false })
+  userId: number;
+
+  @Column({ type: 'enum', enum: Category, nullable: false })
+  category: Category;
 
   @Column({ type: 'varchar', nullable: false })
   title: string;
@@ -40,17 +50,11 @@ export class Schedules {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type: 'int', nullable: false })
-  groupId: number;
-
   @ManyToOne(() => Users, (users) => users.schedules, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   users: Users;
-
-  @Column({ type: 'int', nullable: false })
-  userId: number;
 
   @OneToMany(
     () => ScheduleMembers,
