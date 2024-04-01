@@ -47,4 +47,5 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
+  async getOneSchedule() {}
 }
