@@ -82,5 +82,22 @@ export class SchedulesService {
   }
 
   // 스케쥴 삭제
-  async deleteSchedule() {}
+  async deleteSchedule(groupId: number, scheduleId: number) {
+    const schedule = await this.ScheduleRepository.findOne({
+      where: { groupId, scheduleId },
+    });
+
+    if (!schedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+        message: '존재하지 않는 스케쥴입니다.',
+      };
+    }
+    await this.ScheduleRepository.delete({ groupId, scheduleId });
+
+    return {
+      status: HttpStatus.OK,
+      message: '스케쥴이 삭제되었습니다.',
+    };
+  }
 }
