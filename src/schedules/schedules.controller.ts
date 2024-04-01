@@ -1,14 +1,21 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, Param, Post } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
+import { ScheduleDto } from './dto/schedule.dto';
 
 @Controller('schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
-  // @Post()
-  // create(@Body() createScheduleDto: CreateScheduleDto) {
-  //   return this.schedulesService.create(createScheduleDto);
-  // }
+  @Post()
+  async create(
+    @Body() createScheduleDto: ScheduleDto,
+    @Param('groupId') groupId: number,
+  ) {
+    return await this.schedulesService.createSchedule(
+      createScheduleDto,
+      groupId,
+    );
+  }
 
   // @Get()
   // findAll() {

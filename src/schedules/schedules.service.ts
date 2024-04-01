@@ -47,8 +47,8 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(scheduleId: Schedules) {
-    const schedule = this.ScheduleRepository.findOne({ where: scheduleId });
+  async getOneSchedule(schedulesId: Schedules) {
+    const schedule = this.ScheduleRepository.findOne({ where: schedulesId });
 
     if (!schedule) {
       throw {
@@ -60,10 +60,10 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: Schedules) {
+  async changeSchedule(changeScheduleDto: ScheduleDto, schedulesId: Schedules) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.ScheduleRepository.findOne({
-      where: scheduleId,
+      where: schedulesId,
     });
 
     if (!schedule) {
@@ -73,7 +73,7 @@ export class SchedulesService {
       };
     }
 
-    await this.ScheduleRepository.update(changeScheduleDto, scheduleId);
+    await this.ScheduleRepository.update(changeScheduleDto, schedulesId);
 
     return {
       status: HttpStatus.OK,
@@ -82,9 +82,9 @@ export class SchedulesService {
   }
 
   // 스케쥴 삭제
-  async deleteSchedule(groupId: number, scheduleId: number) {
+  async deleteSchedule(groupId: number, schedulesId: number) {
     const schedule = await this.ScheduleRepository.findOne({
-      where: { groupId, scheduleId },
+      where: { groupId, schedulesId },
     });
 
     if (!schedule) {
@@ -93,7 +93,7 @@ export class SchedulesService {
         message: '존재하지 않는 스케쥴입니다.',
       };
     }
-    await this.ScheduleRepository.delete({ groupId, scheduleId });
+    await this.ScheduleRepository.delete({ groupId, schedulesId });
 
     return {
       status: HttpStatus.OK,
