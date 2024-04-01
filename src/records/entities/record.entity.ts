@@ -13,9 +13,9 @@ export class Records {
     @Column({ type : 'bigint', nullable : false, default : 0 })
     stackedDistance : bigint;
 
-    @ManyToOne(() => Users, (users) => users.records, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.records, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 

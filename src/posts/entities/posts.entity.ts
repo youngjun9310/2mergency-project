@@ -33,9 +33,9 @@ export class Posts {
     @UpdateDateColumn({ type : 'timestamp' })
     updatedAt : Date;
 
-    @ManyToOne(() => Users, (users) => users.posts, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.posts, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : "userId", referencedColumnName : 'userId' })
     users : Users; 
     

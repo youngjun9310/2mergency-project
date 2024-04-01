@@ -29,14 +29,6 @@ export class Groups {
     
     @UpdateDateColumn({ type : 'timestamp' })
     updatedAt : Date;
-    
-
-    @ManyToOne(() => Users)
-    @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
-    users : Users;
-
-    @Column({ type : 'int', nullable : false })
-    userId : number;
 
     @OneToMany(() => Schedules, (schedules) => schedules.groups)
     schedules : Schedules[];

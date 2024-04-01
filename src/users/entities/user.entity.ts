@@ -8,21 +8,23 @@ import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.e
 import { Schedules } from "src/schedules/entities/schedule.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-
 @Entity({
     name : 'users'
 })
 
 export class Users {
     
-    @PrimaryGeneratedColumn()
-    userId : number;
+    @PrimaryGeneratedColumn('uuid')
+    userId : string;
 
-    @Column({ type : 'varchar', nullable : false, unique : true })
-    nickname : string;
+    @Column({ type : 'varchar', nullable : true })
+    profileImage? : string;
 
     @Column({ type : 'varchar', nullable : false, unique : true })
     email : string;
+
+    @Column({ type : 'varchar', nullable : false, unique : true })
+    nickname : string;
 
     @Column({ type : 'varchar', nullable : false })
     password : string;
@@ -30,17 +32,11 @@ export class Users {
     @Column({ type : 'varchar', nullable : false })
     address : string;
 
-    @Column({ type : 'bigint', nullable : true, default : 1000 })
-    point : bigint;
-
-    @Column({ type : 'varchar', nullable : true })
-    profileImage? : string;
+    @Column({ type : 'boolean', default : false })
+    isAdmin : boolean;
 
     @Column({ type : 'boolean', nullable : false, default : false })
     isDelete? : boolean;
-
-    @Column({ type : 'boolean', nullable : false, default : false })
-    isAdmin : boolean;
 
     @Column({ type : 'boolean', nullable : false, default : true })
     isOpen : boolean;
@@ -54,30 +50,38 @@ export class Users {
     @DeleteDateColumn({ type : 'timestamp', nullable : true })
     deletedAt? : Date;
 
+    // @Column({ type : 'bigint', nullable : true, default : 1000 })
+    // point : bigint;
 
-    @OneToMany(() => Posts , (posts) => posts.users)
-    posts : Posts[];
+    // @OneToMany(() => Posts , (posts) => posts.users)
+    // posts : Posts[]; //
 
-    @OneToMany(() => PostComments, (postComments) => postComments.users)
-    postComments : PostComments[];
+    // @OneToMany(() => PostComments, (postComments) => postComments.users)
+    // postComments : PostComments[]; //
 
-    @OneToMany(() => Groups, (groups) => groups.users)
-    groups : Groups[];
+    // @OneToMany(() => PostLikes , (posts) => posts.users)
+    // postLikes : PostLikes[]; //
 
-    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
-    groupMembers : GroupMembers[];
+    // @OneToMany(() => CommentLikes , (posts) => posts.users)
+    // commentLikes : CommentLikes[]; //
 
-    @OneToMany(() => Records, (records) => records.users)
-    records : Records[];
+    // @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
+    // groupMembers : GroupMembers[];
 
-    @OneToMany(() => Follows, (follows) => follows.users)
-    follows : Follows[];
+    // @OneToMany(() => GroupComments, (groupComments) => groupComments.users)
+    // groupComments : GroupComments[];
 
-    @OneToMany(() => Schedules, (schedules) => schedules.users)
-    schedules : Schedules[];
+    // OneToMany(() => GroupLikes, (groupLikes) => groupLikes.users)
+    // groupLikes : GroupLikes[];
 
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
-    scheduleMembers : ScheduleMembers[];
+    // @OneToMany(() => Schedules, (schedules) => schedules.users)
+    // schedules : Schedules[];
+
+    // @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
+    // scheduleMembers : ScheduleMembers[];
+
+    // @OneToMany(() => Follows, (follows) => follows.users)
+    // follows : Follows[]; //
 
     
 }

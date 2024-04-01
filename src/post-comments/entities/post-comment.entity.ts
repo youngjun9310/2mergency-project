@@ -20,9 +20,9 @@ export class PostComments {
     @UpdateDateColumn({ type : 'timestamp' })
     updatedAt : Date;
 
-    @ManyToOne(() => Users, (users) => users.postComments, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.postComments, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name: 'userId', referencedColumnName : 'userId' })
     users : Users;
 

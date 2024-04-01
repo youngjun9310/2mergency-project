@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GroupMembersService } from './group-members.service';
 import { CreateGroupMemberDto } from './dto/create-group-member.dto';
 import { UpdateGroupMemberDto } from './dto/update-group-member.dto';
-import { User } from 'src/utils/userInfo.decorator';
+import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 
 
@@ -21,7 +21,7 @@ export class GroupMembersController {
   }
 
   @Patch(':id')
-  update(@Param('id') groupMemberId: number, @Body() updateGroupMemberDto: UpdateGroupMemberDto, @User() user : Users, userId : bigint) {
+  update(@Param('id') groupMemberId: number, @Body() updateGroupMemberDto: UpdateGroupMemberDto, @UserInfo() user : Users, userId : bigint) {
     return this.groupMembersService.groupinvite(groupMemberId, user, userId ,updateGroupMemberDto);
   }
 

@@ -16,9 +16,9 @@ export class Follows {
     @Column({ type : 'int', nullable : false , default : 0 })
     followingId : number;
 
-    @ManyToOne(() => Users, (users) => users.follows, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.follows, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
     
