@@ -1,7 +1,7 @@
 import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Category } from 'src/types/Category.type';
 
-export class CreateScheduleDto {
+export class ScheduleDto {
   @IsString()
   @IsNotEmpty({ message: '제목을 입력해주세요.' })
   title: string;

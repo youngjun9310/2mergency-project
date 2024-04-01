@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateScheduleDto } from './dto/create-schedule.dto';
+import { ScheduleDto } from './dto/create-schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
@@ -12,7 +12,7 @@ export class SchedulesService {
   ) {}
 
   // 스케쥴 등록
-  async createSchedule(createScheduleDto: CreateScheduleDto, groupId: number) {
+  async createSchedule(createScheduleDto: ScheduleDto, groupId: number) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     await this.ScheduleRepository.save({
@@ -60,5 +60,7 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule() {}
+  async changeSchedule(changeScheduleDto: ScheduleDto) {
+    // 교체하고자 하는 스케쥴 1개를 찾아준다.
+  }
 }
