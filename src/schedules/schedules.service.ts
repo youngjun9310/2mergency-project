@@ -80,4 +80,7 @@ export class SchedulesService {
       message: '스케쥴이 수정되었습니다.',
     };
   }
+
+  // 스케쥴 삭제
+  async deleteSchedule() {}
 }
