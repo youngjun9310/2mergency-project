@@ -58,4 +58,7 @@ export class SchedulesService {
     }
     return schedule;
   }
+
+  // 스케쥴 수정
+  async changeSchedule() {}
 }
