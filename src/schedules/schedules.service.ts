@@ -10,7 +10,7 @@ export class SchedulesService {
     @InjectRepository(Schedules)
     private ScheduleRepository: Repository<Schedules>,
   ) {}
-
+  /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
   async createSchedule(createScheduleDto: ScheduleDto, groupId: number) {
     const { title, content, category, scheduleDate } = createScheduleDto;
@@ -48,7 +48,7 @@ export class SchedulesService {
 
   // 스케쥴 상세 조회
   async getOneSchedule(scheduleId: Schedules) {
-    const schedule = this.ScheduleRepository.findOneBy(scheduleId);
+    const schedule = this.ScheduleRepository.findOne({ where: scheduleId });
 
     if (!schedule) {
       throw {
@@ -60,7 +60,24 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(changeScheduleDto: ScheduleDto) {
+  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: Schedules) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
+    const schedule = await this.ScheduleRepository.findOne({
+      where: scheduleId,
+    });
+
+    if (!schedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+        message: '존재하지 않는 스케쥴입니다.',
+      };
+    }
+
+    await this.ScheduleRepository.update(changeScheduleDto, scheduleId);
+
+    return {
+      status: HttpStatus.OK,
+      message: '스케쥴이 수정되었습니다.',
+    };
   }
 }
