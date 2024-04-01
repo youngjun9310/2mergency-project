@@ -28,9 +28,9 @@ export class SchedulesService {
     });
 
     if (!group) {
-      return {
+      throw {
         status: HttpStatus.NOT_FOUND,
-        messag: '그룹이 존재하지 않습니다.',
+        message: '존재하지 않는 그룹입니다.',
       };
     }
 
@@ -47,5 +47,15 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule() {}
+  async getOneSchedule(scheduleId: Schedules) {
+    const schedule = this.ScheduleRepository.findOneBy(scheduleId);
+
+    if (!schedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+        message: '존재하지 않는 스케쥴입니다.',
+      };
+    }
+    return schedule;
+  }
 }
