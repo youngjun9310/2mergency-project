@@ -39,6 +39,7 @@ export class SignUpDto {
     example: 'adminPassword',
     description: '어드민 가입 패스워드',
   })
+  @IsOptional()
   adminPassword: string;
 
   @IsString()
@@ -56,13 +57,6 @@ export class SignUpDto {
   })
   @IsOptional()
   profileImage: string;
-
-  @IsBoolean()
-  @ApiProperty({
-    example: false,
-    description: '어드민여부'
-  })
-  isAdmin?: boolean;
 
   @IsBoolean()
   @ApiProperty({

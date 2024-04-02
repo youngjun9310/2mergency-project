@@ -27,13 +27,27 @@ export class UsersController {
       signUpdto.email,
       signUpdto.password,
       signUpdto.passwordConfirm,
+      signUpdto.address,
+      signUpdto.profileImage,
+      signUpdto.isOpen
+    );
+    return { statusCode: 201 , message: "회원가입에 성공하였습니다." };
+  }
+
+  @ApiOperation({ summary: '운영자 회원가입' ,  description: '운영자 회원가입'})
+  @Post('adminRegister')
+  async adminRegister(@Body() signUpdto: SignUpDto) {
+    const user = await this.usersService.adminRegister(
+      signUpdto.nickname,
+      signUpdto.email,
+      signUpdto.password,
+      signUpdto.passwordConfirm,
       signUpdto.adminPassword,
       signUpdto.address,
       signUpdto.profileImage,
-      signUpdto.isAdmin,
       signUpdto.isOpen
     );
-    return { statusCode: 201 , message: "회원가입에 성공하였습니다.", data: user };
+    return { statusCode: 201 , message: "운영자 회원가입에 성공하였습니다." };
   }
 
   @ApiOperation({ summary: '로그인', description: '로그인' })
@@ -62,7 +76,7 @@ export class UsersController {
 
   @ApiOperation({ summary: '전체 사용자 조회', description: '전체 조회' })
   @UseGuards(RolesGuard)
-  @Get('/allUser')
+  @Get('allUser')
   async findAllUser() {
     const userInfo = await this.usersService.findAllUser();
     return userInfo ;
@@ -101,7 +115,7 @@ export class UsersController {
 
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
   @UseGuards(AuthGuard('jwt'))
-  @Get('/info')
+  @Get('info')
   getUserInfo(@UserInfo() user: Users) {
     return { 이메일: user.email, 닉네임: user.nickname };
   }

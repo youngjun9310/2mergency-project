@@ -17,24 +17,18 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
-  async register(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, profileImage: string, isAdmin: boolean, isOpen: boolean
+  async register(nickname: string, email: string, password: string, passwordConfirm:string, address: string, profileImage: string, isOpen: boolean
     ) {
     const existingUser = await this.userRepository.findOne({ where: { email } });
     if (existingUser) {
       throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
     }
+    const existingNickname = await this.userRepository.findOne({ where: { nickname } });
+    if (existingNickname) {
+      throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
+    }
     if (password !== passwordConfirm) {
       throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
-    }
-    
-    const adminPassKey = this.configService.get<string>('ROLE_ADMIN_PASSWORD')
-    
-    if(adminPassword){
-
-      if (adminPassword !== adminPassKey) {
-        throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
-      }
-      isAdmin = true;
     }
     
     const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
@@ -44,19 +38,54 @@ export class UsersService {
       password: hashedPassword,
       address,
       profileImage,
-      isAdmin,
       isOpen
     });
+    
     return user;
   }
 
+  async adminRegister(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, profileImage: string, isOpen: boolean
+    ) {
+    const existingUser = await this.userRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
+    }
+    const existingNickname = await this.userRepository.findOne({ where: { nickname } });
+    if (existingNickname) {
+      throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
+    }
+    if (password !== passwordConfirm) {
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+    }
+    
+    
+    const adminPassKey = this.configService.get<string>('ROLE_ADMIN_PASSWORD')
+
+    if (adminPassword !== adminPassKey) {
+      throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
+    }
+    
+    const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
+    const user = await this.userRepository.save({
+      nickname,
+      email,
+      password: hashedPassword,
+      address,
+      profileImage,
+      isAdmin: true,
+      isOpen
+    });
+
+    return user;
+  }
+
+
   async login(email: string, password: string) {
-    console.log('email',email)
     const user = await this.userRepository.findOne({
       select: ['userId', 'email', 'password'],
       where: { email },
     });
-    console.log('user',user)
+    
     if (_.isNil(user)) {
       throw new UnauthorizedException('이메일을 확인해주세요.');
     }
@@ -66,7 +95,6 @@ export class UsersService {
     }
 
     const payload = { email, sub: user.userId };
-    console.log('payload',payload)
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET_KEY,
       expiresIn: '12h',
