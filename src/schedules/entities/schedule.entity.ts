@@ -18,7 +18,7 @@ import {
 })
 export class Schedules {
   @PrimaryGeneratedColumn()
-  schedulesId: number;
+  scheduleId: number;
 
   @Column({ type: 'int', nullable: false })
   groupId: number;

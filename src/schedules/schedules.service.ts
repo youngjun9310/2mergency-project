@@ -42,13 +42,26 @@ export class SchedulesService {
 
   // 스케쥴 전체 조회
   /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
-  async getAllSchedule() {
-    return await this.ScheduleRepository.find({});
+  async getAllSchedule(groupId: number, scheduleId: number) {
+    const allSchedule = await this.ScheduleRepository.find({
+      where: { groupId, scheduleId },
+    });
+
+    if (!allSchedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+        message: '존재하지 않는 스케쥴입니다.',
+      };
+    }
+
+    return allSchedule;
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(schedulesId: Schedules) {
-    const schedule = this.ScheduleRepository.findOne({ where: schedulesId });
+  async getOneSchedule(groupId: number, scheduleId: number) {
+    const schedule = this.ScheduleRepository.findOne({
+      where: { groupId, scheduleId },
+    });
 
     if (!schedule) {
       throw {
@@ -60,10 +73,14 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(changeScheduleDto: ScheduleDto, schedulesId: Schedules) {
+  async changeSchedule(
+    changeScheduleDto: ScheduleDto,
+    groupId: number,
+    scheduleId: number,
+  ) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.ScheduleRepository.findOne({
-      where: schedulesId,
+      where: { groupId, scheduleId },
     });
 
     if (!schedule) {
@@ -73,7 +90,7 @@ export class SchedulesService {
       };
     }
 
-    await this.ScheduleRepository.update(changeScheduleDto, schedulesId);
+    await this.ScheduleRepository.update(scheduleId, changeScheduleDto);
 
     return {
       status: HttpStatus.OK,
@@ -82,9 +99,9 @@ export class SchedulesService {
   }
 
   // 스케쥴 삭제
-  async deleteSchedule(groupId: number, schedulesId: number) {
+  async deleteSchedule(groupId: number, scheduleId: number) {
     const schedule = await this.ScheduleRepository.findOne({
-      where: { groupId, schedulesId },
+      where: { groupId, scheduleId },
     });
 
     if (!schedule) {
@@ -93,7 +110,7 @@ export class SchedulesService {
         message: '존재하지 않는 스케쥴입니다.',
       };
     }
-    await this.ScheduleRepository.delete({ groupId, schedulesId });
+    await this.ScheduleRepository.delete({ groupId, scheduleId });
 
     return {
       status: HttpStatus.OK,

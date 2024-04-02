@@ -1,4 +1,12 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { ScheduleDto } from './dto/schedule.dto';
 
@@ -6,8 +14,9 @@ import { ScheduleDto } from './dto/schedule.dto';
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
+  // 스케쥴 생성
   @Post()
-  async create(
+  async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @Param('groupId') groupId: number,
   ) {
@@ -17,25 +26,44 @@ export class SchedulesController {
     );
   }
 
-  // @Get()
-  // findAll() {
-  //   return this.schedulesService.findAll();
-  // }
+  // 스케쥴 전체 조회
+  @Get()
+  async getAllSchedule(
+    @Param('groupId') groupId: number,
+    @Param('scheduleId') scheduleId: number,
+  ) {
+    return this.schedulesService.getAllSchedule(groupId, scheduleId);
+  }
 
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.schedulesService.findOne(+id);
-  // }
+  // 스케쥴 상세 조회
+  @Get()
+  async getOneSchedule(
+    @Param('groupId') groupId: number,
+    @Param('scheduleId') scheduleId: number,
+  ) {
+    return await this.schedulesService.getOneSchedule(groupId, scheduleId);
+  }
 
-  // @Patch(':id')
-  // update(
-  //   @Param('id') id: string,
-  //   @Body() updateScheduleDto: UpdateScheduleDto,
-  // ) {
-  //   return this.schedulesService.update(+id, updateScheduleDto);
-  // }
+  // 스케쥴 수정
+  @Patch()
+  changeSchedule(
+    @Param('groupId') groupId: number,
+    @Param('schedulesId') scheduleId: number,
+    @Body() updateScheduleDto: ScheduleDto,
+  ) {
+    return this.schedulesService.changeSchedule(
+      updateScheduleDto,
+      groupId,
+      scheduleId,
+    );
+  }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.schedulesService.remove(+id);
+  // 스케쥴 삭제
+  @Delete()
+  async deleteSchedule(
+    @Param('groupId') groupId: number,
+    @Param('scheduleId') scheduled: number,
+  ) {
+    return await this.schedulesService.deleteSchedule(groupId, scheduled);
+  }
 }
