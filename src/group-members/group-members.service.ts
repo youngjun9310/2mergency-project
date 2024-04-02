@@ -5,8 +5,12 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class GroupMembersService {
- constructor(
-  @InjectRepository(GroupMembers)
-  private GroupMember:Repository<GroupMembers>
- )
+  constructor(
+    @InjectRepository(GroupMembers)
+    private GroupMemberRepository: Repository<GroupMembers>,
+  ) {}
+
+  // 그룹 멤버 초대하기
+
+  // 그룹 초대 수락하기
 }

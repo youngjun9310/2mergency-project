@@ -7,21 +7,13 @@ import { AuthModule } from './auth/auth.module';
 import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { GroupsModule } from './groups/groups.module';
-import { Users } from './users/entities/user.entity';
 import { SchedulesModule } from './schedules/schedules.module';
 import { ScheduleMembersModule } from './schedule-members/schedule-members.module';
 import { PostCommentsModule } from './post-comments/post-comments.module';
 import { FollowsModule } from './follows/follows.module';
 import { RecordsModule } from './records/records.module';
 import { GroupMembersModule } from './group-members/group-members.module';
-import { Groups } from './groups/entities/group.entity';
-import { GroupMembers } from './group-members/entities/group-member.entity';
 import { MailModule } from './mail/mail.module';
-import { PostComments } from './post-comments/entities/post-comment.entity';
-import { Schedules } from './schedules/entities/schedule.entity';
-import { ScheduleMembers } from './schedule-members/entities/schedule-member.entity';
-import { Records } from './records/entities/record.entity';
-import { Follows } from './follows/entities/follow.entity';
 import {
   ENV_DB_HOST,
   ENV_DB_NAME,
@@ -30,7 +22,6 @@ import {
   ENV_DB_SYNC,
   ENV_DB_USERNAME,
 } from './const/env.keys';
-import { Posts } from './posts/entities/posts.entity';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -43,17 +34,7 @@ const typeOrmModuleOptions = {
     host: configService.get<string>(ENV_DB_HOST),
     port: configService.get<number>(ENV_DB_PORT),
     database: configService.get<string>(ENV_DB_NAME),
-    entities: [
-      Users,
-      Groups,
-      GroupMembers,
-      Posts,
-      PostComments,
-      Schedules,
-      ScheduleMembers,
-      Records,
-      Follows,
-    ],
+    entities: ['dist/**/**.entity{.ts,.js}'],
     synchronize: configService.get<boolean>(ENV_DB_SYNC),
     logging: true,
   }),

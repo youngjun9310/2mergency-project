@@ -7,18 +7,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class GroupsService {
-  constructor(@InjectRepository(Groups) private groupRepository : Repository<Groups>){}
+  constructor(
+    @InjectRepository(Groups) private groupRepository: Repository<Groups>,
+  ) {}
   async create(createGroupDto: CreateGroupDto) {
     const { title, content, category } = createGroupDto;
 
     const groupcreate = await this.groupRepository.create({
       title,
       content,
-      category
-    })
+      category,
+    });
 
     await this.groupRepository.save(groupcreate);
-    
+
     return groupcreate;
   }
 
@@ -27,44 +29,42 @@ export class GroupsService {
   }
 
   async findOne(groupId: number) {
-    const groups = await this.groupRepository.findOne({ where : { groupId } });
+    const groups = await this.groupRepository.findOne({ where: { groupId } });
 
-    if(!groups){
-      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    if (!groups) {
+      throw new NotFoundException('그룹이 존재하지 않습니다.');
     }
-
-    
 
     return groups;
   }
 
   async update(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
-    const groups = await this.groupRepository.findOne({ where : { groupId }});
+    const groups = await this.groupRepository.findOne({ where: { groupId } });
 
-    if(!groups){
-      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    if (!groups) {
+      throw new NotFoundException('그룹이 존재하지 않습니다.');
     }
 
-    const groupupdate = await this.groupRepository.update(groupId,{
+    await this.groupRepository.update(groupId, {
       title,
       content,
       category,
-      isPublic
-    })
-    
-    return groupupdate;
+      isPublic,
+    });
+
+    return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
   }
 
   async remove(groupId: number) {
-    const groups = await this.groupRepository.findOne({ where : { groupId }});
+    const groups = await this.groupRepository.findOne({ where: { groupId } });
 
-    if(!groups){
-      throw new NotFoundException("그룹이 존재하지 않습니다.");
+    if (!groups) {
+      throw new NotFoundException('그룹이 존재하지 않습니다.');
     }
 
-    const groupdelete = await this.groupRepository.delete(groupId);
+    await this.groupRepository.delete(groupId);
 
-    return groupdelete;
+    return { statusCode: 201, message: '성공적으로 그룹을 삭제하였습니다.' };
   }
 }
