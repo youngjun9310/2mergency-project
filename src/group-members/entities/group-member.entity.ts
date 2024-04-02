@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Role } from "../types/groupMemberRole.type";
 import { Users } from "src/users/entities/user.entity";
 import { Groups } from "src/groups/entities/group.entity";
+import { MemberRole } from "../types/groupMemberRole.type";
 
 @Entity({
     name : 'groupMembers'
@@ -12,8 +12,8 @@ export class GroupMembers {
     @PrimaryGeneratedColumn()
     groupMemberId : number;
 
-    @Column({ type : 'enum', enum: Role , nullable : false, default : Role.User })
-    role : Role;
+    @Column({ type : 'enum', enum: MemberRole , nullable : false, default : MemberRole.User })
+    memberRole : MemberRole;
 
     @Column({ type : 'boolean', nullable : false, default : false })
     isVailed : boolean;
@@ -25,8 +25,8 @@ export class GroupMembers {
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'int', nullable : false })
-    userId : number;
+    @Column({ type : 'varchar' })
+    userId : string;
 
     @ManyToOne(() => Groups, (groups) => groups.groupMembers, {
         onDelete : 'CASCADE'
@@ -34,7 +34,7 @@ export class GroupMembers {
     @JoinColumn({ name : 'groupId', referencedColumnName : 'groupId' })
     groups : Groups;
     
-    @Column({ type : 'int', nullable : false })
+    @Column({ type : 'int' })
     groupId : number;
 
     

@@ -4,13 +4,10 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
-import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { GroupsModule } from './groups/groups.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { ScheduleMembersModule } from './schedule-members/schedule-members.module';
-import { PostCommentsModule } from './post-comments/post-comments.module';
-import { FollowsModule } from './follows/follows.module';
 import { RecordsModule } from './records/records.module';
 import { GroupMembersModule } from './group-members/group-members.module';
 import { MailModule } from './mail/mail.module';
@@ -53,13 +50,10 @@ const typeOrmModuleOptions = {
   }),
   TypeOrmModule.forRootAsync(typeOrmModuleOptions),
   AuthModule,
-  PostsModule,
   UsersModule,
   GroupsModule,
   SchedulesModule,
   ScheduleMembersModule,
-  PostCommentsModule,
-  FollowsModule,
   RecordsModule,
   GroupMembersModule,
   MailModule,

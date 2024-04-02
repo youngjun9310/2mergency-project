@@ -7,7 +7,7 @@ import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 
 
-@Controller('group-members')
+@Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
 
@@ -29,7 +29,7 @@ export class GroupMembersController {
   }
 
   @UseGuards(AuthGuard('jwt'))
-  @Post('/groupmember/invite')
+  @Post('invite')
   async invite( groupMemberId: number, groupId : number, @UserInfo() users : Users,  @Body() Invitememberdto : InvitememberDto) {
     return await this.groupMembersService.groupinvite(groupId, groupMemberId , users, Invitememberdto.email);
   }

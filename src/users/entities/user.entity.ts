@@ -1,7 +1,4 @@
-import { Follows } from "src/follows/entities/follow.entity";
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
-import { PostComments } from "src/post-comments/entities/post-comment.entity";
-import { Posts } from "src/posts/entities/posts.entity";
 import { Records } from "src/records/entities/record.entity";
 import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
@@ -53,26 +50,16 @@ export class Users {
     @DeleteDateColumn({ type : 'timestamp', nullable : true })
     deletedAt? : Date;
 
-
-    @OneToMany(() => Posts , (posts) => posts.users)
-    posts : Posts[];
-
-    @OneToMany(() => PostComments, (postComments) => postComments.users)
-    postComments : PostComments[];
-
-    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
+    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users, { cascade : true })
     groupMembers : GroupMembers[];
 
-    @OneToMany(() => Records, (records) => records.users)
+    @OneToMany(() => Records, (records) => records.users, { cascade : true })
     records : Records[];
 
-    @OneToMany(() => Follows, (follows) => follows.users)
-    follows : Follows[];
-
-    @OneToMany(() => Schedules, (schedules) => schedules.users)
+    @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade : true })
     schedules : Schedules[];
 
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
+    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade : true })
     scheduleMembers : ScheduleMembers[];
 
     
