@@ -6,11 +6,8 @@ import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "t
 })
 
 export class Follows {
-
-    @PrimaryGeneratedColumn()
-    followId : number
     
-    @Column({ type : 'int', nullable : false , default : 0 })
+    @PrimaryGeneratedColumn()
     followerId : number;
 
     @Column({ type : 'int', nullable : false , default : 0 })
