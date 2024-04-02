@@ -2,7 +2,8 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Render, Res, UseGuar
 import { Response } from 'express';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from '../auth/guard/jwt.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from '../auth/guard/roles.guard';
 import { UserInfo } from '../auth/decorator/userInfo.decorator'
 import { Users } from './entities/user.entity';
 import { SignUpDto } from './dto/signup.dto';
@@ -39,52 +40,50 @@ export class UsersController {
   @Post('login')
   @HttpCode(204) 
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
-    console.log('loginDto', loginDto)
+
     const user = await this.usersService.login(loginDto.email, loginDto.password);
-    console.log('accessToken controller return')
-    console.log('user',user)
-    
+
     res.cookie('authorization', `Bearer ${user.accessToken}`);
     //res.cookie('refreshToken', user.refreshToken);
-    console.log('authorization token Make')
   
     return ;
   }
 
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Get('')
   getUser(@UserInfo() user: Users) {
     return { 이메일: user.email, 닉네임: user.nickname };
   }
 
   @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard('jwt'))
   @Post('logout')
-  logOut(@Res() res) {
+  @HttpCode(204)
+  logOut( @Res({ passthrough: true }) res: Response) {
 
     res.clearCookie('authorization');
     //res.clearCookie('refreshToken');
-    return { statusCode: 200 , message: "로그아웃에 성공하였습니다." };
+    return ;
   }
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RolesGuard)
   @Patch('')
   async userUpdate(@Body() updateDto: UpdateDto, @Req() req) {
     const { userId } = req.user;
 
     const userUpdate = await this.usersService.userUpdate(
       userId, updateDto );
-    return userUpdate;
+    return ;
   }
+
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(RolesGuard)
   @Delete('')
   async userDelete(@Body() deleteDto: DeleteDto, @Req() req) {
     const { userId } = req.user;
-    if (deleteDto.password !== deleteDto.confirmPassword) {
-      throw new ForbiddenException('입력한 비밀번호와 확인 비밀번호가 같지 않습니다.');
-    }
-    return await this.usersService.userDelete(userId, deleteDto.password);
+    const result = await this.usersService.userDelete(userId, deleteDto.password)
+
+    return ;
   }
 }

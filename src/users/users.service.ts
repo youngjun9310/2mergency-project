@@ -1,10 +1,9 @@
-import { ConflictException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
-import { Role } from './types/userRole.type';
 import * as _ from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
@@ -86,20 +85,37 @@ export class UsersService {
   }
 
   async userUpdate( userId: string,  updateDto: UpdateDto ) {
+    const { nickname, email, password, passwordConfirm, address, profileImage, isOpen } = updateDto
     const user = await this.userRepository.findOneBy({ userId });
+
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
 
-    return this.userRepository.update(userId,  updateDto );
+    if (password !== passwordConfirm) {
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+    }
+
+    const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));    
+
+    return this.userRepository.update(userId, { nickname, email, password:hashedPassword , address, profileImage, isOpen}  );
   }
 
   async userDelete(userId: string, password: string) {
-    const user = await this.userRepository.findOneBy({ userId });
+    
+    const user = await this.userRepository.findOne({
+      select: [ 'password'],
+      where: { userId },
+    });
+
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
 
+    if (!compare(password,user.password)) {
+      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    }
+    
     return this.userRepository.delete(userId);
   }
 }

@@ -70,14 +70,6 @@ export class SignUpDto {
     description: '공개된 사용자여부'
   })
   isOpen: boolean;
-
-  // @IsNumber()
-  // @ApiProperty({
-  //   example: 5,
-  //   description: '포인트',
-  // })
-  // @IsOptional()
-  // point: number;
   
 }
 
