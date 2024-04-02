@@ -1,39 +1,106 @@
-import { Injectable, UseGuards } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { Repository } from 'typeorm';
-import { Users } from './entities/user.entity';
+import { ConflictException, ForbiddenException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Users } from './entities/user.entity';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import { compare, hash } from 'bcrypt';
+import { Role } from './types/userRole.type';
+import * as _ from 'lodash';
+import { ConfigService } from '@nestjs/config';
+import { UpdateDto } from './dto/update.dto';
+import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(Users) private userRepository : Repository<Users>){}
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
-  }
+  constructor(
+    @InjectRepository(Users)
+    private userRepository: Repository<Users>,
+    private readonly jwtService: JwtService,
+    private readonly configService: ConfigService,
+  ) {}
 
-  findAll() {
-    return this.userRepository.find();
-  }
-
-  findOne(userId: string) {
-    return this.userRepository.findOne({ where : { userId }});
-  }
-
-  update(userId: string, updateUserDto: UpdateUserDto) {
-    return this.userRepository.findOne({ where : { userId }});
-  }
-
-  remove(userId: string) {
-    return ;
-  }
-
-  async findByEmail (email : string) {
-    const user = await this.userRepository.findOne({ where : { email } });
-    if(user){
-      throw new Error("유저가 존재하지 않습니다.");
+  async register(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, profileImage: string, isAdmin: boolean, isOpen: boolean
+    ) {
+    const existingUser = await this.userRepository.findOne({ where: { email } });
+    if (existingUser) {
+      throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
     }
+    if (password !== passwordConfirm) {
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+    }
+    
+    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD)
+    
+    if(adminPassword){
+
+      if (adminPassword !== adminPassKey) {
+        throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
+      }
+      isAdmin = true;
+    }
+    
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+    const user = await this.userRepository.save({
+      nickname,
+      email,
+      password: hashedPassword,
+      address,
+      profileImage,
+      isAdmin,
+      isOpen
+    });
     return user;
   }
 
+  async login(email: string, password: string) {
+    console.log('email',email)
+    const user = await this.userRepository.findOne({
+      select: ['userId', 'email', 'password'],
+      where: { email },
+    });
+    console.log('user',user)
+    if (_.isNil(user)) {
+      throw new UnauthorizedException('이메일을 확인해주세요.');
+    }
+
+    if (!(await compare(password, user.password))) {
+      throw new UnauthorizedException('비밀번호를 확인해주세요.');
+    }
+
+    const payload = { email, sub: user.userId };
+    console.log('payload',payload)
+    const accessToken = this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET_KEY,
+      expiresIn: '12h',
+    });
+    console.log('accessToken', accessToken)
+    // const refreshToken = this.jwtService.sign(payload, {
+    //   secret: process.env.REFRESH_SECRET,
+    //   expiresIn: '7d',
+    // });
+    return { accessToken };
+  }
+
+  async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    return user;
+  }
+
+  async userUpdate( userId: string,  updateDto: UpdateDto ) {
+    const user = await this.userRepository.findOneBy({ userId });
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    return this.userRepository.update(userId,  updateDto );
+  }
+
+  async userDelete(userId: string, password: string) {
+    const user = await this.userRepository.findOneBy({ userId });
+    if (!user) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    return this.userRepository.delete(userId);
+  }
 }
