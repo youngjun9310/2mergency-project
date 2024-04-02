@@ -19,6 +19,7 @@ export class UsersController {
         private readonly usersService: UsersService,
         private readonly configService: ConfigService ) {}
 
+  /** 회원가입*/
   @ApiOperation({ summary: '회원가입' ,  description: '회원가입'})
   @Post('register')
   async register(@Body() signUpdto: SignUpDto) {
@@ -34,7 +35,8 @@ export class UsersController {
     return { statusCode: 201 , message: "회원가입에 성공하였습니다." };
   }
 
-  @ApiOperation({ summary: '운영자 회원가입' ,  description: '운영자 회원가입'})
+  /** 어드민 회원가입*/
+  @ApiOperation({ summary: '어드민 회원가입' ,  description: '어드민 회원가입'})
   @Post('adminRegister')
   async adminRegister(@Body() signUpdto: SignUpDto) {
     const user = await this.usersService.adminRegister(
@@ -50,6 +52,7 @@ export class UsersController {
     return { statusCode: 201 , message: "운영자 회원가입에 성공하였습니다." };
   }
 
+  /** 로그인*/
   @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
   @HttpCode(204) 
@@ -63,6 +66,7 @@ export class UsersController {
     return ;
   }
 
+  /** 로그아웃*/
   @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
   @UseGuards(AuthGuard('jwt'))
   @Post('logout')
@@ -74,6 +78,7 @@ export class UsersController {
     return ;
   }
 
+  /** 전체 사용자 조회(어드민용)*/
   @ApiOperation({ summary: '전체 사용자 조회', description: '전체 조회' })
   @UseGuards(RolesGuard)
   @Get('allUser')
@@ -82,6 +87,7 @@ export class UsersController {
     return userInfo ;
   }
 
+  /** 사용자 조회*/
   @ApiOperation({ summary: '사용자 조회', description: '조회' })
   @UseGuards(AuthGuard('jwt'))
   @Get('/')
@@ -92,6 +98,7 @@ export class UsersController {
     return userInfo ;
   }
 
+  /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
   @UseGuards(AuthGuard('jwt'))
   @Patch('')
@@ -103,6 +110,7 @@ export class UsersController {
     return ;
   }
 
+  /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
   @UseGuards(AuthGuard('jwt'))
   @Delete('')
@@ -113,6 +121,20 @@ export class UsersController {
     return ;
   }
 
+  /** 이메일 가입초대*/
+  @ApiOperation({summary: '이메일 가입초대', description: '이메일 가입 토큰번호 전송'})
+  @UseGuards(AuthGuard('jwt'))
+  @Post('invite')
+  async userInvite(){
+
+  }
+
+  /** 이메일 가입수락*/
+  @ApiOperation({summary: '이메일 가입초대', description: '이메일 가입 토큰번호 전송'})
+  @Post('accept')
+  async userAccept(){}
+
+  /** 사용자 접속정보조회*/
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
   @UseGuards(AuthGuard('jwt'))
   @Get('info')

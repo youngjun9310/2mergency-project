@@ -1,4 +1,4 @@
-import { ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -17,6 +17,7 @@ export class UsersService {
     private readonly configService: ConfigService,
   ) {}
 
+  /*회원가입*/
   async register(nickname: string, email: string, password: string, passwordConfirm:string, address: string, profileImage: string, isOpen: boolean
     ) {
     const existingUser = await this.userRepository.findOne({ where: { email } });
@@ -44,6 +45,7 @@ export class UsersService {
     return user;
   }
 
+  /*어드민 회원가입*/
   async adminRegister(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, profileImage: string, isOpen: boolean
     ) {
     const existingUser = await this.userRepository.findOne({ where: { email } });
@@ -79,7 +81,7 @@ export class UsersService {
     return user;
   }
 
-
+  /*로그인*/
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
       select: ['userId', 'email', 'password'],
@@ -107,21 +109,19 @@ export class UsersService {
     return { accessToken };
   }
 
+  /*전체 사용자 조회(어드민용)*/
   async findAllUser(){
     const user = await this.userRepository.find();
     return user;
   }
 
+  /*사용자 조회*/
   async findUser(userId: string){
     const user = await this.userRepository.findOne({ where: { userId } });
     return user;
   }
 
-  async findByEmail(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    return user;
-  }
-
+  /*사용자 수정*/
   async userUpdate( userId: string,  updateDto: UpdateDto ) {
     const { nickname, email, password, passwordConfirm, address, profileImage, isOpen } = updateDto
     const user = await this.userRepository.findOneBy({ userId });
@@ -139,6 +139,7 @@ export class UsersService {
     return this.userRepository.update(userId, { nickname, email, password:hashedPassword , address, profileImage, isOpen}  );
   }
 
+  /*사용자 삭제*/
   async userDelete(userId: string, password: string) {
     
     const user = await this.userRepository.findOne({
@@ -155,5 +156,22 @@ export class UsersService {
     }
     
     return this.userRepository.delete(userId);
+  }
+
+  /** 이메일 가입초대*/
+  async userInvite(email: string){
+    
+    if(_.isNil(email)){
+      throw new BadRequestException('이메일을 입력해주시기 바랍니다.')
+    }
+  }
+
+  /** 이메일 가입수락*/
+  async userAccept(){}
+
+   /*사용자 조회(이메일)*/
+   async findByEmail(email: string) {
+    const user = await this.userRepository.findOne({ where: { email } });
+    return user;
   }
 }
