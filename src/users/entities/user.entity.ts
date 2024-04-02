@@ -1,8 +1,5 @@
-import { Follows } from "src/follows/entities/follow.entity";
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
 import { Groups } from "src/groups/entities/group.entity";
-import { PostComments } from "src/post-comments/entities/post-comment.entity";
-import { Posts } from "src/posts/entities/posts.entity";
 import { Records } from "src/records/entities/record.entity";
 import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
@@ -50,38 +47,16 @@ export class Users {
     @DeleteDateColumn({ type : 'timestamp', nullable : true })
     deletedAt? : Date;
 
-    // @Column({ type : 'bigint', nullable : true, default : 1000 })
-    // point : bigint;
+    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
+    groupMembers : GroupMembers[];
 
-    // @OneToMany(() => Posts , (posts) => posts.users)
-    // posts : Posts[]; //
+    @OneToMany(() => Records, (records) => records.users)
+    records : Records[];
 
-    // @OneToMany(() => PostComments, (postComments) => postComments.users)
-    // postComments : PostComments[]; //
+    @OneToMany(() => Schedules, (schedules) => schedules.users)
+    schedules : Schedules[];
 
-    // @OneToMany(() => PostLikes , (posts) => posts.users)
-    // postLikes : PostLikes[]; //
-
-    // @OneToMany(() => CommentLikes , (posts) => posts.users)
-    // commentLikes : CommentLikes[]; //
-
-    // @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
-    // groupMembers : GroupMembers[];
-
-    // @OneToMany(() => GroupComments, (groupComments) => groupComments.users)
-    // groupComments : GroupComments[];
-
-    // OneToMany(() => GroupLikes, (groupLikes) => groupLikes.users)
-    // groupLikes : GroupLikes[];
-
-    // @OneToMany(() => Schedules, (schedules) => schedules.users)
-    // schedules : Schedules[];
-
-    // @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
-    // scheduleMembers : ScheduleMembers[];
-
-    // @OneToMany(() => Follows, (follows) => follows.users)
-    // follows : Follows[]; //
-
+    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
+    scheduleMembers : ScheduleMembers[];
     
 }
