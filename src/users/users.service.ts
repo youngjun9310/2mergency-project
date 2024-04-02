@@ -79,6 +79,16 @@ export class UsersService {
     return { accessToken };
   }
 
+  async findAllUser(){
+    const user = await this.userRepository.find();
+    return user;
+  }
+
+  async findUser(userId: string){
+    const user = await this.userRepository.findOne({ where: { userId } });
+    return user;
+  }
+
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     return user;
