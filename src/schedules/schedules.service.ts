@@ -12,15 +12,12 @@ export class SchedulesService {
   ) {}
   /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
-  async createSchedule(createScheduleDto: ScheduleDto, groupId: number) {
+  async createSchedule(
+    createScheduleDto: ScheduleDto,
+    groupId: number,
+    userId: string,
+  ) {
     const { title, content, category, scheduleDate } = createScheduleDto;
-
-    await this.ScheduleRepository.save({
-      title,
-      content,
-      category,
-      scheduleDate,
-    });
 
     // 매개변수로 받은 groupId로 그룹을 찾는다.
     const group = await this.ScheduleRepository.find({
@@ -30,27 +27,33 @@ export class SchedulesService {
     if (!group) {
       throw {
         status: HttpStatus.NOT_FOUND,
-        message: '존재하지 않는 그룹입니다.',
       };
     }
 
+    await this.ScheduleRepository.save({
+      groupId,
+      userId,
+      title,
+      content,
+      category,
+      scheduleDate,
+    });
+
     return {
       status: HttpStatus.CREATED,
-      message: '스케쥴을 작성하였습니다.',
     };
   }
 
   // 스케쥴 전체 조회
   /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
-  async getAllSchedule(groupId: number, scheduleId: number) {
+  async getAllSchedule(groupId: number) {
     const allSchedule = await this.ScheduleRepository.find({
-      where: { groupId, scheduleId },
+      where: { groupId },
     });
 
     if (!allSchedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
-        message: '존재하지 않는 스케쥴입니다.',
       };
     }
 
@@ -66,27 +69,21 @@ export class SchedulesService {
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
-        message: '존재하지 않는 스케쥴입니다.',
       };
     }
     return schedule;
   }
 
   // 스케쥴 수정
-  async changeSchedule(
-    changeScheduleDto: ScheduleDto,
-    groupId: number,
-    scheduleId: number,
-  ) {
+  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: number) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.ScheduleRepository.findOne({
-      where: { groupId, scheduleId },
+      where: { scheduleId },
     });
 
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
-        message: '존재하지 않는 스케쥴입니다.',
       };
     }
 
@@ -94,27 +91,24 @@ export class SchedulesService {
 
     return {
       status: HttpStatus.OK,
-      message: '스케쥴이 수정되었습니다.',
     };
   }
 
   // 스케쥴 삭제
-  async deleteSchedule(groupId: number, scheduleId: number) {
+  async deleteSchedule(scheduleId: number) {
     const schedule = await this.ScheduleRepository.findOne({
-      where: { groupId, scheduleId },
+      where: { scheduleId },
     });
 
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
-        message: '존재하지 않는 스케쥴입니다.',
       };
     }
-    await this.ScheduleRepository.delete({ groupId, scheduleId });
+    await this.ScheduleRepository.delete({ scheduleId });
 
     return {
       status: HttpStatus.OK,
-      message: '스케쥴이 삭제되었습니다.',
     };
   }
 }

@@ -24,7 +24,7 @@ export class Schedules {
   groupId: number;
 
   @Column({ type: 'int', nullable: false })
-  userId: number;
+  userId: string;
 
   @Column({ type: 'enum', enum: Category, nullable: false })
   category: Category;

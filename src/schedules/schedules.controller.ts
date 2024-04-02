@@ -19,20 +19,19 @@ export class SchedulesController {
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @Param('groupId') groupId: number,
+    @Param('userId') userId: string,
   ) {
     return await this.schedulesService.createSchedule(
       createScheduleDto,
       groupId,
+      userId,
     );
   }
 
   // 스케쥴 전체 조회
   @Get()
-  async getAllSchedule(
-    @Param('groupId') groupId: number,
-    @Param('scheduleId') scheduleId: number,
-  ) {
-    return this.schedulesService.getAllSchedule(groupId, scheduleId);
+  async getAllSchedule(@Param('groupId') groupId: number) {
+    return this.schedulesService.getAllSchedule(groupId);
   }
 
   // 스케쥴 상세 조회
@@ -47,23 +46,15 @@ export class SchedulesController {
   // 스케쥴 수정
   @Patch()
   changeSchedule(
-    @Param('groupId') groupId: number,
     @Param('schedulesId') scheduleId: number,
-    @Body() updateScheduleDto: ScheduleDto,
+    @Body() changeScheduleDto: ScheduleDto,
   ) {
-    return this.schedulesService.changeSchedule(
-      updateScheduleDto,
-      groupId,
-      scheduleId,
-    );
+    return this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
   }
 
   // 스케쥴 삭제
   @Delete()
-  async deleteSchedule(
-    @Param('groupId') groupId: number,
-    @Param('scheduleId') scheduled: number,
-  ) {
-    return await this.schedulesService.deleteSchedule(groupId, scheduled);
+  async deleteSchedule(@Param('scheduleId') scheduled: number) {
+    return await this.schedulesService.deleteSchedule(scheduled);
   }
 }
