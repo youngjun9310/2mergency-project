@@ -1,6 +1,8 @@
-export const ENV_GOOGLE_ID = 'Google_Mail'
+export const ENV_MAILER_HOST = 'MAILER_HOST'
 
-export const ENV_GOOGLE_Password = 'Google_Password'
+export const ENV_MAILER_EMAIL = 'MAILER_EMAIL'
+
+export const ENV_MAILER_PASSWORD = 'MAILER_PASSWORD'
 
 export const ENV_DB_USERNAME = 'DB_USERNAME'
 

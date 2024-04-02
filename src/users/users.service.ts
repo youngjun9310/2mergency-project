@@ -159,12 +159,7 @@ export class UsersService {
   }
 
   /** 이메일 가입초대*/
-  async userInvite(email: string){
-    
-    if(_.isNil(email)){
-      throw new BadRequestException('이메일을 입력해주시기 바랍니다.')
-    }
-  }
+  async userInvite(email: string){}
 
   /** 이메일 가입수락*/
   async userAccept(){}

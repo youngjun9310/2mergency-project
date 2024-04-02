@@ -11,13 +11,16 @@ import { LoginDto } from './dto/login.dto';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 import { ConfigService } from '@nestjs/config';
+import { MailService } from 'src/mail/mail.service';
 
 @ApiTags('User')
 @Controller('users')
 export class UsersController {
   constructor(
         private readonly usersService: UsersService,
-        private readonly configService: ConfigService ) {}
+        private readonly configService: ConfigService,
+        private readonly mailService: MailService
+        ) {}
 
   /** 회원가입*/
   @ApiOperation({ summary: '회원가입' ,  description: '회원가입'})
@@ -122,17 +125,21 @@ export class UsersController {
   }
 
   /** 이메일 가입초대*/
-  @ApiOperation({summary: '이메일 가입초대', description: '이메일 가입 토큰번호 전송'})
+  @ApiOperation({summary: '이메일 가입초대', description: '가입 토큰번호 전송'})
   @UseGuards(AuthGuard('jwt'))
   @Post('invite')
-  async userInvite(){
-
+  async userInvite(@Body('email') email: string, @Res() res ){
+    await this.mailService.usersendMail(email);
+    res.send('회원가입 토큰번호를 전송했습니다.');
+    
   }
 
   /** 이메일 가입수락*/
   @ApiOperation({summary: '이메일 가입초대', description: '이메일 가입 토큰번호 전송'})
   @Post('accept')
-  async userAccept(){}
+  async userAccept(){
+    
+  }
 
   /** 사용자 접속정보조회*/
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
