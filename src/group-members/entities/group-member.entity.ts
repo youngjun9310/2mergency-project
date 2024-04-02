@@ -10,7 +10,7 @@ import { Groups } from "src/groups/entities/group.entity";
 export class GroupMembers {
     
     @PrimaryGeneratedColumn()
-    groupMenberId : number;
+    groupMemberId : number;
 
     @Column({ type : 'enum', enum: Role , nullable : false, default : Role.User })
     role : Role;
