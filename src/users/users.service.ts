@@ -119,13 +119,13 @@ export class UsersService {
   }
 
   /*사용자 조회*/
-  async findUser(userId: string){
+  async findUser(userId: number){
     const user = await this.userRepository.findOne({ where: { userId } });
     return user;
   }
 
   /*사용자 수정*/
-  async userUpdate( userId: string,  updateDto: UpdateDto ) {
+  async userUpdate( userId: number,  updateDto: UpdateDto ) {
     const { nickname, email, password, passwordConfirm, address, profileImage, isOpen } = updateDto
     const user = await this.userRepository.findOneBy({ userId });
 
@@ -143,7 +143,7 @@ export class UsersService {
   }
 
   /*사용자 삭제*/
-  async userDelete(userId: string, password: string) {
+  async userDelete(userId: number, password: string) {
     
     const user = await this.userRepository.findOne({
       select: [ 'password'],

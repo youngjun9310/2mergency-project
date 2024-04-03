@@ -10,8 +10,8 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 
 export class Users {
     
-    @PrimaryGeneratedColumn('uuid')
-    userId : string;
+    @PrimaryGeneratedColumn()
+    userId : number;
 
     @Column({ type : 'varchar', nullable : true })
     profileImage? : string;
