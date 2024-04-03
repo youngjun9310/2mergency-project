@@ -86,7 +86,7 @@ export class UsersService {
     return user;
   }
 
-  async userUpdate( userId: string,  updateDto: UpdateDto ) {
+  async userUpdate( userId: number,  updateDto: UpdateDto ) {
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
@@ -95,7 +95,7 @@ export class UsersService {
     return this.userRepository.update(userId,  updateDto );
   }
 
-  async userDelete(userId: string, password: string) {
+  async userDelete(userId: number, password: string) {
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
