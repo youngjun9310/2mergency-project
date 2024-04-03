@@ -19,7 +19,7 @@ export class Records {
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'varchar' })
-    userId : string;
+    @Column({ type : 'int' })
+    userId : number;
 
 }

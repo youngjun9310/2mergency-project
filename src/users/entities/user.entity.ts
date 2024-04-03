@@ -11,8 +11,8 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryG
 
 export class Users {
     
-    @PrimaryGeneratedColumn('uuid')
-    userId : string;
+    @PrimaryGeneratedColumn()
+    userId : number;
 
     @Column({ type : 'varchar', nullable : false, unique : true })
     nickname : string;

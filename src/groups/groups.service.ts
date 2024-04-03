@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 @Injectable()
 export class GroupsService {
   constructor(@InjectRepository(Groups) private groupRepository : Repository<Groups>){}
+
+  // 그룹 생성 //
   async create(createGroupDto: CreateGroupDto) {
     const { title, content, category } = createGroupDto;
 
@@ -22,10 +24,13 @@ export class GroupsService {
     return groupcreate;
   }
 
+  // 그룹 모든 목록 조회 //
   async findAll() {
     return await this.groupRepository.find();
   }
 
+
+  // 그룹 상세 목록 조회 //
   async findOne(groupId: number) {
     const groups = await this.groupRepository.findOne({ where : { groupId } });
 
@@ -38,6 +43,8 @@ export class GroupsService {
     return groups;
   }
 
+
+  // 그룹 모든 수정 //
   async update(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where : { groupId }});
@@ -56,6 +63,8 @@ export class GroupsService {
     return { statusCode : 201, message : "성공적으로 그룹을 수정하였습니다."};
   }
 
+
+  // 그룹 삭제 //
   async remove(groupId: number) {
     const groups = await this.groupRepository.findOne({ where : { groupId }});
 
