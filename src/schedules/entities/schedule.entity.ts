@@ -42,8 +42,8 @@ export class Schedules {
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'varchar' })
-    userId : string;
+    @Column({ type : 'int' })
+    userId : number;
 
     @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.schedules, { cascade : true })
     scheduleMembers : ScheduleMembers[];
