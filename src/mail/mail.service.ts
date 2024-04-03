@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { ENV_MAILER_EMAIL, ENV_MAILER_PASSWORD } from 'src/const/env.keys';
+import { ENV_MAILER_EMAIL, ENV_MAILER_HOST, ENV_MAILER_PASSWORD } from 'src/const/env.keys';
 import { SendOption } from './interface/SendOption';
 
 
@@ -15,7 +15,7 @@ export class MailService {
   constructor(configService : ConfigService) {
     this.configService = configService;
     this.transporter = nodemailer.createTransport({
-      host : 'smtp.gmail.com',
+      host : configService.get<string>(ENV_MAILER_HOST),
       secure: true,
       auth: {
         user: configService.get<string>(ENV_MAILER_EMAIL),
