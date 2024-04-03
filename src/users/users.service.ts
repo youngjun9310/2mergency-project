@@ -78,7 +78,8 @@ export class UsersService {
       address,
       profileImage,
       isAdmin: true,
-      isOpen
+      isOpen,
+      CertificationStatus:true
     });
 
     return user;

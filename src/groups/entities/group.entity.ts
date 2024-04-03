@@ -29,11 +29,7 @@ export class Groups {
     @UpdateDateColumn({ type : 'timestamp' })
     updatedAt : Date;
 
-<<<<<<< HEAD
-    @OneToMany(() => Schedules, (schedules) => schedules.groups)
-=======
     @OneToMany(() => Schedules, (schedules) => schedules.groups, { cascade : true })
->>>>>>> 19c6ad55d19325a1e30ce501203a6b624f57431a
     schedules : Schedules[];
 
     @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.groups, { cascade : true })

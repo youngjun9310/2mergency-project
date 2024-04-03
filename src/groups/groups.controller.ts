@@ -2,11 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-<<<<<<< HEAD
-import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-=======
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
->>>>>>> 19c6ad55d19325a1e30ce501203a6b624f57431a
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 
