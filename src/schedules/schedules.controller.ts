@@ -10,12 +10,12 @@ import {
 import { SchedulesService } from './schedules.service';
 import { ScheduleDto } from './dto/schedule.dto';
 
-@Controller('schedules')
+@Controller('groups/:groupId')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  @Post()
+  @Post('schedules')
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @Param('groupId') groupId: number,
@@ -29,13 +29,13 @@ export class SchedulesController {
   }
 
   // 스케쥴 전체 조회
-  @Get()
+  @Get('schedules')
   async getAllSchedule(@Param('groupId') groupId: number) {
     return this.schedulesService.getAllSchedule(groupId);
   }
 
   // 스케쥴 상세 조회
-  @Get()
+  @Get('schedules/:schedulesId')
   async getOneSchedule(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
@@ -44,7 +44,7 @@ export class SchedulesController {
   }
 
   // 스케쥴 수정
-  @Patch()
+  @Patch('schedules/:scheduleId')
   changeSchedule(
     @Param('schedulesId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
@@ -53,7 +53,7 @@ export class SchedulesController {
   }
 
   // 스케쥴 삭제
-  @Delete()
+  @Delete('schedules/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);
   }

@@ -13,9 +13,8 @@ async function bootstrap() {
   );
 
   setupSwagger(app);
-  
 
   await app.listen(3000);
-  Logger.log("Swagger 주소 : http://localhost:3000/api")
+  Logger.log('Swagger 주소 : http://localhost:3000/api');
 }
 bootstrap();

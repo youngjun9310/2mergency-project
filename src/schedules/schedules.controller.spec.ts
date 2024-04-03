@@ -3,7 +3,7 @@ import { SchedulesController } from './schedules.controller';
 import { SchedulesService } from './schedules.service';
 
 describe('SchedulesController', () => {
-  let controller: SchedulesController;
+  let schedulesController: SchedulesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -11,10 +11,11 @@ describe('SchedulesController', () => {
       providers: [SchedulesService],
     }).compile();
 
-    controller = module.get<SchedulesController>(SchedulesController);
+    schedulesController = module.get<SchedulesController>(SchedulesController);
   });
 
-  it('should be defined', () => {
-    expect(controller).toBeDefined();
+  it('하이킹 스케쥴 생성', () => {
+    const
+    expect(schedulesController).toBeDefined();
   });
 });
