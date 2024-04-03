@@ -33,7 +33,7 @@ export class Schedules {
     @JoinColumn({ name : 'groupId', referencedColumnName : 'groupId' })
     groups : Groups;
     
-    @Column({ type : 'int', nullable : false })
+    @Column({ type : 'int' })
     groupId : number;
 
     // @ManyToOne(() => Users, (users) => users.schedules, {
@@ -42,10 +42,10 @@ export class Schedules {
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'int', nullable : false })
-    userId : number;
+    @Column({ type : 'varchar' })
+    userId : string;
 
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.schedules)
+    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.schedules, { cascade : true })
     scheduleMembers : ScheduleMembers[];
     
 }

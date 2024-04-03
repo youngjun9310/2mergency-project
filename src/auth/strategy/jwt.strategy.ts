@@ -4,15 +4,20 @@ import { Request as RequestType } from 'express';
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import _ from 'lodash';
 import { UsersService } from 'src/users/users.service';
+import { ConfigService } from '@nestjs/config';
+import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private readonly userService: UsersService) {
+  constructor(
+    private readonly userService: UsersService,
+    private readonly configService: ConfigService,
+    ) {
     super({
       //jwtFromRequest: ExtractJwt.fromExtractors([JwtStrategy.extractJWT]),
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: process.env.JWT_SECRET_KEY,
+      secretOrKey:configService.get(ENV_JWT_SECRET_KEY),
     });
   }
 

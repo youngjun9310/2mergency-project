@@ -19,9 +19,6 @@ export class Users {
     @Column({ type : 'varchar', nullable : false, unique : true })
     email : string;
 
-    @Column({ type : 'varchar', nullable : false, unique : true })
-    nickname : string;
-
     @Column({ type : 'varchar', select: false, nullable : false })
     password : string;
 
@@ -49,16 +46,16 @@ export class Users {
     @DeleteDateColumn({ type : 'timestamp', nullable : true })
     deletedAt? : Date;
 
-    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
+    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users, { cascade : true })
     groupMembers : GroupMembers[];
 
-    @OneToMany(() => Records, (records) => records.users)
+    @OneToMany(() => Records, (records) => records.users, { cascade : true })
     records : Records[];
 
-    @OneToMany(() => Schedules, (schedules) => schedules.users)
+    @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade : true })
     schedules : Schedules[];
 
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users)
+    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade : true })
     scheduleMembers : ScheduleMembers[];
     
 }

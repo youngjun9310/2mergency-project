@@ -1,6 +1,5 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Category } from "../../types/Category.type";
-import { Users } from "src/users/entities/user.entity";
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
 
@@ -30,10 +29,14 @@ export class Groups {
     @UpdateDateColumn({ type : 'timestamp' })
     updatedAt : Date;
 
+<<<<<<< HEAD
     @OneToMany(() => Schedules, (schedules) => schedules.groups)
+=======
+    @OneToMany(() => Schedules, (schedules) => schedules.groups, { cascade : true })
+>>>>>>> 19c6ad55d19325a1e30ce501203a6b624f57431a
     schedules : Schedules[];
 
-    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.groups)
+    @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.groups, { cascade : true })
     groupMembers : GroupMembers[];
 
     

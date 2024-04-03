@@ -17,7 +17,7 @@ export class ScheduleMembers {
     @JoinColumn({ name : 'scheduleId', referencedColumnName : 'scheduleId' })
     schedules : Schedules;
     
-    @Column({ type : 'int', nullable : false })
+    @Column({ type : 'int' })
     scheduleId : number;
 
     // @ManyToOne(() => Users, (users) => users.scheduleMembers, {
@@ -26,8 +26,8 @@ export class ScheduleMembers {
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'int', nullable : false })
-    userId : number;
+    @Column({ type : 'varchar' })
+    userId : string;
     
     
 }
