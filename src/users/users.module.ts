@@ -6,6 +6,7 @@ import { Users } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { MailModule } from 'src/mail/mail.module'; 
+import { Invites } from './entities/invite.entity';
 
 @Module({
   imports: [
@@ -15,7 +16,7 @@ import { MailModule } from 'src/mail/mail.module';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Invites]),
     MailModule
   ],
   providers: [UsersService, JwtService],

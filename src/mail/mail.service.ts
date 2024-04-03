@@ -36,11 +36,11 @@ export class MailService {
         <p>인증토큰 : ${genToken.token} </p>
         <p>This link will expire on ${genToken.expires}.</p>`
       };
-      console.log('sendOption 작성')
-      console.log('sendOption', sendOption)
       const result = await this.transporter.sendMail(sendOption);
-      console.log('result',result);
       console.log('가입 토큰이 전송되었습니다');
+
+      return genToken ;
+
     }catch(error){
       console.log('send error', error)
       throw new BadRequestException('가입 토큰 전송 중 오류가 발생했습니다.');

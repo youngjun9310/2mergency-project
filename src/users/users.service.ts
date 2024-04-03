@@ -7,12 +7,15 @@ import { compare, hash } from 'bcrypt';
 import * as _ from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
+import { Invites } from './entities/invite.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    @InjectRepository(Invites)
+    private invitesRepository: Repository<Invites>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -159,10 +162,45 @@ export class UsersService {
   }
 
   /** 이메일 가입초대*/
-  async userInvite(email: string){}
+  async userInvite(email: string, gentoken: {token: number, expires:Date}){
+    const existingEmail = await this.userRepository.findOneBy({email});
+    console.log('existingEmail',existingEmail);
+
+    if(existingEmail){
+    await this.invitesRepository.delete({email})
+    }
+
+    const status = 'standBy';
+    const result = await this.invitesRepository.save({
+      email,
+      token: (gentoken.token).toString(),
+      expires: gentoken.expires,
+      status
+    });
+
+    console.log('result',result)
+
+  }
 
   /** 이메일 가입수락*/
-  async userAccept(){}
+  async userAccept(email: string, token: string){
+    const existingToken = await this.invitesRepository.findOne({ where: { email } });
+
+    if(!existingToken){
+      throw new BadRequestException('인증 번호를 다시 입력 부탁드립니다.');
+    }
+    console.log('existingToken.expires',existingToken.expires);
+    const present = new Date();
+
+    if( existingToken.expires < present){
+      throw new BadRequestException('인증 번호가 만료되었습니다. 다시 요청 부탁드립니다.');
+    }
+    
+    await this.invitesRepository.delete({email});
+    await this.userRepository.update({email}, {CertificationStatus: true})
+
+    return ;
+  }
 
    /*사용자 조회(이메일)*/
    async findByEmail(email: string) {

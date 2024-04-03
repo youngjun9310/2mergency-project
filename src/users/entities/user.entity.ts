@@ -1,5 +1,4 @@
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
-import { Groups } from "src/groups/entities/group.entity";
 import { Records } from "src/records/entities/record.entity";
 import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
@@ -29,7 +28,7 @@ export class Users {
     @Column({ type : 'varchar', nullable : false })
     address : string;
 
-    @Column({ type : 'boolean', default : false })
+    @Column({ type : 'boolean', default : false})
     isAdmin : boolean;
 
     @Column({ type : 'boolean', nullable : false, default : false })
@@ -37,6 +36,9 @@ export class Users {
 
     @Column({ type : 'boolean', nullable : false, default : true })
     isOpen : boolean;
+
+    @Column({ type : 'boolean', nullable : false, default : false})
+    CertificationStatus : boolean;
 
     @CreateDateColumn({ type : 'timestamp', nullable : false })
     createdAt : Date;

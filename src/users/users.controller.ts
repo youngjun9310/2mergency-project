@@ -129,7 +129,8 @@ export class UsersController {
   @UseGuards(AuthGuard('jwt'))
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res ){
-    await this.mailService.usersendMail(email);
+    const gentoken = await this.mailService.usersendMail(email);
+    await this.usersService.userInvite(email,gentoken);
     res.send('회원가입 토큰번호를 전송했습니다.');
     
   }
@@ -137,7 +138,9 @@ export class UsersController {
   /** 이메일 가입수락*/
   @ApiOperation({summary: '이메일 가입초대', description: '이메일 가입 토큰번호 전송'})
   @Post('accept')
-  async userAccept(){
+  async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res){
+    await this.usersService.userAccept(email, token);
+    res.send('회원가입 이메일 인증을 완료했습니다.');
     
   }
 
