@@ -20,12 +20,6 @@ export class Schedules {
   @PrimaryGeneratedColumn()
   scheduleId: number;
 
-  @Column({ type: 'int', nullable: false })
-  groupId: number;
-
-  @Column({ type: 'int', nullable: false })
-  userId: string;
-
   @Column({ type: 'enum', enum: Category, nullable: false })
   category: Category;
 
@@ -44,21 +38,25 @@ export class Schedules {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-  @ManyToOne(() => Groups, (groups) => groups.schedules, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
-  groups: Groups;
+    @ManyToOne(() => Groups, (groups) => groups.schedules, {
+        onDelete : 'CASCADE'
+    })
+    @JoinColumn({ name : 'groupId', referencedColumnName : 'groupId' })
+    groups : Groups;
+    
+    @Column({ type : 'int' })
+    groupId : number;
 
-  @ManyToOne(() => Users, (users) => users.schedules, {
-    onDelete: 'CASCADE',
-  })
-  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
-  users: Users;
+    @ManyToOne(() => Users, (users) => users.schedules, {
+        onDelete : 'CASCADE'
+    })
+    @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
+    users : Users;
 
-  @OneToMany(
-    () => ScheduleMembers,
-    (scheduleMembers) => scheduleMembers.schedules,
-  )
-  scheduleMembers: ScheduleMembers[];
+    @Column({ type : 'int'})
+    userId : number;
+
+    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.schedules)
+    scheduleMembers : ScheduleMembers[];
+    
 }

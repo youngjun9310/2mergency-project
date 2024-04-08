@@ -17,16 +17,16 @@ export class ScheduleMembers {
     @JoinColumn({ name : 'scheduleId', referencedColumnName : 'scheduleId' })
     schedules : Schedules;
     
-    @Column({ type : 'int', nullable : false })
+    @Column({ type : 'int' })
     scheduleId : number;
 
-    @ManyToOne(() => Users, (users) => users.scheduleMembers, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.scheduleMembers, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
-    @Column({ type : 'int', nullable : false })
+    @Column({ type : 'int' })
     userId : number;
     
     

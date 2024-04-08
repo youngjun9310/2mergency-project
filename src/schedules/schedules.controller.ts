@@ -19,7 +19,7 @@ export class SchedulesController {
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @Param('groupId') groupId: number,
-    @Param('userId') userId: string,
+    @Param('userId') userId: number,
   ) {
     return await this.schedulesService.createSchedule(
       createScheduleDto,

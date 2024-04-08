@@ -11,24 +11,24 @@ import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
-import { Users } from 'src/users/entities/user.entity';
+
 
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
+
+  // 그룹 생성 //
   @ApiTags('groups')
-  @ApiResponse({ description: '성공', status: 200 })
+  @ApiResponse({ description:'성공', status: 200 })
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @Post()
-  async create(
-    @Body() createGroupDto: CreateGroupDto,
-    @UserInfo() users: Users,
-  ) {
+  async create(@Body() createGroupDto: CreateGroupDto) {
     return await this.groupsService.create(createGroupDto);
   }
 
+
+  // 그룹 모든 목록 조회 //
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 모든 목록 조회 API',
@@ -43,6 +43,8 @@ export class GroupsController {
     return await this.groupsService.findAll();
   }
 
+
+  // 그룹 상세 목록 조회 //
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 상세 조회 API',
@@ -57,6 +59,8 @@ export class GroupsController {
     return await this.groupsService.findOne(groupId);
   }
 
+
+  // 그룹 수정 //
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 업데이트 API',
@@ -74,6 +78,8 @@ export class GroupsController {
     return await this.groupsService.update(groupId, updateGroupDto);
   }
 
+  
+  // 그룹 삭제 //
   @ApiTags('groups')
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹을 삭제합니다.' })
   @ApiResponse({

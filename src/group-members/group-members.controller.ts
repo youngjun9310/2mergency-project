@@ -1,21 +1,15 @@
 import { Controller, Get, Param, Patch } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
+import { CreateGroupMemberDto } from './dto/create-group-member.dto';
+import { ApiCreatedResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { InvitememberDto } from './dto/invite_member';
+import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
+import { Users } from 'src/users/entities/user.entity';
+import { AuthGuard } from '@nestjs/passport';
 
-@Controller('group-members')
+
+@Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
 
-  @Post()
-  async (
-    @Param('scheduleId') scheduleId: number,
-    @Param('userId') userId: string,
-  ) {
-    return await this.groupMembersService.findScheduleMember(
-      scheduleId,
-      userId,
-    );
-  }
-
-  @Patch()
-  
 }

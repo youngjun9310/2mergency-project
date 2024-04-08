@@ -2,15 +2,14 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from './entities/group-member.entity';
 import { Repository } from 'typeorm';
+import { MailService } from 'src/mail/mail.service';
+import { Groups } from 'src/groups/entities/group.entity';
 
 @Injectable()
 export class GroupMembersService {
-  constructor(
-    @InjectRepository(GroupMembers)
-    private GroupMemberRepository: Repository<GroupMembers>,
-  ) {}
-
-  // 그룹 멤버 초대하기
-
-  // 그룹 초대 수락하기
+  constructor(@InjectRepository(GroupMembers) private groupMemberRepository : Repository<GroupMembers>,
+  @InjectRepository(Groups) private groupRepository : Repository<Groups>,
+ 
+  private readonly mailservice : MailService ){}
+ 
 }

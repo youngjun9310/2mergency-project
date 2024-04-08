@@ -15,7 +15,7 @@ export class SchedulesService {
   async createSchedule(
     createScheduleDto: ScheduleDto,
     groupId: number,
-    userId: string,
+    userId: number,
   ) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 

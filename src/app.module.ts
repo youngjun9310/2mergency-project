@@ -4,13 +4,10 @@ import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
 import Joi from 'joi';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { AuthModule } from './auth/auth.module';
-import { PostsModule } from './posts/posts.module';
 import { UsersModule } from './users/users.module';
 import { GroupsModule } from './groups/groups.module';
 import { SchedulesModule } from './schedules/schedules.module';
 import { ScheduleMembersModule } from './schedule-members/schedule-members.module';
-import { PostCommentsModule } from './post-comments/post-comments.module';
-import { FollowsModule } from './follows/follows.module';
 import { RecordsModule } from './records/records.module';
 import { GroupMembersModule } from './group-members/group-members.module';
 import { MailModule } from './mail/mail.module';
@@ -42,36 +39,32 @@ const typeOrmModuleOptions = {
 };
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      validationSchema: Joi.object({
-        JWT_SECRET_KEY: Joi.string().required(),
-        PASSWORD_HASH_ROUNDS: Joi.number().required(),
-        ROLE_ADMIN_PASSWORD: Joi.string().required(),
-        MAILER_EMAIL: Joi.string().required(),
-        MAILER_PASSWORD: Joi.string().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_NAME: Joi.string().required(),
-        DB_SYNC: Joi.boolean().required(),
-      }),
+  imports: [ConfigModule.forRoot({
+    isGlobal: true,
+    validationSchema: Joi.object({
+      JWT_SECRET_KEY: Joi.string().required(),
+      PASSWORD_HASH_ROUNDS: Joi.number().required(),
+      ROLE_ADMIN_PASSWORD: Joi.string().required(),
+      MAILER_EMAIL: Joi.string().required(),
+      MAILER_PASSWORD: Joi.string().required(),
+      DB_USERNAME: Joi.string().required(),
+      DB_PASSWORD: Joi.string().required(),
+      DB_HOST: Joi.string().required(),
+      DB_PORT: Joi.number().required(),
+      DB_NAME: Joi.string().required(),
+      DB_SYNC: Joi.boolean().required()
     }),
-    TypeOrmModule.forRootAsync(typeOrmModuleOptions),
-    AuthModule,
-    PostsModule,
-    UsersModule,
-    GroupsModule,
-    SchedulesModule,
-    ScheduleMembersModule,
-    PostCommentsModule,
-    FollowsModule,
-    RecordsModule,
-    GroupMembersModule,
-    MailModule,
-  ],
+  }),
+  TypeOrmModule.forRootAsync(typeOrmModuleOptions),
+  AuthModule,
+  UsersModule,
+  GroupsModule,
+  SchedulesModule,
+  ScheduleMembersModule,
+  RecordsModule,
+  GroupMembersModule,
+  MailModule,
+],
   controllers: [],
   providers: [],
 })
