@@ -29,3 +29,4 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
     console.log("여기",member)
     return requiredRoles.some((memberRole) => member.memberRole === memberRole);
   }
+}
