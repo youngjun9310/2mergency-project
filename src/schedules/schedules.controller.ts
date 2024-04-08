@@ -18,8 +18,8 @@ export class SchedulesController {
   @Post('schedules')
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
-    @Param('groupId') groupId: number,
-    @Param('userId') userId: number,
+    // @Param('groupId') groupId: number,
+    // @Param('userId') userId: number,
   ) {
     return await this.schedulesService.createSchedule(
       createScheduleDto.title,
@@ -27,7 +27,6 @@ export class SchedulesController {
       createScheduleDto.category,
       createScheduleDto.scheduleDate,
       // groupId,
-      // userId,
     );
   }
 
