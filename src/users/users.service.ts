@@ -125,6 +125,7 @@ export class UsersService {
     return user;
   }
 
+
   /*사용자 수정*/
   async userUpdate( userId: number,  updateDto: UpdateDto ) {
     const { nickname, email, password, passwordConfirm, address, profileImage, isOpen } = updateDto
@@ -142,6 +143,7 @@ export class UsersService {
 
     return this.userRepository.update(userId, { nickname, email, password:hashedPassword , address, profileImage, isOpen}  );
   }
+
 
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
