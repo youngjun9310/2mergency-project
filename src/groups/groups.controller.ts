@@ -3,8 +3,6 @@ import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
-import { Users } from 'src/users/entities/user.entity';
 
 
 @Controller('groups')
@@ -17,7 +15,7 @@ export class GroupsController {
   @ApiResponse({ description:'성공', status: 200 })
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @Post()
-  async create(@Body() createGroupDto: CreateGroupDto, @UserInfo() users : Users) {
+  async create(@Body() createGroupDto: CreateGroupDto) {
     return await this.groupsService.create(createGroupDto);
   }
 
