@@ -2,12 +2,10 @@ import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/co
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import * as _ from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
-import { Invites } from './entities/invite.entity';
 
 @Injectable()
 export class UsersService {
