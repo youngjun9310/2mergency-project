@@ -5,8 +5,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
-import { MailModule } from 'src/mail/mail.module'; 
-import { Invites } from './entities/invite.entity';
 
 @Module({
   imports: [
@@ -16,8 +14,7 @@ import { Invites } from './entities/invite.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users, Invites]),
-    MailModule
+    TypeOrmModule.forFeature([Users]),
   ],
   providers: [UsersService, JwtService],
   controllers: [UsersController],

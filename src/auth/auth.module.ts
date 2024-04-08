@@ -5,6 +5,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
 import { Users } from 'src/users/entities/user.entity';
+import { AuthService } from './auth.service';
+import { AuthController } from './auth.controller';
+import { Invites } from './entities/invite.entity';
+import { MailModule } from 'src/mail/mail.module';
 
 @Module({
   imports: [
@@ -14,11 +18,12 @@ import { Users } from 'src/users/entities/user.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Invites]),
     UsersModule,
+    MailModule
   ],
-
-  controllers: [],
-  providers: [JwtStrategy],
+  
+  controllers: [AuthController],
+  providers: [JwtStrategy, AuthService],
 })
 export class AuthModule {}
