@@ -66,4 +66,3 @@ export class SignUpDto {
   isOpen: boolean;
   
 }
-
