@@ -57,12 +57,5 @@ export class SignUpDto {
   })
   @IsOptional()
   profileImage: string;
-
-  @IsBoolean()
-  @ApiProperty({
-    example: true,
-    description: '공개된 사용자여부'
-  })
-  isOpen: boolean;
   
 }

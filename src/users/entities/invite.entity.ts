@@ -26,7 +26,5 @@ export class Invites {
   @UpdateDateColumn({ type : 'timestamp', nullable : false })
   updatedAt : Date;
 
-  @DeleteDateColumn({ type : 'timestamp', nullable : true })
-  deletedAt? : Date;
 
 }
