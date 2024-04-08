@@ -4,7 +4,6 @@ import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.e
 import { Schedules } from "src/schedules/entities/schedule.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-
 @Entity({
     name : 'users'
 })
@@ -14,32 +13,32 @@ export class Users {
     @PrimaryGeneratedColumn()
     userId : number;
 
-    @Column({ type : 'varchar', nullable : false, unique : true })
-    nickname : string;
+    @Column({ type : 'varchar', nullable : true })
+    profileImage? : string;
 
     @Column({ type : 'varchar', nullable : false, unique : true })
     email : string;
 
-    @Column({ type : 'varchar', nullable : false })
+    @Column({ type : 'varchar', nullable : false, unique : true })
+    nickname : string;
+
+    @Column({ type : 'varchar', select: false, nullable : false })
     password : string;
 
     @Column({ type : 'varchar', nullable : false })
     address : string;
 
-    @Column({ type : 'bigint', nullable : true, default : 1000 })
-    point : bigint;
-
-    @Column({ type : 'varchar', nullable : true })
-    profileImage? : string;
+    @Column({ type : 'boolean', default : false})
+    isAdmin : boolean;
 
     @Column({ type : 'boolean', nullable : false, default : false })
     isDelete? : boolean;
 
-    @Column({ type : 'boolean', nullable : false, default : false })
-    isAdmin : boolean;
-
     @Column({ type : 'boolean', nullable : false, default : true })
     isOpen : boolean;
+
+    @Column({ type : 'boolean', nullable : false, default : false})
+    CertificationStatus : boolean;
 
     @CreateDateColumn({ type : 'timestamp', nullable : false })
     createdAt : Date;
@@ -61,6 +60,5 @@ export class Users {
 
     @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade : true })
     scheduleMembers : ScheduleMembers[];
-
     
 }

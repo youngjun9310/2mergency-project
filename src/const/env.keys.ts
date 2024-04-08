@@ -1,3 +1,5 @@
+export const ENV_MAILER_HOST = 'MAILER_HOST'
+
 export const ENV_MAILER_EMAIL = 'MAILER_EMAIL'
 
 export const ENV_MAILER_PASSWORD = 'MAILER_PASSWORD'

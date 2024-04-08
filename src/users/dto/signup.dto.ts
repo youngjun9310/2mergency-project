@@ -34,13 +34,13 @@ export class SignUpDto {
   @IsNotEmpty({ message: '비밀번호 재확인을 입력해주세요.' })
   passwordConfirm: string;
   
-  @IsOptional()
   @IsString()
   @ApiProperty({
     example: 'adminPassword',
     description: '어드민 가입 패스워드',
   })
-  adminPassword?: string;
+  @IsOptional()
+  adminPassword: string;
 
   @IsString()
   @ApiProperty({
@@ -60,25 +60,10 @@ export class SignUpDto {
 
   @IsBoolean()
   @ApiProperty({
-    example: false,
-    description: '어드민여부'
-  })
-  isAdmin?: boolean;
-
-  @IsBoolean()
-  @ApiProperty({
     example: true,
     description: '공개된 사용자여부'
   })
   isOpen: boolean;
-
-  // @IsNumber()
-  // @ApiProperty({
-  //   example: 5,
-  //   description: '포인트',
-  // })
-  // @IsOptional()
-  // point: number;
   
 }
 

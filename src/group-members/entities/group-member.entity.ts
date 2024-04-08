@@ -19,9 +19,9 @@ export class GroupMembers {
     isVailed : boolean;
 
 
-    @ManyToOne(() => Users, (users) => users.groupMembers, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.groupMembers, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 

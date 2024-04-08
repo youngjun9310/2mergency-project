@@ -20,9 +20,9 @@ export class ScheduleMembers {
     @Column({ type : 'int' })
     scheduleId : number;
 
-    @ManyToOne(() => Users, (users) => users.scheduleMembers, {
-        onDelete : 'CASCADE'
-    })
+    // @ManyToOne(() => Users, (users) => users.scheduleMembers, {
+    //     onDelete : 'CASCADE'
+    // })
     @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
     users : Users;
 
