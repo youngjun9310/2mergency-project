@@ -13,14 +13,14 @@ export class SchedulesService {
   /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
   async createSchedule(
-    createScheduleDto: ScheduleDto,
+    createScheduleDto:ScheduleDto,
     groupId: number,
-    // userId: number,
+    userId: number,
   ) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     // 매개변수로 받은 groupId로 그룹을 찾는다.
-    const group = await this.ScheduleRepository.find({
+    const group = await this.ScheduleRepository.findOne({
       where: { groupId },
     });
 
@@ -31,8 +31,8 @@ export class SchedulesService {
     }
 
     await this.ScheduleRepository.save({
-      // groupId,
-      // userId,
+      groupId,
+      userId,
       title,
       content,
       category,

@@ -18,15 +18,14 @@ export class SchedulesController {
   @Post('schedules')
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
-    // @Param('groupId') groupId: number,
-    // @Param('userId') userId: number,
+    @Body('userId') userId: number,
+    @Param('groupId') groupId: number,
+    
   ) {
     return await this.schedulesService.createSchedule(
-      createScheduleDto.title,
-      createScheduleDto.content,
-      createScheduleDto.category,
-      createScheduleDto.scheduleDate,
-      // groupId,
+      createScheduleDto,
+      groupId,
+      userId,
     );
   }
 

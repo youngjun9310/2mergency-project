@@ -1,6 +1,5 @@
 import { GroupMembers } from "src/group-members/entities/group-member.entity";
 import { Records } from "src/records/entities/record.entity";
-import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.entity";
 import { Schedules } from "src/schedules/entities/schedule.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
@@ -57,8 +56,5 @@ export class Users {
 
     @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade : true })
     schedules : Schedules[];
-
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade : true })
-    scheduleMembers : ScheduleMembers[];
     
 }
