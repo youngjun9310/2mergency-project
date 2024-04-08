@@ -31,8 +31,8 @@ export class SchedulesService {
     }
 
     await this.ScheduleRepository.save({
-      groupId,
-      userId,
+      // groupId,
+      // userId,
       title,
       content,
       category,

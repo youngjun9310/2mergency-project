@@ -22,9 +22,12 @@ export class SchedulesController {
     @Param('userId') userId: number,
   ) {
     return await this.schedulesService.createSchedule(
-      createScheduleDto,
-      groupId,
-      userId,
+      createScheduleDto.title,
+      createScheduleDto.content,
+      createScheduleDto.category,
+      createScheduleDto.scheduleDate,
+      // groupId,
+      // userId,
     );
   }
 
