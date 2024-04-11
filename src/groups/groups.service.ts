@@ -4,24 +4,35 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { Repository } from 'typeorm';
 import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GroupMembers } from 'src/group-members/entities/group-member.entity';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { number } from 'joi';
 
 @Injectable()
 export class GroupsService {
-  constructor(@InjectRepository(Groups) private groupRepository : Repository<Groups>){}
+  constructor(
+    @InjectRepository(Groups) private groupRepository : Repository<Groups>,
+    @InjectRepository(GroupMembers) private groupMembersRepository : Repository<GroupMembers>){}
 
   // 그룹 생성 //
-  async create(createGroupDto: CreateGroupDto) {
+  async create(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
-    const groupcreate = await this.groupRepository.create({
+    const groupCreate = await this.groupRepository.save({
       title,
       content,
-      category
-    })
+      category,
+    });
 
-    await this.groupRepository.save(groupcreate);
+    await this.groupMembersRepository.save({
+      role: MemberRole.Admin,
+      isVailed: true,
+      isInvited: true,
+      groupId: groupCreate.groupId,
+      userId: userId,
+    });
     
-    return groupcreate;
+    return groupCreate;
   }
 
   // 그룹 모든 목록 조회 //
@@ -37,8 +48,6 @@ export class GroupsService {
     if(!groups){
       throw new NotFoundException("그룹이 존재하지 않습니다.");
     }
-
-    
 
     return groups;
   }

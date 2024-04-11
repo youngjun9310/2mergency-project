@@ -17,15 +17,18 @@ import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Groups } from 'src/groups/entities/group.entity';
-import { memberRolesGuard } from './guard/members.guard';
+import { memberRolesGuard} from './guard/members.guard';
+import { Role } from 'src/users/types/userRole.type';
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
+import { ScheduleMembersService } from 'src/schedule-members/schedule-members.service';
 
 
 @UseGuards(memberRolesGuard) 
 @Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(
+    private readonly scheduleMembersService: ScheduleMembersService,
     private readonly groupMembersService: GroupMembersService,
     private readonly userService: UsersService,
   ) {}
@@ -98,4 +101,31 @@ export class GroupMembersController {
       }));
   }
 
+  @Patch('register/:userId')
+  @MemberRoles(MemberRole.Admin)
+  @HttpCode(HttpStatus.CREATED)
+  async registerGroupMember(
+    @Param('groupId') groupId: number,
+    @Param('userId') userId: number,
+    @Body('email') email: string,
+    @Body() updateGroupMemberDto: UpdateGroupMemberDto,
+  ): Promise<any> {
+    await this.groupMembersService.registerGroupMember(groupId, userId);
+    // acceptGroupInvitation 메소드를 호출하여 사용자의 그룹 초대 수락 처리
+
+    return {
+      message: '그룹의 멤버로 등록되었습니다.',
+    };
+  }
+
+  @Get('userId')
+  @HttpCode(HttpStatus.OK)
+  async isGroupMember(
+    @Param('groupId') groupId: number,
+    @Param('userId') userId: number,
+  ): Promise<any> {
+    await this.groupMembersService.isGroupMember(groupId, userId)
+
+    return;
+  }
 }

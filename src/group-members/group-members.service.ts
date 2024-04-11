@@ -147,5 +147,43 @@ export class GroupMembersService {
       relations: ['users'],
     });
   }
+/**
+   * 초대된 사용자를 그룹 멤버로 등록
+   * @returns
+   */
 
+async registerGroupMember(groupId: number, userId: number): Promise<any> {
+  // 사용자기 이미 그룹멤버인지 확인<- 
+  const groupMembers = await this.groupMemberRepository.findOne({
+    where: { groupId, userId },
+    relations: ['group'],
+  });
+  // 이미 그룹멤버면 에러 뱉기
+  if (!groupMembers) {
+    throw new BadRequestException(`유저는 이미 그룹의 멤버입니다.`);
+  }
+
+  // 사용자를 그룹 멤버로 추가 
+  const newGroupMember = this.groupMemberRepository.create({
+    userId,
+    groupId,
+    isInvited: true, // 초대된 상태로 설정
+    isVailed: true, // 초대를 수락한 상태로 설정
+  });
+
+  await this.groupMemberRepository.save(newGroupMember);
+  return { success: true, message: '그룹 멤버로 등록되었습니다.' };
+}
+
+// 멤버 존재 확인, 반환
+async isGroupMember(groupId: number, userId: number): Promise<boolean> {
+  const member = await this.groupMemberRepository.findOne({
+    where: { groupId, userId },
+  });
+  return !!member; 
+  // !!member: 논리 NOT 연산자(!)를 두 번 사용하여, 
+  // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
+  // member가 존재하면 (null 또는 undefined가 아니면),
+  // true를 반환하고, 그렇지 않으면 false를 반환
+}
 }
