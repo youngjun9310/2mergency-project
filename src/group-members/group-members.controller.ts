@@ -22,8 +22,9 @@ import { Role } from 'src/users/types/userRole.type';
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { ScheduleMembersService } from 'src/schedule-members/schedule-members.service';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
-@UseGuards(memberRolesGuard)
+@UseGuards(RolesGuard)
 @Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(
