@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsEmail } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, IsBoolean } from 'class-validator';
 
 export class InviteMemberDto {
   @IsString()

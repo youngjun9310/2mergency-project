@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { Repository } from 'typeorm';
@@ -18,18 +22,28 @@ export class UsersService {
   ) {}
 
   /*전체 사용자 조회(어드민용)*/
-  async findAllUser(){
+  async findAllUser() {
     const user = await this.userRepository.find();
     return user;
   }
 
   /*사용자 조회*/
-  async findUser(userId: number){
+  async findUser(userId: number) {
     const user = await this.userRepository.findOne({ where: { userId } });
     return user;
   }
 
   /*사용자 수정*/
+  async userUpdate(userId: number, updateDto: UpdateDto) {
+    const {
+      nickname,
+      email,
+      password,
+      passwordConfirm,
+      address,
+      profileImage,
+      isOpen,
+    } = updateDto;
   async userUpdate( userId: number,  updateDto: UpdateDto, file:Express.Multer.File ) {
     const { nickname, email, password, passwordConfirm, address, isOpen } = updateDto
     const user = await this.userRepository.findOneBy({ userId });
@@ -39,7 +53,9 @@ export class UsersService {
     }
 
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+      throw new UnauthorizedException(
+        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
+      );
     }
 
     const profileImage = await this.awsService.imageUpload(file);
@@ -52,7 +68,7 @@ export class UsersService {
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
     const user = await this.userRepository.findOne({
-      select: [ 'password'],
+      select: ['password'],
       where: { userId },
     });
 
@@ -60,14 +76,15 @@ export class UsersService {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
 
-    if (!compare(password,user.password)) {
+    if (!compare(password, user.password)) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
+    
     return this.userRepository.delete(userId);
   }
 
-   /*사용자 조회(이메일)*/
-   async findByEmail(email: string) {
+  /*사용자 조회(이메일)*/
+  async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     return user;
   }

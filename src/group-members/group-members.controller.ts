@@ -8,10 +8,11 @@ import {
   UseGuards,
   HttpCode,
   HttpStatus,
+  NotFoundException,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 import { UpdateGroupMemberDto } from './dto/update-group-member.dto copy';
-import { InviteMemberDto } from './dto/invite_member';
+import { InviteMemberDto } from './dto/invite-member.dto';
 import { UsersService } from '../users/users.service';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
@@ -23,8 +24,9 @@ import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { ScheduleMembersService } from 'src/schedule-members/schedule-members.service';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { GroupMembers } from './entities/group-member.entity';
 
-@UseGuards(RolesGuard)
+@UseGuards(memberRolesGuard)
 @Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(
@@ -79,27 +81,32 @@ export class GroupMembersController {
     };
   }
 
+  // /**
+  //  * 그룹의 초대를 수락한 멤버들 조회/목록
+  //  * @returns
+  //  */
+
+  // @Get('acceptedMembers')
+  // // @MemberRoles(MemberRole.Admin)
+  // @HttpCode(HttpStatus.OK)
+  // async findAcceptedMember(@Param('groupId') groupId: number) {
+  //   const acceptedMembers =
+  //     await this.groupMembersService.findAcceptedMember(groupId);
+
+  //   // null 체크를 추가하여 `users` 객체가 없는 경우를 안전하게 처리
+  //   return acceptedMembers
+  //     .filter((member) => member.users) // null이 아닌 `users` 객체만 필터링
+  //     .map((member) => ({
+  //       userId: member.users?.userId, // 옵셔널 체이닝 ?? ->
+  //       email: member.users?.email,
+  //       nickname: member.users?.nickname,
+  //     }));
+  // }
+
   /**
-   * 그룹의 초대를 수락한 멤버들 조회/목록
+   * 그룹의 멤버로 등록
    * @returns
    */
-
-  @Get('acceptedMembers')
-  @MemberRoles(MemberRole.Admin)
-  @HttpCode(HttpStatus.OK)
-  async findAcceptedMember(@Param('groupId') groupId: number) {
-    const acceptedMembers =
-      await this.groupMembersService.findAcceptedMember(groupId);
-
-    // null 체크를 추가하여 `users` 객체가 없는 경우를 안전하게 처리
-    return acceptedMembers
-      .filter((member) => member.users) // null이 아닌 `users` 객체만 필터링
-      .map((member) => ({
-        userId: member.users?.userId, // 옵셔널 체이닝 ?? ->
-        email: member.users?.email,
-        nickname: member.users?.nickname,
-      }));
-  }
 
   @Patch('register/:userId')
   @MemberRoles(MemberRole.Admin)
@@ -118,14 +125,29 @@ export class GroupMembersController {
     };
   }
 
-  @Get('userId')
-  @HttpCode(HttpStatus.OK)
-  async isGroupMember(
-    @Param('groupId') groupId: number,
-    @Param('userId') userId: number,
-  ): Promise<any> {
-    await this.groupMembersService.isGroupMember(groupId, userId);
+  // @Get('userId')
+  // @HttpCode(HttpStatus.OK)
+  // async isGroupMember(
+  //   @Param('groupId') groupId: number,
+  //   @Param('userId') userId: number,
+  // ): Promise<any> {
+  //   await this.groupMembersService.isGroupMember(groupId, userId);
 
-    return;
+  //   return;
+  // }
+
+  @Get('users/:userId')
+  async findByUserAndGroup(
+    @Param('userId') userId: number,
+    @Param('groupId') groupId: number,
+  ): Promise<GroupMembers> {
+    const groupMember = await this.groupMembersService.findByUserAndGroup(
+      userId,
+      groupId,
+    );
+    if (!groupMember) {
+      throw new NotFoundException(`멤버 정보를 찾을 수 없습니다.`);
+    }
+    return groupMember;
   }
 }

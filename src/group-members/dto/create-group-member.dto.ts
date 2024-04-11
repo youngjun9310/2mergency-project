@@ -1,4 +1,12 @@
-import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { MemberRole } from '../types/groupMemberRole.type';
 
 export class CreateGroupMemberDto {
   @IsString()
@@ -17,4 +25,8 @@ export class CreateGroupMemberDto {
   @IsBoolean()
   @IsNotEmpty()
   isInvited: boolean;
+
+  @IsEnum(MemberRole)
+  @IsOptional()
+  role?: MemberRole = MemberRole.User;
 }
