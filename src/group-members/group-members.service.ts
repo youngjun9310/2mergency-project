@@ -6,10 +6,10 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from './entities/group-member.entity';
 import { Repository } from 'typeorm';
-import { MailService } from 'src/mail/mail.service';
 import { Groups } from 'src/groups/entities/group.entity';
-import { Users } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
+import { MailService } from 'src/mail/mail.service';
+import { Users } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class GroupMembersService {
@@ -56,10 +56,14 @@ export class GroupMembersService {
       throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
     }
 
+    // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
+    const uniqueNickname = `user_${user}_${Date.now()}`;
+
     // 사용자를 바로 그룹 멤버로 추가X => 그냥 초대 상태만 설정
     const memberInvite = this.groupMemberRepository.create({
       userId: user.userId,
       groupId: group.groupId,
+      nickname: uniqueNickname, // 고유한 닉네임 사용
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
     });
@@ -134,18 +138,60 @@ export class GroupMembersService {
   }
 
   /**
-   * 그룹 초대 수락 멤버 조회
+   * 초대된 사용자를 그룹 멤버로 등록
    * @returns
    */
 
-  async findAcceptedMember(groupId: number): Promise<GroupMembers[]> {
-    return await this.groupMemberRepository.find({
-      where: {
-        groupId: groupId,
-        isVailed: true,
-      },
-      relations: ['users'],
+  async registerGroupMember(groupId: number, userId: number): Promise<any> {
+    // 사용자기 이미 그룹멤버인지 확인<-
+    const groupMembers = await this.groupMemberRepository.findOne({
+      where: { groupId, userId },
+      relations: ['groups'],
     });
+    // 이미 그룹멤버면 에러 뱉기
+    if (!groupMembers) {
+      throw new BadRequestException(`유저는 이미 그룹의 멤버입니다.`);
+    }
+
+    // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
+    const uniqueNickname = `user_${Date.now()}`;
+    // 사용자를 그룹 멤버로 추가
+    const newGroupMember = this.groupMemberRepository.create({
+      userId,
+      groupId,
+      nickname: uniqueNickname, // 고유한 닉네임 사용
+      isInvited: true, // 초대된 상태로 설정
+      isVailed: true, // 초대를 수락한 상태로 설정
+    });
+
+    await this.groupMemberRepository.save(newGroupMember);
+    return { success: true, message: '그룹 멤버로 등록되었습니다.' };
   }
 
+  // 그룹 멤버 존재 확인, 반환
+  async isGroupMember(groupId: number, userId: number): Promise<boolean> {
+    const member = await this.groupMemberRepository.findOne({
+      where: { groupId, userId },
+    });
+    return !!member;
+    // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
+    // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
+    // member가 존재하면 (null 또는 undefined가 아니면),
+    // true를 반환하고, 그렇지 않으면 false를 반환
+  }
+
+  /**
+   * 특정 사용자의 그룹 멤버 정보 조회
+   */
+  async findByUserAndGroup(
+    userId: number,
+    groupId: number,
+  ): Promise<GroupMembers | undefined> {
+    return await this.groupMemberRepository.findOne({
+      where: {
+        userId: userId,
+        groupId: groupId,
+      },
+    });
+  }
 }

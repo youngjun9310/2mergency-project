@@ -16,6 +16,7 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
     UsersModule,
   ],
   controllers: [GroupMembersController],
-  providers: [GroupMembersService, JwtStrategy],
+  providers: [GroupMembersService, JwtStrategy, GroupMembers],
+  exports: [GroupMembersService],
 })
 export class GroupMembersModule {}

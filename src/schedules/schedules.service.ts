@@ -3,24 +3,30 @@ import { ScheduleDto } from './dto/schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
+import { Groups } from 'src/groups/entities/group.entity';
+import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 
 @Injectable()
 export class SchedulesService {
   constructor(
     @InjectRepository(Schedules)
-    private ScheduleRepository: Repository<Schedules>,
+    private scheduleRepository: Repository<Schedules>,
+    @InjectRepository(Groups)
+    private groupsRepository: Repository<Groups>,
+    @InjectRepository(GroupMembers)
+    private groupMembersRepository: Repository<GroupMembers>,
   ) {}
+
   /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
   async createSchedule(
-    createScheduleDto:ScheduleDto,
+    createScheduleDto: ScheduleDto,
     groupId: number,
     userId: number,
   ) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
-    // 매개변수로 받은 groupId로 그룹을 찾는다.
-    const group = await this.ScheduleRepository.findOne({
+    const group = await this.groupsRepository.findOne({
       where: { groupId },
     });
 
@@ -30,7 +36,7 @@ export class SchedulesService {
       };
     }
 
-    await this.ScheduleRepository.save({
+    await this.scheduleRepository.save({
       groupId,
       userId,
       title,
@@ -47,7 +53,7 @@ export class SchedulesService {
   // 스케쥴 전체 조회
   /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
   async getAllSchedule(groupId: number) {
-    const allSchedule = await this.ScheduleRepository.find({
+    const allSchedule = await this.scheduleRepository.find({
       where: { groupId },
     });
 
@@ -61,8 +67,18 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(groupId: number, scheduleId: number) {
-    const schedule = this.ScheduleRepository.findOne({
+  async getOneSchedule(groupId: number, scheduleId: number, userId: number) {
+    const selectUser = await this.groupMembersRepository.findOne({
+      where: { groupId, userId },
+    });
+
+    if (userId !== selectUser.userId) {
+      throw {
+        status: HttpStatus.UNAUTHORIZED,
+      };
+    }
+
+    const schedule = await this.scheduleRepository.findOne({
       where: { groupId, scheduleId },
     });
 
@@ -77,7 +93,7 @@ export class SchedulesService {
   // 스케쥴 수정
   async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: number) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
-    const schedule = await this.ScheduleRepository.findOne({
+    const schedule = await this.scheduleRepository.findOne({
       where: { scheduleId },
     });
 
@@ -87,7 +103,7 @@ export class SchedulesService {
       };
     }
 
-    await this.ScheduleRepository.update(scheduleId, changeScheduleDto);
+    await this.scheduleRepository.update(scheduleId, changeScheduleDto);
 
     return {
       status: HttpStatus.OK,
@@ -96,7 +112,7 @@ export class SchedulesService {
 
   // 스케쥴 삭제
   async deleteSchedule(scheduleId: number) {
-    const schedule = await this.ScheduleRepository.findOne({
+    const schedule = await this.scheduleRepository.findOne({
       where: { scheduleId },
     });
 
@@ -105,7 +121,7 @@ export class SchedulesService {
         status: HttpStatus.NOT_FOUND,
       };
     }
-    await this.ScheduleRepository.delete({ scheduleId });
+    await this.scheduleRepository.delete({ scheduleId });
 
     return {
       status: HttpStatus.OK,
