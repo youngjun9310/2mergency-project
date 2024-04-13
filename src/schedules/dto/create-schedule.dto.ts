@@ -1,4 +1,4 @@
-import { IsDate, IsEnum, IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 import { Category } from 'src/types/Category.type';
 
 export class ScheduleDto {
@@ -14,7 +14,6 @@ export class ScheduleDto {
   @IsNotEmpty({ message: '카테고리를 선택해주세요.' })
   category: Category;
 
-  @IsDate()
-  @IsNotEmpty({ message: '일정 날자를 선택해주세요.' })
+  @IsNotEmpty({ message: '일정 날짜를 선택해주세요.' })
   scheduleDate: Date;
 }

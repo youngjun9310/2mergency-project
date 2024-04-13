@@ -10,13 +10,19 @@ import {
   HttpStatus,
   BadRequestException,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduleMembersService } from './schedule-members.service';
 import { CreateScheduleMemberDto } from './dto/create-schedule-member.dto';
 // import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { GroupMembersService } from 'src/group-members/group-members.service';
 import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
+import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
+// @UseGuards(memberRolesGuard)
 @Controller('/groups/:groupId/schedules')
 export class ScheduleMembersController {
   constructor(
@@ -29,23 +35,31 @@ export class ScheduleMembersController {
    * @returns
    */
 
+  @MemberRoles(MemberRole.Main)
   @Post(':scheduleId/members')
   @HttpCode(HttpStatus.CREATED)
+  @ApiOperation({ summary: '스케줄에 멤버 등록' })
+  @ApiResponse({
+    status: 201,
+    description: '스케줄에 멤버 등록이 완료되었습니다.',
+  })
   async registerScheduleMember(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
     @Body('userId') userId: number, // Body에서 직접 userId를 추출하기 !
   ) {
     // 사용자가 그룹 멤버라면, 스케줄 멤버로 등록하기
-    await this.scheduleMembersService.registerScheduleMember(
-      groupId,
-      scheduleId,
-      userId,
-    );
+    const newScheduleMember =
+      await this.scheduleMembersService.registerScheduleMember(
+        groupId,
+        scheduleId,
+        userId,
+      );
 
-    return {
-      message: '스케줄에 멤버 등록이 완료되었습니다.',
-    };
+    return newScheduleMember;
+    // {
+    //   message: '스케줄에 멤버 등록이 완료되었습니다.',
+    // };
   }
 
   /**
@@ -55,11 +69,16 @@ export class ScheduleMembersController {
 
   @Get(':scheduleId/members')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '스케줄에 등록된 멤버 전체 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '스케줄에 등록된 멤버들의 조회가 완료되었습니다.',
+  })
   async findAllScheduleMembers(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
   ) {
-    const members = this.scheduleMembersService.findAllScheduleMembers(
+    const members = await this.scheduleMembersService.findAllScheduleMembers(
       groupId,
       scheduleId,
     );
@@ -77,6 +96,11 @@ export class ScheduleMembersController {
 
   @Get(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: '스케줄에 등록된 멤버 상세 조회' })
+  @ApiResponse({
+    status: 200,
+    description: '스케줄에 등록된 멤버 조회가 완료되었습니다.',
+  })
   async findOneScheduleMembers(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
@@ -98,32 +122,6 @@ export class ScheduleMembersController {
     };
   }
 
-  // /**
-  //  * 스케줄에 등록된 멤버 수정
-  //  * @returns
-  //  */
-
-  // @Patch(':scheduleId/members/:userId')
-  // @HttpCode(HttpStatus.OK)
-  // async updateScheduleMember(
-  //   @Param('groupId') groupId: number,
-  //   @Param('scheduleId') scheduleId: number,
-  //   @Param('userId') userId: number,
-  //   @Body() updateScheduleMemberDto: UpdateScheduleMemberDto,
-  // ) {
-  //   const updateMember = await this.scheduleMembersService.updateScheduleMember(
-  //     groupId,
-  //     scheduleId,
-  //     userId,
-  //     updateScheduleMemberDto,
-  //   );
-
-  //   return {
-  //     message: '스케줄에 등록된 멤버 수정이 완료되었습니다.',
-  //     data: updateMember,
-  //   };
-  // }
-
   /**
    * 스케줄에 등록된 멤버 삭제
    * @returns
@@ -131,6 +129,8 @@ export class ScheduleMembersController {
 
   @Delete(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.OK) // 성공적으로 처리, 응답 본문에 데이터가 포함되지 않을 때 사용하는 상태 코드
+  @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제' })
+  @ApiResponse({ status: 200, description: '스케줄 멤버 삭제에 성공했습니다.' })
   async deleteScheduleMembers(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,

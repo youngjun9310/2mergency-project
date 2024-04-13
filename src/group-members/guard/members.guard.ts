@@ -37,6 +37,7 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
       userId,
       groupId,
     );
+    console.log('그룹멤버확인이다아ㅏ', groupMem);
     if (!groupMem) {
       return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
     }
@@ -45,9 +46,9 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
     //   member,
     // );
 
-    // 사용자가 admin 역할인지 검증하기 !
-    if (member.memberRole === MemberRole.Admin) {
-      return true; // 어드민이면 검증 통과 !
+    // 사용자가ㅏ 어드민인지 확인 -> 어드민이면 항상 접근 O
+    if (groupMem.role === MemberRole.Admin) {
+      return true; // 어드민이면 접근을 허용
     }
 
     // 현재 경로에 필요한 역할 가져오기

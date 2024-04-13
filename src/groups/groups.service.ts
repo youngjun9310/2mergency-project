@@ -18,7 +18,7 @@ export class GroupsService {
   ) {}
 
   // 그룹 생성 //
-  async create(createGroupDto: CreateGroupDto, userId: number) {
+  async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     console.log('유저아이디이이', userId);
     const { title, content, category } = createGroupDto;
 
@@ -33,7 +33,7 @@ export class GroupsService {
       const uniqueNickname = `user_${userId}_${Date.now()}`;
 
       const groupMemberCreate = await this.groupMembersRepository.save({
-        role: MemberRole.Admin,
+        role: MemberRole.Main,
         nickname: uniqueNickname, // 고유한 닉네임 사용
         isVailed: true,
         isInvited: true,
@@ -48,12 +48,12 @@ export class GroupsService {
   }
 
   // 그룹 모든 목록 조회 //
-  async findAll() {
+  async findAllGroups() {
     return await this.groupRepository.find();
   }
 
   // 그룹 상세 목록 조회 //
-  async findOne(groupId: number) {
+  async findOneGroup(groupId: number): Promise<Groups | undefined> {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
@@ -64,7 +64,7 @@ export class GroupsService {
   }
 
   // 그룹 모든 수정 //
-  async update(groupId: number, updateGroupDto: UpdateGroupDto) {
+  async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
@@ -83,7 +83,7 @@ export class GroupsService {
   }
 
   // 그룹 삭제 //
-  async remove(groupId: number) {
+  async deleteGroup(groupId: number) {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {

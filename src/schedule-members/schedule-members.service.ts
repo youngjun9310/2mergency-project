@@ -12,12 +12,13 @@ import { Groups } from 'src/groups/entities/group.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
 import { GroupMembersService } from 'src/group-members/group-members.service';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
+import { Users } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ScheduleMembersService {
   constructor(
     @InjectRepository(ScheduleMembers)
-    private scheduleMemberRepository: Repository<ScheduleMembers>,
+    private scheduleMembersRepository: Repository<ScheduleMembers>,
     private groupMembersService: GroupMembersService,
     @InjectRepository(Groups)
     private groupsRepository: Repository<Groups>,
@@ -58,14 +59,18 @@ export class ScheduleMembersService {
       throw new NotFoundException(`그룹에서 해당 스케줄은 존재하지 않습니다.`);
     }
 
+    // 고유 닉네임 생성
+    const uniqueNickname = `user_${userId}_${Date.now()}`;
+
     // 스케줄 멤버를 생성하고 저장
-    const newScheduleMember = this.scheduleMemberRepository.create({
+    const newScheduleMember = this.scheduleMembersRepository.create({
       scheduleId,
       userId,
+      nickname: uniqueNickname, // 닉네임 설정
     });
 
     // 생성된 스케줄 멤버를 데이터베이스에 저장
-    await this.scheduleMemberRepository.save(newScheduleMember);
+    await this.scheduleMembersRepository.save(newScheduleMember);
 
     // 성공적으로 저장된다면 -> 성공 메세지 반환
     return {
@@ -84,12 +89,10 @@ export class ScheduleMembersService {
   ): Promise<ScheduleMembers[]> {
     // Promise<ScheduleMembers[]>: 함수의 반환 타입
     // 함수가 비동기적으로 ScheduleMembers 엔티티의 배열을 반환<
-    return await this.scheduleMemberRepository.find({
+    return await this.scheduleMembersRepository.find({
       where: {
         scheduleId: scheduleId,
-        schedules: {
-          groupId: groupId,
-        },
+        schedules: { groupId: groupId },
       },
       relations: ['schedules'],
     });
@@ -121,48 +124,10 @@ export class ScheduleMembersService {
     }
 
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
-    return await this.scheduleMemberRepository.findOne({
+    return await this.scheduleMembersRepository.findOne({
       where: { scheduleId, userId },
     });
   }
-
-  // async updateScheduleMember(
-  //   groupId: number,
-  //   scheduleId: number,
-  //   userId: number,
-  //   updateScheduleMemberDto: UpdateScheduleMemberDto,
-  // ): Promise<ScheduleMembers> {
-  //   // 해당 스케줄이 있는지 확인하기
-  //   const schedule = await this.schedulesRepository.findOne({
-  //     where: { scheduleId, groupId },
-  //   });
-
-  //   if (!schedule) {
-  //     throw new NotFoundException('해당하는 스케줄이 없습니다.');
-  //   }
-
-  //   // 그룹과 스케줄에 속한 멤버가 있는지 확인하기 !
-  //   const member = await this.scheduleMemberRepository.findOne({
-  //     where: {
-  //       scheduleId,
-  //       userId,
-  //     },
-  //   });
-
-  //   if (!member) {
-  //     throw new NotFoundException('해당하는 멤버가 없습니다.');
-  //   }
-
-  //   // 멤버 정보 업데이트
-  //   this.scheduleMemberRepository.merge(member, updateScheduleMemberDto);
-  //   // merge 메서드 -> 첫 번째 인자 member에 두 번째 updateScheduleMemberDto의 속성 값들을 병합함
-  //   // 병합 후, 첫 번째 인자로 주어진 엔티티 객체는 수정된 속성 값을 포함한다.
-  //   // 만약 updateScheduleMemberDto에 특정 속성이 undefined로 정의되어 있다면, 해당 속성은 병합 대상에서 제외된다.
-  //   // merge 메서드 : 객체의 속성 값들을 병합하는 메모리 상의 연산, 변경된 엔티티 객체를 데이터베이스에 반영하려면 save 메서드 사용해야함
-  //   const updatedMember = await this.scheduleMemberRepository.save(member);
-
-  //   return updatedMember;
-  // }
 
   async deleteScheduleMembers(
     groupId: number,
@@ -179,7 +144,7 @@ export class ScheduleMembersService {
     }
 
     // 해당 스케줄에 등록된 멤버가 있는지 확인
-    const member = await this.scheduleMemberRepository.findOne({
+    const member = await this.scheduleMembersRepository.findOne({
       where: { scheduleId, userId },
     });
 
@@ -188,6 +153,6 @@ export class ScheduleMembersService {
     }
 
     // 멤버 삭제하기
-    await this.scheduleMemberRepository.remove(member);
+    await this.scheduleMembersRepository.remove(member);
   }
 }

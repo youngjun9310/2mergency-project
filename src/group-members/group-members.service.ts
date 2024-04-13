@@ -10,6 +10,7 @@ import { Groups } from 'src/groups/entities/group.entity';
 import { UsersService } from 'src/users/users.service';
 import { MailService } from 'src/mail/mail.service';
 import { Users } from 'src/users/entities/user.entity';
+import { UpdateGroupMemberDto } from './dto/update-group-member.dto copy';
 
 @Injectable()
 export class GroupMembersService {
@@ -137,34 +138,28 @@ export class GroupMembersService {
     return { success: true, message: '초대를 수락했습니다.' };
   }
 
-  // /**
-  //  * 그룹 초대 수락 멤버 조회
-  //  * @returns
-  //  */
-
-  // async findAcceptedMember(groupId: number): Promise<GroupMembers[]> {
-  //   return await this.groupMemberRepository.find({
-  //     where: {
-  //       groupId: groupId,
-  //       isVailed: true,
-  //     },
-  //     relations: ['users'],
-  //   });
-  // }
-
   /**
    * 초대된 사용자를 그룹 멤버로 등록
    * @returns
    */
 
-  async registerGroupMember(groupId: number, userId: number): Promise<any> {
+  async registerGroupMember(
+    groupId: number,
+    userId: number,
+    email: string,
+  ): Promise<any> {
+    // 사용자의 존재 유무 확인
+    const isUser = await this.usersRepository.findOne({ where: { userId } });
+    if (!isUser) {
+      throw new NotFoundException(`ID ${userId}의 사용자를 찾을 수 없습니다.`);
+    }
     // 사용자기 이미 그룹멤버인지 확인<-
     const groupMembers = await this.groupMemberRepository.findOne({
       where: { groupId, userId },
       relations: ['groups'],
     });
     // 이미 그룹멤버면 에러 뱉기
-    if (!groupMembers) {
+    if (groupMembers) {
       throw new BadRequestException(`유저는 이미 그룹의 멤버입니다.`);
     }
 
@@ -183,20 +178,37 @@ export class GroupMembersService {
     return { success: true, message: '그룹 멤버로 등록되었습니다.' };
   }
 
+  async checkGroupExists(groupId: number): Promise<boolean> {
+    const group = await this.groupRepository.findOne({
+      where: { groupId },
+    });
+    return !!group;
+  }
+
+  async checkUserExists(userId: number): Promise<boolean> {
+    const user = await this.usersRepository.findOne({
+      where: { userId },
+    });
+    return !!user;
+  }
+
   // 그룹 멤버 존재 확인, 반환
   async isGroupMember(groupId: number, userId: number): Promise<boolean> {
+    console.log(
+      `Checking membership for groupId: ${groupId}, userId: ${userId}`,
+    );
     const member = await this.groupMemberRepository.findOne({
       where: { groupId, userId },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
-    // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
-    // member가 존재하면 (null 또는 undefined가 아니면),
-    // true를 반환하고, 그렇지 않으면 false를 반환
+    //   // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
+    //   // member가 존재하면 (null 또는 undefined가 아니면),
+    //   // true를 반환하고, 그렇지 않으면 false를 반환
   }
 
   /**
-   * 특정 사용자 ID와 그룹 ID로 그룹 멤버 정보 조회
+   * 특정 사용자의 그룹 멤버 정보 조회
    */
   async findByUserAndGroup(
     userId: number,
@@ -208,5 +220,20 @@ export class GroupMembersService {
         groupId: groupId,
       },
     });
+  }
+
+  async getAllGroupMembers(groupId: number): Promise<GroupMembers[]> {
+    const members = await this.groupMemberRepository.find({
+      where: { groupId },
+      relations: ['users'], // 여기서 'users'는 GroupMembers 엔티티 내에서 Users 엔티티와 맺고 있는 관계의 속성 이름입니다.
+    });
+
+    if (!members.length) {
+      throw new NotFoundException(
+        `그룹 ID ${groupId}에 해당하는 멤버가 없습니다.`,
+      );
+    }
+
+    return members;
   }
 }
