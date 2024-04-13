@@ -91,10 +91,14 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: number) {
+  async changeSchedule(
+    changeScheduleDto: ScheduleDto,
+    groupId: number,
+    scheduleId: number,
+  ) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.scheduleRepository.findOne({
-      where: { scheduleId },
+      where: { groupId, scheduleId },
     });
 
     if (!schedule) {
