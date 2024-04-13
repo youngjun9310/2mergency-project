@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  SetMetadata,
   UseGuards,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
@@ -17,13 +18,15 @@ import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 
 @Controller('groups/:groupId')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(AuthGuard('jwt'), memberRolesGuard)
+  @SetMetadata('roles', [MemberRole.Main])
   @Post('/schedules')
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,

@@ -36,17 +36,18 @@ export class ScheduleMembersController {
    */
 
   @MemberRoles(MemberRole.Main)
-  @Post(':scheduleId/members')
+  @Post(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '스케줄에 멤버 등록' })
   @ApiResponse({
     status: 201,
-    description: '스케줄에 멤버 등록이 완료되었습니다.',
+    description: `스케줄에 멤버 등록이 완료되었습니다.`,
   })
   async registerScheduleMember(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
-    @Body('userId') userId: number, // Body에서 직접 userId를 추출하기 !
+    @Param('userId') userId: number,
+    @Body() updateScheduleMemberDto: UpdateScheduleMemberDto,
   ) {
     // 사용자가 그룹 멤버라면, 스케줄 멤버로 등록하기
     const newScheduleMember =
@@ -54,12 +55,10 @@ export class ScheduleMembersController {
         groupId,
         scheduleId,
         userId,
+        updateScheduleMemberDto,
       );
 
     return newScheduleMember;
-    // {
-    //   message: '스케줄에 멤버 등록이 완료되었습니다.',
-    // };
   }
 
   /**

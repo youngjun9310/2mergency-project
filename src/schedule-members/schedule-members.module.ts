@@ -8,6 +8,7 @@ import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupMembersService } from 'src/group-members/group-members.service';
 import { GroupMembersModule } from 'src/group-members/group-members.module';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { GroupMembersModule } from 'src/group-members/group-members.module';
       GroupMembers,
     ]),
     GroupMembersModule,
+    UsersModule,
   ],
   controllers: [ScheduleMembersController],
   providers: [ScheduleMembersService],

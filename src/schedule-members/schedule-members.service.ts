@@ -34,6 +34,7 @@ export class ScheduleMembersService {
     groupId: number,
     scheduleId: number,
     userId: number,
+    updateScheduleMemberDto: UpdateScheduleMemberDto,
   ): Promise<any> {
     // 그룹이 있는지 먼저 확인하기
     const isGroup = await this.groupsRepository.findOne({ where: { groupId } });
@@ -48,7 +49,9 @@ export class ScheduleMembersService {
     );
 
     if (!isGroupMember) {
-      throw new BadRequestException('이 그룹의 멤버가 아닙니다.');
+      throw new BadRequestException(
+        `이 그룹${groupId}의 멤버${userId}가 아닙니다.`,
+      );
     }
 
     // 스케줄이 있는지 확인하기
@@ -56,7 +59,9 @@ export class ScheduleMembersService {
       where: { scheduleId, groupId },
     });
     if (!isSchedule) {
-      throw new NotFoundException(`그룹에서 해당 스케줄은 존재하지 않습니다.`);
+      throw new NotFoundException(
+        `그룹${groupId}에서 해당 스케줄${scheduleId}은 존재하지 않습니다.`,
+      );
     }
 
     // 고유 닉네임 생성
@@ -75,7 +80,7 @@ export class ScheduleMembersService {
     // 성공적으로 저장된다면 -> 성공 메세지 반환
     return {
       success: true,
-      message: '스케줄 멤버가 성공적으로 등록되었습니다.',
+      message: `그룹 ${groupId}의 스케줄${scheduleId}에 멤버${userId} 등록이 완료되었습니다.`,
       data: newScheduleMember,
     };
   }
@@ -92,9 +97,9 @@ export class ScheduleMembersService {
     return await this.scheduleMembersRepository.find({
       where: {
         scheduleId: scheduleId,
-        schedules: { groupId: groupId },
+        // schedules: { groupId: groupId },
       },
-      relations: ['schedules'],
+      relations: ['users', 'schedules'],
     });
   }
 

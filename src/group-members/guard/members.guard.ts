@@ -64,44 +64,4 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
     // 사용자의 역할이 필요한 역할 중 하나인지 확인합니다.
     return requiredRoles.includes(groupMember.role);
   }
-
-  // async canActivate(context: ExecutionContext): Promise<boolean> {
-  //   // 상위 클래스의 canActivate를 호출하여 인증 여부를 확인하기!
-  //   const authenticated = await super.canActivate(context);
-  //   if (!authenticated) {
-  //     return false; // 인증되지 않았으면 접근 거부
-  //     throw new UnauthorizedException(); // // 인증 실패 시 예외를
-  //   }
-
-  //   const request = context.switchToHttp().getRequest();
-  //   // console.log(request)
-  //   const member = request.user;
-  //   // console.log(request.user); // 사용자 객체 확인
-
-  //   // `member` 객체와 `member.memberRole` 속성의 존재 확인
-  //   if (!member) {
-  //     return false; // 사용자 객체가 없으면 접근 거부
-  //   }
-  //   console.log('멤버롤 확인!!', member.memberRole); // 사용자 역할 로깅
-
-  //   // 사용자가 admin 역할인지 검증하기 !
-  //   if (member.memberRole === MemberRole.Admin) {
-  //     return true; // 어드민이면 검증 통과 !
-  //   }
-
-  //   // 어드민이 아니면 ~, 역할 role 확인하기
-  //   const requiredRoles = this.reflector.getAllAndOverride<MemberRole[]>(
-  //     'memberRoles',
-  //     [context.getHandler(), context.getClass()],
-  //   );
-
-  //   console.log('필요한 역할 확인:', requiredRoles); // 필요한 롤 확인
-
-  //   if (!requiredRoles) {
-  //     return true; // 필요한 역할이 설정되지 않았으면 접근 허용
-  //   }
-
-  //   // return requiredRoles.some(role => member.memberRole.includes(role));
-  //   return requiredRoles.some((memberRole) => member.memberRole === memberRole);
-  // }
 }
