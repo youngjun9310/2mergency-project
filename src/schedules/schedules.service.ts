@@ -1,5 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { ScheduleDto } from './dto/schedule.dto';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { ScheduleDto } from './dto/create-schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
@@ -31,12 +31,10 @@ export class SchedulesService {
     });
 
     if (!group) {
-      throw {
-        status: HttpStatus.NOT_FOUND,
-      };
+      throw new HttpException('Group not found', HttpStatus.NOT_FOUND);
     }
 
-    await this.scheduleRepository.save({
+    const newSchedule = await this.scheduleRepository.save({
       groupId,
       userId,
       title,
@@ -45,9 +43,7 @@ export class SchedulesService {
       scheduleDate,
     });
 
-    return {
-      status: HttpStatus.CREATED,
-    };
+    return newSchedule;
   }
 
   // 스케쥴 전체 조회
@@ -91,14 +87,10 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(
-    changeScheduleDto: ScheduleDto,
-    groupId: number,
-    scheduleId: number,
-  ) {
+  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: number) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.scheduleRepository.findOne({
-      where: { groupId, scheduleId },
+      where: { scheduleId },
     });
 
     if (!schedule) {

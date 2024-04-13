@@ -8,7 +8,7 @@ import {
   IsString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { Category } from 'src/types/Category.type';
+import { Category } from '../../types/Category.type';
 
 export class UpdateGroupDto extends PickType(CreateGroupDto, [
   'title',

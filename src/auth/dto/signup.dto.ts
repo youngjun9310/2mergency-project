@@ -1,30 +1,36 @@
-import { ApiProperty } from '@nestjs/swagger' ;
-import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsString,
+  IsBoolean,
+  IsOptional,
+} from 'class-validator';
 import { IsFile, MemoryStoredFile } from 'nestjs-form-data';
 
 export class SignUpDto {
   @IsString()
   @ApiProperty({
     example: 'nickname',
-    description: '닉네임'
+    description: '닉네임',
   })
-  @IsNotEmpty({message: '닉네임을 입력해주세요.'})
+  @IsNotEmpty({ message: '닉네임을 입력해주세요.' })
   nickname: string;
 
   @IsEmail()
   @ApiProperty({
     example: 'abcd123@gmail.com',
-    description: '이메일'
+    description: '이메일',
   })
-  @IsNotEmpty({message: '이메일을 입력해주세요.'})
+  @IsNotEmpty({ message: '이메일을 입력해주세요.' })
   email: string;
 
   @IsString()
   @ApiProperty({
     example: 'password',
-    description: '패스워드'
+    description: '패스워드',
   })
-  @IsNotEmpty({message: '패스워드를 입력해주세요.'})
+  @IsNotEmpty({ message: '패스워드를 입력해주세요.' })
   password: string;
 
   @IsString()
@@ -34,7 +40,7 @@ export class SignUpDto {
   })
   @IsNotEmpty({ message: '비밀번호 재확인을 입력해주세요.' })
   passwordConfirm: string;
-  
+
   @IsString()
   @ApiProperty({
     example: 'adminPassword',
@@ -46,17 +52,16 @@ export class SignUpDto {
   @IsString()
   @ApiProperty({
     example: '서울시',
-    description: '주소'
+    description: '주소',
   })
-  @IsNotEmpty({message: '주소를 입력해주세요.'})
+  @IsNotEmpty({ message: '주소를 입력해주세요.' })
   address: string;
 
   @IsString()
   @IsOptional()
   @ApiProperty({
     example: true,
-    description: '공개된 사용자여부'
+    description: '공개된 사용자여부',
   })
   isOpen: string;
 }
-

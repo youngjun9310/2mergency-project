@@ -13,6 +13,8 @@ import { AwsModule } from 'src/aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { RoleStrategy } from './strategy/roles.strategy';
 import { RolesGuard } from './guard/roles.guard';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
+import { GroupMembersModule } from 'src/group-members/group-members.module';
 
 @Module({
   imports: [
@@ -26,9 +28,9 @@ import { RolesGuard } from './guard/roles.guard';
     UsersModule,
     MailModule,
     AwsModule,
-    NestjsFormDataModule
+    NestjsFormDataModule,
   ],
-  
+
   controllers: [AuthController],
   providers: [JwtStrategy, AuthService],
 })

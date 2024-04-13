@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsInt, IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsEmail, IsBoolean } from 'class-validator';
 
-export class CreateScheduleMemberDto {
+export class InviteMemberDto {
   @IsString()
   @IsEmail()
   @IsNotEmpty({ message: '이메일이 존재하지 않습니다.' })
   @ApiProperty({
-    description: '그룹 멤버의 이메일 주소',
+    description: '초대할 사용자의 이메일 주소',
     example: 'user@example.com',
     required: true,
   })
@@ -15,7 +15,7 @@ export class CreateScheduleMemberDto {
   @IsString()
   @IsNotEmpty()
   @ApiProperty({
-    description: '그룹 멤버의 별명',
+    description: '초대할 사용자의 별명',
     example: 'nickname',
     required: true,
   })

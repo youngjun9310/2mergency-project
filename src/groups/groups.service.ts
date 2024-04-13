@@ -4,9 +4,8 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { Repository } from 'typeorm';
 import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 @Injectable()
 export class GroupsService {
   constructor(
@@ -16,7 +15,7 @@ export class GroupsService {
   ) {}
 
   // 그룹 생성 //
-  async create(createGroupDto: CreateGroupDto, userId: number) {
+  async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     console.log('유저아이디이이', userId);
     const { title, content, category } = createGroupDto;
 
@@ -27,12 +26,12 @@ export class GroupsService {
     });
     console.log('그룹크리에이트트 그룹 생성:', groupCreate);
     try {
-      // 고유한 닉네임 생성 ->  사용자 ID와 현재 시간을 결합
+      // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
       const uniqueNickname = `user_${userId}_${Date.now()}`;
 
       const groupMemberCreate = await this.groupMembersRepository.save({
-        role: MemberRole.Admin,
-        nickname: uniqueNickname, // 고유한 닉네임 사용하는 방법!
+        role: MemberRole.Main,
+        nickname: uniqueNickname, // 고유한 닉네임 사용
         isVailed: true,
         isInvited: true,
         groupId: groupCreate.groupId,
@@ -46,12 +45,12 @@ export class GroupsService {
   }
 
   // 그룹 모든 목록 조회 //
-  async findAll() {
+  async findAllGroups() {
     return await this.groupRepository.find();
   }
 
   // 그룹 상세 목록 조회 //
-  async findOne(groupId: number) {
+  async findOneGroup(groupId: number): Promise<Groups | undefined> {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
@@ -62,7 +61,7 @@ export class GroupsService {
   }
 
   // 그룹 모든 수정 //
-  async update(groupId: number, updateGroupDto: UpdateGroupDto) {
+  async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
@@ -81,7 +80,7 @@ export class GroupsService {
   }
 
   // 그룹 삭제 //
-  async remove(groupId: number) {
+  async deleteGroup(groupId: number) {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {

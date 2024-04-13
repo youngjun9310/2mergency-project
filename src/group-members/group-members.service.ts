@@ -8,7 +8,6 @@ import { GroupMembers } from './entities/group-member.entity';
 import { Repository } from 'typeorm';
 import { Groups } from 'src/groups/entities/group.entity';
 import { UsersService } from 'src/users/users.service';
-import { MailService } from 'src/mail/mail.service';
 import { Users } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -19,12 +18,24 @@ export class GroupMembersService {
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
     @InjectRepository(Users) private usersRepository: Repository<Users>,
     private usersService: UsersService,
-    private readonly mailService: MailService,
   ) {}
+
+  async checkGroupExists(groupId: number): Promise<boolean> {
+    const group = await this.groupRepository.findOne({
+      where: { groupId },
+    });
+    return !!group;
+  }
+
+  async checkUserExists(userId: number): Promise<boolean> {
+    const user = await this.usersRepository.findOne({
+      where: { userId },
+    });
+    return !!user;
+  }
 
   /**
    * 그룹에 멤버 초대
-   * @returns
    */
 
   async inviteUserToGroup(groupId: number, email: string): Promise<any> {
@@ -55,7 +66,6 @@ export class GroupMembersService {
     if (member) {
       throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
     }
-
     // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
     const uniqueNickname = `user_${user}_${Date.now()}`;
 
@@ -70,114 +80,100 @@ export class GroupMembersService {
     console.log('멤버초대', memberInvite);
     await this.groupMemberRepository.save(memberInvite);
 
-    return { success: true, message: '초대가 발송되었습니다.' };
+    return {
+      success: true,
+      message: `${user.userId}유저에게 초대가 발송되었습니다.`,
+    };
   }
 
   /**
    * 유저가 그룹 초대 수락
-   * @returns
    */
-
-  async acceptGroupInvitation(
-    groupId: number,
-    userId: number,
-    email: string,
-  ): Promise<any> {
-    const group = await this.groupRepository.findOne({
-      where: { groupId },
-    });
-    if (!group) {
+  async acceptInvitation(groupId: number, email: string): Promise<any> {
+    // 그룹 존재 여부 확인
+    if (!(await this.checkGroupExists(groupId))) {
       throw new NotFoundException(`그룹이 존재하지 않습니다.`);
     }
 
+    // 사용자가 있는지 이메일로 확인
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('유저가 존재하지 않습니다.');
+    }
+
+    // 사용자의 초대 상태 확인
+    const member = await this.groupMemberRepository.findOne({
+      where: {
+        userId: user.userId,
+        groupId: groupId,
+        isInvited: true, // 초대가 발송된 상태인지 확인
+      },
+    });
+
+    if (!member) {
+      throw new NotFoundException('해당 유저는 초대받지 않았습니다.');
+    }
+
+    // 초대 수락 처리
+    member.isVailed = true; // 초대 수락 여부를 true로 설정
+    await this.groupMemberRepository.save(member);
+
+    return {
+      success: true,
+      message: `${user.userId}님이 초대를 수락했습니다.`,
+    };
+  }
+
+  /**
+   * 초대된 사용자를 그룹 멤버로 등록
+   */
+
+  async addGroupMember(groupId: number, email: string): Promise<any> {
     // '사용자'가 있는지 확인하기
     const user = await this.usersService.findByEmail(email);
     console.log('유저임', user);
     if (!user) {
       throw new NotFoundException(
-        `이메일 ${email}에 해당하는 유저가 존재하지 않습니다.`,
+        `이메일 ${email}에 해당하는 사용자를 찾을 수 없습니다..`,
       );
     }
 
-    // 사용자 ID가 실제로 제공된 userId와 일치하는지 확인
-    if (user.userId !== userId) {
-      throw new NotFoundException(`userId가 유효하지 않습니다.`);
-    }
-
-    // 그룹 멤버 조회
+    // 사용자의 초대 수락 상태 확인
     const member = await this.groupMemberRepository.findOne({
       where: {
         userId: user.userId,
         groupId: groupId,
+        isVailed: true, // 초대를 수락한 상태인지 확인
       },
-      relations: ['users', 'groups'],
     });
 
-    // 해당 그룹에 멤버(초대?)가 존재하는지 확인
     if (!member) {
-      throw new NotFoundException('해당 그룹의 초대가 존재하지 않습니다.');
-    }
-
-    // 이미 초대가 된 상태?인지 확인
-    if (member.isVailed) {
-      throw new BadRequestException(
-        '유저는 이미 그룹에 초대되었습니다. 초대를 수락해주세요.',
+      throw new NotFoundException(
+        `사용자 ${user.userId}가 아직 그룹 ${groupId} 초대를 수락하지 않았습니다.`,
       );
     }
 
-    // 초대 상태가 맞는지 확인
-    if (!member.isInvited) {
-      throw new BadRequestException('유효하지 않은 초대입니다.');
-    }
+    await this.groupMemberRepository.save(member);
 
-    // 그룹 초대를 수락 상태로 변경하고 멤버 업데이트 !
-    member.isVailed = true; // 초대 수락 상태로 변경
-    await this.groupMemberRepository.save(member); // 수락 상태 저장하기
-
-    return { success: true, message: '초대를 수락했습니다.' };
-  }
-
-  /**
-   * 초대된 사용자를 그룹 멤버로 등록
-   * @returns
-   */
-
-  async registerGroupMember(groupId: number, userId: number): Promise<any> {
-    // 사용자기 이미 그룹멤버인지 확인<-
-    const groupMembers = await this.groupMemberRepository.findOne({
-      where: { groupId, userId },
-      relations: ['groups'],
-    });
-    // 이미 그룹멤버면 에러 뱉기
-    if (!groupMembers) {
-      throw new BadRequestException(`유저는 이미 그룹의 멤버입니다.`);
-    }
-
-    // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
-    const uniqueNickname = `user_${Date.now()}`;
-    // 사용자를 그룹 멤버로 추가
-    const newGroupMember = this.groupMemberRepository.create({
-      userId,
-      groupId,
-      nickname: uniqueNickname, // 고유한 닉네임 사용
-      isInvited: true, // 초대된 상태로 설정
-      isVailed: true, // 초대를 수락한 상태로 설정
-    });
-
-    await this.groupMemberRepository.save(newGroupMember);
-    return { success: true, message: '그룹 멤버로 등록되었습니다.' };
+    return {
+      success: true,
+      message: `유저 ${user.userId}는 그룹 ${groupId} 멤버로 등록되었습니다.`,
+    };
   }
 
   // 그룹 멤버 존재 확인, 반환
   async isGroupMember(groupId: number, userId: number): Promise<boolean> {
+    console.log(
+      `Checking membership for groupId: ${groupId}, userId: ${userId}`,
+    );
     const member = await this.groupMemberRepository.findOne({
       where: { groupId, userId },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
-    // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
-    // member가 존재하면 (null 또는 undefined가 아니면),
-    // true를 반환하고, 그렇지 않으면 false를 반환
+    //   // member 변수의 "진리성(truthiness)"을 boolean 값으로 강제 변환
+    //   // member가 존재하면 (null 또는 undefined가 아니면),
+    //   // true를 반환하고, 그렇지 않으면 false를 반환
   }
 
   /**
@@ -193,5 +189,20 @@ export class GroupMembersService {
         groupId: groupId,
       },
     });
+  }
+
+  async getAllGroupMembers(groupId: number): Promise<GroupMembers[]> {
+    const members = await this.groupMemberRepository.find({
+      where: { groupId },
+      relations: ['users'], // 여기서 'users'는 GroupMembers 엔티티 내에서 Users 엔티티와 맺고 있는 관계의 속성 이름입니다.
+    });
+
+    if (!members.length) {
+      throw new NotFoundException(
+        `그룹 ID ${groupId}에 해당하는 멤버가 없습니다.`,
+      );
+    }
+
+    return members;
   }
 }
