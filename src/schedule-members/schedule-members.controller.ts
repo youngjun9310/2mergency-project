@@ -83,7 +83,7 @@ export class ScheduleMembersController {
     );
 
     return {
-      message: '스케줄에 등록된 멤버들의 조회가 완료되었습니다.',
+      message: `그룹 ${groupId}스케줄 ${scheduleId}에 등록된 멤버들의 조회가 완료되었습니다.`,
       data: members,
     };
   }
