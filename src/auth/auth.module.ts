@@ -11,6 +11,8 @@ import { Invites } from './entities/invite.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { AwsModule } from 'src/aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { RoleStrategy } from './strategy/roles.strategy';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [

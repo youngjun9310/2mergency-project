@@ -12,6 +12,7 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
 
   async canActivate(context: ExecutionContext) {
     const authenticated = await super.canActivate(context);
+    console.log("확인", context)
     if (!authenticated) {
       return false;
     }
@@ -24,7 +25,8 @@ export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
       return true;
     }
 
-    const { member } = context.switchToHttp().getRequest();
+    const member  = context.switchToHttp().getRequest();
+    console.log("여기",member)
     return requiredRoles.some((memberRole) => member.memberRole === memberRole);
   }
 }

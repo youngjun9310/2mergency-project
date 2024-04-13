@@ -59,7 +59,6 @@ export class MailService {
         html: `<h1> 그룹에 당신을 초대하였습니다. </h1> <br>
         <p> 인증번호를 입력해주세요! : ${token} </p>`,
       };
-      console.log(sendOption)
 
       await this.transporter.sendMail(sendOption);
       console.log('메일이 전송되었습니다')

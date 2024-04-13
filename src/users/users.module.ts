@@ -6,6 +6,7 @@ import { Users } from './entities/user.entity';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AwsModule } from 'src/aws/aws.module';
+import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { AwsModule } from 'src/aws/aws.module';
     TypeOrmModule.forFeature([Users]),
     AwsModule
   ],
-  providers: [UsersService, JwtService],
+  providers: [UsersService, JwtService,RoleStrategy ],
   controllers: [UsersController],
   exports: [UsersService],
 })

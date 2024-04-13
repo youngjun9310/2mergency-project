@@ -8,6 +8,7 @@ import { Users } from './entities/user.entity';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 
 @ApiTags('User')
 @Controller('users')
@@ -18,7 +19,7 @@ export class UsersController {
 
   /** 전체 사용자 조회(어드민용)*/
   @ApiOperation({ summary: '전체 사용자 조회', description: '전체 조회' })
-  @UseGuards(RolesGuard)
+  @UseGuards(JWTAuthGuard, RolesGuard)
   @Get('allUser')
   async findAllUser() {
     const userInfo = await this.usersService.findAllUser();
@@ -27,7 +28,7 @@ export class UsersController {
 
   /** 사용자 조회*/
   @ApiOperation({ summary: '사용자 조회', description: '조회' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Get('/')
   async findUser(@UserInfo() user: Users , @Req() req) {
     const { userId } = req.user;
@@ -37,7 +38,7 @@ export class UsersController {
 
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @UseInterceptors(FileInterceptor('profileImage'))
   @Patch('')
   async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @Req() req) {
@@ -48,7 +49,7 @@ export class UsersController {
 
   /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Delete('')
   async userDelete(@Body() deleteDto: DeleteDto, @Req() req) {
     const { userId } = req.user;
@@ -59,7 +60,7 @@ export class UsersController {
 
   /** 사용자 접속정보조회*/
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Get('info')
   getUserInfo(@UserInfo() user: Users) {
     return { 이메일: user.email, 닉네임: user.nickname };

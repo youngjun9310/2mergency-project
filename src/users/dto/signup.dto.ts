@@ -59,4 +59,3 @@ export class SignUpDto {
   isOpen: string;
    
 }
-
