@@ -1388,13 +1388,6 @@ function posmarkers(latitude, longitude){
         position: new Tmapv2.LatLng(latitude, longitude), //Marker의 중심좌표 설정.
         map: map //Marker가 표시될 Map 설정..
     });
-    // var resultHeader = response.resultData.header;
-    // tDistance = resultHeader.totalDistance;
-    // tTime = resultHeader.speed;	
-    // rName = resultHeader.roadName;
-    // console.log(tDistance)
-    // console.log(tTime)
-    // console.log(rName)
 }
 
 function startmarkers(latitude, longitude){
