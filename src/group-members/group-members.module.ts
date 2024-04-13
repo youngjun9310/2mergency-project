@@ -8,6 +8,7 @@ import { MailModule } from 'src/mail/mail.module';
 import { Users } from 'src/users/entities/user.entity';
 import { UsersModule } from 'src/users/users.module';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
+import { MembersRoleStrategy } from './strategies/members.strategy';
 
 @Module({
   imports: [
@@ -16,6 +17,12 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
     UsersModule,
   ],
   controllers: [GroupMembersController],
-  providers: [GroupMembersService, JwtStrategy],
+  providers: [
+    GroupMembersService,
+    JwtStrategy,
+    GroupMembers,
+    MembersRoleStrategy,
+  ],
+  exports: [GroupMembersService],
 })
 export class GroupMembersModule {}

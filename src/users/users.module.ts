@@ -7,6 +7,7 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { AwsModule } from 'src/aws/aws.module';
 import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 
 @Module({
   imports: [
@@ -17,9 +18,9 @@ import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Users]),
-    AwsModule
+    AwsModule,
   ],
-  providers: [UsersService, JwtService,RoleStrategy ],
+  providers: [UsersService, JwtService, RoleStrategy],
   controllers: [UsersController],
   exports: [UsersService],
 })

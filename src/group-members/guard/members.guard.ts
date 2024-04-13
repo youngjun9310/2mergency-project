@@ -1,32 +1,14 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-
+import { MembersRoleStrategy } from '../strategies/members.strategy';
 
 @Injectable()
-export class memberRolesGuard extends AuthGuard('jwt') implements CanActivate {
-  constructor(private reflector: Reflector) {
-    super();
-  }
+export class memberRolesGuard implements CanActivate {
+  constructor(private strategy: MembersRoleStrategy) {}
 
-  async canActivate(context: ExecutionContext) {
-    const authenticated = await super.canActivate(context);
-    console.log("확인", context)
-    if (!authenticated) {
-      return false;
-    }
-
-    const requiredRoles = this.reflector.getAllAndOverride<MemberRole[]>('memberRoles', [
-      context.getHandler(),
-      context.getClass(),
-    ]);
-    if (!requiredRoles) {
-      return true;
-    }
-
-    const member  = context.switchToHttp().getRequest();
-    console.log("여기",member)
-    return requiredRoles.some((memberRole) => member.memberRole === memberRole);
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+    const userId = request.payload.sub; // 인증된 사용자 가져옴
+    const groupId = request.groups; // URL에서 그룹아이디 가져옹
+    return await this.strategy.validate(userId, groupId, context);
   }
 }
