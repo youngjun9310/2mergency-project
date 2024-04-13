@@ -1,23 +1,20 @@
-import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Reflector } from '@nestjs/core';
-import { AuthGuard } from '@nestjs/passport';
+import { CanActivate, ExecutionContext, Injectable, NotFoundException } from '@nestjs/common';
+import { RoleStrategy } from '../strategy/roles.strategy';
 
 @Injectable()
-export class RolesGuard extends AuthGuard('jwt') implements CanActivate {
-  constructor(private reflector: Reflector) {
-    super();
-  }
+export class RolesGuard implements CanActivate{
+  
+  constructor(
+    private readonly strategy : RoleStrategy
+  ) { }
 
-  async canActivate(context: ExecutionContext) {
-    const authenticated = await super.canActivate(context);
-    if (!authenticated) {
-      return false;
-    }
+  async canActivate(context: ExecutionContext): Promise<boolean>  {
+    const request = context.switchToHttp().getRequest();
+    console.log('request',request)
+    console.log(request.user)
+    const userId = request.user.userId
 
-    const { user } = context.switchToHttp().getRequest();
-    console.log('isAdmin? ', user.isAdmin);
-    return user.isAdmin;
-
+    return await this.strategy.validate(userId)
   }
 }
 

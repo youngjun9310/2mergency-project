@@ -1,5 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger' ;
-import { IsEmail, IsNotEmpty, IsString, IsNumber, IsBoolean, IsOptional } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, IsBoolean, IsOptional } from 'class-validator';
+import { IsFile, MemoryStoredFile } from 'nestjs-form-data';
 
 export class SignUpDto {
   @IsString()
@@ -51,19 +52,11 @@ export class SignUpDto {
   address: string;
 
   @IsString()
-  @ApiProperty({
-    example: "profileImg.gif",
-    description: '프로필 이미지'
-  })
   @IsOptional()
-  profileImage: string;
-
-  @IsBoolean()
   @ApiProperty({
     example: true,
     description: '공개된 사용자여부'
   })
-  isOpen: boolean;
-  
+  isOpen: string;
 }
 
