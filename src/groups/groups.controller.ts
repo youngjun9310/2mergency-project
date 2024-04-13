@@ -16,6 +16,8 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
 @UseGuards(RolesGuard)
 @Controller('groups')
@@ -23,6 +25,7 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
+  @MemberRoles(MemberRole.Admin)
   @ApiTags('groups')
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })

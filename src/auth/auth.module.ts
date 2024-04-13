@@ -26,9 +26,9 @@ import { RolesGuard } from './guard/roles.guard';
     UsersModule,
     MailModule,
     AwsModule,
-    NestjsFormDataModule
+    NestjsFormDataModule,
   ],
-  
+
   controllers: [AuthController],
   providers: [JwtStrategy, AuthService],
 })

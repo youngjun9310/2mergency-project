@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,  
+  Patch,
   Param,
   UseGuards,
   HttpCode,
@@ -17,18 +17,17 @@ import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
 import { Groups } from 'src/groups/entities/group.entity';
-import { memberRolesGuard} from './guard/members.guard';
+import { memberRolesGuard } from './guard/members.guard';
 import { Role } from 'src/users/types/userRole.type';
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { ScheduleMembersService } from 'src/schedule-members/schedule-members.service';
 
-
-@UseGuards(memberRolesGuard) 
+@UseGuards(memberRolesGuard)
 @Controller('groups/:groupId')
 export class GroupMembersController {
   constructor(
-    private readonly scheduleMembersService: ScheduleMembersService,
+    // private readonly scheduleMembersService: ScheduleMembersService,
     private readonly groupMembersService: GroupMembersService,
     private readonly userService: UsersService,
   ) {}
@@ -124,7 +123,7 @@ export class GroupMembersController {
     @Param('groupId') groupId: number,
     @Param('userId') userId: number,
   ): Promise<any> {
-    await this.groupMembersService.isGroupMember(groupId, userId)
+    await this.groupMembersService.isGroupMember(groupId, userId);
 
     return;
   }

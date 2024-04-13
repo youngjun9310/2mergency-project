@@ -11,17 +11,17 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
     private readonly userService: UsersService,
     private readonly configService: ConfigService,
-    ) {
+  ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey:configService.get(ENV_JWT_SECRET_KEY),
+      secretOrKey: configService.get(ENV_JWT_SECRET_KEY),
     });
   }
 
   async validate(payload: any) {
     const user = await this.userService.findByEmail(payload.email);
-    console.log('payload',payload)
+    console.log('payload', payload);
     console.log(user);
     if (_.isNil(user)) {
       throw new NotFoundException('해당하는 사용자를 찾을 수 없습니다.');

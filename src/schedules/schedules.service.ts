@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ScheduleDto } from './dto/schedule.dto';
+import { ScheduleDto } from './dto/create-schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
@@ -13,7 +13,7 @@ export class SchedulesService {
   /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
   async createSchedule(
-    createScheduleDto:ScheduleDto,
+    createScheduleDto: ScheduleDto,
     groupId: number,
     userId: number,
   ) {

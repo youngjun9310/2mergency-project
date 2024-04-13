@@ -27,7 +27,6 @@ export class ScheduleMembersService {
 
   /**
    * 스케줄에 멤버 등록
-   * @returns
    */
 
   async registerScheduleMember(
@@ -76,19 +75,119 @@ export class ScheduleMembersService {
     };
   }
 
-  findAll() {
-    return `This action returns all scheduleMembers`;
+  /**
+   * 스케줄에 등록된 멤버 전체 조회
+   **/
+  async findAllScheduleMembers(
+    groupId: number,
+    scheduleId: number,
+  ): Promise<ScheduleMembers[]> {
+    // Promise<ScheduleMembers[]>: 함수의 반환 타입
+    // 함수가 비동기적으로 ScheduleMembers 엔티티의 배열을 반환<
+    return await this.scheduleMemberRepository.find({
+      where: {
+        scheduleId: scheduleId,
+        schedules: {
+          groupId: groupId,
+        },
+      },
+      relations: ['schedules'],
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} scheduleMember`;
+  /**
+   * 스케줄에 등록된 멤버 상세 조회
+   **/
+  async findOneScheduleMembers(
+    groupId: number,
+    scheduleId: number,
+    userId: number,
+  ): Promise<ScheduleMembers | undefined> {
+    // findOneScheduleMembers 함수가 ScheduleMembers 타입의 객체 또는 undefined를 반환함
+    // '|' 기호 => 유니온 타입은 변수나 함수가 여러 타입 중 하나의 값을 가질 수 있음을 뜻함<
+    // 즉, ScheduleMembers 타입의 객체를 반환 or 해당하는 데이터가 없어 undefined를 반환할 수 있음!
+
+    // 스케줄이 해당 그룹에 속하는지 확인
+    const schedule = await this.schedulesRepository.findOne({
+      where: {
+        scheduleId,
+        groupId,
+      },
+    });
+
+    // 스케줄 없으면 오류 반환
+    if (!schedule) {
+      throw new NotFoundException('그룹에 해당 스케줄이 없습니다.');
+    }
+
+    // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
+    return await this.scheduleMemberRepository.findOne({
+      where: { scheduleId, userId },
+    });
   }
 
-  update(id: number, updateScheduleMemberDto: UpdateScheduleMemberDto) {
-    return `This action updates a #${id} scheduleMember`;
-  }
+  // async updateScheduleMember(
+  //   groupId: number,
+  //   scheduleId: number,
+  //   userId: number,
+  //   updateScheduleMemberDto: UpdateScheduleMemberDto,
+  // ): Promise<ScheduleMembers> {
+  //   // 해당 스케줄이 있는지 확인하기
+  //   const schedule = await this.schedulesRepository.findOne({
+  //     where: { scheduleId, groupId },
+  //   });
 
-  remove(id: number) {
-    return `This action removes a #${id} scheduleMember`;
+  //   if (!schedule) {
+  //     throw new NotFoundException('해당하는 스케줄이 없습니다.');
+  //   }
+
+  //   // 그룹과 스케줄에 속한 멤버가 있는지 확인하기 !
+  //   const member = await this.scheduleMemberRepository.findOne({
+  //     where: {
+  //       scheduleId,
+  //       userId,
+  //     },
+  //   });
+
+  //   if (!member) {
+  //     throw new NotFoundException('해당하는 멤버가 없습니다.');
+  //   }
+
+  //   // 멤버 정보 업데이트
+  //   this.scheduleMemberRepository.merge(member, updateScheduleMemberDto);
+  //   // merge 메서드 -> 첫 번째 인자 member에 두 번째 updateScheduleMemberDto의 속성 값들을 병합함
+  //   // 병합 후, 첫 번째 인자로 주어진 엔티티 객체는 수정된 속성 값을 포함한다.
+  //   // 만약 updateScheduleMemberDto에 특정 속성이 undefined로 정의되어 있다면, 해당 속성은 병합 대상에서 제외된다.
+  //   // merge 메서드 : 객체의 속성 값들을 병합하는 메모리 상의 연산, 변경된 엔티티 객체를 데이터베이스에 반영하려면 save 메서드 사용해야함
+  //   const updatedMember = await this.scheduleMemberRepository.save(member);
+
+  //   return updatedMember;
+  // }
+
+  async deleteScheduleMembers(
+    groupId: number,
+    scheduleId: number,
+    userId: number,
+  ): Promise<void> {
+    // 해당 스케줄이 -> 그룹에 속해있는지 확인
+    const schedule = await this.schedulesRepository.findOne({
+      where: { scheduleId, groupId },
+    });
+
+    if (!schedule) {
+      throw new NotFoundException('그룹에 해당하는 스케줄이 없습니다.');
+    }
+
+    // 해당 스케줄에 등록된 멤버가 있는지 확인
+    const member = await this.scheduleMemberRepository.findOne({
+      where: { scheduleId, userId },
+    });
+
+    if (!member) {
+      throw new NotFoundException('해당 멤버를 찾을 수 없습니다.');
+    }
+
+    // 멤버 삭제하기
+    await this.scheduleMemberRepository.remove(member);
   }
 }

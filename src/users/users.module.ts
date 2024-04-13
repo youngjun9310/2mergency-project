@@ -17,10 +17,10 @@ import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
       inject: [ConfigService],
     }),
     TypeOrmModule.forFeature([Users]),
-    AwsModule
+    AwsModule,
   ],
-  providers: [UsersService, JwtService,RoleStrategy ],
+  providers: [UsersService, JwtService, RoleStrategy],
   controllers: [UsersController],
-  exports: [UsersService],
+  exports: [UsersService, RoleStrategy],
 })
 export class UsersModule {}

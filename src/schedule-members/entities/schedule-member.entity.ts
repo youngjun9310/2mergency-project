@@ -15,6 +15,9 @@ export class ScheduleMembers {
   @PrimaryGeneratedColumn()
   scheduleMemberId: number; // 스케줄 멤버의 고유 ID(scheduleMembers 테이블의 기본 키!)
 
+  @Column({ type: 'varchar', nullable: false, unique: true })
+  nickname: string;
+
   @ManyToOne(() => Schedules, (schedules) => schedules.scheduleMembers, {
     onDelete: 'CASCADE',
   })

@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
-import { ScheduleDto } from './dto/schedule.dto';
+import { ScheduleDto } from './dto/create-schedule.dto';
 
 @Controller('groups/:groupId')
 export class SchedulesController {
@@ -20,7 +20,6 @@ export class SchedulesController {
     @Body() createScheduleDto: ScheduleDto,
     @Body('userId') userId: number,
     @Param('groupId') groupId: number,
-    
   ) {
     return await this.schedulesService.createSchedule(
       createScheduleDto,

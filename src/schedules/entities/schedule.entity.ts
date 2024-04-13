@@ -38,25 +38,27 @@ export class Schedules {
   @UpdateDateColumn({ type: 'timestamp' })
   updatedAt: Date;
 
-    @ManyToOne(() => Groups, (groups) => groups.schedules, {
-        onDelete : 'CASCADE'
-    })
-    @JoinColumn({ name : 'groupId', referencedColumnName : 'groupId' })
-    groups : Groups;
-    
-    @Column({ type : 'int' })
-    groupId : number;
+  @ManyToOne(() => Groups, (groups) => groups.schedules, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
+  groups: Groups;
 
-    @ManyToOne(() => Users, (users) => users.schedules, {
-        onDelete : 'CASCADE'
-    })
-    @JoinColumn({ name : 'userId', referencedColumnName : 'userId' })
-    users : Users;
+  @Column({ type: 'int' })
+  groupId: number;
 
-    @Column({ type : 'int'})
-    userId : number;
+  @ManyToOne(() => Users, (users) => users.schedules, {
+    onDelete: 'CASCADE',
+  })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
+  users: Users;
 
-    @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.schedules)
-    scheduleMembers : ScheduleMembers[];
-    
+  @Column({ type: 'int' })
+  userId: number;
+
+  @OneToMany(
+    () => ScheduleMembers,
+    (scheduleMembers) => scheduleMembers.schedules,
+  )
+  scheduleMembers: ScheduleMembers[];
 }
