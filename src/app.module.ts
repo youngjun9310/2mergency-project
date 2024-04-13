@@ -12,6 +12,8 @@ import { RecordsModule } from './records/records.module';
 import { GroupMembersModule } from './group-members/group-members.module';
 import { MailModule } from './mail/mail.module';
 import { ENV_DB_HOST, ENV_DB_NAME, ENV_DB_PASSWORD, ENV_DB_PORT, ENV_DB_SYNC, ENV_DB_USERNAME } from './const/env.keys';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
@@ -62,7 +64,7 @@ const typeOrmModuleOptions = {
   AwsModule,
   NestjsFormDataModule
 ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

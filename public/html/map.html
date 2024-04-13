@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>티맵 OpenAPI</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=WriPLFWas18xUYsFCelxl1og5A9pHFRd2yf11y1U"></script>
+
+    <link rel="stylesheet" href="../assets/css/default.css">
+    <link href="../assets/css/demo.css" rel="stylesheet" />
+    <link href="../assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="../assets/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
+</head>
+<body>
+    <div id="map">
+        <div id="map_div" style="position: relative;">
+            <input type="hidden" id="searchAddress"/>
+            <input type="hidden" id="startx"/>
+            <input type="hidden" id="starty" />
+            <input type="hidden" id="endx" />
+            <input type="hidden" id="endy" />
+        </div>
+    </div>
+
+    <div class="wrapper">
+        <div class="sidebar" data-color="orange" data-image="../assets/img/sidebar-5.jpg">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
+
+        Tip 2: you can also add an image using data-image tag
+    -->
+            <div class="sidebar-wrapper">
+                <div class="logo">
+                    <a href="http://www.creative-tim.com" class="simple-text logo-mini">
+                        Ct
+                    </a>
+                    <a href="http://www.creative-tim.com" class="simple-text logo-normal">
+                        Creative Tim
+                    </a>
+                </div>
+                <div class="user">
+                    <div class="photo">
+                        <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png" />
+                    </div>
+                    <div class="info ">
+                        <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                            <span>고양이
+                                <b class="caret"></b>
+                            </span>
+                        </a>
+                        <div class="collapse" id="collapseExample">
+                            <ul class="nav">
+                                <li>
+                                    <a class="profile-dropdown" href="#pablo">
+                                        <span class="sidebar-mini">MP</span>
+                                        <span class="sidebar-normal">마이페이지</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="profile-dropdown" href="#pablo">
+                                        <span class="sidebar-mini">EP</span>
+                                        <span class="sidebar-normal">프로필 수정</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="profile-dropdown" href="#pablo">
+                                        <span class="sidebar-mini">S</span>
+                                        <span class="sidebar-normal">설정</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <ul class="nav">
+                    <li class="nav-item ">
+                        <a class="nav-link" href="../html/dashboard.html">
+                            <i class="nc-icon nc-chart-pie-35"></i>
+                            <p>메인페이지</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+                            <i class="nc-icon nc-app"></i>
+                            <p>
+                                Components
+                                <b class="caret"></b>
+                            </p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    
+
+   
+</body>
+<script src="../js/default.js"></script>
+<div id="center">
+    <div id="remove_button">
+        <button onclick="reset()">마커 제거하기</button>
+    </div>     
+    <details>
+        <summary>경로 카테고리</summary>
+        <button onclick="radius250m()">250m</button>
+        <button onclick="radius500m()">500m</button>
+        <button onclick="radius1000m()">1000m</button>
+        <button onclick="radius_free()">원하는 반경 입력</button>
+    </details>
+</div>
+<div class="_map_layer_overlay">
+    <div class="__space_15_h"></div>
+    <div class="_map_overlay_row" id="div1">
+        <input type="text" id="searchStartAddress" class="_search_entry _search_entry_short" placeholder="출발지를 입력하세요" onkeyup="onKeyupSearchPoi(this);">
+        <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">
+        출발</button>
+        <div class="__space_13_w"></div>
+        <input type="text" id="searchEndAddress" class="_search_entry _search_entry_short" placeholder="목적지를 입력하세요" onkeyup="onKeyupSearchPoi(this);">
+        <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">
+        목적지</button>
+        <div class="__space_10_w"></div>
+        <div class="_btn_action _btn_action-search __color_grey" id="search_button">
+            <button onclick="apiSearchRoutes()">검색</button>
+        </div>
+    </div>
+    <div id="wpList">
+        <div class="__space_10_h"></div>
+        <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+            <input type="hidden" name="multipos" />
+            <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요.">
+            <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+            <div style="width: 90px;"></div>
+            <!-- <button onclick="onMultiButton(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;"></button> -->
+        </div>
+    </div>
+    <div class="__flex_expand"></div>
+    <div id="apiResult" class="_map_overlay_row">
+        <div class="_result_panel_bg ">
+            <div class="_result_panel">
+                    
+                <div class="__disable_text"> 경로 API 선택 시, 장소 API의 기본 항목이 자동으로 활성화 됩니다. </div>
+                <div class="__disable_text"> API를 선택해 주세요. </div>
+                                    </div>
+        </div>
+    </div>
+</div>
+</html>
