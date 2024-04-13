@@ -9,6 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupMembersService } from 'src/group-members/group-members.service';
 import { GroupMembersModule } from 'src/group-members/group-members.module';
 import { UsersModule } from 'src/users/users.module';
+import { AuthModule } from 'src/auth/auth.module';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
+import { Users } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
@@ -17,11 +20,13 @@ import { UsersModule } from 'src/users/users.module';
       ScheduleMembers,
       Groups,
       GroupMembers,
+      Users,
     ]),
     GroupMembersModule,
     UsersModule,
+    AuthModule,
   ],
   controllers: [ScheduleMembersController],
-  providers: [ScheduleMembersService],
+  providers: [ScheduleMembersService, MembersRoleStrategy],
 })
 export class ScheduleMembersModule {}

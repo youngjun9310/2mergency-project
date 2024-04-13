@@ -64,5 +64,4 @@ export class SignUpDto {
     description: '공개된 사용자여부',
   })
   isOpen: string;
-  isOpen: string;
 }

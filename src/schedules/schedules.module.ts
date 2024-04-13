@@ -5,17 +5,23 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
 import { Groups } from 'src/groups/entities/group.entity';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { ScheduleMembersModule } from 'src/schedule-members/schedule-members.module';
-import { ScheduleMembersService } from 'src/schedule-members/schedule-members.service';
-import { GroupMembersModule } from 'src/group-members/group-members.module';
+import { GroupMembersService } from 'src/group-members/group-members.service';
+import { Users } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { MailService } from 'src/mail/mail.service';
+import { AwsService } from 'src/aws/aws.service';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Schedules, Groups, GroupMembers]),
-    GroupMembersModule,
-    ScheduleMembersModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Schedules, Groups, GroupMembers, Users])],
   controllers: [SchedulesController],
-  providers: [SchedulesService],
+  providers: [
+    SchedulesService,
+    GroupMembersService,
+    UsersService,
+    MailService,
+    AwsService,
+    MembersRoleStrategy,
+  ],
 })
 export class SchedulesModule {}

@@ -8,15 +8,17 @@ import { GroupMembersModule } from 'src/group-members/group-members.module';
 import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
 import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
+import { Users } from 'src/users/entities/user.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Groups, GroupMembers]),
+    TypeOrmModule.forFeature([Groups, GroupMembers, Users]),
     GroupMembersModule,
     AuthModule,
     UsersModule,
   ],
   controllers: [GroupsController],
-  providers: [GroupsService, RoleStrategy],
+  providers: [GroupsService, MembersRoleStrategy],
 })
 export class GroupsModule {}

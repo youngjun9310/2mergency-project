@@ -18,6 +18,9 @@ import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
 @UseGuards(memberRolesGuard)
 @Controller('groups')
