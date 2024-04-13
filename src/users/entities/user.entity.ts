@@ -34,7 +34,7 @@ export class Users {
     @Column({ type : 'boolean', nullable : false, default : false })
     isDelete? : boolean;
 
-    @Column({ type : 'boolean', nullable : false, default : true })
+    @Column({ type : 'boolean', nullable : false, default : false })
     isOpen : boolean;
 
     @Column({ type : 'boolean', nullable : false, default : false})

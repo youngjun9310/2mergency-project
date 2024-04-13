@@ -9,6 +9,8 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { Invites } from './entities/invite.entity';
 import { MailModule } from 'src/mail/mail.module';
+import { AwsModule } from 'src/aws/aws.module';
+import { NestjsFormDataModule } from 'nestjs-form-data';
 
 @Module({
   imports: [
@@ -20,7 +22,9 @@ import { MailModule } from 'src/mail/mail.module';
     }),
     TypeOrmModule.forFeature([Users, Invites]),
     UsersModule,
-    MailModule
+    MailModule,
+    AwsModule,
+    NestjsFormDataModule
   ],
   
   controllers: [AuthController],

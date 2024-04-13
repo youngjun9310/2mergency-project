@@ -1,4 +1,4 @@
-import { Controller, Get, Body, Patch, Delete, UseGuards, Req } from '@nestjs/common';
+import { Controller, Get, Body, Patch, Delete, UseGuards, Req, UploadedFile,UseInterceptors } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
@@ -7,6 +7,7 @@ import { UserInfo } from '../auth/decorator/userInfo.decorator'
 import { Users } from './entities/user.entity';
 import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @ApiTags('User')
 @Controller('users')
@@ -30,7 +31,6 @@ export class UsersController {
   @Get('/')
   async findUser(@UserInfo() user: Users , @Req() req) {
     const { userId } = req.user;
-
     const userInfo = await this.usersService.findUser(userId);
     return userInfo ;
   }
@@ -38,12 +38,11 @@ export class UsersController {
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
   @UseGuards(AuthGuard('jwt'))
+  @UseInterceptors(FileInterceptor('profileImage'))
   @Patch('')
-  async userUpdate(@Body() updateDto: UpdateDto, @Req() req) {
+  async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @Req() req) {
     const { userId } = req.user;
-
-    const userUpdate = await this.usersService.userUpdate(
-      userId, updateDto );
+    const userUpdate = await this.usersService.userUpdate(userId, updateDto, file );
     return ;
   }
 
@@ -65,5 +64,7 @@ export class UsersController {
   getUserInfo(@UserInfo() user: Users) {
     return { 이메일: user.email, 닉네임: user.nickname };
   }
+
+ 
 
 }

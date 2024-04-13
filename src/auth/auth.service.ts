@@ -7,6 +7,7 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import _ from 'lodash';
+import { AwsService } from 'src/aws/aws.service';
 
 @Injectable()
 export class AuthService {
@@ -17,10 +18,11 @@ export class AuthService {
     private invitesRepository: Repository<Invites>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly awsService: AwsService
   ){}
 
-  /*회원가입*/
-  async register(nickname: string, email: string, password: string, passwordConfirm:string, address: string, profileImage: string, isOpen: boolean
+  /*회원가입*/ //isOpen: boolean, 
+  async register(nickname: string, email: string, password: string, passwordConfirm:string, address: string,isOpen: string, file: Express.Multer.File
   ) {
   const existingUser = await this.userRepository.findOne({ where: { email } });
   if (existingUser) {
@@ -33,7 +35,10 @@ export class AuthService {
   if (password !== passwordConfirm) {
     throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
   }
-  
+
+  const profileImage = await this.awsService.imageUpload(file);
+  let srtToBoolean = Boolean(isOpen === 'true')
+
   const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
   const user = await this.userRepository.save({
     nickname,
@@ -41,14 +46,13 @@ export class AuthService {
     password: hashedPassword,
     address,
     profileImage,
-    isOpen
-  });
-  
+    isOpen : srtToBoolean
+  }); 
   return user;
 }
 
-/*어드민 회원가입*/
-async adminRegister(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, profileImage: string, isOpen: boolean
+/*어드민 회원가입*/ 
+async adminRegister(nickname: string, email: string, password: string, passwordConfirm:string, adminPassword: string, address: string, file: Express.Multer.File
   ) {
   const existingUser = await this.userRepository.findOne({ where: { email } });
   if (existingUser) {
@@ -62,13 +66,13 @@ async adminRegister(nickname: string, email: string, password: string, passwordC
     throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
   }
   
-  
   const adminPassKey = this.configService.get<string>('ROLE_ADMIN_PASSWORD')
 
   if (adminPassword !== adminPassKey) {
     throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
   }
-  
+
+  const profileImage = await this.awsService.imageUpload(file);
   const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
   const user = await this.userRepository.save({
     nickname,
@@ -77,10 +81,8 @@ async adminRegister(nickname: string, email: string, password: string, passwordC
     address,
     profileImage,
     isAdmin: true,
-    isOpen,
     CertificationStatus:true
   });
-
   return user;
 }
 
@@ -115,7 +117,6 @@ async login(email: string, password: string) {
 /** 이메일 가입초대*/
 async userInvite(email: string, gentoken: {token: number, expires:Date}){
   const existingEmail = await this.userRepository.findOneBy({email});
-  console.log('existingEmail',existingEmail);
 
   if(existingEmail){
   await this.invitesRepository.delete({email})
@@ -140,7 +141,6 @@ async userAccept(email: string, token: string){
   if(!existingToken){
     throw new BadRequestException('인증 번호를 다시 입력 부탁드립니다.');
   }
-  console.log('existingToken.expires',existingToken.expires);
   const present = new Date();
 
   if( existingToken.expires < present){
@@ -152,5 +152,8 @@ async userAccept(email: string, token: string){
 
   return ;
 }
+
+/** 사용자 이미지 업로드 */
+async uploadImg(){}
 
 }

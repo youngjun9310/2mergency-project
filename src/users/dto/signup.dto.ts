@@ -51,19 +51,12 @@ export class SignUpDto {
   address: string;
 
   @IsString()
-  @ApiProperty({
-    example: "profileImg.gif",
-    description: '프로필 이미지'
-  })
   @IsOptional()
-  profileImage: string;
-
-  @IsBoolean()
   @ApiProperty({
     example: true,
     description: '공개된 사용자여부'
   })
-  isOpen: boolean;
-  
+  isOpen: string;
+   
 }
 
