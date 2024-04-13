@@ -16,7 +16,6 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
-import { RolesGuard } from 'src/auth/guard/roles.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { AuthGuard } from '@nestjs/passport';

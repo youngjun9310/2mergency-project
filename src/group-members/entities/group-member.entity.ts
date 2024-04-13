@@ -8,7 +8,6 @@ import {
 import { MemberRole } from '../types/groupMemberRole.type';
 import { Users } from 'src/users/entities/user.entity';
 import { Groups } from 'src/groups/entities/group.entity';
-import { string } from 'joi';
 
 @Entity({
   name: 'groupMembers',

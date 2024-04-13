@@ -7,7 +7,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
-import * as _ from 'lodash';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
@@ -47,7 +46,7 @@ export class UsersService {
       );
     }
     const profileImage = await this.awsService.imageUpload(file);
-    let srtToBoolean = Boolean(isOpen === 'true');
+    const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(
       password,
       this.configService.get<number>('PASSWORD_HASH_ROUNDS'),

@@ -66,7 +66,6 @@ export class GroupMembersService {
     if (member) {
       throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
     }
-
     // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
     const uniqueNickname = `user_${user}_${Date.now()}`;
 
@@ -90,7 +89,6 @@ export class GroupMembersService {
   /**
    * 유저가 그룹 초대 수락
    */
-
   async acceptInvitation(groupId: number, email: string): Promise<any> {
     // 그룹 존재 여부 확인
     if (!(await this.checkGroupExists(groupId))) {

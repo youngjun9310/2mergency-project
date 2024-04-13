@@ -16,7 +16,6 @@ import { ScheduleDto } from './dto/create-schedule.dto';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { AuthGuard } from '@nestjs/passport';
-import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 

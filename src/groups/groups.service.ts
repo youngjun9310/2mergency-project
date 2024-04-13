@@ -6,9 +6,6 @@ import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { number } from 'joi';
-import { Users } from 'src/users/entities/user.entity';
-
 @Injectable()
 export class GroupsService {
   constructor(

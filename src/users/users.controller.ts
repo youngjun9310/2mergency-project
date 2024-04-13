@@ -11,7 +11,6 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from '../auth/guard/roles.guard';
 import { UserInfo } from '../auth/decorator/userInfo.decorator';
 import { Users } from './entities/user.entity';
@@ -51,11 +50,7 @@ export class UsersController {
     @Req() req,
   ) {
     const { userId } = req.user;
-    const userUpdate = await this.usersService.userUpdate(
-      userId,
-      updateDto,
-      file,
-    );
+    await this.usersService.userUpdate(userId, updateDto, file);
     return;
   }
   /** 사용자 삭제*/
@@ -64,10 +59,7 @@ export class UsersController {
   @Delete('')
   async userDelete(@Body() deleteDto: DeleteDto, @Req() req) {
     const { userId } = req.user;
-    const result = await this.usersService.userDelete(
-      userId,
-      deleteDto.password,
-    );
+    await this.usersService.userDelete(userId, deleteDto.password);
     return;
   }
   /** 사용자 접속정보조회*/

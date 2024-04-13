@@ -19,19 +19,15 @@ import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { GroupMembers } from './entities/group-member.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { emit } from 'process';
-
 @UseGuards(memberRolesGuard)
 @ApiTags('groups')
 @Controller('groups')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
-
   /**
    * 그룹에 멤버 초대
    * @returns
    */
-
   @Post(':groupId/invite')
   @MemberRoles(MemberRole.Main)
   @HttpCode(HttpStatus.CREATED)
@@ -42,18 +38,15 @@ export class GroupMembersController {
     @Body() inviteMemberDto: InviteMemberDto,
   ) {
     const { email } = inviteMemberDto;
-
     await this.groupMembersService.inviteUserToGroup(groupId, email);
     return {
       message: '초대를 완료했습니다.',
     };
   }
-
   /**
    * 유저가 그룹 초대 수락
    * @returns
    */
-
   @Post(':groupId/accept')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '사용자가 그룹 초대를 수락' })
@@ -64,12 +57,10 @@ export class GroupMembersController {
   ): Promise<any> {
     return this.groupMembersService.acceptInvitation(groupId, email);
   }
-
   /**
    * 그룹의 멤버로 등록
    * @returns
    */
-
   @Patch(':groupId/register') //
   @MemberRoles(MemberRole.Main)
   @HttpCode(HttpStatus.CREATED)
@@ -82,10 +73,8 @@ export class GroupMembersController {
     if (!email) {
       throw new BadRequestException('이메일 주소가 제공되지 않았습니다.');
     }
-
     return await this.groupMembersService.addGroupMember(groupId, email);
   }
-
   /* 사용자가 그룹의 멤버인지 확인 */
   @Get(':groupId/members/:userId')
   @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
@@ -106,7 +95,6 @@ export class GroupMembersController {
         statusCode: 404,
       };
     }
-
     const userExists = await this.groupMembersService.checkUserExists(userId);
     if (!userExists) {
       return {
@@ -114,7 +102,6 @@ export class GroupMembersController {
         statusCode: 404,
       };
     }
-
     const isMember = await this.groupMembersService.isGroupMember(
       groupId,
       userId,
@@ -125,7 +112,6 @@ export class GroupMembersController {
       return { message: '그룹 멤버가 아닙니다.', statusCode: 404 };
     }
   }
-
   /* 사용자와 그룹의 관련된 정보 */
   @Get(':groupId/users/:userId')
   @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회' })
@@ -143,7 +129,6 @@ export class GroupMembersController {
     }
     return groupMember;
   }
-
   /* 그룹에 가입된 사용자 전체 조회 */
   @Get(':groupId/members')
   @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })

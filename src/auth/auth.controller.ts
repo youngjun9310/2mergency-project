@@ -3,7 +3,6 @@ import {
   Controller,
   HttpCode,
   Post,
-  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -11,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
@@ -32,7 +31,7 @@ export class AuthController {
     @Body() signUpdto: SignUpDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const user = await this.authService.register(
+    await this.authService.register(
       signUpdto.nickname,
       signUpdto.email,
       signUpdto.password,
@@ -51,7 +50,7 @@ export class AuthController {
     @Body() signUpdto: SignUpDto,
     @UploadedFile() file: Express.Multer.File,
   ) {
-    const user = await this.authService.adminRegister(
+    await this.authService.adminRegister(
       signUpdto.nickname,
       signUpdto.email,
       signUpdto.password,

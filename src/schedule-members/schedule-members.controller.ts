@@ -3,22 +3,17 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   HttpCode,
   HttpStatus,
-  BadRequestException,
   NotFoundException,
-  UseGuards,
 } from '@nestjs/common';
 import { ScheduleMembersService } from './schedule-members.service';
-import { CreateScheduleMemberDto } from './dto/create-schedule-member.dto';
 // import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { GroupMembersService } from 'src/group-members/group-members.service';
 import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
-import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
