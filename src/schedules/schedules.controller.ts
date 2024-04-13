@@ -22,7 +22,6 @@ export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  // @UseGuards(AuthGuard('jwt'))
   @UseGuards(AuthGuard('jwt'), memberRolesGuard)
   @MemberRoles(MemberRole.Admin)
   @Post('/schedules')

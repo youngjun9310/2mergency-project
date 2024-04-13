@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
+import { AwsService } from 'src/aws/aws.service';
 
 @Injectable()
 export class UsersService {
@@ -12,6 +13,7 @@ export class UsersService {
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
     private readonly configService: ConfigService,
+    private readonly awsService: AwsService
   ) {}
 
   /*전체 사용자 조회(어드민용)*/
@@ -27,8 +29,8 @@ export class UsersService {
   }
 
   /*사용자 수정*/
-  async userUpdate( userId: number,  updateDto: UpdateDto ) {
-    const { nickname, email, password, passwordConfirm, address, profileImage, isOpen } = updateDto
+  async userUpdate( userId: number,  updateDto: UpdateDto, file:Express.Multer.File ) {
+    const { nickname, email, password, passwordConfirm, address, isOpen } = updateDto
     const user = await this.userRepository.findOneBy({ userId });
 
     if (!user) {
@@ -39,14 +41,15 @@ export class UsersService {
       throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
 
+    const profileImage = await this.awsService.imageUpload(file);
+    let srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));    
 
-    return this.userRepository.update(userId, { nickname, email, password:hashedPassword , address, profileImage, isOpen}  );
+    return this.userRepository.update(userId, { nickname, email, password:hashedPassword , address, profileImage, isOpen:srtToBoolean}  );
   }
 
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
-    
     const user = await this.userRepository.findOne({
       select: ['password'],
       where: { userId },
@@ -59,7 +62,6 @@ export class UsersService {
     if (!compare(password,user.password)) {
       throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
-    
     return this.userRepository.delete(userId);
   }
 
