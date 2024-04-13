@@ -1441,24 +1441,19 @@ function stopmarkers(latitude, longitude){
 //     });
 // }
 
-function getAddressFromCoordinates(latitude, longitude) {
-    // Tmap Geocoder API 호출
-    Tmapv2.Geocoder.reverseGeocoding(
-        longitude,
-        latitude,
-        function(response) {
-            // API 호출 성공 시
-            if (response.result === 'SUCCESS') {
-                // 주소를 얻어옴
-                var address = response.address.addressString;
-                // 주소를 입력란에 설정
-                document.getElementById('searchStartAddress').value = address;
-            } else {
-                // API 호출 실패 시 에러 메시지 출력
-                console.error('Failed to reverse geocode:', response);
-            }
-        }
-    );
+function onComplete(latitude, longitude) {
+    console.log(this._responseData); //json으로 데이터를 받은 정보들을 콘솔창에서 확인할 수 있습니다.
+    var result ='현재 지도의 중심 좌표주소 : ' + this._responseData.addressInfo.fullAddress; //출력될 결과 주소 정보 입니다.
+
+    var marker = new Tmapv2.Marker({
+        position: new Tmapv2.LatLng(latitude,longitude),
+        label:result
+    });
+
+    console.log(marker);
+
+    marker.setMap(map);
+    map.setCenter(new Tmapv2.LatLng(latitude,longitude));
 }
 
 // 출발시
@@ -1530,6 +1525,8 @@ tData.getAddressFromGeoJson(lat, lon, optionObj, params);
 // tData.getAddressFromGeoJson(lat, lon, optionObj, params);
 // });
 
+
+
 document.getElementById('250m').addEventListener('click', function stopmarkers (latitude, longitude, evt) {
     console.log(latitude);
     console.log(longitude);
@@ -1573,8 +1570,8 @@ function radius250m() {
 navigator.geolocation.getCurrentPosition(function (pos) {
 const latitude = pos.coords.latitude;
 const longitude = pos.coords.longitude;
-console.log("lat : ",latitude);
-console.log("long : ",longitude);
+
+onComplete(latitude, longitude);
 // prompt 로 입력값을 받아서 if 문으로 숫자를 걸러줘서 랜덤경로를 지정하거나,
 // 버튼을 따로 250, 500, 1000, 1500 등등을 따로 또 만들어서 redius 값을 지정해주거나 둘 중 하나 하면 될듯!!
 startmarkers(latitude, longitude);
