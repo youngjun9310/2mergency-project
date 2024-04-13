@@ -19,6 +19,8 @@ import {
   ENV_DB_SYNC,
   ENV_DB_USERNAME,
 } from './const/env.keys';
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
@@ -70,7 +72,7 @@ const typeOrmModuleOptions = {
     AwsModule,
     NestjsFormDataModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}
