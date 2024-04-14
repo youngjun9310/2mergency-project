@@ -23,7 +23,7 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
     TypeOrmModule.forFeature([Users]),
     AwsModule,
   ],
-  providers: [UsersService, JwtService, JwtStrategy, RoleStrategy],
+  providers: [UsersService, JwtService, RoleStrategy],
   controllers: [UsersController],
   exports: [UsersService],
 })

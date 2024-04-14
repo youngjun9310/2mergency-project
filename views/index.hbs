@@ -1,1029 +1,1306 @@
-<!-- 
-=========================================================
-Light Bootstrap Dashboard PRO - v2.0.1
-=========================================================
-
-Product Page: https://www.creative-tim.com/product/light-bootstrap-dashboard-pro
-Copyright 2019 Creative Tim (https://www.creative-tim.com)
-
-Coded by Creative Tim
-
-=========================================================
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. -->
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="utf-8" />
-    <link rel="apple-touch-icon" sizes="76x76" href="../public/assets/img/apple-icon.png">
-    <link rel="icon" type="image/png" href="../public/assets/img/favicon.ico">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>2mergency</title>
-    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
-    <!--     Fonts and icons     -->
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700,200" rel="stylesheet" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/latest/css/font-awesome.min.css" />
-    <!-- CSS Files -->
-    <link href="../public/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="../public/assets/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
-    <!-- CSS Just for demo purpose, don't include it in your project -->
-    <link href="../public/assets/css/demo.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <title>티맵 OpenAPI</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=WriPLFWas18xUYsFCelxl1og5A9pHFRd2yf11y1U"></script>
 </head>
+<style>
+
+    #maps{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 5px;
+    }
+    
+  button{
+      background-color: whitesmoke;
+      border: 0.1px solid lightgrey;
+      transition-duration: 0.3s;
+      color: black;
+      padding: 4px;
+      border-radius: 5px;
+  }
+
+  button:hover{
+      background-color: lightgrey;
+  }
+
+  button:active{
+      background-color: grey;
+  }
+
+  #box1{
+      box-shadow: 0px 0px 3px 0px lightgrey;
+      border-radius: 5px;
+      text-align: center;
+      padding: 5px;
+  }
+
+  #div1{
+      box-shadow: 0px 0px 3px 0px black;
+      border-radius: 5px;
+      width: 1200px;
+      text-align: center;
+      margin: 5px auto 5px auto;
+      border: 0.1px solid lightgrey;
+      display: block;
+  }
+
+  #search_button{
+      padding-bottom: 5px;
+  }
+
+  #remove_button{
+      padding: 5px;
+  }
+
+  #stopover{
+      box-shadow: 0px 0px 3px 0px lightgrey;
+      width: 1200px;
+      text-align: center;
+      margin: 5px auto 5px auto;
+      border-radius: 5px;
+      display: block;
+  }
+
+  #content{
+      padding: 5px;
+      box-shadow: 0px 0px 3px 0px lightgrey;
+      text-align: center;
+      border-radius: 5px;
+      display: block;
+  }
+
+  #explanation{
+      background-color: white;
+      box-shadow: 0px 0px 3px 0px black;
+      border-radius: 5px;
+      width: 150px;
+      text-align: center;
+      display: inline-block;
+  }
+
+  ._search_item{
+      padding: 5px;
+      box-shadow: 0px 0px 3px 0px lightgrey;
+      text-align: center;
+      border-radius: 5px;
+      display: block;
+  }
+
+  #footer{
+      width: 500px;
+      margin: 5px auto 10px auto;
+      box-shadow: 0px 0px 3px 0px lightgrey;
+      border-radius: 5px;
+  }
+
+  #footer_button{
+      padding: 5px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+  }
+
+  #tracking_div{
+    padding: 5px;
+  }
+
+  .__disable_text{
+    margin-left: 10px;
+  }
+
+</style>
 <body>
-    <div class="wrapper">
-        <div class="sidebar" data-color="orange" data-image="../public/assets/img/sidebar-5.jpg">
-            <!--
-        Tip 1: You can change the color of the sidebar using: data-color="purple | blue | green | orange | red"
-
-        Tip 2: you can also add an image using data-image tag
-    -->
-            <div class="sidebar-wrapper">
-                <div class="logo">
-                    <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-                        Ct
-                    </a>
-                    <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-                        Creative Tim
-                    </a>
-                </div>
-                <div class="user">
-                    <div class="photo">
-                        <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png" />
-                    </div>
-                    <div class="info ">
-                        <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                            <span>고양이
-                                <b class="caret"></b>
-                            </span>
-                        </a>
-                        <div class="collapse" id="collapseExample">
-                            <ul class="nav">
-                                <li>
-                                    <a class="profile-dropdown" href="#pablo">
-                                        <span class="sidebar-mini">MP</span>
-                                        <span class="sidebar-normal">마이페이지</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="profile-dropdown" href="#pablo">
-                                        <span class="sidebar-mini">EP</span>
-                                        <span class="sidebar-normal">프로필 수정</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="profile-dropdown" href="#pablo">
-                                        <span class="sidebar-mini">S</span>
-                                        <span class="sidebar-normal">설정</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <ul class="nav">
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/dashboard.html">
-                            <i class="nc-icon nc-chart-pie-35"></i>
-                            <p>메인페이지</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
-                            <i class="nc-icon nc-app"></i>
-                            <p>
-                                Components
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse " id="componentsExamples">
-                            <ul class="nav">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/buttons.html">
-                                        <span class="sidebar-mini">B</span>
-                                        <span class="sidebar-normal">Buttons</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/grid.html">
-                                        <span class="sidebar-mini">GS</span>
-                                        <span class="sidebar-normal">Grid System</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/panels.html">
-                                        <span class="sidebar-mini">P</span>
-                                        <span class="sidebar-normal">Panels</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/sweet-alert.html">
-                                        <span class="sidebar-mini">SA</span>
-                                        <span class="sidebar-normal">Sweet Alert</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/notifications.html">
-                                        <span class="sidebar-mini">N</span>
-                                        <span class="sidebar-normal">Notifications</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/icons.html">
-                                        <span class="sidebar-mini">I</span>
-                                        <span class="sidebar-normal">Icons</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/components/typography.html">
-                                        <span class="sidebar-mini">T</span>
-                                        <span class="sidebar-normal">Typography</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#formsExamples">
-                            <i class="nc-icon nc-notes"></i>
-                            <p>
-                                Forms
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse " id="formsExamples">
-                            <ul class="nav">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/forms/regular.html">
-                                        <span class="sidebar-mini">Rf</span>
-                                        <span class="sidebar-normal">Regular Forms</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/forms/extended.html">
-                                        <span class="sidebar-mini">Ef</span>
-                                        <span class="sidebar-normal">Extended Forms</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/forms/validation.html">
-                                        <span class="sidebar-mini">Vf</span>
-                                        <span class="sidebar-normal">Validation Forms</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/forms/wizard.html">
-                                        <span class="sidebar-mini">W</span>
-                                        <span class="sidebar-normal">Wizard</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
-                            <i class="nc-icon nc-paper-2"></i>
-                            <p>
-                                Tables
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse " id="tablesExamples">
-                            <ul class="nav">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/tables/regular.html">
-                                        <span class="sidebar-mini">RT</span>
-                                        <span class="sidebar-normal">Regular Tables</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/tables/extended.html">
-                                        <span class="sidebar-mini">ET</span>
-                                        <span class="sidebar-normal">Extended Tables</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/tables/bootstrap-table.html">
-                                        <span class="sidebar-mini">BT</span>
-                                        <span class="sidebar-normal">Bootstrap Table</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/tables/datatables.net.html">
-                                        <span class="sidebar-mini">DT</span>
-                                        <span class="sidebar-normal">DataTables.net</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#mapsExamples">
-                            <i class="nc-icon nc-pin-3"></i>
-                            <p>
-                                지도
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse " id="mapsExamples">
-                            <ul class="nav">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/maps/google.html">
-                                        <span class="sidebar-mini">GM</span>
-                                        <span class="sidebar-normal">Google Maps</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/maps/vector.html">
-                                        <span class="sidebar-mini">VM</span>
-                                        <span class="sidebar-normal">Vector maps</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/maps/fullscreen.html">
-                                        <span class="sidebar-mini">FSM</span>
-                                        <span class="sidebar-normal">Full Screen Map</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/map.html">
-                            <i class="nc-icon nc-pin-3"></i>
-                            <p>그룹</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/Tmap.html">
-                            <i class="nc-icon nc-pin-3"></i>
-                            <p>testdd</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/indexsd.html">
-                            <i class="nc-icon nc-pin-3"></i>
-                            <p>notestmaps</p>
-                        </a>
-                    </li>
-
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/charts.html">
-                            <i class="nc-icon nc-chart-bar-32"></i>
-                            <p>Charts</p>
-                        </a>
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link" href="../public/html/calendar.html">
-                            <i class="nc-icon nc-single-copy-04"></i>
-                            <p>Calendar</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
-                            <i class="nc-icon nc-puzzle-10"></i>
-                            <p>
-                                Pages
-                                <b class="caret"></b>
-                            </p>
-                        </a>
-                        <div class="collapse " id="pagesExamples">
-                            <ul class="nav">
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/pages/login.html">
-                                        <span class="sidebar-mini">LP</span>
-                                        <span class="sidebar-normal">Login Page</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/pages/register.html">
-                                        <span class="sidebar-mini">RP</span>
-                                        <span class="sidebar-normal">Register Page</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item ">
-                                    <a class="nav-link" href="../public/html/pages/lock.html">
-                                        <span class="sidebar-mini">LSP</span>
-                                        <span class="sidebar-normal">Lock Screen Page</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a class="nav-link" href="../public/html/pages/user.html">
-                                        <span class="sidebar-mini">UP</span>
-                                        <span class="sidebar-normal">User Page</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item  ">
-                                    <a class="nav-link" href="#lbd">
-                                        <span class="sidebar-mini">MCS</span>
-                                        <span class="sidebar-normal">More coming soon...</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="main-panel">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg ">
-                <div class="container-fluid">
-                    <div class="navbar-wrapper">
-                        <div class="navbar-minimize">
-                            <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon d-none d-lg-block">
-                                <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
-                                <i class="fa fa-navicon visible-on-sidebar-mini"></i>
-                            </button>
-                        </div>
-                        <a class="navbar-brand" href="#pablo"> Dashboard PRO </a>
-                    </div>
-                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end">
-                        <ul class="nav navbar-nav mr-auto">
-                            <form class="navbar-form navbar-left navbar-search-form" role="search">
-                                <div class="input-group">
-                                    <i class="nc-icon nc-zoom-split"></i>
-                                    <input type="text" value="" class="form-control" placeholder="Search...">
-                                </div>
-                            </form>
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="dropdown nav-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                    <i class="nc-icon nc-planet"></i>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">Create New Post</a>
-                                    <a class="dropdown-item" href="#">Manage Something</a>
-                                    <a class="dropdown-item" href="#">Do Nothing</a>
-                                    <a class="dropdown-item" href="#">Submit to live</a>
-                                    <li class="divider"></li>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                </ul>
-                            </li>
-                            <li class="dropdown nav-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                    <i class="nc-icon nc-bell-55"></i>
-                                    <span class="notification">5</span>
-                                    <span class="d-lg-none">알림</span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">알림 1</a>
-                                    <a class="dropdown-item" href="#">알림 2</a>
-                                    <a class="dropdown-item" href="#">알림 3</a>
-                                    <a class="dropdown-item" href="#">알림 4</a>
-                                    <a class="dropdown-item" href="#">알림 5</a>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="nc-icon nc-bullet-list-67"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-email-85"></i> 메세지
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-umbrella-13"></i> 고객센터
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-settings-90"></i> 설정
-                                    </a>
-                                    <div class="divider"></div>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-lock-circle-open"></i> Lock Screen
-                                    </a>
-                                    <a href="#" class="dropdown-item text-danger">
-                                        <i class="nc-icon nc-button-power"></i> 로그아웃
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
-            <!-- End Navbar -->
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center icon-warning">
-                                                <i class="nc-icon nc-chart text-warning"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="numbers">
-                                                <p class="card-category">Number</p>
-                                                <h4 class="card-title">150GB</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-refresh"></i> 지금 업그레이드!
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center icon-warning">
-                                                <i class="nc-icon nc-light-3 text-success"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="numbers">
-                                                <p class="card-category">Revenue</p>
-                                                <h4 class="card-title">$ 1,345</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-calendar-o"></i> Last day
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center icon-warning">
-                                                <i class="nc-icon nc-vector text-danger"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="numbers">
-                                                <p class="card-category">Errors</p>
-                                                <h4 class="card-title">23</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-clock-o"></i> In the last hour
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-sm-6">
-                            <div class="card card-stats">
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="icon-big text-center icon-warning">
-                                                <i class="nc-icon nc-favourite-28 text-primary"></i>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="numbers">
-                                                <p class="card-category">Followers</p>
-                                                <h4 class="card-title">+45K</h4>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ">
-                                    <hr>
-                                    <div class="stats">
-                                        <i class="fa fa-refresh"></i> Update now
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="card ">
-                                <div class="card-header ">
-                                    <h4 class="card-title">Global Sales by Top Locations</h4>
-                                    <p class="card-category">All products that were shipped</p>
-                                </div>
-                                <div class="card-body ">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="table-responsive">
-                                                <table class="table">
-                                                    <tbody>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/US.png" </div>
-                                                            </td>
-                                                            <td>USA</td>
-                                                            <td class="text-right">
-                                                                2.920
-                                                            </td>
-                                                            <td class="text-right">
-                                                                53.23%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/DE.png" </div>
-                                                            </td>
-                                                            <td>Germany</td>
-                                                            <td class="text-right">
-                                                                1.300
-                                                            </td>
-                                                            <td class="text-right">
-                                                                20.43%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/AU.png" </div>
-                                                            </td>
-                                                            <td>Australia</td>
-                                                            <td class="text-right">
-                                                                760
-                                                            </td>
-                                                            <td class="text-right">
-                                                                10.35%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/GB.png" </div>
-                                                            </td>
-                                                            <td>United Kingdom</td>
-                                                            <td class="text-right">
-                                                                690
-                                                            </td>
-                                                            <td class="text-right">
-                                                                7.87%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/RO.png" </div>
-                                                            </td>
-                                                            <td>Romania</td>
-                                                            <td class="text-right">
-                                                                600
-                                                            </td>
-                                                            <td class="text-right">
-                                                                5.94%
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <div class="flag">
-                                                                    <img src="../public/assets/img/flags/BR.png" </div>
-                                                            </td>
-                                                            <td>Brasil</td>
-                                                            <td class="text-right">
-                                                                550
-                                                            </td>
-                                                            <td class="text-right">
-                                                                4.34%
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                </div>
-                                                </div>
-                                                <div class="col-md-6 ml-auto mr-auto">
-                                                    <div id="worldMap" style="height: 300px;"></div>
-                                                </div>
-                                                </div>
-                                                </div>
-                                                </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="card ">
-                                                        <div class="card-header ">
-                                                            <h4 class="card-title">Email Statistics</h4>
-                                                            <p class="card-category">Last Campaign Performance</p>
-                                                        </div>
-                                                        <div class="card-body ">
-                                                            <div id=chartEmail class="ct-chart ct-perfect-fourth"></div>
-                                                        </div>
-                                                        <div class="card-footer ">
-                                                            <div class="legend">
-                                                                <i class="fa fa-circle text-info"></i> Open
-                                                                <i class="fa fa-circle text-danger"></i> Bounce
-                                                                <i class="fa fa-circle text-warning"></i> Unsubscribe
-                                                            </div>
-                                                            <hr>
-                                                            <div class="stats">
-                                                                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-8">
-                                                    <div class="card ">
-                                                        <div class="card-header ">
-                                                            <h4 class="card-title">Users Behavior</h4>
-                                                            <p class="card-category">24 Hours performance</p>
-                                                        </div>
-                                                        <div class="card-body ">
-                                                            <div id=chartHours class="ct-chart"></div>
-                                                        </div>
-                                                        <div class="card-footer ">
-                                                            <div class="legend">
-                                                                <i class="fa fa-circle text-info"></i> Open
-                                                                <i class="fa fa-circle text-danger"></i> Click
-                                                                <i class="fa fa-circle text-warning"></i> Click Second Time
-                                                            </div>
-                                                            <hr>
-                                                            <div class="stats">
-                                                                <i class="fa fa-history"></i> Updated 3 minutes ago
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="card ">
-                                                        <div class="card-header ">
-                                                            <h4 class="card-title">2017 Sales</h4>
-                                                            <p class="card-category">All products including Taxes</p>
-                                                        </div>
-                                                        <div class="card-body ">
-                                                            <div id="chartActivity" class="ct-chart"></div>
-                                                        </div>
-                                                        <div class="card-footer ">
-                                                            <div class="legend">
-                                                                <i class="fa fa-circle text-info"></i> Tesla Model S
-                                                                <i class="fa fa-circle text-danger"></i> BMW 5 Series
-                                                            </div>
-                                                            <hr>
-                                                            <div class="stats">
-                                                                <i class="fa fa-check"></i> Data information certified
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="card  card-tasks">
-                                                        <div class="card-header ">
-                                                            <h4 class="card-title">Tasks</h4>
-                                                            <p class="card-category">Backend development</p>
-                                                        </div>
-                                                        <div class="card-body ">
-                                                            <div class="table-full-width">
-                                                                <table class="table">
-                                                                    <tbody>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" value="">
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Sign contract for "What are conference organizers afraid of?"</td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" value="" checked>
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Lines From Great Russian Literature? Or E-mails From My Boss?</td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" value="" checked>
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit
-                                                                            </td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" checked>
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Create 4 Invisible User Experiences you Never Knew About</td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" value="">
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Read "Following makes Medium better"</td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <td>
-                                                                                <div class="form-check">
-                                                                                    <label class="form-check-label">
-                                                                                        <input class="form-check-input" type="checkbox" value="" checked>
-                                                                                        <span class="form-check-sign"></span>
-                                                                                    </label>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>Unfollow 5 enemies from twitter</td>
-                                                                            <td class="td-actions text-right">
-                                                                                <button type="button" rel="tooltip" title="Edit Task" class="btn btn-info btn-simple btn-link">
-                                                                                    <i class="fa fa-edit"></i>
-                                                                                </button>
-                                                                                <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-simple btn-link">
-                                                                                    <i class="fa fa-times"></i>
-                                                                                </button>
-                                                                            </td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>
-                                                            </div>
-                                                        </div>
-                                                        <div class="card-footer ">
-                                                            <hr>
-                                                            <div class="stats">
-                                                                <i class="now-ui-icons loader_refresh spin"></i> Updated 3 minutes ago
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <footer class="footer">
-                                        <div class="container">
-                                            <nav>
-                                                <ul class="footer-menu">
-                                                    <li>
-                                                        <a href="#">
-                                                            Home
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            Company
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            Portfolio
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#">
-                                                            Blog
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <p class="copyright text-center">
-                                                    ©
-                                                    <script>
-                                                        document.write(new Date().getFullYear())
-                                                    </script>
-                                                    <a href="http://www.creative-tim.com">Creative Tim</a>, made with love for a better web
-                                                </p>
-                                            </nav>
-                                        </div>
-                                    </footer>
-                                </div>
-                            </div>
-                            <!-- 
-
-
-
-
-
-
-<div class="fixed-plugin">
-    <div class="dropdown show-dropdown">
-        <a href="#" data-toggle="dropdown">
-            <i class="fa fa-cog fa-2x"> </i>
-        </a>
-
-        <ul class="dropdown-menu">
-			<li class="header-title"> Sidebar Style</li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger">
-                    <p>Background Image</p>
-                    <label class="switch-image">
-                        <input type="checkbox" data-toggle="switch" checked="" data-on-color="info" data-off-color="info"><span class="toggle"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger">
-                    <p>Sidebar Mini</p>
-                    <label class="switch-mini">
-                        <input type="checkbox" data-toggle="switch" data-on-color="info" data-off-color="info">
-                        <span class="toggle"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger">
-                    <p>Fixed Navbar</p>
-                    <label class="switch-nav">
-                        <input type="checkbox" data-toggle="switch" data-on-color="info" data-off-color="info">
-                        <span class="toggle"></span>
-                    </label>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="adjustments-line">
-                <a href="javascript:void(0)" class="switch-trigger background-color">
-                    <p>Filters</p>
-                    <div class="pull-right">
-                        <span class="badge filter badge-black" data-color="black"></span>
-                        <span class="badge filter badge-azure" data-color="azure"></span>
-                        <span class="badge filter badge-green" data-color="green"></span>
-                        <span class="badge filter badge-orange active" data-color="orange"></span>
-                        <span class="badge filter badge-red" data-color="red"></span>
-                        <span class="badge filter badge-purple" data-color="purple"></span>
-                    </div>
-                    <div class="clearfix"></div>
-                </a>
-            </li>
-            <li class="header-title">Sidebar Images</li>
-
-            <li class="active">
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-1.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-3.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-4.jpg" alt="" />
-                </a>
-            </li>
-            <li>
-                <a class="img-holder switch-trigger" href="javascript:void(0)">
-                    <img src="../assets/img/sidebar-5.jpg" alt="" />
-                </a>
-            </li>
-
-            <li class="button-container">
-                <div>
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard" target="_blank" class="btn btn-info btn-block">Get free demo!</a>
-                </div>
-            </li>
-
-            <li class="button-container">
-                <div>
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro" target="_blank" class="btn btn-warning btn-block btn-fill">Buy now!</a>
-                </div>
-            </li>
-
-            <li class="button-container">
-                <div>
-                    <a href="http://www.creative-tim.com/product/light-bootstrap-dashboard-pro/documentation/tutorial-components.html" target="_blank" class="btn btn-danger btn-block">Documentation</a>
-                </div>
-            </li>
-
-            <li class="header-title" id="sharrreTitle">Thank you for sharing!</li>
-
-            <li class="button-container">
-				<button id="twitter" class="btn btn-social btn-twitter btn-round sharrre"><i class="fa fa-twitter"></i> · 256</button>
-                <button id="facebook" class="btn btn-social btn-facebook btn-round sharrre"><i class="fa fa-facebook-square"> · 426</i></button>
-            </li>
-        </ul>
+<div id="maps">
+    <div id="map_div" style="position: relative;">
+    <input type="hidden" id="searchAddress" />
+    <input type="hidden" id="startx" />
+    <input type="hidden" id="starty" />
+    <input type="hidden" id="nowx" />
+    <input type="hidden" id="nowy" />
+    <input type="hidden" id="endx" />
+    <input type="hidden" id="endy" />
     </div>
 </div>
- -->
-</body>
-<!--   Core JS Files   -->
-<script src="../public/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>
-<script src="../public/assets/js/core/popper.min.js" type="text/javascript"></script>
-<script src="../public/assets/js/core/bootstrap.min.js" type="text/javascript"></script>
-<!--  Plugin for Switches, full documentation here: http://www.jque.re/plugins/version3/bootstrap.switch/ -->
-<script src="../public/assets/js/plugins/bootstrap-switch.js"></script>
-<!--  Google Maps Plugin    -->
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=75b512eb692749c484cb571161b92115"></script>
-<!--  Chartist Plugin  -->
-<script src="../public/assets/js/plugins/chartist.min.js"></script>
-<!--  Notifications Plugin    -->
-<script src="../public/assets/js/plugins/bootstrap-notify.js"></script>
-<!--  jVector Map  -->
-<script src="../public/assets/js/plugins/jquery-jvectormap.js" type="text/javascript"></script>
-<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
-<script src="../public/assets/js/plugins/moment.min.js"></script>
-<!--  DatetimePicker   -->
-<script src="../public/assets/js/plugins/bootstrap-datetimepicker.js"></script>
-<!--  Sweet Alert  -->
-<script src="../public/assets/js/plugins/sweetalert2.min.js" type="text/javascript"></script>
-<!--  Tags Input  -->
-<script src="../public/assets/js/plugins/bootstrap-tagsinput.js" type="text/javascript"></script>
-<!--  Sliders  -->
-<script src="../public/assets/js/plugins/nouislider.js" type="text/javascript"></script>
-<!--  Bootstrap Select  -->
-<script src="../public/assets/js/plugins/bootstrap-selectpicker.js" type="text/javascript"></script>
-<!--  jQueryValidate  -->
-<script src="../public/assets/js/plugins/jquery.validate.min.js" type="text/javascript"></script>
-<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
-<script src="../public/assets/js/plugins/jquery.bootstrap-wizard.js"></script>
-<!--  Bootstrap Table Plugin -->
-<script src="../public/assets/js/plugins/bootstrap-table.js"></script>
-<!--  DataTable Plugin -->
-<script src="../public/assets/js/plugins/jquery.dataTables.min.js"></script>
-<!--  Full Calendar   -->
-<script src="../public/assets/js/plugins/fullcalendar.min.js"></script>
-<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="../public/assets/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
-<!-- Light Dashboard DEMO methods, don't include it in your project! -->
-<script src="../public/assets/js/demo.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
 
-        demo.showNotification();
 
-        demo.initVectorMap();
-
+<script>
+    var map = new Tmapv2.Map("map_div", { // 지도가 생성될 div
+        center: new Tmapv2.LatLng(37.5694466853466, 126.97611808776898),    // 지도의 중심좌표
+        width : "750px", // 지도의 넓이
+        height : "750px", // 지도의 높이
+        zoom : 15, // 지도의 줌레벨
+        httpsMode: true,    // https모드 설정
     });
-</script>
+    
+    // 지도 타입 변경: ROAD
+    map.setMapType(Tmapv2.Map.MapType.ROAD);
+    /* API시작 */
+    // 마커 초기화
+    let markerStart = null;
+    var markerEnd = null;
+    var markerWp = [];
+    var markerPoi = [];
+    var markerPoint = [];
+    var markerArr = [], lineArr = [], labelArr = [];
+    var nowPosition = [];
+    var moveDistance = 0;
+    var testDistance = [0, 0, 0, 0, 0];
+    var test = [];
+    var testx = [];
+    var testy = [];
+    var marker1 = new Tmapv2.Marker({
+        icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_a.png",
+        iconSize : new Tmapv2.Size(24, 38),
+        map : map
+    });
+    var tData = new Tmapv2.extension.TData();
+        
+    window.onload = function getCurrentPosition(){
+        if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                    $("#startx").val(position.coords.longitude);
+					$("#starty").val(position.coords.latitude);
+						
+					//팝업 생성
 
+					marker = new Tmapv2.Marker({
+						position : new Tmapv2.LatLng(lat,lon),
+						map : map
+					});
+
+					InfoWindow = new Tmapv2.InfoWindow({
+						position : new Tmapv2.LatLng(lat,lon),
+						type : 2,
+						map : map
+					});
+					map.setCenter(new Tmapv2.LatLng(lat,lon));
+					map.setZoom(15);
+				});
+		}
+    }
+    //watchPosition
+    function watchingPosition() {
+        alert('위치정보 추적 시작');
+         if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                    $("#startx").val(position.coords.longitude);
+					$("#starty").val(position.coords.latitude);
+        })}
+        var positionId = navigator.geolocation.watchPosition(
+            function success(position) {
+				var lat = position.coords.latitude;
+				var lon = position.coords.longitude;
+                $("#nowx").val(position.coords.longitude);
+				$("#nowy").val(position.coords.latitude);
+                var startx = $("#startx").val();
+				var starty = $("#starty").val();
+                var movePosition = distance(starty, startx, lat, lon);
+                var moveDistance = moveDistance+movePosition;
+                var startx = $("#startx").val(lat);
+				var starty = $("#starty").val(lon);
+                if(marker){
+                    marker.setMap(null);
+                }
+                marker = new Tmapv2.Marker({
+				position : new Tmapv2.LatLng(lat,lon),
+				map : map
+				});
+        });
+        $('#btnDistance').click(function() {
+            alert(`${moveDistance}km 만큼 이동하였습니다.`);
+            // 테스트 용도
+            for(var a = 0; a<test.length; a++){
+                for (var i = 0; i<test[a].length; i++){
+                    for (var j = 0; j<test[a][i].geometry.length; j++){
+                        testx.push(test[a][i].geometry[j].x);
+                        testy.push(test[a][i].geometry[j].y);
+                    }
+                }
+            }
+        });
+        $('#btnStop').click(function() {
+            navigator.geolocation.clearWatch(positionId);
+            alert(`${moveDistance}km 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
+            console.log(test);
+            console.log(testx);
+            console.log(testy);
+            for (var i = 0; i<testx.length; i++){
+                var lon1 = testx[i];
+                var lat1 = testy[i];
+                var lon2 = testx[i+1];
+                var lat2 = testy[i+1];
+                if(lon1 === lon2 && lat1 === lat2){
+                    continue;
+                }
+                console.log(distance(lat1, lon1, lat2, lon2));
+            }
+            //데이터베이스에 distance저장.
+            //재시작 혹은 이전페이지.
+        });
+    }
+
+    document.getElementById('watchingPosition')
+
+    function distance(lat1, lon1, lat2, lon2) {
+        const R = 6371; // 지구 반지름 (단위: km)
+        const dLat = deg2rad(lat2 - lat1);
+        const dLon = deg2rad(lon2 - lon1);
+        const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        const distance = R * c; // 두 지점 간의 거리 (단위: km)
+        return distance;
+    }
+
+    function deg2rad(deg) {
+        return deg * (Math.PI/180);
+    }
+
+    // (장소API) 주소 찾기
+    map.addListener("click", function onClick(evt) {
+        var mapLatLng = evt.latLng;
+        //기존 마커 삭제
+        marker1.setMap(null);
+        // 기존 라인 지우기
+        if(lineArr.length > 0){
+            for(var k=0; k<lineArr.length ; k++){
+                lineArr[k].setMap(null);
+            }
+            //지운뒤 배열 초기화
+            lineArr = [];
+        }
+        var markerPosition = new Tmapv2.LatLng(
+                mapLatLng._lat, mapLatLng._lng);
+        //마커 올리기
+        marker1 = new Tmapv2.Marker({
+            position : markerPosition,
+            // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png",
+            iconHTML: `
+            <div class='_t_marker' style="position:relative;" >
+                <img src="https://cdn.icon-icons.com/icons2/1189/PNG/512/1490793853-user-interface22_82349.png" style="width:48px;height:48px;position:absolute;"/>
+                <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                P</div>
+            </div>
+            `,
+            offset: new Tmapv2.Point(24, 38),
+            iconSize : new Tmapv2.Size(24, 38),
+            map : map
+        });
+        var lon = mapLatLng._lng;
+        var lat = mapLatLng._lat;
+       
+        var optionObj = {
+            coordType: "WGS84GEO",       //응답좌표 타입 옵션 설정 입니다.
+            addressType: "A10"           //주소타입 옵션 설정 입니다.
+        };
+        var params = {
+            onComplete:function(result) { //데이터 로드가 성공적으로 완료 되었을때 실행하는 함수 입니다.
+                // 기존 팝업 지우기
+                if(labelArr.length > 0){
+                    for(var i in labelArr){
+                        labelArr[i].setMap(null);
+                    }
+                    labelArr = [];
+                }
+                
+                // poi 마커 지우기
+                if(markerPoi.length > 0){
+                    for(var i in markerPoi){
+                        markerPoi[i].setMap(null);
+                    }
+                    markerPoi = [];
+                }
+                $("#searchAddress").val('');
+                $("._btn_radio").removeClass('__color_blue_fill');
+                var arrResult = result._responseData.addressInfo;
+                var fullAddress = arrResult.fullAddress.split(",");
+                var newRoadAddr = fullAddress[2];
+                var jibunAddr = fullAddress[1];
+                if (arrResult.buildingName != '') {//빌딩명만 존재하는 경우
+                    jibunAddr += (' ' + arrResult.buildingName);
+                }
+                let resultStr = `
+                <div class="_result_panel_bg">
+                    <div class="_result_panel_area">
+                        <div class="__reverse_geocoding_result" style="flex-grow: 1;" id="content">
+                            <p class="_result_text_line">새주소 : ${newRoadAddr}</p>
+                            <p class="_result_text_line">지번주소 : ${jibunAddr}</p>
+                            <p class="_result_text_line"></p>
+                        </div>
+                        <div>
+                            <div class="_search_item_button_panel" id="footer">
+                                    <div class="_search_item_button" id="footer_button">
+                                        <button onclick="enterDest('end', '${newRoadAddr}', '${lon}', '${lat}');">도착</button>
+                                    </div>
+                                    <div class="_search_item_button" id="footer_button">
+                                        <button onclick="enterDest('wp', '${newRoadAddr}', '${lon}', '${lat}');">경유</button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                
+                var resultDiv = document.getElementById("apiResult");
+                resultDiv.innerHTML = resultStr;
+            },      
+            onProgress:function() {},   //데이터 로드 중에 실행하는 함수 입니다.
+            onError:function() {        //데이터 로드가 실패했을때 실행하는 함수 입니다.
+                alert("onError");
+            }             
+        };
+        tData.getAddressFromGeoJson(lat, lon, optionObj, params);
+    });
+    // (장소API) 통합 검색 함수
+    function searchPois() {
+        var searchKeyword = $("#searchAddress").val();
+        var optionObj = {
+            resCoordType : "WGS84GEO",
+            reqCoordType : "WGS84GEO",
+            count: 10
+        };
+        var params = {
+            onComplete: function(result) {
+                // 데이터 로드가 성공적으로 완료되었을 때 발생하는 이벤트입니다.
+                var resultpoisData = result._responseData.searchPoiInfo.pois.poi;
+                // 기존 마커, 팝업 제거
+                reset();
+                $("._btn_radio").removeClass('__color_blue_fill');
+                if(marker1) {
+                    marker1.setMap(null);
+                }
+                
+                var innerHtml =    // Search Reulsts 결과값 노출 위한 변수
+                `
+                <div class="_result_panel_bg _scroll_padding">
+                    <div class="_result_panel_scroll">
+                `;
+                var positionBounds = new Tmapv2.LatLngBounds();        //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+                
+                for(var k in resultpoisData){
+                    // POI 정보의 ID
+                    var id = resultpoisData[k].id;
+                    
+                    var name = resultpoisData[k].name;
+                    
+                    var lat = Number(resultpoisData[k].noorLat);
+                    var lon = Number(resultpoisData[k].noorLon);
+                    
+                    var frontLat = Number(resultpoisData[k].frontLat);
+                    var frontLon = Number(resultpoisData[k].frontLon);
+                    
+                    var markerPosition = new Tmapv2.LatLng(lat, lon);
+                    
+                    var fullAddressRoad = resultpoisData[k].newAddressList.newAddress[0].fullAddressRoad;
+                    
+                    const marker3 = new Tmapv2.Marker({
+                        position : markerPosition,
+                        //icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" + k + ".png",
+                        iconHTML:`
+                            <div class='_t_marker' style="position:relative;" >
+                            <img src="https://cdn.icon-icons.com/icons2/317/PNG/512/map-marker-icon_34392.png" style="width:48px;height:48px;position:absolute;"/>
+                            <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
+                            ${Number(k)+1}</div>
+                            </div>
+                        `,
+                        iconSize : new Tmapv2.Size(24, 38),
+                        title : name,
+                        label: `<span style="display:none;">${k}_${id}</span>`,
+                        map:map
+                    });
+                    
+                    // 마커 클릭 이벤트 추가
+                    marker3.addListener("click", function(evt) {
+                        for(let tMarker of markerPoi) {
+                            const labelInfo = $(tMarker.getOtherElements()).text();
+                            const forK = labelInfo.split("_")[0];
+                            tMarker.setIconHTML(`
+                                <div class='_t_marker' style="position:relative;" >
+                                <img src="https://cdn.icon-icons.com/icons2/317/PNG/512/map-marker-icon_34392.png" style="width:48px;height:48px;position:absolute;"/>
+                                <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
+                                ${Number(forK)+1}</div>
+                                </div>
+                            `);
+                             // marker z-index 초기화
+                             $(tMarker.getOtherElements()).next('div').css('z-index', 100);
+                        }
+                        // 선택한 marker z-index 처리 
+                        $(marker3.getOtherElements()).next('div').css('z-index', 101);
+                        const labelInfo = $(marker3.getOtherElements()).text();
+                        const thisK = labelInfo.split("_")[0];
+                        const thisId = labelInfo.split("_")[1];
+                        marker3.setIconHTML(`
+                            <div class='_t_marker' style="position:relative;" >
+                            <img src="https://cdn.icon-icons.com/icons2/317/PNG/512/map-marker-icon_34392.png" style="width:48px;height:48px;position:absolute;"/>
+                            <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
+                            ${Number(thisK)+1}</div>
+                            </div>
+                        `);
+                        poiDetail(thisId, thisK);
+                    });
+                    
+                    innerHtml += `
+                        <div class="_search_item" id="poi_${k}">
+                            <div class="_search_item_poi">
+                                <div class="_search_item_poi_icon _search_item_poi_icon_grey">
+                                    <div class="_search_item_poi_icon_text">${Number(k)+1}</div>
+                                </div>
+                            </div>
+                            <div class="_search_item_info">
+                                <p class="_search_item_info_title">${name}</p>
+                                <p class="_search_item_info_address">${fullAddressRoad}</p>
+                                <p class="_search_item_info_address">중심점 : ${lat}, ${lon}</p>
+                                <p class="_search_item_info_address">입구점 : ${frontLat}, ${frontLon}</p>
+                            </div>
+                            <div class="_search_item_button_panel">
+                                <div class="_search_item_button __color_blue">
+                                    <button onclick='poiDetail("${id}", "${k}");'>상세정보</button>
+                                </div>
+                            </div>
+                            <div class="_search_item_button_panel" id="footer">
+                                <div class="_search_item_button" id="footer_button">
+                                    <button onclick="enterDest('end', '${name}', '${lon}', '${lat}');">도착</buttn>
+                                </div>
+                                <div class="_search_item_button" id="footer_button">
+                                    <button onclick="enterDest('wp', '${name}', '${lon}', '${lat}');">경유</button>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        ${(resultpoisData.length-1) === Number(k) ? "": `<div class="_search_item_split"></div>`}
+                    `;
+                    markerPoi.push(marker3);
+                    positionBounds.extend(markerPosition);    // LatLngBounds의 객체 확장
+                }
+                
+                innerHtml += "</div></div>";
+                $("#apiResult").html(innerHtml);    //searchResult 결과값 노출
+                map.panToBounds(positionBounds);    // 확장된 bounds의 중심으로 이동시키기
+                map.zoomOut();
+            },
+            onProgress: function() {},
+            onError: function(){}
+        }
+        tData.getPOIDataFromSearchJson(searchKeyword, optionObj, params);
+        
+    }    
+        
+    // POI 상세검색 함수
+    function poiDetail(poiId, thisK) {
+        for(let tMarker of markerPoi) {
+            const labelInfo = $(tMarker.getOtherElements()).text();
+            const forK = labelInfo.split("_")[0];
+            tMarker.setIconHTML(`
+                <div class='_t_marker' style="position:relative;" >
+                <img src="https://cdn.icon-icons.com/icons2/317/PNG/512/map-marker-icon_34392.png" style="width:48px;height:48px;position:absolute;"/>
+                <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
+                ${Number(forK)+1}</div>
+                </div>
+            `);
+             // marker z-index 초기화
+             $(tMarker.getOtherElements()).next('div').css('z-index', 100);
+        }
+        markerPoi[thisK].setIconHTML(`
+            <div class='_t_marker' style="position:relative;" >
+            <img src="https://cdn.icon-icons.com/icons2/165/PNG/256/mapmarker_marker_outside_azure_23007.png" style="width:48px;height:48px;position:absolute;"/>
+            <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 15px;line-height: 19px;">
+            ${Number(thisK)+1}</div>
+            </div>
+        `);
+        // 선택한 marker z-index 처리 
+        $(markerPoi[thisK].getOtherElements()).next('div').css('z-index', 101);
+        var scrollOffset = $("#poi_"+thisK)[0].offsetTop - $("._result_panel_scroll")[0].offsetTop
+        $("._result_panel_scroll").animate({scrollTop: scrollOffset}, 'slow');
+        $("._result_panel_scroll ._search_item_poi_icon").removeClass("_search_item_poi_icon_blue");
+        $("#poi_"+thisK).find('._search_item_poi_icon').addClass("_search_item_poi_icon_blue");
+        // 기존 라벨 지우기
+        if(labelArr.length > 0){
+            for(var i in labelArr){
+                labelArr[i].setMap(null);
+            }
+            labelArr = [];
+        }
+    
+        var optionObj = {
+            resCoordType: "WGS84GEO"
+        }
+        var params = {
+            onComplete: function(result) {
+                // 응답받은 POI 정보
+                var detailInfo = result._responseData.poiDetailInfo;
+                console.log(detailInfo);
+                var name = detailInfo.name;
+                var bldAddr = detailInfo.bldAddr;
+                var tel = detailInfo.tel;
+                var bizCatName = detailInfo.bizCatName;
+                var parkingString = (detailInfo.parkFlag === "0"? "주차 불가능": (detailInfo.parkFlag === "1" ? "주차 가능": ""));
+                var zipCode = detailInfo.zipCode;
+                var lat = Number(detailInfo.lat);
+                var lon = Number(detailInfo.lon);
+                var bldNo1 = detailInfo.bldNo1;
+                var bldNo2 = detailInfo.bldNo2;
+                
+                var labelPosition = new Tmapv2.LatLng(lat, lon);
+                if(bldNo1 !== "") {
+                    bldAddr += ` ${bldNo1}`;
+                }
+                if(bldNo2 !== "") {
+                    bldAddr += `-${bldNo2}`;
+                }
+                var content = `
+                    <div class="_tmap_preview_popup_text">
+                        <div class="_tmap_preview_popup_info" id="explanation">
+                            <div class="_tmap_preview_popup_title">${name}</div>
+                            <div class="_tmap_preview_popup_address">${bldAddr}</div>
+                            <div class="_tmap_preview_popup_address">${zipCode}</div>
+                            <div class="_tmap_preview_popup_address">${bizCatName}</div>
+                `;
+                // 상세보기 클릭 시 지도에 표출할 popup창
+/*                     var content = "<div style=' border-radius:10px 10px 10px 10px;background-color:#2f4f4f; position: relative;"
+                        + "line-height: 15px; padding: 5 5px 2px 4; right:65px; width:150px; padding: 5px;'>"
+                        + "<div style='font-size: 11px; font-weight: bold ; line-height: 15px; color : white'>"
+                        + name
+                        + "</br>"
+                        + address 
+                        + "</br>"
+                        + bizCatName;
+ */                            
+                if(tel !== "") {
+                    content += `<div class="_tmap_preview_popup_address">${tel}</div>`;
+                }
+                if(parkingString !== "") {
+                    content += `<div class="_tmap_preview_popup_address">${parkingString}</div>`;
+                }
+                
+                content += "</div></div>";
+            
+                var labelInfo2 = new Tmapv2.InfoWindow({
+                    position: labelPosition, //Popup 이 표출될 맵 좌표
+                    content: content, //Popup 표시될 text
+                    border:'0px solid #FF0000', //Popup의 테두리 border 설정.
+                    background: false,
+                    offset: new Tmapv2.Point(-12, -6),
+                    type: 2, //Popup의 type 설정.
+                    align: Tmapv2.InfoWindowOptions.ALIGN_CENTERTOP,
+                    map: map //Popup이 표시될 맵 객체
+                });
+/* 
+                var labelInfo2 = new Tmapv2.Label({
+                    position : labelPosition,
+                    content : content,
+                    zIndex: 999,
+                    align: 'ct',
+                    map : map
+                });
+                 */
+                //popup 생성
+    
+                // LABEL이 마커보다 상위에 표시되도록 수정함. 
+                $("#map_div ._tmap_preview_popup_text").parent().parent().css('z-index', 10);
+                // popup들을 담을 배열에 팝업 저장
+                labelArr.push(labelInfo2);
+                
+                map.setCenter(labelPosition);
+            },
+            onProgress: function() {},
+            onError: function() {}
+        }
+        tData.getPOIDataFromIdJson(poiId,optionObj, params);
+    }        
+    
+    // 지도에 그릴 모드 선택
+    var drawMode = "apiRoutesMulti_0";
+    // 경로 API [검색] 버튼 동작
+    async function apiSearchRoutes() {
+        marker1.setMap(null);
+        var startx = $("#startx").val();
+        var starty = $("#starty").val();
+        var endx = $("#endx").val();
+        var endy = $("#endy").val();
+        if($("._btn_action").hasClass('__color_grey')) {
+            return false;
+        }
+        if(startx === "" || starty === "" || endx === "" || endy === "") {
+            alert("정확한 주소를 입력하세요.");
+            return false;
+        }
+
+        
+        $("#apiResult").empty();
+        reset();
+        
+        await routesPedestrian();
+        await routesRedrawMap();
+    }
+    
+    // (경로API) 보행자 경로 안내 API
+    function routesPedestrian() {
+        return new Promise(function(resolve, reject) {
+            // 출발지, 목적지의 좌표를 조회
+            var startx = $("#startx").val();
+            var starty = $("#starty").val();
+            var endx = $("#endx").val();
+            var endy = $("#endy").val();
+            var startLatLng = new Tmapv2.LatLng(starty, startx);
+            var endLatLng = new Tmapv2.LatLng(endy, endx);
+            // 경유지 좌표 파라미터 생성
+            var viaPoints = [];
+            $(".waypoint_input").each(function(idx) {
+                var pos = $(this).find("input[name='multipos']").val();
+                if(pos === "") {
+                    return true;
+                }
+                var viaX = pos.split(',')[0];
+                var viaY = pos.split(',')[1];
+                viaPoints.push(viaX + "," + viaY);
+            });
+            var passList = viaPoints.join("_");
+            var optionObj = {
+                reqCoordType: "WGS84GEO",
+                resCoordType: "WGS84GEO",
+                    passList: passList,
+            };
+            var params = {
+                onComplete: function (result) {
+                    var resultData = result._responseData.features;
+                    //결과 출력
+                    var appendHtml = `
+                        <div class="_route_item" id="box1">
+                            <div class="_btn_action _btn_action-search __color_grey" onclick="watchingPosition();">
+                                <button>현재 위치 추적 시작</button>
+                            </div>
+                            <div id="tracking_div">
+                                <button id="btnDistance">이동 거리 확인</button>
+                                <button id="btnStop">현재 위치 추적 중지</button>
+                            </div>
+
+                            <div class="_route_item_info">${((resultData[0].properties.totalTime) / 60).toFixed(0)}분 | ${((resultData[0].properties.totalDistance) / 1000).toFixed(1)}km</div>
+                        </div>
+                    `;
+                    // $("#apiResult").append(appendHtml);
+                    writeApiResultHtml("apiRoutesPedestrian", appendHtml);
+                    if (drawMode === "apiRoutesPedestrian") {
+                        //기존 그려진 라인 & 마커가 있다면 초기화
+                        reset();
+                        // 시작마커설정
+                        markerStart = new Tmapv2.Marker({
+                            position: new Tmapv2.LatLng(starty, startx),
+                            // icon: "http://topopen.tmap.co.kr/imgs/start.png",
+                            iconHTML: `
+                            <div class='_t_marker' style="position:relative;" >
+                                <img src="https://cdn.icon-icons.com/icons2/3205/PNG/512/gps_place_marker_pointer_location_pin_map_navigation_direction_icon_195752.png" style="width:48px;height:48px;position:absolute;"/>
+                                <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                                출발</div>
+                            </div>
+                            `,
+                            offset: new Tmapv2.Point(24, 38),
+                            iconSize: new Tmapv2.Size(24, 38),
+                            map: map
+                        });
+                        // 도착마커설정
+                        markerEnd = new Tmapv2.Marker({
+                            position: new Tmapv2.LatLng(endy, endx),
+                            // icon: "http://topopen.tmap.co.kr/imgs/arrival.png",
+                            iconHTML: `
+                            <div class='_t_marker' style="position:relative;" >
+                                <img src="https://cdn.icon-icons.com/icons2/1283/PNG/512/1497619936-jd21_85172.png" style="width:48px;height:48px;position:absolute;"/>
+                                <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                                도착</div>
+                            </div>
+                            `,
+                            offset: new Tmapv2.Point(24, 38),
+                            iconSize: new Tmapv2.Size(24, 38),
+                            map: map
+                        });
+                        // markerArr.push(marker_s);
+                        // markerArr.push(marker_e);
+                        // GeoJSON함수를 이용하여 데이터 파싱 및 지도에 그린다.
+                        var jsonObject = new Tmapv2.extension.GeoJSON();
+                        var jsonForm = jsonObject.read(result._responseData);
+                        test.push(jsonForm);
+                        jsonObject.drawRoute(map, jsonForm, {}, function (e) {
+                            // 경로가 표출된 이후 실행되는 콜백 함수.
+                            for (var m of e.markers) {
+                                markerArr.push(m);
+                            }
+                            for (var l of e.polylines) {
+                                lineArr.push(l);
+                            }
+                            var positionBounds = new Tmapv2.LatLngBounds(); //맵에 결과물 확인 하기 위한 LatLngBounds객체 생성
+                            for (var polyline of e.polylines) {
+                                for (var latlng of polyline.getPath().path) {
+                                    positionBounds.extend(latlng);  // LatLngBounds의 객체 확장
+                                }
+                            }
+                            map.panToBounds(positionBounds);
+                            map.zoomOut();
+                        });
+                    }
+                    resolve();
+                },
+                onProgress: function () {
+                },
+                onError: function () {
+                    alert('보행자 경로 - 결과 값이 없습니다.');
+
+                }
+            };
+            tData.getRoutePlanForPeopleJson(startLatLng, endLatLng, "출발지", "도착지", optionObj, params);
+        });
+    }
+    
+    //마커 생성하기
+    function addMarkers(infoObj) {
+        var size = new Tmapv2.Size(24, 38);//아이콘 크기 설정합니다.
+
+        if (infoObj.pointType == "P") { //포인트점일때는 아이콘 크기를 줄입니다.
+            size = new Tmapv2.Size(8, 8);
+        }
+
+        marker_p = new Tmapv2.Marker({
+            position : new Tmapv2.LatLng(infoObj.lat, infoObj.lng),
+            icon : infoObj.markerImage,
+            iconSize : size,
+            map : map
+        });
+
+        markerArr.push(marker_p);
+    }
+
+    // 경유지 추가 컨트롤 함수
+    function onMultiButton(btn) {
+        // 삭제 버튼이면 li 지움
+        if($(btn).hasClass('wp_clear')) {
+            $(btn).parent().prev('.__space_10_h').remove();
+            $(btn).parent().remove();
+            // 경유지를 지우고 남은 마지막 버튼을 추가버튼으로 변경
+            var cnt0 = $(".waypoint_input").length;
+            $(".waypoint_input:last").removeClass('wp_add wp_clear');
+            $(".waypoint_input:last").addClass('wp_add');
+
+            // 마커 다시 그리기
+            if(markerWp.length > 0){
+                for(var i in markerWp){
+                    if(markerWp[i]) {
+                        markerWp[i].setMap(null);
+                    }
+                }
+                markerWp = [];
+            }
+            $(".waypoint_input").each(function(idx) {
+                // 차례번호 재생성
+                $(this).attr('data-idx', idx);
+                var pos = $(this).find("input[name='multipos']").val();
+                if(pos === "") {
+                    return true;
+                }
+                var viaX = pos.split(',')[0];
+                var viaY = pos.split(',')[1];
+                markerWp[idx] = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(viaY, viaX),
+                    icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" + idx + ".png",
+                    iconSize : new Tmapv2.Size(24, 38),
+                    map:map
+                });
+            });
+            return false;
+        }
+        // 경유지 value empty체크
+        var val = $(btn).parent().find("input[type='text']").val();
+        if(val === "") {
+            alert("경유지를 입력하세요.");
+            return false;
+        }
+        // 기존 버튼들은 삭제 버튼으로 변경
+        $(".waypoint_input > button").each(function() {
+            $(this).removeClass('wp_add wp_clear');
+            $(this).addClass('wp_clear');
+        });
+        $("#wpList").append(`
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" />
+                <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button class="wp_add" onclick="onMultiButton(this);"></button>
+            </div>
+        `);
+        // 총 개수가 5개 이상이면 - 로 변경
+        var cnt2 = $(".waypoint_input").length;
+        if(cnt2 >= 5) {
+            $(".waypoint_input > button").each(function() {
+                $(this).removeClass('wp_add wp_clear');
+                $(this).addClass('wp_clear');
+            })
+        }
+        // 차례번호 재생성
+        $(".waypoint_input").each(function(idx) {
+            $(this).removeClass('wp_add wp_clear');
+            $(this).attr('data-idx', idx);
+        });
+        $(".waypoint_input").removeClass('texton');
+        $(".waypoint_input:last").addClass("texton");
+    }
+    function clickSearchPois(buttonObj) {
+        const $input = $(buttonObj).prev('input');
+        if($(buttonObj).hasClass('_search_address_btn')) {
+            $("#searchAddress").val($input.val());
+            searchPois();
+        } else if($(buttonObj).parent('div').hasClass('waypoint_input')) {
+            // 경유지 제거
+            const $_deleteObj = $(buttonObj).parent('div.waypoint_input');
+            clearWaypoint($_deleteObj[0]);
+        } else {
+            const type = $input.attr('id') || '';
+            if(type === "searchStartAddress") {
+                $("#startx").val('');
+                $("#starty").val('');
+                if(markerStart) {
+                    markerStart.setMap(null);
+                }
+        
+            } else if(type === "searchEndAddress") {
+                $("#endx").val('');
+                $("#endy").val('');
+                if(markerEnd) {
+                    markerEnd.setMap(null);
+                }
+            }
+            $input.val('');
+            $("#searchAddress").val('');
+            $(buttonObj).removeClass('_delete_address_btn');
+            $(buttonObj).addClass('_search_address_btn');
+            $("._btn_action").addClass('__color_grey');
+/*                 if(($("#searchStartAddress").val() === "") || ($("#searchEndAddress").val() === "")) {
+                console.log("remove1");
+                $("._btn_action").addClass('__color_grey');
+            } else {
+                console.log("remove2");
+                $("._btn_action").removeClass('__color_grey');
+            }
+ */            }
+    }
+    
+    //(경로API공통) 엔터키 통합검색 함수
+    function onKeyupSearchPoi(inputText) {
+        $("._btn_action").addClass('__color_grey');
+        if($(inputText).next('button').hasClass('_delete_address_btn')) {
+            $(inputText).val('');
+        }
+        $(inputText).next('button').removeClass('_delete_address_btn');
+        $(inputText).next('button').addClass('_search_address_btn');
+        // Get the parent div.waypoint_input element
+        const $_deleteObj = $(inputText).parent('div.waypoint_input');
+        // Get the current size
+        var currentSize = $(".waypoint_input._wp_not_empty").length;
+        // Check if currentSize is greater than 0 and data-idx is not equal to currentSize
+        if (currentSize > 0 && $_deleteObj.data('idx') !== currentSize) {
+            const inputValue = $(inputText).val();
+            // Check if the input value is null or empty
+            if (inputValue === null || inputValue === '' && inputText.id !== 'searchStartAddress' && inputText.id !== 'searchEndAddress') {
+                // Call clearWaypoint
+                clearWaypoint($_deleteObj[0]);
+            }
+        }
+        if (window.event.keyCode == 13) {
+            // 엔터키가 눌렸을 때 실행하는 반응
+            var isWaypoint = $(inputText).parent('div.waypoint_input').length === 1;
+            if(isWaypoint) {
+                // 경유지입력시 엔터키대상 li에대해 class추가
+                $(".waypoint_input").each(function() {
+                    $(this).removeClass('texton');
+                });
+                $(inputText).parent('div.waypoint_input').addClass('texton');
+            }
+            $("#searchAddress").val($(inputText).val());
+            searchPois();
+        }
+    }
+    
+    // (경로API공통) 지도위의 경로 안내 효과 다시그림
+    function routesRedrawMap() {
+            drawMode = "apiRoutesPedestrian";
+            routesPedestrian();
+        $("#apiResult").find('._route_item_type').removeClass('__color_blue');
+        $("#apiResult").find('#'+'apiRoutesPedestrian').find('._route_item_type').addClass('__color_blue');
+    }
+    // (경로API공통) 도착지의 좌표를 설정한다.
+    function enterDest(type, address, x, y) {
+        marker1.setMap(null);
+        // 기존 라인 지우기
+        if(lineArr.length > 0){
+            for(var i in lineArr) {
+                lineArr[i].setMap(null);
+            }
+            //지운뒤 배열 초기화
+            lineArr = [];
+        }
+        // 경로찾기 point 마커 지우기
+        if(markerPoint.length > 0){
+            for(var i in markerPoint){
+                markerPoint[i].setMap(null);
+            }
+            markerPoint = [];
+        }
+        if(type === 'end') {
+            if(markerEnd) {
+                markerEnd.setMap(null);
+            }
+            $("#endx").val(x);
+            $("#endy").val(y);
+            $("#searchEndAddress").val(address);
+            $("#searchEndAddress").next('button').removeClass('_search_address_btn');
+            $("#searchEndAddress").next('button').addClass('_delete_address_btn');
+            
+            markerEnd = new Tmapv2.Marker({
+                position : new Tmapv2.LatLng(y, x),
+                // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+                iconHTML: `
+                <div class='_t_marker' style="position:relative;" >
+                    <img src="https://cdn.icon-icons.com/icons2/1283/PNG/512/1497619936-jd21_85172.png" style="width:48px;height:48px;position:absolute;"/>
+                    <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                    도착</div>
+                </div>
+                `,
+                offset: new Tmapv2.Point(24, 38),
+                iconSize : new Tmapv2.Size(24, 38),
+                map : map
+            });
+        } else if(type === 'wp') {
+            const currentSize = $(".waypoint_input").length;
+            const prependHtml = `
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _wp_not_empty _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" value="${x},${y}">
+                <input type="text" value="${address}" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button onclick="clickSearchPois(this);" class="_delete_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+                <div style="width: 90px;"></div>
+            </div>
+            `;
+            const emptyHtml = `
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" />
+                <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+                <div style="width: 90px;"></div>
+            </div>
+            `;
+            if(currentSize < 5) {
+                const $_deleteObj = $("#wpList .waypoint_input:last");
+                $_deleteObj.prev('.__space_10_h').remove();
+                $_deleteObj.remove();
+                $("#wpList").append(prependHtml);
+                $("#wpList").append(emptyHtml);
+            } else {
+                const $_deleteObj = $("#wpList .waypoint_input:last");
+                $_deleteObj.prev('.__space_10_h').remove();
+                $_deleteObj.remove();
+                $("#wpList").append(prependHtml);
+            }
+            redrawRouteMarker();
+        }
+        /* 검색버튼 활성화/비활성화 체크  */
+        var startx = $("#startx").val();
+        var starty = $("#starty").val();
+        var endx = $("#endx").val();
+        var endy = $("#endy").val();
+        if(startx === "" || starty === "" || endx === "" || endy === "") {
+            $("._btn_action").addClass('__color_grey');
+        } else {
+            $("._btn_action").removeClass('__color_grey');
+        }
+        
+        // reset();
+    }
+    function clearWaypoint(destObj) {
+        const currentSize = $(".waypoint_input._wp_not_empty").length;
+        const emptyHtml = `
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" />
+                <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;"></button>
+                <div style="width: 90px;"></div>
+            </div>
+            `;
+        const $_deleteObj = $(destObj);
+        $_deleteObj.prev('.__space_10_h').remove();
+        $_deleteObj.remove();
+        if(currentSize === 5) {
+        $("#wpList").append(emptyHtml);
+        }
+        redrawRouteMarker();
+    }
+    /* 경로검색시 경유지 마커 다시 그림 */
+    function redrawRouteMarker() {
+        if(markerWp.length > 0){
+            for(var i in markerWp) {
+                markerWp[i].setMap(null);
+            }
+            //지운뒤 배열 초기화
+            markerWp = [];
+        }
+        $(".waypoint_input").each(function(idx) {
+            // 차례번호 재생성
+            $(this).attr('data-idx', idx);
+            var pos = $(this).find("input[name='multipos']").val();
+            if(pos === "") {
+                return true;
+            }
+            var viaX = pos.split(',')[0];
+            var viaY = pos.split(',')[1];
+            markerWp[idx] = new Tmapv2.Marker({
+                position : new Tmapv2.LatLng(viaY, viaX),
+                // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_" + idx + ".png",
+                iconHTML: `
+                <div class='_t_marker' style="position:relative;" >
+                    <img src="https://cdn.icon-icons.com/icons2/3205/PNG/512/pin_place_pointer_marker_direction_gps_navigation_map_location_icon_195711.png" style="width:48px;height:48px;position:absolute;"/>
+                    <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                    ${idx+1}</div>
+                </div>
+                `,
+                offset: new Tmapv2.Point(24, 38),
+                iconSize : new Tmapv2.Size(24, 38),
+                map:map
+            });
+        });
+    }
+    // (경로API공통) API 결과값 기록
+    function writeApiResultHtml(type, string) {
+        if($("#apiResult div#results").length === 0) {
+            $("#apiResult").empty();
+            $("#apiResult").html(`
+                <div class="_result_panel_bg">
+                    <div class="_result_panel_scroll">
+                        <div class="__space_10_h"></div>
+                        <div id="results"></div>
+                        <div id="apiRoutesPedestrian"></div>
+                    </div>
+                </div>
+            `);
+        }
+            $("#apiResult").find("#"+type).html(string);
+    }   
+
+    // (API 공통) 맵에 그려져있는 라인, 마커, 팝업을 지우는 함수
+    function reset() {
+        // 기존 라인 지우기
+        if(lineArr.length > 0){
+            for(var i in lineArr) {
+                lineArr[i].setMap(null);
+            }
+            //지운뒤 배열 초기화
+            lineArr = [];
+        }
+    
+        // 기존 마커 지우기
+        if(markerStart) {
+            markerStart.setMap(null);
+        }
+        if(markerEnd) {
+            markerEnd.setMap(null);
+        }
+        if(markerArr.length > 0){
+            for(var i in markerArr){
+                markerArr[i].setMap(null);
+            }
+            markerArr = [];
+        }
+        // poi 마커 지우기
+        if(markerPoi.length > 0){
+            for(var i in markerPoi){
+                markerPoi[i].setMap(null);
+            }
+            markerPoi = [];
+        }
+        // 경로찾기 point 마커 지우기
+        if(markerPoint.length > 0){
+            for(var i in markerPoint){
+                markerPoint[i].setMap(null);
+            }
+            markerPoint = [];
+        }
+        
+        // 기존 팝업 지우기
+        if(labelArr.length > 0){
+            for(var i in labelArr){
+                labelArr[i].setMap(null);
+            }
+            labelArr = [];
+        }
+    }
+
+
+// 아직 개발용
+    document.getElementById('stop_button').addEventListener('click', function (){
+        $('searchEndAddress').val(address);
+        
+    })
+
+    function random(latitude, longitude){
+    const radius = 250;
+    const d2r = Math.PI / 180;
+    const r2d = 180 / Math.PI;
+// 이거를 drawingObject라는 원의 크기를 키워주는 대로 그 값대로 지름을 정해서 계산하게 해주기!!
+// 이걸 해결하려면, getDrawingObject() 함수에 redius를 담당하는 값이 있는지 보고 그 값을 지정해주면 인식해서 그 내로 경로가 생성이 가능할듯
+    const earth_rad = 6378000; // 지구 반지름 근사값
+
+    const r = Math.random() * radius;
+    const rlat = (r / earth_rad) * r2d;
+    const rlng = rlat / Math.cos(latitude * d2r);
+
+    const theta = Math.PI * (Math.random() * 2);
+    const x = latitude + (rlat * Math.sin(theta));
+    const y = longitude + (rlng * Math.cos(theta));
+    console.log("stops lat : ",x);
+    console.log("stops long : ",y);
+    moveMapTo(x, y);
+    stopmarkers(x, y);
+    const end = markerEnd.getPosition();
+    $("#searchEndAddress").val('도착역');
+    }
+
+// 현재위치 값을 기반으로 랜덤 값 돌린 값을 도착에
+
+document.getElementById('random_road').addEventListener('click', function (type, address, ){
+    marker1.setMap(null);
+        // 기존 라인 지우기
+        if(lineArr.length > 0){
+            for(var i in lineArr) {
+                lineArr[i].setMap(null);
+            }
+            //지운뒤 배열 초기화
+            lineArr = [];
+        }
+        // 경로찾기 point 마커 지우기
+        if(markerPoint.length > 0){
+            for(var i in markerPoint){
+                markerPoint[i].setMap(null);
+            }
+            markerPoint = [];
+        }
+        if(type === 'end') {
+            if(markerEnd) {
+                markerEnd.setMap(null);
+            }
+            $("#endx").val(x);
+            $("#endy").val(y);
+            $("#searchEndAddress").val(address);
+            $("#searchEndAddress").next('button').removeClass('_search_address_btn');
+            $("#searchEndAddress").next('button').addClass('_delete_address_btn');
+            
+            markerEnd = new Tmapv2.Marker({
+                position : new Tmapv2.LatLng(y, x),
+                // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+                iconHTML: `
+                <div class='_t_marker' style="position:relative;" >
+                    <img src="https://cdn.icon-icons.com/icons2/1283/PNG/512/1497619936-jd21_85172.png" style="width:48px;height:48px;position:absolute;"/>
+                    <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                    도착</div>
+                </div>
+                `,
+                offset: new Tmapv2.Point(24, 38),
+                iconSize : new Tmapv2.Size(24, 38),
+                map : map
+            });
+        } else if(type === 'wp') {
+            const currentSize = $(".waypoint_input").length;
+            const prependHtml = `
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _wp_not_empty _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" value="${x},${y}">
+                <input type="text" value="${address}" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button onclick="clickSearchPois(this);" class="_delete_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+                <div style="width: 90px;"></div>
+            </div>
+            `;
+            const emptyHtml = `
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" />
+                <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요." style="padding-right: 45px;">
+                <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+                <div style="width: 90px;"></div>
+            </div>
+            `;
+            if(currentSize < 5) {
+                const $_deleteObj = $("#wpList .waypoint_input:last");
+                $_deleteObj.prev('.__space_10_h').remove();
+                $_deleteObj.remove();
+                $("#wpList").append(prependHtml);
+                $("#wpList").append(emptyHtml);
+            } else {
+                const $_deleteObj = $("#wpList .waypoint_input:last");
+                $_deleteObj.prev('.__space_10_h').remove();
+                $_deleteObj.remove();
+                $("#wpList").append(prependHtml);
+            }
+            redrawRouteMarker();
+        }
+        /* 검색버튼 활성화/비활성화 체크  */
+        var startx = $("#startx").val();
+        var starty = $("#starty").val();
+        var endx = $("#endx").val();
+        var endy = $("#endy").val();
+        if(startx === "" || starty === "" || endx === "" || endy === "") {
+            $("._btn_action").addClass('__color_grey');
+        } else {
+            $("._btn_action").removeClass('__color_grey');
+        }
+})
+
+</script>
+    <div class="_map_layer_overlay">
+        <div class="__space_15_h"></div>
+        <div class="_map_overlay_row" id="div1">
+            <div class="__space_13_w"></div>
+            <input type="text" id="searchEndAddress" class="_search_entry _search_entry_short" placeholder="목적지를 입력하세요" onkeyup="onKeyupSearchPoi(this);">
+            <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;" id="stop_button">
+                목적지
+            </button>
+            <div>
+                {{!-- <button onclick="clickSearchPois(this);" id="random_road">랜덤 경로 250m</button> --}}
+            </div>
+            <div class="__space_10_w"></div>
+                    <div class="_btn_action _btn_action-search __color_grey" id="search_button">
+                        <button onclick="apiSearchRoutes();" >검색</button>
+                    </div>
+                    <div class="_btn_action _btn_action-search __color_grey" id="remove_button">
+                        <button onclick="reset();">초기화</button>
+                    </div>
+        </div>
+        <div id="wpList">
+            <div class="__space_10_h"></div>
+            <div class="waypoint_input _map_overlay_row" data-idx="0" id="stopover">
+                <input type="hidden" name="multipos" />
+                <input type="text" class="_search_entry _search_entry_short" onkeyup="onKeyupSearchPoi(this);" placeholder="경유지를 입력하세요.">
+                <button onclick="clickSearchPois(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;">경유지</button>
+                <div style="width: 90px;"></div>
+                <!-- <button onclick="onMultiButton(this);" class="_search_address_btn" style="margin-top: 14px; margin-bottom: 14px; pointer-events: all; cursor: pointer;"></button> -->
+            </div>
+        </div>
+        <div class="__flex_expand"></div>
+        <div id="apiResult" class="_map_overlay_row">
+            <div class="_result_panel_bg ">
+                <div class="_result_panel">
+                        
+                    <div class="__disable_text"> 경로 API 선택 시, 장소 API의 기본 항목이 자동으로 활성화 됩니다. </div>
+                    <div class="__disable_text"> API를 선택해 주세요. </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
 </html>
