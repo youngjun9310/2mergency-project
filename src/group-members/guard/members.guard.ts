@@ -7,6 +7,7 @@ export class memberRolesGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
+    console.log(request);
     const userId = request.payload.sub; // 인증된 사용자 가져옴
     const groupId = request.groups; // URL에서 그룹아이디 가져옹
     return await this.strategy.validate(userId, groupId, context);

@@ -34,10 +34,8 @@ export class GroupsController {
   @Post()
   async createGroup(
     @Body() createGroupDto: CreateGroupDto,
-    @Req() req: Request,
     @UserInfo() users: Users,
   ) {
-    // const userId = req.headers['userId'];
     return await this.groupsService.createGroup(createGroupDto, users.userId);
   }
 

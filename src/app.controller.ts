@@ -6,9 +6,8 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  @Render('index.hbs')
-  getHello(): any {
-    const data = this.appService.getHello();
+  @Render('index')
+  root() {
     return { message : "data" };
   }
 }

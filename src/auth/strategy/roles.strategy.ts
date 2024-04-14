@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import _ from 'lodash';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
