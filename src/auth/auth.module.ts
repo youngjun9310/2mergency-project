@@ -12,15 +12,15 @@ import { MailModule } from 'src/mail/mail.module';
 import { AwsModule } from 'src/aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { RoleStrategy } from './strategy/roles.strategy';
-import { RolesGuard } from './guard/roles.guard';
-import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
-import { GroupMembersModule } from 'src/group-members/group-members.module';
+import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    PassportModule,
     JwtModule.registerAsync({
       useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET_KEY'),
+        secret: config.get<string>(ENV_JWT_SECRET_KEY),
       }),
       inject: [ConfigService],
     }),
@@ -32,6 +32,7 @@ import { GroupMembersModule } from 'src/group-members/group-members.module';
   ],
 
   controllers: [AuthController],
-  providers: [JwtStrategy, AuthService],
+  providers: [JwtStrategy, AuthService, RoleStrategy],
+  exports : [AuthService]
 })
 export class AuthModule {}

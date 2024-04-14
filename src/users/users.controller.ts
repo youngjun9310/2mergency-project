@@ -18,6 +18,7 @@ import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('User')
 @Controller('users')
 export class UsersController {
