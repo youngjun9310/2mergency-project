@@ -17,7 +17,6 @@ async function bootstrap() {
   app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  app.setViewEngine('hbs');
 
   await app.listen(3000);
   Logger.log('Swagger 주소 : http://localhost:3000/api');
