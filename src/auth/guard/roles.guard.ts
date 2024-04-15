@@ -7,8 +7,6 @@ export class RolesGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log('request', request);
-    console.log(request.user);
     const userId = request.user.userId;
 
     return await this.strategy.validate(userId);

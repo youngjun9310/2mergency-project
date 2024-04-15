@@ -14,12 +14,13 @@ import {
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 import { InviteMemberDto } from './dto/invite-member.dto';
-import { memberRolesGuard } from './guard/members.guard';
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { GroupMembers } from './entities/group-member.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-@UseGuards(memberRolesGuard)
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { memberRolesGuard } from './guard/members.guard';
+
 @ApiTags('groups')
 @Controller('groups')
 export class GroupMembersController {
@@ -28,8 +29,9 @@ export class GroupMembersController {
    * 그룹에 멤버 초대
    * @returns
    */
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
-  @MemberRoles(MemberRole.Main)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대' })
   @ApiResponse({ status: 201, description: '초대를 완료했습니다.' })
@@ -47,6 +49,7 @@ export class GroupMembersController {
    * 유저가 그룹 초대 수락
    * @returns
    */
+  @UseGuards(JWTAuthGuard)
   @Post(':groupId/accept')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '사용자가 그룹 초대를 수락' })
@@ -61,7 +64,7 @@ export class GroupMembersController {
    * 그룹의 멤버로 등록
    * @returns
    */
-  @Patch(':groupId/register') //
+  @Patch(':groupId/register')
   @MemberRoles(MemberRole.Main)
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹의 멤버로 등록' })
@@ -76,6 +79,8 @@ export class GroupMembersController {
     return await this.groupMembersService.addGroupMember(groupId, email);
   }
   /* 사용자가 그룹의 멤버인지 확인 */
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members/:userId')
   @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
   @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
@@ -113,6 +118,7 @@ export class GroupMembersController {
     }
   }
   /* 사용자와 그룹의 관련된 정보 */
+  @UseGuards(JWTAuthGuard)
   @Get(':groupId/users/:userId')
   @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회' })
   @ApiResponse({ status: 200, description: '그룹 멤버의 상세 정보' })
@@ -129,7 +135,9 @@ export class GroupMembersController {
     }
     return groupMember;
   }
-  /* 그룹에 가입된 사용자 전체 조회 */
+  // 해당 그룹의 멤버 전체 조회
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members')
   @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })
   @ApiResponse({
@@ -140,6 +148,7 @@ export class GroupMembersController {
   })
   async getAllGroupMembers(
     @Param('groupId', ParseIntPipe) groupId: number,
+    // @UserInfo() users: Users,
   ): Promise<GroupMembers[]> {
     return this.groupMembersService.getAllGroupMembers(groupId);
   }

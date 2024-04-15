@@ -13,7 +13,11 @@ import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import _ from 'lodash';
 import { AwsService } from 'src/aws/aws.service';
-import { ENV_JWT_SECRET_KEY, ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
+import {
+  ENV_JWT_SECRET_KEY,
+  ENV_PASSWORD_HASH_ROUNDS,
+  ENV_ROLE_ADMIN_PASSWORD,
+} from 'src/const/env.keys';
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,7 +61,7 @@ export class AuthService {
       );
     }
     const profileImage = await this.awsService.imageUpload(file);
-    let srtToBoolean = Boolean(isOpen === 'true');
+    const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(
       password,
       this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
@@ -67,7 +71,7 @@ export class AuthService {
       email,
       password: hashedPassword,
       address,
-      profileImage : profileImage,
+      profileImage: profileImage,
       isOpen: srtToBoolean,
     });
     return user;
@@ -103,7 +107,9 @@ export class AuthService {
         '비밀번호가 체크비밀번호와 일치하지 않습니다.',
       );
     }
-    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
+    const adminPassKey = this.configService.get<string>(
+      ENV_ROLE_ADMIN_PASSWORD,
+    );
     if (adminPassword !== adminPassKey) {
       throw new UnauthorizedException(
         '어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.',
@@ -156,13 +162,12 @@ export class AuthService {
       await this.invitesRepository.delete({ email });
     }
     const status = 'standBy';
-    const result = await this.invitesRepository.save({
+    await this.invitesRepository.save({
       email,
       token: gentoken.token.toString(),
       expires: gentoken.expires,
       status,
     });
-    console.log('result', result);
   }
   /** 이메일 가입수락*/
   async userAccept(email: string, token: string) {

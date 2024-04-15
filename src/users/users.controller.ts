@@ -28,8 +28,7 @@ export class UsersController {
   @UseGuards(JWTAuthGuard, RolesGuard)
   @Get('allUser')
   async findAllUser() {
-    const userInfo = await this.usersService.findAllUser();
-    return userInfo;
+    return await this.usersService.findAllUser();
   }
   /** 사용자 조회*/
   @ApiOperation({ summary: '사용자 조회', description: '조회' })

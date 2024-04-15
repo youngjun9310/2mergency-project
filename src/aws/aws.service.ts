@@ -2,7 +2,12 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { v4 as uuidv4 } from 'uuid';
-import { ENV_S3_ACCESS_KEY_ID, ENV_S3_BUCKET, ENV_S3_REGION, ENV_S3_SECRET_ACCESS_KEY } from 'src/const/env.keys';
+import {
+  ENV_S3_ACCESS_KEY_ID,
+  ENV_S3_BUCKET,
+  ENV_S3_REGION,
+  ENV_S3_SECRET_ACCESS_KEY,
+} from 'src/const/env.keys';
 
 @Injectable()
 export class AwsService {
@@ -14,7 +19,9 @@ export class AwsService {
       region: this.configService.get<string>(ENV_S3_REGION),
       credentials: {
         accessKeyId: this.configService.get<string>(ENV_S3_ACCESS_KEY_ID),
-        secretAccessKey: this.configService.get<string>(ENV_S3_SECRET_ACCESS_KEY),
+        secretAccessKey: this.configService.get<string>(
+          ENV_S3_SECRET_ACCESS_KEY,
+        ),
       },
     });
   }

@@ -8,6 +8,7 @@ import {
   HttpCode,
   HttpStatus,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { ScheduleMembersService } from './schedule-members.service';
 // import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
@@ -16,8 +17,11 @@ import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
+import { Users } from 'src/users/entities/user.entity';
 
-// @UseGuards(memberRolesGuard)
 @Controller('/groups/:groupId/schedules')
 export class ScheduleMembersController {
   constructor(
@@ -29,8 +33,8 @@ export class ScheduleMembersController {
    * 스케줄에 멤버 등록
    * @returns
    */
-
-  @MemberRoles(MemberRole.Main)
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '스케줄에 멤버 등록' })
@@ -41,7 +45,7 @@ export class ScheduleMembersController {
   async registerScheduleMember(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
-    @Param('userId') userId: number,
+    @UserInfo() users: Users,
     @Body() updateScheduleMemberDto: UpdateScheduleMemberDto,
   ) {
     // 사용자가 그룹 멤버라면, 스케줄 멤버로 등록하기
@@ -49,8 +53,9 @@ export class ScheduleMembersController {
       await this.scheduleMembersService.registerScheduleMember(
         groupId,
         scheduleId,
-        userId,
-        updateScheduleMemberDto,
+        users.userId,
+        updateScheduleMemberDto.email,
+        updateScheduleMemberDto.nickname,
       );
 
     return newScheduleMember;
@@ -60,7 +65,8 @@ export class ScheduleMembersController {
    * 스케줄에 등록된 멤버 전체 조회
    * @returns
    */
-
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Admin, MemberRole.User)
   @Get(':scheduleId/members')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '스케줄에 등록된 멤버 전체 조회' })
@@ -72,15 +78,10 @@ export class ScheduleMembersController {
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
   ) {
-    const members = await this.scheduleMembersService.findAllScheduleMembers(
+    return await this.scheduleMembersService.findAllScheduleMembers(
       groupId,
       scheduleId,
     );
-
-    return {
-      message: `그룹 ${groupId}스케줄 ${scheduleId}에 등록된 멤버들의 조회가 완료되었습니다.`,
-      data: members,
-    };
   }
 
   /**
@@ -120,7 +121,8 @@ export class ScheduleMembersController {
    * 스케줄에 등록된 멤버 삭제
    * @returns
    */
-
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Delete(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.OK) // 성공적으로 처리, 응답 본문에 데이터가 포함되지 않을 때 사용하는 상태 코드
   @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제' })
