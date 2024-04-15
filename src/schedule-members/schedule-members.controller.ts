@@ -65,6 +65,7 @@ export class ScheduleMembersController {
    * 스케줄에 등록된 멤버 전체 조회
    * @returns
    */
+
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   // @MemberRoles(MemberRole.Admin, MemberRole.Admin, MemberRole.User)
   @Get(':scheduleId/members')
@@ -81,10 +82,6 @@ export class ScheduleMembersController {
       groupId,
       scheduleId,
     );
-    if (!members.length) {
-      throw new NotFoundException('해당 스케줄에 등록된 멤버가 없습니다.');
-    }
-    return members;
   }
 
   /**

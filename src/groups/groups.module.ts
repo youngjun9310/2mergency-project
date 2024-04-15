@@ -10,6 +10,7 @@ import { UsersModule } from 'src/users/users.module';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 import { Users } from 'src/users/entities/user.entity';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
+import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
 
 @Module({
   imports: [

@@ -28,12 +28,6 @@ import { PassportModule } from '@nestjs/passport';
           expiresIn: '12h',
         },
       }),
-      useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET_KEY'),
-        signOptions: {
-          expiresIn: '12h',
-        },
-      }),
     }),
     TypeOrmModule.forFeature([Users, Invites]),
     UsersModule,
