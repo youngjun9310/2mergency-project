@@ -286,7 +286,6 @@
         //마커 올리기
         marker1 = new Tmapv2.Marker({
             position : markerPosition,
-            // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_b_m_p.png",
             iconHTML: `
             <div class='_t_marker' style="position:relative;" >
                 <img src="https://cdn.icon-icons.com/icons2/1189/PNG/512/1490793853-user-interface22_82349.png" style="width:48px;height:48px;position:absolute;"/>
@@ -308,6 +307,7 @@
         var params = {
             onComplete:function(result) { //데이터 로드가 성공적으로 완료 되었을때 실행하는 함수 입니다.
                 // 기존 팝업 지우기
+                console.log(result);
                 if(labelArr.length > 0){
                     for(var i in labelArr){
                         labelArr[i].setMap(null);
@@ -1142,39 +1142,48 @@
         }
     }
 
+    function startmarkers(latitude, longitude){
+    reset();
+    markerStart = new Tmapv2.Marker({
+        position : new Tmapv2.LatLng(latitude, longitude),
+                    iconHTML: `
+                    <div class='_t_marker' style="position:relative;" >
+                        <img src="https://cdn.icon-icons.com/icons2/3205/PNG/512/gps_place_marker_pointer_location_pin_map_navigation_direction_icon_195752.png" style="width:48px;height:48px;position:absolute;"/>
+                        <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                        출발</div>
+                    </div>
+                    `,
+                    offset: new Tmapv2.Point(24, 38),
+                    iconSize: new Tmapv2.Size(48, 48),
+                    map: map
+    });
+}
 
-// 아직 개발용
-    document.getElementById('stop_button').addEventListener('click', function (){
-        $('searchEndAddress').val(address);
-        
-    })
+    function stopmarkers(latitude, longitude){
+    stopmarker_remove(markerEnd);
+    markerEnd = new Tmapv2.Marker({
+        position : new Tmapv2.LatLng(latitude, longitude),
+        iconHTML: `
+                    <div class='_t_marker' style="position:relative;" >
+                        <img src="https://cdn.icon-icons.com/icons2/1283/PNG/512/1497619936-jd21_85172.png" style="width:48px;height:48px;position:absolute;"/>
+                        <div style="position:absolute; width:48px;height:42px; display:flex; align-items:center; justify-content: center; color:#FAFBFF; font-family: 'SUIT';font-style: normal;font-weight: 700;font-size: 8px;line-height: 19px;">
+                        도착</div>
+                    </div>
+                    `,
+        offset: new Tmapv2.Point(24, 38),
+        iconSize: new Tmapv2.Size(24, 38),
+        map : map
+});
+}
 
-    function random(latitude, longitude){
-    const radius = 250;
-    const d2r = Math.PI / 180;
-    const r2d = 180 / Math.PI;
-// 이거를 drawingObject라는 원의 크기를 키워주는 대로 그 값대로 지름을 정해서 계산하게 해주기!!
-// 이걸 해결하려면, getDrawingObject() 함수에 redius를 담당하는 값이 있는지 보고 그 값을 지정해주면 인식해서 그 내로 경로가 생성이 가능할듯
-    const earth_rad = 6378000; // 지구 반지름 근사값
-
-    const r = Math.random() * radius;
-    const rlat = (r / earth_rad) * r2d;
-    const rlng = rlat / Math.cos(latitude * d2r);
-
-    const theta = Math.PI * (Math.random() * 2);
-    const x = latitude + (rlat * Math.sin(theta));
-    const y = longitude + (rlng * Math.cos(theta));
-    console.log("stops lat : ",x);
-    console.log("stops long : ",y);
-    moveMapTo(x, y);
-    stopmarkers(x, y);
-    const end = markerEnd.getPosition();
-    $("#searchEndAddress").val('도착역');
+function stopmarker_remove(markerEnd){
+    if(markerEnd){
+        markerEnd.setMap(null);
     }
+}
+                
 
-// 현재위치 값을 기반으로 랜덤 값 돌린 값을 도착에
-
-document.getElementById('random_road').addEventListener('click', function (type, address, ){
+function random_roads(type, address, latitude, longitude){
     marker1.setMap(null);
         // 기존 라인 지우기
         if(lineArr.length > 0){
@@ -1191,19 +1200,58 @@ document.getElementById('random_road').addEventListener('click', function (type,
             }
             markerPoint = [];
         }
-        if(type === 'end') {
-            if(markerEnd) {
+       
+        type = 'end';
+        address = '경기도 여주시 세종로 397-6';    
+
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                var latitude = position.coords.latitude; // 현재 위치의 위도
+                var longitude = position.coords.longitude; // 현재 위치의 경도
+
+                var startx = $("#startx").val(latitude);
+                var starty = $("#starty").val(longitude);
+
+                const radius = 250;
+                const d2r = Math.PI / 180;
+                const r2d = 180 / Math.PI;
+                const earth_rad = 6378000;
+
+                const r = Math.random() * radius;
+                const rlat = (r / earth_rad) * r2d;
+                const rlng = rlat / Math.cos(latitude * d2r);
+
+                const theta = Math.PI * (Math.random() * 2);
+                const x = latitude + (rlat * Math.sin(theta));
+                const y = longitude + (rlng * Math.cos(theta));
+
+                console.log(x)
+                console.log(y)
+                moveMapTo(x, y);
+
+
+             if(type === 'end') {
+                if(markerEnd) {
                 markerEnd.setMap(null);
-            }
+                }
+
+                // 랜덤 값 x, y 값을 endx, endy 값에 저장해줬음
             $("#endx").val(x);
             $("#endy").val(y);
-            $("#searchEndAddress").val(address);
+
+            // type이랑 address 주소를 불러오는 방식을 생각해봐야함
+            
+            $("#searchEndAddress").val(address);    
             $("#searchEndAddress").next('button').removeClass('_search_address_btn');
             $("#searchEndAddress").next('button').addClass('_delete_address_btn');
+
             
+            
+
+
             markerEnd = new Tmapv2.Marker({
-                position : new Tmapv2.LatLng(y, x),
-                // icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
+                position : new Tmapv2.LatLng(x, y),
                 iconHTML: `
                 <div class='_t_marker' style="position:relative;" >
                     <img src="https://cdn.icon-icons.com/icons2/1283/PNG/512/1497619936-jd21_85172.png" style="width:48px;height:48px;position:absolute;"/>
@@ -1215,7 +1263,8 @@ document.getElementById('random_road').addEventListener('click', function (type,
                 iconSize : new Tmapv2.Size(24, 38),
                 map : map
             });
-        } else if(type === 'wp') {
+
+            }else if(type === 'wp') {
             const currentSize = $(".waypoint_input").length;
             const prependHtml = `
             <div class="__space_10_h"></div>
@@ -1249,17 +1298,58 @@ document.getElementById('random_road').addEventListener('click', function (type,
             }
             redrawRouteMarker();
         }
-        /* 검색버튼 활성화/비활성화 체크  */
-        var startx = $("#startx").val();
-        var starty = $("#starty").val();
-        var endx = $("#endx").val();
-        var endy = $("#endy").val();
-        if(startx === "" || starty === "" || endx === "" || endy === "") {
+
+    startx = $("#startx").val();
+    starty = $("#starty").val();
+     var endx = $("#endx").val();
+     var endy = $("#endy").val();
+
+     if(startx === "" || starty === "" || endx === "" || endy === "") {
             $("._btn_action").addClass('__color_grey');
         } else {
             $("._btn_action").removeClass('__color_grey');
         }
-})
+
+            
+            }
+        )
+    }
+}
+
+
+
+function moveMapTo(latitude, longitude) {
+    var newPosition = new Tmapv2.LatLng(latitude, longitude);
+    map.setCenter(newPosition);
+    }
+
+
+// 아직 개발용
+
+    function random(latitude, longitude){
+    const radius = 250;
+    const d2r = Math.PI / 180;
+    const r2d = 180 / Math.PI;
+// 이거를 drawingObject라는 원의 크기를 키워주는 대로 그 값대로 지름을 정해서 계산하게 해주기!!
+// 이걸 해결하려면, getDrawingObject() 함수에 redius를 담당하는 값이 있는지 보고 그 값을 지정해주면 인식해서 그 내로 경로가 생성이 가능할듯
+    const earth_rad = 6378000; // 지구 반지름 근사값
+
+    const r = Math.random() * radius;
+    const rlat = (r / earth_rad) * r2d;
+    const rlng = rlat / Math.cos(latitude * d2r);
+
+    const theta = Math.PI * (Math.random() * 2);
+    const x = latitude + (rlat * Math.sin(theta));
+    const y = longitude + (rlng * Math.cos(theta));
+    console.log("stops lat : ",x);
+    console.log("stops long : ",y);
+    moveMapTo(x, y);
+    stopmarkers(x, y);
+    }
+
+// 현재위치 값을 기반으로 랜덤 값 돌린 값을 도착에
+
+
 
 </script>
     <div class="_map_layer_overlay">
@@ -1271,7 +1361,8 @@ document.getElementById('random_road').addEventListener('click', function (type,
                 목적지
             </button>
             <div>
-                {{!-- <button onclick="clickSearchPois(this);" id="random_road">랜덤 경로 250m</button> --}}
+                <button id="road" onclick="random_roads('end', '${address}', '${latitude}', '${longitude}');">랜덤 경로 250m</button>
+                <button id="testbutton">테스트 버튼</button>
             </div>
             <div class="__space_10_w"></div>
                     <div class="_btn_action _btn_action-search __color_grey" id="search_button">
