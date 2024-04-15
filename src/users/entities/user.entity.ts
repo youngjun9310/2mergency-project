@@ -1,5 +1,4 @@
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { Records } from 'src/records/entities/record.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';

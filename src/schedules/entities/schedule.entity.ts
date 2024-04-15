@@ -20,6 +20,9 @@ export class Schedules {
   @PrimaryGeneratedColumn()
   scheduleId: number;
 
+  @Column({ type: 'int' })
+  userId: number;
+
   @Column({ type: 'enum', enum: Category, nullable: false })
   category: Category;
 
@@ -52,9 +55,6 @@ export class Schedules {
   })
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   users: Users;
-
-  @Column({ type: 'int' })
-  userId: number;
 
   @OneToMany(
     () => ScheduleMembers,

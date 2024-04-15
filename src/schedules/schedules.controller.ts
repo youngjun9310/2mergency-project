@@ -8,31 +8,31 @@ import {
   Param,
   Patch,
   Post,
-  SetMetadata,
   UseGuards,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
 import { ScheduleDto } from './dto/create-schedule.dto';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
-import { AuthGuard } from '@nestjs/passport';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 
 @Controller('groups/:groupId')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  @UseGuards(AuthGuard('jwt'), memberRolesGuard)
-  @SetMetadata('roles', [MemberRole.Main])
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post('/schedules')
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @UserInfo() users: Users,
     @Param('groupId') groupId: number,
   ) {
-    if (!users || !users.userId) {
+    if (!(users || users.userId)) {
       throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
     }
 
@@ -52,7 +52,7 @@ export class SchedulesController {
   }
 
   // 스케쥴 상세 조회
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Get('/schedules/:scheduleId')
   async getOneSchedule(
     @Param('groupId') groupId: number,
@@ -67,17 +67,24 @@ export class SchedulesController {
   }
 
   // 스케쥴 수정
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Patch('schedules/:scheduleId')
   changeSchedule(
     @Param('scheduleId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
+    // @UserInfo() users: Users,
   ) {
-    return this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
+    return this.schedulesService.changeSchedule(
+      changeScheduleDto,
+      scheduleId,
+      // users.userId,
+    );
   }
 
   // 스케쥴 삭제
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Delete('/schedules/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);

@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from './entities/group-member.entity';
@@ -40,7 +41,7 @@ export class GroupMembersService {
 
   async inviteUserToGroup(groupId: number, email: string): Promise<any> {
     // 그룹 존재 여부 확인
-    console.log(groupId);
+
     const group = await this.groupRepository.findOne({
       where: { groupId },
     });
@@ -50,7 +51,6 @@ export class GroupMembersService {
 
     // '사용자'가 있는지 확인하기
     const user = await this.usersService.findByEmail(email);
-    console.log('유저임', user);
     if (!user) {
       throw new NotFoundException('유저가 존재하지 않습니다.');
     }
@@ -77,7 +77,6 @@ export class GroupMembersService {
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
     });
-    console.log('멤버초대', memberInvite);
     await this.groupMemberRepository.save(memberInvite);
 
     return {
@@ -131,7 +130,6 @@ export class GroupMembersService {
   async addGroupMember(groupId: number, email: string): Promise<any> {
     // '사용자'가 있는지 확인하기
     const user = await this.usersService.findByEmail(email);
-    console.log('유저임', user);
     if (!user) {
       throw new NotFoundException(
         `이메일 ${email}에 해당하는 사용자를 찾을 수 없습니다..`,
@@ -191,12 +189,26 @@ export class GroupMembersService {
     });
   }
 
-  async getAllGroupMembers(groupId: number): Promise<GroupMembers[]> {
+  // 해당 그룹의 멤버 전체 조회
+  async getAllGroupMembers(
+    groupId: number,
+    // userId: number,
+  ): Promise<GroupMembers[]> {
+    // // 조회하는 유저의 그룹 찾기
+    // const joinedGroup = await this.groupMemberRepository.findOne({
+    //   where: { userId, groupId },
+    // });
+
+    // console.log('호로로로롤', groupId);
+    // console.log('깔껄깔', joinedGroup.groupId);
+    // if (groupId !== joinedGroup.groupId) {
+    //   throw new UnauthorizedException('낄낄낄');
+    // }
+
     const members = await this.groupMemberRepository.find({
       where: { groupId },
       relations: ['users'], // 여기서 'users'는 GroupMembers 엔티티 내에서 Users 엔티티와 맺고 있는 관계의 속성 이름입니다.
     });
-
     if (!members.length) {
       throw new NotFoundException(
         `그룹 ID ${groupId}에 해당하는 멤버가 없습니다.`,

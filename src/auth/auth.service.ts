@@ -56,7 +56,7 @@ export class AuthService {
       );
     }
     const profileImage = await this.awsService.imageUpload(file);
-    let srtToBoolean = Boolean(isOpen === 'true');
+    const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(
       password,
       this.configService.get<number>('PASSWORD_HASH_ROUNDS'),
@@ -137,16 +137,9 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
     }
     const payload = { email, sub: user.userId };
-    const accessToken = this.jwtService.sign(payload, {
-      secret: process.env.JWT_SECRET_KEY,
-      expiresIn: '12h',
-    });
-    console.log('accessToken', accessToken);
-    // const refreshToken = this.jwtService.sign(payload, {
-    //   secret: process.env.REFRESH_SECRET,
-    //   expiresIn: '7d',
-    // });
-    return { accessToken };
+    const accessToken = this.jwtService.sign(payload);
+
+    return accessToken;
   }
   /** 이메일 가입초대*/
   async userInvite(email: string, gentoken: { token: number; expires: Date }) {
@@ -155,13 +148,12 @@ export class AuthService {
       await this.invitesRepository.delete({ email });
     }
     const status = 'standBy';
-    const result = await this.invitesRepository.save({
+    await this.invitesRepository.save({
       email,
       token: gentoken.token.toString(),
       expires: gentoken.expires,
       status,
     });
-    console.log('result', result);
   }
   /** 이메일 가입수락*/
   async userAccept(email: string, token: string) {

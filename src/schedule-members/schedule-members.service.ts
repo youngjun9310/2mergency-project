@@ -6,13 +6,9 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { ScheduleMembers } from './entities/schedule-member.entity'; // 가정: ScheduleMembers 엔티티 경로
 import { Repository } from 'typeorm';
-import { CreateScheduleMemberDto } from './dto/create-schedule-member.dto';
-import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { Groups } from 'src/groups/entities/group.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
 import { GroupMembersService } from 'src/group-members/group-members.service';
-import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { Users } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class ScheduleMembersService {
@@ -34,8 +30,9 @@ export class ScheduleMembersService {
     groupId: number,
     scheduleId: number,
     userId: number,
-    updateScheduleMemberDto: UpdateScheduleMemberDto,
-  ): Promise<any> {
+    email: string,
+    nickname: string,
+  ) {
     // 그룹이 있는지 먼저 확인하기
     const isGroup = await this.groupsRepository.findOne({ where: { groupId } });
     if (!isGroup) {
@@ -65,42 +62,45 @@ export class ScheduleMembersService {
     }
 
     // 고유 닉네임 생성
-    const uniqueNickname = `user_${userId}_${Date.now()}`;
+    // const uniqueNickname = `user_${userId}_${Date.now()}`;
 
     // 스케줄 멤버를 생성하고 저장
-    const newScheduleMember = this.scheduleMembersRepository.create({
+    const newScheduleMember = await this.scheduleMembersRepository.save({
+      groupId,
       scheduleId,
       userId,
-      nickname: uniqueNickname, // 닉네임 설정
+      email,
+      nickname, // 닉네임 설정
     });
 
-    // 생성된 스케줄 멤버를 데이터베이스에 저장
-    await this.scheduleMembersRepository.save(newScheduleMember);
+    console.log('스멤 등록', newScheduleMember);
 
     // 성공적으로 저장된다면 -> 성공 메세지 반환
     return {
       success: true,
       message: `그룹 ${groupId}의 스케줄${scheduleId}에 멤버${userId} 등록이 완료되었습니다.`,
-      data: newScheduleMember,
+      data: newScheduleMember.schedules,
     };
   }
 
   /**
    * 스케줄에 등록된 멤버 전체 조회
    **/
-  async findAllScheduleMembers(
-    groupId: number,
-    scheduleId: number,
-  ): Promise<ScheduleMembers[]> {
-    // Promise<ScheduleMembers[]>: 함수의 반환 타입
-    // 함수가 비동기적으로 ScheduleMembers 엔티티의 배열을 반환<
-    return await this.scheduleMembersRepository.find({
-      where: {
-        scheduleId: scheduleId,
-        // schedules: { groupId: groupId },
-      },
-      relations: ['users', 'schedules'],
+  async findAllScheduleMembers(groupId: number, scheduleId: number) {
+    // 스케줄 멤버 조회
+    const schedule = await this.schedulesRepository.find({
+      where: { scheduleId, groupId },
+      relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
     });
+
+    console.log('뿡빵뿡', schedule);
+
+    if (!schedule) {
+      throw new NotFoundException(
+        `해당 그룹 ${groupId}에서 스케줄 ${scheduleId}는 존재하지 않습니다.`,
+      );
+    }
+    return schedule;
   }
 
   /**
@@ -122,12 +122,10 @@ export class ScheduleMembersService {
         groupId,
       },
     });
-
     // 스케줄 없으면 오류 반환
     if (!schedule) {
       throw new NotFoundException('그룹에 해당 스케줄이 없습니다.');
     }
-
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
     return await this.scheduleMembersRepository.findOne({
       where: { scheduleId, userId },
@@ -147,17 +145,17 @@ export class ScheduleMembersService {
     if (!schedule) {
       throw new NotFoundException('그룹에 해당하는 스케줄이 없습니다.');
     }
-
     // 해당 스케줄에 등록된 멤버가 있는지 확인
     const member = await this.scheduleMembersRepository.findOne({
       where: { scheduleId, userId },
     });
+    const findMember = member.userId;
 
-    if (!member) {
+    console.log(findMember);
+    if (!findMember) {
       throw new NotFoundException('해당 멤버를 찾을 수 없습니다.');
     }
-
     // 멤버 삭제하기
-    await this.scheduleMembersRepository.remove(member);
+    await this.scheduleMembersRepository.delete(findMember);
   }
 }

@@ -21,7 +21,7 @@ export class MembersRoleStrategy {
       where: { userId },
     });
 
-    if (user.isAdmin) {
+    if (user.isAdmin === true) {
       return true;
     }
 

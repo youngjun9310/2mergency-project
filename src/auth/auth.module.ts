@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { UsersModule } from 'src/users/users.module';
@@ -11,18 +11,21 @@ import { Invites } from './entities/invite.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { AwsModule } from 'src/aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { RoleStrategy } from './strategy/roles.strategy';
-import { RolesGuard } from './guard/roles.guard';
-import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
-import { GroupMembersModule } from 'src/group-members/group-members.module';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
   imports: [
+    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
-      useFactory: (config: ConfigService) => ({
-        secret: config.get<string>('JWT_SECRET_KEY'),
-      }),
+      imports: [ConfigModule],
       inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get<string>('JWT_SECRET_KEY'),
+        signOptions: {
+          expiresIn: '12h',
+        },
+      }),
     }),
     TypeOrmModule.forFeature([Users, Invites]),
     UsersModule,

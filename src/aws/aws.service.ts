@@ -36,8 +36,8 @@ export class AwsService {
       });
 
       // 생성된 명령을 S3 클라이언트에 전달하여 이미지 업로드
-      const result = await this.s3Client.send(command);
-      const url = `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET}/${fileName}`;
+      await this.s3Client.send(command);
+      `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET}/${fileName}`;
 
       // 업로드된 이미지의 URL 반환
       return fileName;

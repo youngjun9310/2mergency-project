@@ -16,7 +16,6 @@ export class GroupsService {
 
   // 그룹 생성 //
   async createGroup(createGroupDto: CreateGroupDto, userId: number) {
-    console.log('유저아이디이이', userId);
     const { title, content, category } = createGroupDto;
 
     const groupCreate = await this.groupRepository.save({

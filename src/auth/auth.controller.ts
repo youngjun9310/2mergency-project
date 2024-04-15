@@ -24,6 +24,7 @@ export class AuthController {
     private readonly mailService: MailService,
   ) {}
   /** 회원가입*/
+  // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
@@ -69,12 +70,11 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this.authService.login(
+    const accessToken = await this.authService.login(
       loginDto.email,
       loginDto.password,
     );
-    res.cookie('authorization', `Bearer ${user.accessToken}`);
-    //res.cookie('refreshToken', user.refreshToken);
+    res.cookie('authorization', `Bearer ${accessToken}`);
     return;
   }
   /** 로그아웃*/
@@ -84,7 +84,6 @@ export class AuthController {
   @HttpCode(204)
   logOut(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('authorization');
-    //res.clearCookie('refreshToken');
     return;
   }
   /** 이메일 가입초대*/

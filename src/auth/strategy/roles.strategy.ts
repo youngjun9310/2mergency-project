@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import _ from 'lodash';
 import { UsersService } from 'src/users/users.service';
 
 @Injectable()
@@ -9,7 +8,7 @@ export class RoleStrategy {
   async validate(userId: number) {
     const user = await this.userService.findUser(userId);
 
-    if (user.isAdmin) {
+    if (user.isAdmin === true) {
       return true;
     }
     return false;
