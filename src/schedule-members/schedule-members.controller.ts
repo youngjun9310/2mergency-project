@@ -68,13 +68,12 @@ export class ScheduleMembersController {
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   // @MemberRoles(MemberRole.Admin, MemberRole.Admin, MemberRole.User)
   @Get(':scheduleId/members')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '스케줄에 등록된 멤버 전체 조회' })
+  @ApiOperation({ summary: '특정 스케줄에 등록된 모든 멤버 조회' })
   @ApiResponse({
     status: 200,
-    description: '스케줄에 등록된 멤버들의 조회가 완료되었습니다.',
+    description: '스케줄에 등록된 모든 멤버들의 목록을 반환합니다.',
   })
-  async findAllScheduleMembers(
+  async findAllMembers(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
   ) {
@@ -82,6 +81,10 @@ export class ScheduleMembersController {
       groupId,
       scheduleId,
     );
+    if (!members.length) {
+      throw new NotFoundException('해당 스케줄에 등록된 멤버가 없습니다.');
+    }
+    return members;
   }
 
   /**

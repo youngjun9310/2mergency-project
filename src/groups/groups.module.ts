@@ -9,6 +9,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { UsersModule } from 'src/users/users.module';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 import { Users } from 'src/users/entities/user.entity';
+import { RolesGuard } from 'src/auth/guard/roles.guard';
 
 @Module({
   imports: [
@@ -18,6 +19,6 @@ import { Users } from 'src/users/entities/user.entity';
     UsersModule,
   ],
   controllers: [GroupsController],
-  providers: [GroupsService, MembersRoleStrategy],
+  providers: [GroupsService, MembersRoleStrategy, RoleStrategy, RolesGuard],
 })
 export class GroupsModule {}
