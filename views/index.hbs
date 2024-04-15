@@ -160,7 +160,6 @@
     });
     var tData = new Tmapv2.extension.TData();
         
-    window.onload = function getCurrentPosition(){
         if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				function(position) {
@@ -185,7 +184,6 @@
 					map.setZoom(15);
 				});
 		}
-    }
     //watchPosition
     function watchingPosition() {
         alert('위치정보 추적 시작');
@@ -269,7 +267,13 @@
     }
 
     // (장소API) 주소 찾기
-    map.addListener("click", function onClick(evt) {
+    map.addListener("touchstart", function (evt){
+        mapload(evt);
+    });
+    map.addListener("click", function(evt){
+        mapload(evt);
+    });
+        function mapload(evt){
         var mapLatLng = evt.latLng;
         //기존 마커 삭제
         marker1.setMap(null);
@@ -362,7 +366,7 @@
             }             
         };
         tData.getAddressFromGeoJson(lat, lon, optionObj, params);
-    });
+    };
     // (장소API) 통합 검색 함수
     function searchPois() {
         var searchKeyword = $("#searchAddress").val();
@@ -422,7 +426,13 @@
                     });
                     
                     // 마커 클릭 이벤트 추가
-                    marker3.addListener("click", function(evt) {
+                    marker3.addListener("touchstart",function (evt){
+                        onload(evt);
+                    })
+                    marker3.addListener("click", function (evt){
+                        onload(evt);
+                    })
+                    function onload (evt) {
                         for(let tMarker of markerPoi) {
                             const labelInfo = $(tMarker.getOtherElements()).text();
                             const forK = labelInfo.split("_")[0];
@@ -449,7 +459,7 @@
                             </div>
                         `);
                         poiDetail(thisId, thisK);
-                    });
+                    };
                     
                     innerHtml += `
                         <div class="_search_item" id="poi_${k}">
@@ -1202,7 +1212,7 @@ function random_roads(type, address, latitude, longitude){
         }
        
         type = 'end';
-        address = '경기도 여주시 세종로 397-6';    
+        address = null;    
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -1348,6 +1358,8 @@ function moveMapTo(latitude, longitude) {
     }
 
 // 현재위치 값을 기반으로 랜덤 값 돌린 값을 도착에
+
+
 
 
 
