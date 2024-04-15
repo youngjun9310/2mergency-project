@@ -13,6 +13,11 @@ import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import _ from 'lodash';
 import { AwsService } from 'src/aws/aws.service';
+import {
+  ENV_JWT_SECRET_KEY,
+  ENV_PASSWORD_HASH_ROUNDS,
+  ENV_ROLE_ADMIN_PASSWORD,
+} from 'src/const/env.keys';
 @Injectable()
 export class AuthService {
   constructor(
@@ -59,14 +64,14 @@ export class AuthService {
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(
       password,
-      this.configService.get<number>('PASSWORD_HASH_ROUNDS'),
+      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
     );
     const user = await this.userRepository.save({
       nickname,
       email,
       password: hashedPassword,
       address,
-      profileImage,
+      profileImage: profileImage,
       isOpen: srtToBoolean,
     });
     return user;
@@ -102,7 +107,9 @@ export class AuthService {
         '비밀번호가 체크비밀번호와 일치하지 않습니다.',
       );
     }
-    const adminPassKey = this.configService.get<string>('ROLE_ADMIN_PASSWORD');
+    const adminPassKey = this.configService.get<string>(
+      ENV_ROLE_ADMIN_PASSWORD,
+    );
     if (adminPassword !== adminPassKey) {
       throw new UnauthorizedException(
         '어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.',
@@ -111,7 +118,7 @@ export class AuthService {
     const profileImage = await this.awsService.imageUpload(file);
     const hashedPassword = await hash(
       password,
-      this.configService.get<number>('PASSWORD_HASH_ROUNDS'),
+      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
     );
     const user = await this.userRepository.save({
       nickname,
@@ -137,9 +144,16 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
     }
     const payload = { email, sub: user.userId };
-    const accessToken = this.jwtService.sign(payload);
-
-    return accessToken;
+    const accessToken = this.jwtService.sign(payload, {
+      secret: ENV_JWT_SECRET_KEY,
+      expiresIn: '12h',
+    });
+    console.log('accessToken', accessToken);
+    // const refreshToken = this.jwtService.sign(payload, {
+    //   secret: process.env.REFRESH_SECRET,
+    //   expiresIn: '7d',
+    // });
+    return { accessToken };
   }
   /** 이메일 가입초대*/
   async userInvite(email: string, gentoken: { token: number; expires: Date }) {

@@ -26,7 +26,7 @@ export class AuthController {
   /** 회원가입*/
   // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
-  @UseInterceptors(FileInterceptor('profileImage'))
+   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   async register(
     @Body() signUpdto: SignUpDto,

@@ -1,8 +1,13 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import * as multerS3 from 'multer-s3';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  ENV_S3_ACCESS_KEY_ID,
+  ENV_S3_BUCKET,
+  ENV_S3_REGION,
+  ENV_S3_SECRET_ACCESS_KEY,
+} from 'src/const/env.keys';
 
 @Injectable()
 export class AwsService {
@@ -11,10 +16,12 @@ export class AwsService {
   constructor(private configService: ConfigService) {
     // AWS S3 클라이언트 초기화. 환경 설정 정보를 사용하여 AWS 리전, Access Key, Secret Key 설정.
     this.s3Client = new S3Client({
-      region: this.configService.get('S3_REGION'),
+      region: this.configService.get<string>(ENV_S3_REGION),
       credentials: {
-        accessKeyId: this.configService.get('S3_ACCESS_KEY_ID'),
-        secretAccessKey: this.configService.get('S3_SECRET_ACCESS_KEY'),
+        accessKeyId: this.configService.get<string>(ENV_S3_ACCESS_KEY_ID),
+        secretAccessKey: this.configService.get<string>(
+          ENV_S3_SECRET_ACCESS_KEY,
+        ),
       },
     });
   }
@@ -24,7 +31,7 @@ export class AwsService {
       const fileName = uuidv4() + '_' + file.originalname;
       console.log('fileName', fileName);
       const ext = file.originalname.split('.').pop();
-      const bucket = this.configService.get('S3_BUCKET');
+      const bucket = this.configService.get<string>(ENV_S3_BUCKET);
 
       // AWS S3에 이미지 업로드 명령을 생성. 파일 이름, 파일 버퍼, 파일 접근 권한, 파일 타입 등을 설정
       const command = new PutObjectCommand({
@@ -36,8 +43,8 @@ export class AwsService {
       });
 
       // 생성된 명령을 S3 클라이언트에 전달하여 이미지 업로드
-      await this.s3Client.send(command);
-      `https://s3.${process.env.S3_REGION}.amazonaws.com/${process.env.S3_BUCKET}/${fileName}`;
+      const result = await this.s3Client.send(command);
+      const url = `https://s3.${ENV_S3_REGION}.amazonaws.com/${ENV_S3_BUCKET}/${fileName}`;
 
       // 업로드된 이미지의 URL 반환
       return fileName;
