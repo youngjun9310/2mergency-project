@@ -20,25 +20,25 @@ export class Groups {
   @Column({ type: 'varchar', nullable: false })
   title: string;
 
-  @Column({ type : 'text', nullable : false })
-  content : string;
+  @Column({ type: 'text', nullable: false })
+  content: string;
 
-  @Column({ type : 'enum', enum: Category, nullable : false })
-  category : Category;
+  @Column({ type: 'enum', enum: Category, nullable: false })
+  category: Category;
 
-  @Column({ type : 'boolean', nullable : false, default : true })
-  isPublic : boolean;
+  @Column({ type: 'boolean', nullable: false, default: true })
+  isPublic: boolean;
 
-  @CreateDateColumn({ type : 'timestamp' })
-  createdAt : Date;
-    
-  @UpdateDateColumn({ type : 'timestamp' })
-  updatedAt : Date;
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
 
   @OneToMany(() => Schedules, (schedules) => schedules.groups, {
-    cascade : true
+    cascade: true,
   })
-    schedules : Schedules[];
+  schedules: Schedules[];
 
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.groups, {
     cascade: true,
