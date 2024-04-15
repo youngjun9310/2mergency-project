@@ -20,7 +20,9 @@ import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 
+// @UseGuards(memberRolesGuard)
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
@@ -39,7 +41,8 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
-
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Main)
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 모든 목록 조회 API',
@@ -56,6 +59,7 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 상세 조회 API',
@@ -80,6 +84,8 @@ export class GroupsController {
   }
 
   // 그룹 수정 //
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Main)
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 업데이트 API',
@@ -100,6 +106,8 @@ export class GroupsController {
   }
 
   // 그룹 삭제 //
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @MemberRoles(MemberRole.Main)
   @ApiTags('groups')
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹을 삭제합니다.' })
   @ApiResponse({

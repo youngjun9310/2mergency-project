@@ -16,6 +16,9 @@ import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { MailService } from 'src/mail/mail.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { JWTAuthGuard } from './guard/jwt.guard';
+import { RolesGuard } from './guard/roles.guard';
+
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
@@ -23,10 +26,11 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly mailService: MailService,
   ) {}
+
   /** 회원가입*/
   // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
-   @UseInterceptors(FileInterceptor('profileImage'))
+  @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   async register(
     @Body() signUpdto: SignUpDto,
@@ -43,6 +47,7 @@ export class AuthController {
     );
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
+
   /** 어드민 회원가입*/
   @ApiOperation({ summary: '어드민 회원가입', description: '어드민 회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
@@ -62,7 +67,9 @@ export class AuthController {
     );
     return { statusCode: 201, message: '운영자 회원가입에 성공하였습니다.' };
   }
+
   /** 로그인*/
+  // @UseGuards(JWTAuthGuard, RolesGuard)
   @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
   @HttpCode(204)
@@ -77,6 +84,7 @@ export class AuthController {
     res.cookie('authorization', `Bearer ${accessToken}`);
     return;
   }
+
   /** 로그아웃*/
   @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
   @UseGuards(AuthGuard('jwt'))
@@ -86,6 +94,7 @@ export class AuthController {
     res.clearCookie('authorization');
     return;
   }
+
   /** 이메일 가입초대*/
   @ApiOperation({
     summary: '이메일 가입초대',
@@ -98,6 +107,7 @@ export class AuthController {
     await this.authService.userInvite(email, gentoken);
     res.send('회원가입 토큰번호를 전송했습니다.');
   }
+
   /** 이메일 가입수락*/
   @ApiOperation({
     summary: '이메일 가입초대',
@@ -112,6 +122,7 @@ export class AuthController {
     await this.authService.userAccept(email, token);
     res.send('회원가입 이메일 인증을 완료했습니다.');
   }
+
   /** 사용자 이미지업로드 */
   @ApiOperation({ summary: '사용자 이미지업로드', description: '이미지업로드' })
   @Post('uploadImg')

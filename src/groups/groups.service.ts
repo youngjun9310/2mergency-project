@@ -23,14 +23,15 @@ export class GroupsService {
       content,
       category,
     });
+
     console.log('그룹크리에이트트 그룹 생성:', groupCreate);
     try {
       // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
-      const uniqueNickname = `user_${userId}_${Date.now()}`;
+      // const uniqueNickname = `user_${userId}_${user.nickname}`;
 
       const groupMemberCreate = await this.groupMembersRepository.save({
         role: MemberRole.Main,
-        nickname: uniqueNickname, // 고유한 닉네임 사용
+        nickname: '',
         isVailed: true,
         isInvited: true,
         groupId: groupCreate.groupId,

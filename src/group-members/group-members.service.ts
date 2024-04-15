@@ -25,7 +25,9 @@ export class GroupMembersService {
     const group = await this.groupRepository.findOne({
       where: { groupId },
     });
-    return !!group;
+    return !!group; // 불리언(Boolean) 타입을 강제로 반환
+    // group이 null 또는 undefined라면, 이는 데이터베이스에서 해당 groupId를 가진 그룹을 찾지 못했다는 것을 의미함
+    // !!group은 group 객체가 존재할 때 true를, 존재하지 않을 때는 false를 반환
   }
 
   async checkUserExists(userId: number): Promise<boolean> {
@@ -207,7 +209,7 @@ export class GroupMembersService {
 
     const members = await this.groupMemberRepository.find({
       where: { groupId },
-      relations: ['users'], // 여기서 'users'는 GroupMembers 엔티티 내에서 Users 엔티티와 맺고 있는 관계의 속성 이름입니다.
+      relations: ['users'],
     });
     if (!members.length) {
       throw new NotFoundException(
