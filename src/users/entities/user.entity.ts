@@ -16,8 +16,9 @@ import {
   name: 'users',
 })
 export class Users {
-  @PrimaryGeneratedColumn()
-  userId: number;
+    
+    @PrimaryGeneratedColumn()
+    userId : number;
 
   @Column({ type: 'varchar', nullable: true })
   profileImage?: string;
@@ -55,10 +56,8 @@ export class Users {
   @DeleteDateColumn({ type: 'timestamp', nullable: true })
   deletedAt?: Date;
 
-  @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users, {
-    cascade: true,
-  })
-  groupMembers: GroupMembers[];
+  @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
+  groupMembers : GroupMembers[];
 
   @OneToMany(() => Records, (records) => records.users, { cascade: true })
   records: Records[];
@@ -72,11 +71,4 @@ export class Users {
     { cascade: true },
   )
   scheduleMembers: ScheduleMembers[];
-
-  //   @Column({
-  //     type: 'enum',
-  //     enum: MemberRole,
-  //     default: MemberRole.User, // 기본값으로 MemberRole.User 설정
-  //   })
-  //   memberRole: MemberRole; // MemberRole 열거형을 사용하여 역할 정의
 }
