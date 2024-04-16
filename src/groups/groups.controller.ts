@@ -20,7 +20,6 @@ import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
-import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 
 // @UseGuards(memberRolesGuard)
 @Controller('groups')

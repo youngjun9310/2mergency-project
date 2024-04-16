@@ -179,7 +179,6 @@ export class AuthService {
       expires: gentoken.expires,
       status,
     });
-    console.log('result', result);
   }
 
   /** 이메일 가입수락*/
