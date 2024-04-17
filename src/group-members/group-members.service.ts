@@ -67,6 +67,7 @@ export class GroupMembersService {
     if (member) {
       throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
     }
+
     // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
     // const uniqueNickname = `user_${user}_${Date.now()}`;
 

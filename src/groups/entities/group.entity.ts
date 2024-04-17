@@ -41,9 +41,13 @@ export class Groups {
   })
   schedules: Schedules[];
 
-  @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.groups, {
-    cascade: true,
-  })
+  @OneToMany(
+    () => ScheduleMembers,
+    (scheduleMembers) => scheduleMembers.groups,
+    {
+      cascade: true,
+    },
+  )
   scheduleMembers: ScheduleMembers[];
 
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.groups, {

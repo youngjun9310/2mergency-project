@@ -30,8 +30,8 @@ export class GroupMembersController {
    * 그룹에 멤버 초대
    * @returns
    */
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)  
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대' })
@@ -39,12 +39,16 @@ export class GroupMembersController {
   @ApiBearerAuth('access-token')
   async inviteUserToGroup(
     @Param('groupId') groupId: number,
-    @UserInfo() users : Users,
+    @UserInfo() users: Users,
     @Body() inviteMemberDto: InviteMemberDto,
   ) {
     const { email } = inviteMemberDto;
     console.log(users);
-    await this.groupMembersService.inviteUserToGroup(groupId, users.userId , email);
+    await this.groupMembersService.inviteUserToGroup(
+      groupId,
+      users.userId,
+      email,
+    );
     return {
       message: '초대를 완료했습니다.',
     };
@@ -60,10 +64,14 @@ export class GroupMembersController {
   @ApiBearerAuth('access-token')
   async acceptInvitation(
     @Param('groupId', ParseIntPipe) groupId: number,
-    @UserInfo() users : Users,
+    @UserInfo() users: Users,
     @Body('email') email: string,
   ): Promise<any> {
-    return this.groupMembersService.acceptInvitation(groupId, users.userId, email);
+    return this.groupMembersService.acceptInvitation(
+      groupId,
+      users.userId,
+      email,
+    );
   }
 
   /* 사용자가 그룹의 멤버인지 확인 */

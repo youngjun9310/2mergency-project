@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
-import _ from 'lodash';
+import _, { result } from 'lodash';
 import { AwsService } from 'src/aws/aws.service';
 import {
   ENV_JWT_SECRET_KEY,
@@ -153,7 +153,7 @@ export class AuthService {
 
     const payload = { email, sub: user.userId };
     const accessToken = this.jwtService.sign(payload);
-    return accessToken; 
+    return accessToken;
   }
 
   /** 이메일 가입초대*/
