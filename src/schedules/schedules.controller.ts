@@ -18,15 +18,18 @@ import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { ApiTags } from '@nestjs/swagger';
 
-@Controller('groups/:groupId')
+@UseGuards(JWTAuthGuard)
+@ApiTags('schedules')
+@Controller('groups/:groupId/schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Post('/schedules')
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Post()
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
     @UserInfo() users: Users,
@@ -46,14 +49,18 @@ export class SchedulesController {
   }
 
   // 스케쥴 전체 조회
-  @Get('/schedules')
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
+    console.log(groupId);
     return this.schedulesService.getAllSchedule(groupId);
   }
 
   // 스케쥴 상세 조회
-  @UseGuards(JWTAuthGuard)
-  @Get('/schedules/:scheduleId')
+  @Get('/:scheduleId')
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   async getOneSchedule(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
@@ -62,28 +69,25 @@ export class SchedulesController {
     return await this.schedulesService.getOneSchedule(
       groupId,
       scheduleId,
-      users.userId,
     );
   }
 
   // 스케쥴 수정
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Patch('schedules/:scheduleId')
   changeSchedule(
     @Param('scheduleId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
-    // @UserInfo() users: Users,
   ) {
     return this.schedulesService.changeSchedule(
       changeScheduleDto,
       scheduleId,
-      // users.userId,
     );
   }
 
   // 스케쥴 삭제
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Delete('/schedules/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {

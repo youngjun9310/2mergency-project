@@ -28,7 +28,6 @@ export class AuthController {
   ) {}
 
   /** 회원가입*/
-  // @UseGuards(AuthGuard('jwt'))
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
@@ -69,7 +68,6 @@ export class AuthController {
   }
 
   /** 로그인*/
-  // @UseGuards(JWTAuthGuard, RolesGuard)
   @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
   @HttpCode(204)
@@ -113,6 +111,7 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
+  @UseGuards(AuthGuard('jwt'))
   @Post('accept')
   async userAccept(
     @Body('email') email: string,

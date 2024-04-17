@@ -152,16 +152,8 @@ export class AuthService {
     }
 
     const payload = { email, sub: user.userId };
-    const accessToken = this.jwtService.sign(payload, {
-      secret: ENV_JWT_SECRET_KEY,
-      expiresIn: '12h',
-    });
-    console.log('accessToken', accessToken);
-    // const refreshToken = this.jwtService.sign(payload, {
-    //   secret: process.env.REFRESH_SECRET,
-    //   expiresIn: '7d',
-    // });
-    return { accessToken };
+    const accessToken = this.jwtService.sign(payload);
+    return accessToken; 
   }
 
   /** 이메일 가입초대*/
