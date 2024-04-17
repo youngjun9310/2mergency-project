@@ -35,6 +35,8 @@ export class MembersRoleStrategy {
       groupId,
     );
 
+    console.log(groupMem)
+
     if (!groupMem) {
       return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
     }
@@ -42,7 +44,7 @@ export class MembersRoleStrategy {
     // 현재 경로에 필요한 역할 가져오기
     const requiredRole = this.reflector.get<MemberRole[]>(
       MemberRole_Key,
-      context.getHandler(),
+      context.getHandler()
     );
 
     if (!requiredRole) {

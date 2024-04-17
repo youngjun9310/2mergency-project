@@ -30,8 +30,8 @@ export class GroupMembersController {
    * 그룹에 멤버 초대
    * @returns
    */
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)  
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main)  
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대' })
@@ -125,7 +125,7 @@ export class GroupMembersController {
   }
   // 해당 그룹의 멤버 전체 조회
   @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members')
   @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })
   @ApiResponse({
