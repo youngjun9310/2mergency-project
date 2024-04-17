@@ -85,7 +85,7 @@ export class AuthController {
 
   /** 로그아웃*/
   @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Post('logout')
   @HttpCode(204)
   logOut(@Res({ passthrough: true }) res: Response) {
@@ -98,7 +98,7 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '가입 토큰번호 전송',
   })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res) {
     const gentoken = await this.mailService.usersendMail(email);
@@ -111,7 +111,7 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
   @Post('accept')
   async userAccept(
     @Body('email') email: string,
