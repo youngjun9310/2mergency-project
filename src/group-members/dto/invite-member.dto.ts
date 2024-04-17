@@ -12,12 +12,4 @@ export class InviteMemberDto {
   })
   email: string;
 
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: '초대할 사용자의 별명',
-    example: 'nickname',
-    required: true,
-  })
-  nickname: string;
 }

@@ -47,9 +47,6 @@ export class Schedules {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type: 'int' })
-  groupId: number;
-
   @ManyToOne(() => Users, (users) => users.schedules, {
     onDelete: 'CASCADE',
   })

@@ -1,27 +1,30 @@
 import { Module } from '@nestjs/common';
-import { JwtModule } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtStrategy } from './strategy/jwt.strategy';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from 'src/users/users.module';
-import { Users } from 'src/users/entities/user.entity';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { Invites } from './entities/invite.entity';
 import { MailModule } from 'src/mail/mail.module';
 import { AwsModule } from 'src/aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { RoleStrategy } from './strategy/roles.strategy';
-
 import { PassportModule } from '@nestjs/passport';
+import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { Users } from 'src/users/entities/user.entity';
+import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { RoleStrategy } from './strategy/roles.strategy';
+import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
     PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
-        secret: configService.get<string>('JWT_SECRET_KEY'),
+        secret: configService.get<string>(ENV_JWT_SECRET_KEY),
         signOptions: {
           expiresIn: '12h',
         },
@@ -36,6 +39,6 @@ import { PassportModule } from '@nestjs/passport';
 
   controllers: [AuthController],
   providers: [JwtStrategy, AuthService, RoleStrategy],
-  exports: [AuthService],
+  exports : [AuthService]
 })
 export class AuthModule {}

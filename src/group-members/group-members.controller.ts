@@ -3,13 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   UseGuards,
   HttpCode,
   HttpStatus,
   NotFoundException,
-  BadRequestException,
   ParseIntPipe,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
@@ -20,7 +18,10 @@ import { GroupMembers } from './entities/group-member.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { memberRolesGuard } from './guard/members.guard';
+import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
+import { Users } from 'src/users/entities/user.entity';
 
+@UseGuards(JWTAuthGuard)
 @ApiTags('groups')
 @Controller('groups')
 export class GroupMembersController {
@@ -29,18 +30,20 @@ export class GroupMembersController {
    * 그룹에 멤버 초대
    * @returns
    */
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)  
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대' })
   @ApiResponse({ status: 201, description: '초대를 완료했습니다.' })
   async inviteUserToGroup(
     @Param('groupId') groupId: number,
+    @UserInfo() users : Users,
     @Body() inviteMemberDto: InviteMemberDto,
   ) {
     const { email } = inviteMemberDto;
-    await this.groupMembersService.inviteUserToGroup(groupId, email);
+    console.log(users);
+    await this.groupMembersService.inviteUserToGroup(groupId, users.userId , email);
     return {
       message: '초대를 완료했습니다.',
     };
@@ -49,38 +52,21 @@ export class GroupMembersController {
    * 유저가 그룹 초대 수락
    * @returns
    */
-  @UseGuards(JWTAuthGuard)
   @Post(':groupId/accept')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '사용자가 그룹 초대를 수락' })
   @ApiResponse({ status: 200, description: '초대를 수락했습니다.' })
   async acceptInvitation(
     @Param('groupId', ParseIntPipe) groupId: number,
+    @UserInfo() users : Users,
     @Body('email') email: string,
   ): Promise<any> {
-    return this.groupMembersService.acceptInvitation(groupId, email);
+    return this.groupMembersService.acceptInvitation(groupId, users.userId, email);
   }
-  /**
-   * 그룹의 멤버로 등록
-   * @returns
-   */
-  @Patch(':groupId/register')
-  @MemberRoles(MemberRole.Main)
-  @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '그룹의 멤버로 등록' })
-  @ApiResponse({ status: 201, description: '그룹의 멤버로 등록되었습니다.' })
-  async registerGroupMember(
-    @Param('groupId') groupId: number,
-    @Body('email') email: string,
-  ): Promise<any> {
-    if (!email) {
-      throw new BadRequestException('이메일 주소가 제공되지 않았습니다.');
-    }
-    return await this.groupMembersService.addGroupMember(groupId, email);
-  }
+
   /* 사용자가 그룹의 멤버인지 확인 */
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members/:userId')
   @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
   @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
@@ -117,8 +103,10 @@ export class GroupMembersController {
       return { message: '그룹 멤버가 아닙니다.', statusCode: 404 };
     }
   }
+
   /* 사용자와 그룹의 관련된 정보 */
-  @UseGuards(JWTAuthGuard)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/users/:userId')
   @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회' })
   @ApiResponse({ status: 200, description: '그룹 멤버의 상세 정보' })
@@ -136,7 +124,7 @@ export class GroupMembersController {
     return groupMember;
   }
   // 해당 그룹의 멤버 전체 조회
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
+  @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members')
   @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })
@@ -148,7 +136,6 @@ export class GroupMembersController {
   })
   async getAllGroupMembers(
     @Param('groupId', ParseIntPipe) groupId: number,
-    // @UserInfo() users: Users,
   ): Promise<GroupMembers[]> {
     return this.groupMembersService.getAllGroupMembers(groupId);
   }

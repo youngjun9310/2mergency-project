@@ -15,11 +15,9 @@ import { UpdateGroupDto } from './dto/update-group.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
-import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
-import { memberRolesGuard } from 'src/group-members/guard/members.guard';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 
+@UseGuards(JWTAuthGuard)
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
@@ -28,7 +26,6 @@ export class GroupsController {
   @ApiTags('groups')
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
-  @UseGuards(JWTAuthGuard)
   @Post()
   async createGroup(
     @Body() createGroupDto: CreateGroupDto,
@@ -38,7 +35,6 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
-
   @ApiTags('groups')
   @ApiOperation({
     summary: '그룹 모든 목록 조회 API',
@@ -48,7 +44,6 @@ export class GroupsController {
     description: '성공적으로 그룹 조회를 하였습니다.',
     status: 200,
   })
-  @UseGuards(JWTAuthGuard)
   @Get()
   async findAllGroups() {
     return await this.groupsService.findAllGroups();
@@ -72,7 +67,6 @@ export class GroupsController {
     description: '유효하지 않은 그룹 ID입니다.',
     status: 400,
   })
-  @UseGuards(JWTAuthGuard)
   @Get(':groupId')
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
@@ -88,8 +82,6 @@ export class GroupsController {
     description: '성공적으로 그룹을 수정하였습니다.',
     status: 201,
   })
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Patch(':groupId')
   async updateGroup(
     @Param('groupId') groupId: number,
@@ -105,8 +97,6 @@ export class GroupsController {
     description: '성공적으로 그룹을 삭제하였습니다.',
     status: 201,
   })
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);

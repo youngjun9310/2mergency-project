@@ -18,10 +18,12 @@ export class MembersRoleStrategy {
 
   async validate(userId: number, groupId: number, context: ExecutionContext) {
     const user = await this.userRepository.findOne({
-      where: { userId },
+      where: { userId: userId },
     });
 
-    console.log('스트레지 유저', user);
+    if (!user) {
+      return false; // 유저가 데이터베이스에 없는 경우
+    }
 
     if (user.isAdmin === true) {
       return true;
