@@ -31,7 +31,6 @@ export class ScheduleMembersService {
     scheduleId: number,
     userId: number,
     email: string,
-    nickname: string,
   ) {
     // 그룹이 있는지 먼저 확인하기
     const isGroup = await this.groupsRepository.findOne({ where: { groupId } });
@@ -53,7 +52,7 @@ export class ScheduleMembersService {
 
     // 스케줄이 있는지 확인하기
     const isSchedule = await this.schedulesRepository.findOne({
-      where: { scheduleId, groupId },
+      where: { scheduleId, groups : { groupId } },
     });
     if (!isSchedule) {
       throw new NotFoundException(
@@ -66,11 +65,10 @@ export class ScheduleMembersService {
 
     // 스케줄 멤버를 생성하고 저장
     const newScheduleMember = await this.scheduleMembersRepository.save({
-      groupId,
+      groups : { groupId },
       scheduleId,
       userId,
       email,
-      nickname, // 닉네임 설정
     });
 
     console.log('스멤 등록', newScheduleMember);
@@ -79,7 +77,7 @@ export class ScheduleMembersService {
     return {
       success: true,
       message: `그룹 ${groupId}의 스케줄${scheduleId}에 멤버${userId} 등록이 완료되었습니다.`,
-      data: newScheduleMember.schedules,
+      newScheduleMember,
     };
   }
 
@@ -89,9 +87,11 @@ export class ScheduleMembersService {
   async findAllScheduleMembers(groupId: number, scheduleId: number) {
     // 스케줄 멤버 조회
     const schedule = await this.schedulesRepository.find({
-      where: { scheduleId, groupId },
+      where: { scheduleId, groups : { groupId } },
       relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
     });
+    console.log(scheduleId);
+    console.log(groupId)
 
     console.log('뿡빵뿡', schedule);
 
@@ -119,7 +119,7 @@ export class ScheduleMembersService {
     const schedule = await this.schedulesRepository.findOne({
       where: {
         scheduleId,
-        groupId,
+        groups : { groupId },
       },
     });
     // 스케줄 없으면 오류 반환
@@ -128,7 +128,7 @@ export class ScheduleMembersService {
     }
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
     return await this.scheduleMembersRepository.findOne({
-      where: { scheduleId, userId },
+      where: { schedules : { scheduleId }, users : { userId } },
     });
   }
 
@@ -139,7 +139,7 @@ export class ScheduleMembersService {
   ): Promise<void> {
     // 해당 스케줄이 -> 그룹에 속해있는지 확인
     const schedule = await this.schedulesRepository.findOne({
-      where: { scheduleId, groupId },
+      where: { scheduleId, groups : { groupId } },
     });
 
     if (!schedule) {
@@ -147,9 +147,9 @@ export class ScheduleMembersService {
     }
     // 해당 스케줄에 등록된 멤버가 있는지 확인
     const member = await this.scheduleMembersRepository.findOne({
-      where: { scheduleId, userId },
+      where: { schedules : { scheduleId }, users : { userId } },
     });
-    const findMember = member.userId;
+    const findMember = member.users.userId;
 
     console.log(findMember);
     if (!findMember) {

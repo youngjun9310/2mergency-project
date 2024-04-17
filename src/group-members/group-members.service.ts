@@ -2,7 +2,6 @@ import {
   Injectable,
   NotFoundException,
   BadRequestException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from './entities/group-member.entity';
@@ -41,7 +40,7 @@ export class GroupMembersService {
    * 그룹에 멤버 초대
    */
 
-  async inviteUserToGroup(groupId: number, email: string): Promise<any> {
+  async inviteUserToGroup(groupId: number, userId : number, email: string): Promise<any> {
     // 그룹 존재 여부 확인
 
     const group = await this.groupRepository.findOne({
@@ -60,8 +59,8 @@ export class GroupMembersService {
     // 사용자가 이미 그룹 멤버인지 여부 확인
     const member = await this.groupMemberRepository.findOne({
       where: {
-        userId: user.userId,
-        groupId: group.groupId,
+        users : { userId },
+        groups : { groupId },
       },
     });
 
@@ -69,13 +68,13 @@ export class GroupMembersService {
       throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
     }
     // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
-    const uniqueNickname = `user_${user}_${Date.now()}`;
+    // const uniqueNickname = `user_${user}_${Date.now()}`;
 
     // 사용자를 바로 그룹 멤버로 추가X => 그냥 초대 상태만 설정
     const memberInvite = this.groupMemberRepository.create({
-      userId: user.userId,
-      groupId: group.groupId,
-      nickname: uniqueNickname, // 고유한 닉네임 사용
+      users : { userId },
+      groups : { groupId },
+      // nickname: uniqueNickname, // 고유한 닉네임 사용
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
     });
@@ -90,7 +89,7 @@ export class GroupMembersService {
   /**
    * 유저가 그룹 초대 수락
    */
-  async acceptInvitation(groupId: number, email: string): Promise<any> {
+  async acceptInvitation(groupId: number, userId : number, email: string): Promise<any> {
     // 그룹 존재 여부 확인
     if (!(await this.checkGroupExists(groupId))) {
       throw new NotFoundException(`그룹이 존재하지 않습니다.`);
@@ -105,8 +104,8 @@ export class GroupMembersService {
     // 사용자의 초대 상태 확인
     const member = await this.groupMemberRepository.findOne({
       where: {
-        userId: user.userId,
-        groupId: groupId,
+        users : { userId },
+        groups : { groupId },
         isInvited: true, // 초대가 발송된 상태인지 확인
       },
     });
@@ -125,49 +124,13 @@ export class GroupMembersService {
     };
   }
 
-  /**
-   * 초대된 사용자를 그룹 멤버로 등록
-   */
-
-  async addGroupMember(groupId: number, email: string): Promise<any> {
-    // '사용자'가 있는지 확인하기
-    const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException(
-        `이메일 ${email}에 해당하는 사용자를 찾을 수 없습니다..`,
-      );
-    }
-
-    // 사용자의 초대 수락 상태 확인
-    const member = await this.groupMemberRepository.findOne({
-      where: {
-        userId: user.userId,
-        groupId: groupId,
-        isVailed: true, // 초대를 수락한 상태인지 확인
-      },
-    });
-
-    if (!member) {
-      throw new NotFoundException(
-        `사용자 ${user.userId}가 아직 그룹 ${groupId} 초대를 수락하지 않았습니다.`,
-      );
-    }
-
-    await this.groupMemberRepository.save(member);
-
-    return {
-      success: true,
-      message: `유저 ${user.userId}는 그룹 ${groupId} 멤버로 등록되었습니다.`,
-    };
-  }
-
   // 그룹 멤버 존재 확인, 반환
   async isGroupMember(groupId: number, userId: number): Promise<boolean> {
     console.log(
       `Checking membership for groupId: ${groupId}, userId: ${userId}`,
     );
     const member = await this.groupMemberRepository.findOne({
-      where: { groupId, userId },
+      where: { groups : { groupId }, users : { userId } },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
@@ -185,8 +148,8 @@ export class GroupMembersService {
   ): Promise<GroupMembers | undefined> {
     return await this.groupMemberRepository.findOne({
       where: {
-        userId: userId,
-        groupId: groupId,
+        users : { userId },
+        groups : { groupId },
       },
     });
   }
@@ -208,7 +171,7 @@ export class GroupMembersService {
     // }
 
     const members = await this.groupMemberRepository.find({
-      where: { groupId },
+      where: { groups : { groupId } },
       relations: ['users'],
     });
     if (!members.length) {
