@@ -7,7 +7,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
   ParseIntPipe,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';

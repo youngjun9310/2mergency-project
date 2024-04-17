@@ -73,12 +73,13 @@ export class SchedulesController {
   changeSchedule(
     @Param('scheduleId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
-    // @UserInfo() users: Users,
+    @UserInfo() users: Users,
   ) {
+    console.log(users);
     return this.schedulesService.changeSchedule(
       changeScheduleDto,
       scheduleId,
-      // users.userId,
+      users.userId,
     );
   }
 

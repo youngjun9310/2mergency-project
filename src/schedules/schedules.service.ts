@@ -90,18 +90,18 @@ export class SchedulesService {
   async changeSchedule(
     changeScheduleDto: ScheduleDto,
     scheduleId: number,
-    // userId: number,
+    userId: number,
   ) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
     const schedule = await this.scheduleRepository.findOne({
-      where: { scheduleId },
+      where: { scheduleId, userId },
     });
 
-    // if (!userId) {
-    //   throw {
-    //     status: HttpStatus.UNAUTHORIZED,
-    //   };
-    // }
+    if (!userId) {
+      throw {
+        status: HttpStatus.UNAUTHORIZED,
+      };
+    }
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,

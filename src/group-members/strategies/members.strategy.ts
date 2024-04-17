@@ -21,6 +21,8 @@ export class MembersRoleStrategy {
       where: { userId },
     });
 
+    console.log('스트레지 유저', user);
+
     if (user.isAdmin === true) {
       return true;
     }
@@ -30,10 +32,10 @@ export class MembersRoleStrategy {
       userId,
       groupId,
     );
-
-    if (!groupMem) {
-      return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
-    }
+    console.log('gropMem 확인', groupMem);
+    // if (!groupMem || !groupMem.isVailed) {
+    //   return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
+    // }
 
     // 현재 경로에 필요한 역할 가져오기
     const requiredRole = this.reflector.get<MemberRole[]>(

@@ -148,12 +148,8 @@ export class AuthService {
       secret: ENV_JWT_SECRET_KEY,
       expiresIn: '12h',
     });
-    console.log('accessToken', accessToken);
-    // const refreshToken = this.jwtService.sign(payload, {
-    //   secret: process.env.REFRESH_SECRET,
-    //   expiresIn: '7d',
-    // });
-    return { accessToken };
+
+    return accessToken;
   }
   /** 이메일 가입초대*/
   async userInvite(email: string, gentoken: { token: number; expires: Date }) {
