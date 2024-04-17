@@ -15,13 +15,5 @@ export class UpdateScheduleMemberDto extends PartialType(
     required: true,
   })
   email: string;
-
-  @IsString()
-  @IsNotEmpty()
-  @ApiProperty({
-    description: '그룹 멤버의 별명',
-    example: 'nickname',
-    required: true,
-  })
-  nickname: string;
+  
 }
