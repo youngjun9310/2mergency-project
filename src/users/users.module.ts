@@ -14,6 +14,7 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 @Module({
   imports: [
     PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       useFactory: (config: ConfigService) => ({
         secret: config.get<string>(ENV_JWT_SECRET_KEY),
@@ -23,7 +24,7 @@ import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
     TypeOrmModule.forFeature([Users]),
     AwsModule,
   ],
-  providers: [UsersService, JwtService, RoleStrategy],
+  providers: [JwtStrategy, UsersService, RoleStrategy],
   controllers: [UsersController],
   exports: [UsersService],
 })

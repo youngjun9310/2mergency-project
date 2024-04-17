@@ -1,4 +1,5 @@
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
+import { Groups } from 'src/groups/entities/group.entity';
 import { Records } from 'src/records/entities/record.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
@@ -17,8 +18,8 @@ import {
 })
 export class Users {
     
-    @PrimaryGeneratedColumn()
-    userId : number;
+  @PrimaryGeneratedColumn()
+  userId : number;
 
   @Column({ type: 'varchar', nullable: true })
   profileImage?: string;
