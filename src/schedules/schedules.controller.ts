@@ -49,8 +49,8 @@ export class SchedulesController {
   }
 
   // 스케쥴 전체 조회
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
     console.log(groupId);
@@ -59,8 +59,8 @@ export class SchedulesController {
 
   // 스케쥴 상세 조회
   @Get('/:scheduleId')
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   async getOneSchedule(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
@@ -75,7 +75,7 @@ export class SchedulesController {
   // 스케쥴 수정
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Patch('schedules/:scheduleId')
+  @Patch('/:scheduleId')
   changeSchedule(
     @Param('scheduleId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
@@ -89,7 +89,7 @@ export class SchedulesController {
   // 스케쥴 삭제
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Delete('/schedules/:scheduleId')
+  @Delete('/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);
   }
