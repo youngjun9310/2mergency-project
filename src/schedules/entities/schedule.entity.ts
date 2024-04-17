@@ -20,9 +20,6 @@ export class Schedules {
   @PrimaryGeneratedColumn()
   scheduleId: number;
 
-  @Column({ type: 'int' })
-  userId: number;
-
   @Column({ type: 'enum', enum: Category, nullable: false })
   category: Category;
 
