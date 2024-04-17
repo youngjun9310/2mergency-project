@@ -40,7 +40,11 @@ export class GroupMembersService {
    * 그룹에 멤버 초대
    */
 
-  async inviteUserToGroup(groupId: number, userId : number, email: string): Promise<any> {
+  async inviteUserToGroup(
+    groupId: number,
+    userId: number,
+    email: string,
+  ): Promise<any> {
     // 그룹 존재 여부 확인
 
     const group = await this.groupRepository.findOne({
@@ -59,8 +63,8 @@ export class GroupMembersService {
     // 사용자가 이미 그룹 멤버인지 여부 확인
     const member = await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
+        users: { userId },
+        groups: { groupId },
       },
     });
 
@@ -73,8 +77,8 @@ export class GroupMembersService {
 
     // 사용자를 바로 그룹 멤버로 추가X => 그냥 초대 상태만 설정
     const memberInvite = this.groupMemberRepository.create({
-      users : { userId },
-      groups : { groupId },
+      users: { userId },
+      groups: { groupId },
       // nickname: uniqueNickname, // 고유한 닉네임 사용
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
@@ -90,7 +94,11 @@ export class GroupMembersService {
   /**
    * 유저가 그룹 초대 수락
    */
-  async acceptInvitation(groupId: number, userId : number, email: string): Promise<any> {
+  async acceptInvitation(
+    groupId: number,
+    userId: number,
+    email: string,
+  ): Promise<any> {
     // 그룹 존재 여부 확인
     if (!(await this.checkGroupExists(groupId))) {
       throw new NotFoundException(`그룹이 존재하지 않습니다.`);
@@ -105,8 +113,8 @@ export class GroupMembersService {
     // 사용자의 초대 상태 확인
     const member = await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
+        users: { userId },
+        groups: { groupId },
         isInvited: true, // 초대가 발송된 상태인지 확인
       },
     });
@@ -131,7 +139,7 @@ export class GroupMembersService {
       `Checking membership for groupId: ${groupId}, userId: ${userId}`,
     );
     const member = await this.groupMemberRepository.findOne({
-      where: { groups : { groupId }, users : { userId } },
+      where: { groups: { groupId }, users: { userId } },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
@@ -149,8 +157,8 @@ export class GroupMembersService {
   ): Promise<GroupMembers | undefined> {
     return await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
+        users: { userId },
+        groups: { groupId },
       },
     });
   }
@@ -172,7 +180,7 @@ export class GroupMembersService {
     // }
 
     const members = await this.groupMemberRepository.find({
-      where: { groups : { groupId } },
+      where: { groups: { groupId } },
       relations: ['users'],
     });
     if (!members.length) {

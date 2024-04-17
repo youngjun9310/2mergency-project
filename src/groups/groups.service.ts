@@ -30,11 +30,13 @@ export class GroupsService {
       // const uniqueNickname = `user_${userId}_${user.nickname}`;
 
       const groupMemberCreate = await this.groupMembersRepository.save({
-        groupId : groupCreate.groupId,
+        groupId: groupCreate.groupId,
         userId,
         role: MemberRole.Main,
         isVailed: true,
         isInvited: true,
+        groupId: groupCreate,
+        userId: userId,
       });
       console.log('확인: 그룹 멤버 생성:', groupMemberCreate);
     } catch (error) {
