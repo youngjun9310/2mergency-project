@@ -2,7 +2,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -11,7 +10,6 @@ import { Category } from '../../types/Category.type';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
-import { Users } from 'src/users/entities/user.entity';
 
 @Entity({
   name: 'groups',

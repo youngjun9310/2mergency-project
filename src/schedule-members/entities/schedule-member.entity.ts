@@ -24,15 +24,25 @@ export class ScheduleMembers {
   @JoinColumn({ name: 'scheduleId', referencedColumnName : 'scheduleId' })
   schedules: Schedules; // 스케줄 엔티티와의 관계
 
+  @Column({ type : 'int', name : 'scheduleId', nullable : false })
+  scheduleId : number;
+
   @ManyToOne(() => Groups, (groups) => groups.scheduleMembers, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'groupId', referencedColumnName : 'groupId' })
   groups: Groups; // 그룹 엔티티와의 관계
 
+  @Column({ type : 'int', name : 'groupId', nullable : false })
+  groupId : number;
+
   @ManyToOne(() => Users, (users) => users.scheduleMembers, {
     onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'userId', referencedColumnName : 'userId' })
   users: Users; // 사용자 엔티티와의 관계
+
+  @Column({ type : 'int', name : 'userId', nullable : false })
+  userId : number;
+
 }
