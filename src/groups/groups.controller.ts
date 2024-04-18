@@ -34,8 +34,6 @@ export class GroupsController {
     @Body() createGroupDto: CreateGroupDto,
     @UserInfo() users: Users,
   ) {
-    console.log('그룹컨트롤러', users.userId);
-    console.log('그룹컨트롤러', createGroupDto);
     return await this.groupsService.createGroup(createGroupDto, users.userId);
   }
 

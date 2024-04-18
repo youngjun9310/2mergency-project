@@ -71,7 +71,7 @@ export class ScheduleMembersService {
       email,
     });
 
-    console.log('스멤 등록', newScheduleMember);
+    console.log('스케쥴 멤버 서비스 newSchedhuleMember', newScheduleMember);
 
     // 성공적으로 저장된다면 -> 성공 메세지 반환
     return {

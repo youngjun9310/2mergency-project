@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { MemberRole } from '../types/groupMemberRole.type';
-import { MemberRoles } from '../decorator/memberRoles.decorator';
+// import { MemberRoles } from '../decorator/memberRoles.decorator';
 import { GroupMembers } from '../entities/group-member.entity';
 
 @Injectable()
@@ -22,8 +22,6 @@ export class MembersRoleStrategy {
       where: { userId: userId },
     });
 
-    console.log('멤버스트렛지 유저', user);
-
     if (!user) {
       return false; // 유저가 데이터베이스에 없는 경우
     }
@@ -32,28 +30,36 @@ export class MembersRoleStrategy {
       return true;
     }
 
-    const groupMem = await this.groupMemberRepository.findOne({
-      where: { users: { userId }, groups: { groupId } },
+    // Url의 groupId와 그룹 멤버 레포지토리에 있는 groupId가 다르면 접근 못하게함
+    const group = await this.groupMemberRepository.findOne({
+      where: { groupId: groupId },
     });
 
-    console.log('멤버스트릿지 groupMem', groupMem);
+    console.log('멤버스트렛지 group', group);
+    if (!group) {
+      return false;
+    }
+
+    const groupMem = await this.groupMemberRepository.findOne({
+      where: { users: { userId: userId }, groups: { groupId } },
+    });
+
+    console.log('멤버스트렛지', groupMem);
     if (!groupMem) {
       return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
     }
 
     // 현재 경로에 필요한 역할 가져오기
-    const requiredRole = this.reflector.get<MemberRole[]>(
-      MemberRoles,
-      context.getHandler(),
+    const requiredRole = this.reflector.getAllAndOverride<MemberRole[]>(
+      'memberRoles',
+      [context.getClass(), context.getHandler()],
     );
-    console.log('멤버스트릿지 requiredRole', requiredRole);
+
     if (!requiredRole) {
       return true; // 필요한 역할이 설정 x 라면 모든 사용자 접근을 허용.
     }
-
     const memberRole: MemberRole = groupMem.role;
     // 사용자의 역할이 필요한 역할 중 하나인지 확인합니다.
-    console.log('멤버스트릿지 memberRole', memberRole);
 
     return requiredRole.includes(memberRole);
   }
