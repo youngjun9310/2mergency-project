@@ -667,7 +667,7 @@
         var startx = $("#startx").val(latitude);
         var starty = $("#starty").val(longitude);
         
-        let one = prompt('원하는 주변 거리 범위를 입력해주세요.');
+        let one = prompt('원하는 주변 거리 범위를 입력해주세요.', 100);
         if(one !== 0 && one >= 50){
         const radius = Number(one);
         const d2r = Math.PI / 180;
@@ -1442,16 +1442,12 @@ marker2.push(marker);
 }
 
 function generateRandomCoords(latitude, longitude, radius) {
-    const r = radius / 111300; // 1도에 대략 111.3km
-    const u = Math.random();
-    const v = Math.random();
-    const w = r * Math.sqrt(u);
-    const t = 2 * Math.PI * v;
-    const x = w * Math.cos(t);
-    const y = w * Math.sin(t);
+    const randomAngle = Math.random() * 2 * Math.PI; // 랜덤한 각도 생성
+    const randomRadius = Math.sqrt(Math.random()) * radius; // 랜덤한 거리 생성
 
-    const newLatitude = latitude + x;
-    const newLongitude = longitude + y;
+    // 새로운 좌표 계산
+    const newLatitude = latitude + (randomRadius / 111300) * Math.cos(randomAngle); // 위도 변화
+    const newLongitude = longitude + (randomRadius / (111300 * Math.cos(latitude * Math.PI / 180))) * Math.sin(randomAngle); // 경도 변화
 
     return { latitude: newLatitude, longitude: newLongitude };
 }
