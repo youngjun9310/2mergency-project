@@ -1,5 +1,4 @@
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { Groups } from 'src/groups/entities/group.entity';
 import { Records } from 'src/records/entities/record.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
@@ -17,9 +16,8 @@ import {
   name: 'users',
 })
 export class Users {
-    
   @PrimaryGeneratedColumn()
-  userId : number;
+  userId: number;
 
   @Column({ type: 'varchar', nullable: true })
   profileImage?: string;
@@ -58,12 +56,16 @@ export class Users {
   deletedAt?: Date;
 
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
-  groupMembers : GroupMembers[];
+  groupMembers: GroupMembers[];
 
-  @OneToMany(() => Records, (records) => records.users, { cascade: true })
+  @OneToMany(() => Records, (records) => records.users, {
+    cascade: true,
+  })
   records: Records[];
 
-  @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade: true })
+  @OneToMany(() => Schedules, (schedules) => schedules.users, {
+    cascade: true,
+  })
   schedules: Schedules[];
 
   @OneToMany(

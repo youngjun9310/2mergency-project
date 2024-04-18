@@ -8,14 +8,15 @@ import { ScheduleMembers } from './entities/schedule-member.entity'; // 가정: 
 import { Repository } from 'typeorm';
 import { Groups } from 'src/groups/entities/group.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
-import { GroupMembersService } from 'src/group-members/group-members.service';
+import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 
 @Injectable()
 export class ScheduleMembersService {
   constructor(
     @InjectRepository(ScheduleMembers)
     private scheduleMembersRepository: Repository<ScheduleMembers>,
-    private groupMembersService: GroupMembersService,
+    @InjectRepository(GroupMembers)
+    private groupMembersRepository: Repository<GroupMembers>,
     @InjectRepository(Groups)
     private groupsRepository: Repository<Groups>,
     @InjectRepository(Schedules)
@@ -39,10 +40,9 @@ export class ScheduleMembersService {
     }
 
     // 그룹 멤버인지 확인!
-    const isGroupMember = await this.groupMembersService.isGroupMember(
-      groupId,
-      userId,
-    );
+    const isGroupMember = await this.groupMembersRepository.find({
+      where: { users: { userId }, groups: { groupId } },
+    });
 
     if (!isGroupMember) {
       throw new BadRequestException(
@@ -52,7 +52,7 @@ export class ScheduleMembersService {
 
     // 스케줄이 있는지 확인하기
     const isSchedule = await this.schedulesRepository.findOne({
-      where: { scheduleId, groups : { groupId } },
+      where: { scheduleId, groups: { groupId } },
     });
     if (!isSchedule) {
       throw new NotFoundException(
@@ -65,7 +65,7 @@ export class ScheduleMembersService {
 
     // 스케줄 멤버를 생성하고 저장
     const newScheduleMember = await this.scheduleMembersRepository.save({
-      groups : { groupId },
+      groups: { groupId },
       scheduleId,
       userId,
       email,
@@ -87,11 +87,11 @@ export class ScheduleMembersService {
   async findAllScheduleMembers(groupId: number, scheduleId: number) {
     // 스케줄 멤버 조회
     const schedule = await this.schedulesRepository.find({
-      where: { scheduleId, groups : { groupId } },
+      where: { scheduleId, groups: { groupId } },
       relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
     });
     console.log(scheduleId);
-    console.log(groupId)
+    console.log(groupId);
 
     console.log('뿡빵뿡', schedule);
 
@@ -119,7 +119,7 @@ export class ScheduleMembersService {
     const schedule = await this.schedulesRepository.findOne({
       where: {
         scheduleId,
-        groups : { groupId },
+        groups: { groupId },
       },
     });
     // 스케줄 없으면 오류 반환
@@ -128,7 +128,7 @@ export class ScheduleMembersService {
     }
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
     return await this.scheduleMembersRepository.findOne({
-      where: { schedules : { scheduleId }, users : { userId } },
+      where: { schedules: { scheduleId }, users: { userId } },
     });
   }
 
@@ -139,7 +139,7 @@ export class ScheduleMembersService {
   ): Promise<void> {
     // 해당 스케줄이 -> 그룹에 속해있는지 확인
     const schedule = await this.schedulesRepository.findOne({
-      where: { scheduleId, groups : { groupId } },
+      where: { scheduleId, groups: { groupId } },
     });
 
     if (!schedule) {
@@ -147,7 +147,7 @@ export class ScheduleMembersService {
     }
     // 해당 스케줄에 등록된 멤버가 있는지 확인
     const member = await this.scheduleMembersRepository.findOne({
-      where: { schedules : { scheduleId }, users : { userId } },
+      where: { schedules: { scheduleId }, users: { userId } },
     });
     const findMember = member.users.userId;
 

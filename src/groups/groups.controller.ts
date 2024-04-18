@@ -16,6 +16,9 @@ import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
 @UseGuards(JWTAuthGuard)
 @Controller('groups')
@@ -31,6 +34,8 @@ export class GroupsController {
     @Body() createGroupDto: CreateGroupDto,
     @UserInfo() users: Users,
   ) {
+    console.log('그룹컨트롤러', users.userId);
+    console.log('그룹컨트롤러', createGroupDto);
     return await this.groupsService.createGroup(createGroupDto, users.userId);
   }
 
@@ -82,6 +87,8 @@ export class GroupsController {
     description: '성공적으로 그룹을 수정하였습니다.',
     status: 201,
   })
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Patch(':groupId')
   async updateGroup(
     @Param('groupId') groupId: number,

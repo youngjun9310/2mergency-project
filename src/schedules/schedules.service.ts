@@ -24,15 +24,15 @@ export class SchedulesService {
     groupId: number,
     userId: number,
   ) {
-    console.log('userId :', userId);
-    console.log('groupId : ', groupId);
+    console.log('스케쥴 서비스 유저 아이디:', userId);
+    console.log('스케쥴 서비스 그룹 아이디 : ', groupId);
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     const group = await this.groupsRepository.findOne({
       where: { groupId },
     });
 
-    console.log('group : ', group);
+    console.log('스케쥴 서비스 group : ', group);
 
     if (!group) {
       throw new HttpException('Group not found', HttpStatus.NOT_FOUND);
@@ -47,6 +47,7 @@ export class SchedulesService {
       scheduleDate,
     });
 
+    console.log('스케쥴 서비스', newSchedule);
     return newSchedule;
   }
 
@@ -54,10 +55,11 @@ export class SchedulesService {
   /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
   async getAllSchedule(groupId: number) {
     const allSchedule = await this.scheduleRepository.find({
-      where: { groups: { groupId } },
+      where: { groups: { groupId: groupId } },
     });
 
-    if (!allSchedule) {
+    console.log('전체 스케쥴', allSchedule);
+    if (!(allSchedule.length === 0)) {
       throw {
         status: HttpStatus.NOT_FOUND,
       };
@@ -73,7 +75,7 @@ export class SchedulesService {
     const selectUser = await this.groupMembersRepository.findOne({
       where: { groups: { groupId } },
     });
-    console.log('selectUser : ', selectUser);
+    console.log('스케쥴 유저 selectUser : ', selectUser);
 
     // if (userId !== selectUser.users.userId) {
     //   throw {
@@ -84,7 +86,7 @@ export class SchedulesService {
     const schedule = await this.scheduleRepository.findOne({
       where: { groups: { groupId } },
     });
-    console.log(scheduleId);
+    console.log('스케쥴서비스', groupId);
     console.log('schedule', schedule);
 
     if (!schedule) {

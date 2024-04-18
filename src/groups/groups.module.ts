@@ -7,6 +7,7 @@ import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { GroupMembersModule } from 'src/group-members/group-members.module';
 import { UsersModule } from 'src/users/users.module';
 import { Users } from 'src/users/entities/user.entity';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 
 @Module({
   imports: [
@@ -15,6 +16,6 @@ import { Users } from 'src/users/entities/user.entity';
     UsersModule,
   ],
   controllers: [GroupsController],
-  providers: [GroupsService],
+  providers: [GroupsService, MembersRoleStrategy],
 })
 export class GroupsModule {}

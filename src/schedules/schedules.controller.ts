@@ -50,17 +50,16 @@ export class SchedulesController {
 
   // 스케쥴 전체 조회
   @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
-    console.log(groupId);
-    return this.schedulesService.getAllSchedule(groupId);
+    return await this.schedulesService.getAllSchedule(groupId);
   }
 
   // 스케쥴 상세 조회
-  @Get('/:scheduleId')
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @Get('/:scheduleId')
   async getOneSchedule(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,

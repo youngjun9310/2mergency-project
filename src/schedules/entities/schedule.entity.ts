@@ -47,9 +47,11 @@ export class Schedules {
   @ManyToOne(() => Users, (users) => users.schedules, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    referencedColumnName: 'userId',
+  })
   users: Users;
-
   @OneToMany(
     () => ScheduleMembers,
     (scheduleMembers) => scheduleMembers.schedules,
