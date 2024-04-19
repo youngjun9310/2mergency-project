@@ -126,7 +126,7 @@ export class ScheduleMembersController {
    */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
-  @Delete(':scheduleId/members/:userId')
+  @Delete(':scheduleId/members')
   @HttpCode(HttpStatus.OK) // 성공적으로 처리, 응답 본문에 데이터가 포함되지 않을 때 사용하는 상태 코드
   @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제' })
   @ApiResponse({ status: 200, description: '스케줄 멤버 삭제에 성공했습니다.' })
@@ -134,12 +134,13 @@ export class ScheduleMembersController {
   async deleteScheduleMembers(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
-    @Param('userId') userId: number,
+    @UserInfo() currentUser: Users,
+    @Body('email') email: string,
   ) {
     await this.scheduleMembersService.deleteScheduleMembers(
       groupId,
       scheduleId,
-      userId,
+      email,
     );
 
     return {

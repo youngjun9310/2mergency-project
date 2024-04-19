@@ -50,12 +50,6 @@ export class ScheduleMembersService {
       throw new NotFoundException(`${user.userId}유저가가 존재하지 않습니다.`);
     }
 
-    // // 그룹 멤버인지 확인!
-    // const isGroupMember = await this.groupMembersService.isGroupMember(
-    //   groupId,
-    //   user.userId,
-    // );
-
     // 그룹 멤버인지 확인 및 초대 수락 여부 확인
     const isGroupMember = await this.groupMembersRepository.findOne({
       where: {
@@ -63,6 +57,10 @@ export class ScheduleMembersService {
         userId: user.userId,
       },
       select: ['userId', 'isVailed'],
+      // select: 데이터베이스에서 전체 엔티티를 가져오는 대신 필요한 특정 필드만을 명시적으로 선택하여 가져오기 위해 사용
+      // 즉, select 옵션을 통해 userId와 isVailed 필드만을 결과로 가져옴
+      // userId: 조회하고자 하는 그룹 멤버의 사용자 식별자<
+      // isVailed: 그룹 멤버의 초대 수락 상태를 나타내는 필드, 이 값이 true일 경우 사용자가 그룹 초대를 수락한 것
     });
 
     if (!isGroupMember) {
@@ -172,7 +170,7 @@ export class ScheduleMembersService {
   async deleteScheduleMembers(
     groupId: number,
     scheduleId: number,
-    userId: number,
+    email: string,
   ): Promise<void> {
     // 해당 스케줄이 -> 그룹에 속해있는지 확인
     const schedule = await this.schedulesRepository.findOne({
@@ -180,19 +178,31 @@ export class ScheduleMembersService {
     });
 
     if (!schedule) {
-      throw new NotFoundException('그룹에 해당하는 스케줄이 없습니다.');
+      throw new NotFoundException(
+        `${groupId}그룹에 해당하는 ${scheduleId}스케줄이 없습니다.`,
+      );
     }
+
+    // 사용자가 있는지 이메일로 확인
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException(`${user.userId}유저가가 존재하지 않습니다.`);
+    }
+
     // 해당 스케줄에 등록된 멤버가 있는지 확인
     const member = await this.scheduleMembersRepository.findOne({
-      where: { schedules: { scheduleId }, users: { userId } },
+      where: { scheduleId: scheduleId, userId: user.userId },
     });
-    const findMember = member.users.userId;
 
-    console.log(findMember);
-    if (!findMember) {
-      throw new NotFoundException('해당 멤버를 찾을 수 없습니다.');
+    if (!member) {
+      throw new NotFoundException(
+        `해당 ${user.userId}멤버는 그룹 스케줄에 등록된 유저가 아닙니다.`,
+      );
     }
     // 멤버 삭제하기
-    await this.scheduleMembersRepository.delete(findMember);
+    await this.scheduleMembersRepository.delete({
+      scheduleId: scheduleId,
+      userId: user.userId,
+    });
   }
 }
