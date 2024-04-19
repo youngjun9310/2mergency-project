@@ -35,8 +35,6 @@ export class GroupsService {
         role: MemberRole.Main,
         isVailed: true,
         isInvited: true,
-        groupId: groupCreate,
-        userId: userId,
       });
       console.log('확인: 그룹 멤버 생성:', groupMemberCreate);
     } catch (error) {

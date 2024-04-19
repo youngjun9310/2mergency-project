@@ -9,6 +9,8 @@ import {
   HttpStatus,
   NotFoundException,
   UseGuards,
+  UnauthorizedException,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { ScheduleMembersService } from './schedule-members.service';
 // import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
@@ -35,9 +37,9 @@ export class ScheduleMembersController {
    * 스케줄에 멤버 등록
    * @returns
    */
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Post(':scheduleId/members/:userId')
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Post(':scheduleId/members')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '스케줄에 멤버 등록' })
   @ApiResponse({
@@ -46,21 +48,16 @@ export class ScheduleMembersController {
   })
   @ApiBearerAuth('access-token')
   async registerScheduleMember(
-    @Param('groupId') groupId: number,
-    @Param('scheduleId') scheduleId: number,
-    @UserInfo() users: Users,
-    @Body() updateScheduleMemberDto: UpdateScheduleMemberDto,
+    @Param('groupId', ParseIntPipe) groupId: number,
+    @Param('scheduleId', ParseIntPipe) scheduleId: number,
+    @UserInfo() currentUser: Users,
+    @Body('email') email: string,
   ) {
-    // 사용자가 그룹 멤버라면, 스케줄 멤버로 등록하기
-    const newScheduleMember =
-      await this.scheduleMembersService.registerScheduleMember(
-        groupId,
-        scheduleId,
-        users.userId,
-        updateScheduleMemberDto.email,
-      );
-
-    return newScheduleMember;
+    return this.scheduleMembersService.registerScheduleMember(
+      groupId,
+      scheduleId,
+      email,
+    );
   }
 
   /**

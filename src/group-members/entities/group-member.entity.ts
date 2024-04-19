@@ -32,8 +32,8 @@ export class GroupMembers {
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   users: Users;
 
-  @Column({ type : "int", name : 'userId', nullable : false })
-  userId : number;
+  @Column({ type: 'int', name: 'userId', nullable: false })
+  userId: number;
 
   @ManyToOne(() => Groups, (groups) => groups.groupMembers, {
     onDelete: 'CASCADE',
@@ -41,8 +41,8 @@ export class GroupMembers {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type : "int", name : 'groupId', nullable : false })
-  groupId : number;
+  @Column({ type: 'int', name: 'groupId', nullable: false })
+  groupId: number;
 
   // 'isInvited' 초대가 발송된 상태 표시 => 초대된 상태면 isInvited=true
   @Column({ type: 'boolean', default: false })

@@ -9,6 +9,7 @@ import {
   HttpStatus,
   NotFoundException,
   ParseIntPipe,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 
@@ -27,10 +28,13 @@ import { InviteMemberDto } from './dto/invite-member.dto';
 @Controller('groups')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}
+
   /**
    * 그룹에 멤버 초대
    * @returns
    */
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대' })
@@ -65,17 +69,24 @@ export class GroupMembersController {
   @ApiBearerAuth('access-token')
   async acceptInvitation(
     @Param('groupId', ParseIntPipe) groupId: number,
-    @UserInfo() users: Users,
+    @UserInfo() currentUser: Users,
     @Body('email') email: string,
   ): Promise<any> {
+    if (currentUser.email !== email) {
+      throw new UnauthorizedException(
+        `${email} 주소가 현재 로그인한 사용자의 이메일${currentUser.email}과 일치하지 않습니다.`,
+      );
+    }
     return this.groupMembersService.acceptInvitation(
       groupId,
-      users.userId,
+      currentUser.userId,
       email,
     );
   }
 
-  /* 사용자가 그룹의 멤버인지 확인 */
+  /**
+   * 사용자가 그룹의 멤버인지 확인
+   * **/
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members/:userId')
@@ -99,23 +110,27 @@ export class GroupMembersController {
     // 그룹, 사용자의 존재와 해당 사용자가 그룹의 멤버인지 여부를 확인
 
     if (!memberDetails) {
-      // memberDetails 객체가 null 또는 undefined인지 확인함
-      // 이 객체가 존재하지 않는다면, 그룹 또는 사용자가 데이터베이스에 없음을 의미
       throw new NotFoundException(
         `해당 사용자${userId} 또는 그룹${groupId}이 데이터 베이스에 존재하지 않습니다.`,
-      ); // groupId 또는 userId에 해당하는 멤버십 데이터 자체가 데이터베이스에 없을 때 발생
+      );
+      // memberDetails 객체가 null 또는 undefined인지 확인함
+      // 이 객체가 존재하지 않는다면, 그룹 또는 사용자가 데이터베이스에 없음을 의미
+      // groupId 또는 userId에 해당하는 멤버십 데이터 자체가 데이터베이스에 없을 때 발생
     }
-    if (!memberDetails.groups || !memberDetails.users) {
-      //memberDetails 객체 내의 groups와 users 관계가 제대로 로드되었는지를 확인
 
+    if (!memberDetails.groups || !memberDetails.users) {
       throw new NotFoundException(
         `해당 사용자${userId} 또는 그룹${groupId}이 정보의 연결이 데이터베이스에 완전히 형성되지 않았습니다.`,
-      ); // 데이터는 존재하지만, 그 데이터가 연관된 그룹 또는 사용자와 제대로 연결되지 않았을 경우
+      );
+      //memberDetails 객체 내의 groups와 users 관계가 제대로 로드되었는지를 확인
+      // 데이터는 존재하지만, 그 데이터가 연관된 그룹 또는 사용자와 제대로 연결되지 않았을 경우
     }
     return { message: `사용자${userId}는 그룹 ${groupId}의 멤버입니다.` };
   }
 
-  /* 사용자와 그룹의 관련된 정보 */
+  /**
+   * 특정 사용자의 그룹 멤버 정보 조회
+   * */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/users/:userId')
@@ -136,7 +151,9 @@ export class GroupMembersController {
     return groupMember;
   }
 
-  // 해당 그룹의 멤버 전체 조회
+  /**
+   * 해당 그룹의 멤버 전체 조회
+   * */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members')

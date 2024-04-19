@@ -9,7 +9,6 @@ import { Repository } from 'typeorm';
 import { Groups } from 'src/groups/entities/group.entity';
 import { UsersService } from 'src/users/users.service';
 import { Users } from 'src/users/entities/user.entity';
-import { Invites } from 'src/auth/entities/invite.entity';
 
 @Injectable()
 export class GroupMembersService {
@@ -27,7 +26,6 @@ export class GroupMembersService {
 
   async inviteUserToGroup(groupId: number, userId: number, email: string) {
     // 그룹 존재 여부 확인
-
     const group = await this.groupRepository.findOne({
       where: { groupId },
     });
@@ -78,6 +76,7 @@ export class GroupMembersService {
   /**
    * 유저가 그룹 초대 수락
    */
+
   async acceptInvitation(
     groupId: number,
     userId: number,
@@ -91,24 +90,33 @@ export class GroupMembersService {
 
     // 사용자가 있는지 이메일로 확인
     const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException(`${user.userId}유저가가 존재하지 않습니다.`);
+    if (!user || user.userId !== userId) {
+      throw new NotFoundException(
+        `${user.userId}유저가가 존재하지 않거나 일치하지 않습니다.`,
+      );
     }
 
     // 사용자의 초대 상태 확인
     const invite = await this.groupMemberRepository.findOne({
       where: {
-        users: { userId: user.userId },
-        groups: { groupId },
-        isInvited: true, // 초대가 발송된 상태인지 확인
-        isVailed: true,
+        userId: user.userId, // 직접적인 필드 사용으로 변경
+        groupId: groupId,
       },
     });
+    console.log('그룹멤버 초대: 이름을 바꿔서 구분해보자', invite);
 
     if (!invite) {
       throw new NotFoundException(
-        `해당 유저${user.userId}는 초대받지 않았습니다.`,
+        `해당 ${user.userId} 유저는 초대받지 않았습니다.`,
       );
+    }
+
+    // 이미 초대를 수락한 경우
+    if (invite.isVailed) {
+      return {
+        success: false,
+        message: `${user.userId} 유저는 이미 초대를 수락한 사용자입니다.`,
+      };
     }
 
     // 초대 수락 처리
@@ -121,13 +129,13 @@ export class GroupMembersService {
     };
   }
 
-  // 그룹 멤버 존재 확인, 반환
+  /**
+   * 사용자가 그룹의 멤버인지 확인
+   **/
   async isGroupMember(groupId: number, userId: number): Promise<boolean> {
-    console.log(
-      `Checking membership for groupId: ${groupId}, userId: ${userId}`,
-    );
+    console.log(`확인하기 : groupId: ${groupId}, userId: ${userId}`);
     const member = await this.groupMemberRepository.findOne({
-      where: { groups: { groupId }, users: { userId } },
+      where: { groupId: groupId, userId: userId },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
@@ -151,7 +159,9 @@ export class GroupMembersService {
     });
   }
 
-  // 해당 그룹의 멤버 전체 조회
+  /**
+   * 해당 그룹의 멤버 전체 조회
+   * */
   async getAllGroupMembers(
     groupId: number,
     // userId: number,
