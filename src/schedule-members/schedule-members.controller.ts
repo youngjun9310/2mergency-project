@@ -23,7 +23,7 @@ import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 
 @UseGuards(JWTAuthGuard)
-@ApiTags('scheduleMember')
+@ApiTags('ScheduleMember')
 @Controller('/groups/:groupId/schedules')
 export class ScheduleMembersController {
   constructor(

@@ -21,7 +21,7 @@ import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JWTAuthGuard)
-@ApiTags('schedules')
+@ApiTags('Schedules')
 @Controller('groups/:groupId/schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}

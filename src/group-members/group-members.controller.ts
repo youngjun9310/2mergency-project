@@ -22,7 +22,7 @@ import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 
 @UseGuards(JWTAuthGuard)
-@ApiTags('groupMember')
+@ApiTags('GroupMember')
 @Controller('groups')
 export class GroupMembersController {
   constructor(private readonly groupMembersService: GroupMembersService) {}

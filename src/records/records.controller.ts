@@ -9,7 +9,7 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 
 // 유저 토큰
 @UseGuards(JWTAuthGuard)
-@ApiTags('records')
+@ApiTags('Records')
 @Controller('records')
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
