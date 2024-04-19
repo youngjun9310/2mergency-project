@@ -67,12 +67,12 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(groupId: number, scheduleId: number) {
-
+  async getOneSchedule(groupId: number, scheduleId: number, userId : number) {
+    console.log("user : ", userId);
     console.log("groupId : ",groupId);
     console.log("scheduleId : ",scheduleId);
     const selectUser = await this.groupMembersRepository.findOne({
-      where: { groups : { groupId } },
+      where: { groups : { groupId }, userId  },
     });
     console.log("selectUser : ",selectUser);
 
@@ -83,7 +83,7 @@ export class SchedulesService {
     // }
 
     const schedule = await this.scheduleRepository.findOne({
-      where: { groups : { groupId } },
+      where: { groups : { groupId }, userId },
     });
     console.log(scheduleId);
     console.log("schedule", schedule);

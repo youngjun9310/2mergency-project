@@ -10,14 +10,12 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
 import { MailService } from 'src/mail/mail.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from './guard/jwt.guard';
-import { RolesGuard } from './guard/roles.guard';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -85,7 +83,8 @@ export class AuthController {
 
   /** 로그아웃*/
   @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
+  @ApiBearerAuth('access-token')
   @Post('logout')
   @HttpCode(204)
   logOut(@Res({ passthrough: true }) res: Response) {
@@ -98,7 +97,8 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '가입 토큰번호 전송',
   })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
+  @ApiBearerAuth('access-token')
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res) {
     const gentoken = await this.mailService.usersendMail(email);
@@ -111,7 +111,8 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JWTAuthGuard)
+  @ApiBearerAuth('access-token')
   @Post('accept')
   async userAccept(
     @Body('email') email: string,
@@ -124,6 +125,7 @@ export class AuthController {
 
   /** 사용자 이미지업로드 */
   @ApiOperation({ summary: '사용자 이미지업로드', description: '이미지업로드' })
+  @ApiBearerAuth('access-token')
   @Post('uploadImg')
   async uploadImg() {}
 }

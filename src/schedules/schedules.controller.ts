@@ -18,10 +18,10 @@ import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JWTAuthGuard)
-@ApiTags('schedules')
+@ApiTags('Schedules')
 @Controller('groups/:groupId/schedules')
 export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
@@ -29,6 +29,7 @@ export class SchedulesController {
   // 스케쥴 생성
   // @UseGuards(memberRolesGuard)
   // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiBearerAuth('access-token')
   @Post()
   async createSchedule(
     @Body() createScheduleDto: ScheduleDto,
@@ -51,6 +52,7 @@ export class SchedulesController {
   // 스케쥴 전체 조회
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiBearerAuth('access-token')
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
     console.log(groupId);
@@ -61,6 +63,7 @@ export class SchedulesController {
   @Get('/:scheduleId')
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @ApiBearerAuth('access-token')
   async getOneSchedule(
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
@@ -69,12 +72,14 @@ export class SchedulesController {
     return await this.schedulesService.getOneSchedule(
       groupId,
       scheduleId,
+      users.userId
     );
   }
 
   // 스케쥴 수정
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiBearerAuth('access-token')
   @Patch('/:scheduleId')
   changeSchedule(
     @Param('scheduleId') scheduleId: number,
@@ -89,6 +94,7 @@ export class SchedulesController {
   // 스케쥴 삭제
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiBearerAuth('access-token')
   @Delete('/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);
