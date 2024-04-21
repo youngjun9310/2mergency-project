@@ -14,7 +14,10 @@ export class GroupsService {
     private groupMembersRepository: Repository<GroupMembers>,
   ) {}
 
-  // 그룹 생성 //
+  /** *
+   * 그룹 생성 *
+   **/
+
   async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
@@ -43,7 +46,10 @@ export class GroupsService {
     return groupCreate;
   }
 
-  // 그룹 모든 목록 조회 //
+  /** *
+   * 그룹 모든 목록 조회 *
+   **/
+
   async findAllGroups() {
     return await this.groupRepository.find();
   }
@@ -59,7 +65,10 @@ export class GroupsService {
     return groups;
   }
 
-  // 그룹 모든 수정 //
+  /** *
+   * 그룹 모든 수정 *
+   **/
+
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
@@ -78,7 +87,10 @@ export class GroupsService {
     return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
   }
 
-  // 그룹 삭제 //
+  /** *
+   * 그룹 삭제 *
+   **/
+
   async deleteGroup(groupId: number) {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 

@@ -27,8 +27,8 @@ export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Post()
   async createSchedule(
@@ -72,7 +72,7 @@ export class SchedulesController {
     return await this.schedulesService.getOneSchedule(
       groupId,
       scheduleId,
-      users.userId
+      users.userId,
     );
   }
 
@@ -85,10 +85,7 @@ export class SchedulesController {
     @Param('scheduleId') scheduleId: number,
     @Body() changeScheduleDto: ScheduleDto,
   ) {
-    return this.schedulesService.changeSchedule(
-      changeScheduleDto,
-      scheduleId,
-    );
+    return this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
   }
 
   // 스케쥴 삭제

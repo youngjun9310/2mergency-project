@@ -16,7 +16,12 @@ import { GroupMembersService } from './group-members.service';
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { GroupMembers } from './entities/group-member.entity';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { memberRolesGuard } from './guard/members.guard';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
@@ -92,10 +97,10 @@ export class GroupMembersController {
   @Get(':groupId/members/:userId')
   @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
   @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
-  @ApiResponse({
-    status: 404,
-    description: '사용자 또는 그룹이 존재하지 않습니다.',
-  })
+  // @ApiResponse({
+  //   status: 404,
+  //   description: '사용자 또는 그룹이 존재하지 않습니다.',
+  // })
   @ApiBearerAuth('access-token')
   async isGroupMember(
     @Param('groupId', ParseIntPipe) groupId: number,

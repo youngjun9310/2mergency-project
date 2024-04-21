@@ -87,7 +87,7 @@ export class SchedulesService {
     //   };
     // }
 
-    const schedule = await this.scheduleRepository.findOne({
+    const schedule = await this.schedulesRepository.findOne({
       where: { groups: { groupId }, userId },
     });
 
