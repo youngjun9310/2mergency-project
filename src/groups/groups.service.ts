@@ -41,7 +41,7 @@ export class GroupsService {
       });
       console.log('확인: 그룹 멤버 생성:', groupMemberCreate);
     } catch (error) {
-      console.error('어어어어 에러 발생:', error);
+      // console.error('어어어어 에러 발생:', error);
     }
     return groupCreate;
   }
@@ -54,7 +54,10 @@ export class GroupsService {
     return await this.groupRepository.find();
   }
 
-  // 그룹 상세 목록 조회 //
+  /** *
+   * 그룹 상세 목록 조회 *
+   **/
+
   async findOneGroup(groupId: number): Promise<Groups | undefined> {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
@@ -74,7 +77,7 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('그룹이 존재하지 않습니다.');
+      throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
 
     await this.groupRepository.update(groupId, {
