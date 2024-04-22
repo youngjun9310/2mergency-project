@@ -18,6 +18,7 @@ export class UsersService {
   /*전체 사용자 조회(어드민용)*/
   async findAllUser() {
     return await this.userRepository.find();
+    return await this.userRepository.find();
   }
   /*사용자 조회*/
   async findUser(userId: number) {
@@ -56,6 +57,7 @@ export class UsersService {
       isOpen: srtToBoolean,
     });
     return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
+    return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
   }
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
@@ -71,9 +73,12 @@ export class UsersService {
     }
     this.userRepository.delete(userId);
     return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };
+    this.userRepository.delete(userId);
+    return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };
   }
   /*사용자 조회(이메일)*/
   async findByEmail(email: string) {
+    return await this.userRepository.findOne({ where: { email } });
     return await this.userRepository.findOne({ where: { email } });
   }
 

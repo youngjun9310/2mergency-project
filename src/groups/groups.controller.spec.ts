@@ -17,25 +17,35 @@ import { Groups } from './entities/group.entity';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 
-// Mock MembersRoleStrategy 정의
-// MembersRoleStrategy에서는 다양한 데이터베이스 조회를 통해 권한을 확인. 테스트 목적으로 이를 간소화하여 목업을 구현하기
+// MockMembersRoleStrategy 클래스는 MembersRoleStrategy의 목업/가짜 구현.
+// 이 클래스는 실제 복잡한 로직을 수행하지 않고, 단순화된 로직으로 테스트를 지원
 class MockMembersRoleStrategy {
+  // validate 메소드는 사용자 ID와 그룹 ID를 받아서,
+  // 사용자가 해당 그룹에 접근할 수 있는지 여부를 판단하는 메소드.
+  // 여기서는 실제 데이터베이스 조회나 복잡한 로직 대신 항상 true를 반환하여,
+  // 모든 접근을 허용하도록 설정.
+  // 이는 테스트 중에 특정 조건이나 상황을 제어하기 위해 사용.
   async validate(userId: number, groupId: number, context: ExecutionContext) {
     // 테스트 시나리오에 따라 다른 결과를 반환하도록 설정
     return true; // 모든 요청을 허용하도록 간단하게 설정
   }
 }
 
-// Mock memberRolesGuard 구현
-// memberRolesGuard는 MembersRoleStrategy의 결과에 기반해서 canActivate 메서드를 실행
+// MockMemberRolesGuard 클래스는 memberRolesGuard의 목업(가짜)
+// 이 가드는 API 엔드포인트에 대한 접근 제어를 담당
 class MockMemberRolesGuard implements CanActivate {
+  // MembersRoleStrategy 인스턴스를 생성자를 통해 받음.
+  // 여기서는 목업 전략을 사용하여 실제 전략의 복잡한 로직을 대체함
   constructor(private strategy: MembersRoleStrategy) {}
 
+  // canActivate 메소드는 요청이 특정 조건을 충족하는지 여부를 판단하여 접근을 허용할지 결정.
+  // 목업 구현에서는 복잡한 조건 검사 대신 항상 true를 반환하며, 테스트 중에 모든 요청을 허용하도록 설정
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // 직접 로직을 목업으로 대체
     return true; // 항상 접근 허용
   }
 }
+
 // describe 함수는 Jest에서 제공하는 테스트 스위트를 정의하는 함수.
 // test suite (테스트 스위트)는 테스트 케이스(여기서 이것은 하나의 메소드를 테스트하기 위한 테스트 메소드를 의미)들을 하나로 묶은 것 ->그리고 그것은 자신의 테스트 케이스들을 실행함
 

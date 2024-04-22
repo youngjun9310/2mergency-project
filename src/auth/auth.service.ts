@@ -8,6 +8,7 @@ import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
+import _ from 'lodash';
 @Injectable()
 export class AuthService {
   constructor(
@@ -51,6 +52,7 @@ export class AuthService {
       isOpen: srtToBoolean,
     });
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
   /*어드민 회원가입*/
@@ -88,6 +90,7 @@ export class AuthService {
       CertificationStatus: true,
     });
     return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
+    return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
   }
 
   /*로그인*/
@@ -105,8 +108,8 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
     }
 
-    if(user.CertificationStatus === false){
-      throw new UnauthorizedException("이메일 인증을 진행해주세요.");
+    if (user.CertificationStatus === false) {
+      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
     }
 
     const payload = { email, sub: user.userId };
@@ -123,7 +126,7 @@ export class AuthService {
     }
 
     if (existingEmail.CertificationStatus === true) {
-      throw new UnauthorizedException("이미 이메일 인증이 완료되었습니다.");
+      throw new UnauthorizedException('이미 이메일 인증이 완료되었습니다.');
     }
 
     const status = 'standBy';

@@ -39,19 +39,27 @@ export class UsersController {
   @Get('/')
   async findUser(@UserInfo() users: Users) {
     return await this.usersService.findUser(users.userId);
+  async findUser(@UserInfo() users: Users) {
+    return await this.usersService.findUser(users.userId);
   }
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @ApiBearerAuth('access-token')
   @Patch('')
-  async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @UserInfo() users: Users) {
+  async userUpdate(
+    @Body() updateDto: UpdateDto,
+    @UploadedFile() file: Express.Multer.File,
+    @UserInfo() users: Users,
+  ) {
     return await this.usersService.userUpdate(users.userId, updateDto, file);
   }
   /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
   @ApiBearerAuth('access-token')
   @Delete('')
+  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users) {
+    return await this.usersService.userDelete(users.userId, deleteDto.password);
   async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users) {
     return await this.usersService.userDelete(users.userId, deleteDto.password);
   }

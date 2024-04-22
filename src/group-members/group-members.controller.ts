@@ -33,6 +33,7 @@ export class GroupMembersController {
   /**
    * 그룹에 멤버 초대
    */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
@@ -79,6 +80,7 @@ export class GroupMembersController {
   /**
    * 사용자가 그룹의 멤버인지 확인
    * **/
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members/:userId')
@@ -104,6 +106,7 @@ export class GroupMembersController {
   /**
    * 특정 사용자의 그룹 멤버 정보 조회
    * */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/users/:userId')
@@ -117,6 +120,7 @@ export class GroupMembersController {
   /**
    * 해당 그룹의 멤버 전체 조회
    * */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members')
