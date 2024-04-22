@@ -2,9 +2,9 @@ name: Nestjs CI
 
 on:
   push:
-    branches: [feature/users]
+    branches: [dev]
   pull_request:
-    branches: [feature/users]
+    branches: [dev]
 
 jobs:
   # lint:
@@ -58,7 +58,8 @@ jobs:
           port: ${{ secrets.PORT }}
           script: |
             ### 프로젝트 디렉토리로 이동
-            cd /home/ubuntu/cicd/2mergency-project
+            ### cd /home/ubuntu/cicd/2mergency-project
+            cd /home/ubuntu/2mergency-project
 
             ### GitHub에서 최신 코드를 가져옴
             git pull
@@ -84,4 +85,6 @@ jobs:
             # node 관련 환경 설정 가져오기 위해 실행
             # source /home/ubuntu/.nvm/nvm.sh
             # 서버 실행 시크립트 가동! #
-            source /home/ubuntu/cicd/2mergency-project/run.sh
+            # source /home/ubuntu/cicd/2mergency-project/run.sh
+            source /home/ubuntu/2mergency-project/run.sh
+            # dev에 cicd 잘되었는지 확인
