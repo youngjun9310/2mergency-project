@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유저 상세 조회</title>
+<link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <p>userId : {{ user.userId }}</p>
+        <p>email : {{ user.email }}</p>
+        <p>password : {{ user.password }}</p>
+        <p>nickname : {{ user.nickname }}</p>
+        <p>address : {{ user.address }}</p>
+        <p>createdAt : {{ user.createdAt }}</p>
+        <p>updatedAt : {{ user.updatedAt }}</p>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

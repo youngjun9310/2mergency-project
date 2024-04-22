@@ -1,26 +1,83 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRecordDto } from './dto/create-record.dto';
-import { UpdateRecordDto } from './dto/update-record.dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { CreateRecordDto } from './dto/create_record.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Records } from './entities/record.entity';
+import { Repository } from 'typeorm';
+import { Users } from 'src/users/entities/user.entity';
 
 @Injectable()
 export class RecordsService {
-  create(createRecordDto: CreateRecordDto) {
-    return 'This action adds a new record';
+  constructor(@InjectRepository(Records) private recordsrepository : Repository<Records>,
+  @InjectRepository(Users) private readonly usersrepository : Repository<Users>){}
+
+  // 레코드 생성
+  async create(userId : number, createRecordDto: CreateRecordDto) {
+    const user = await this.usersrepository.findOne({ where : { userId } });
+    const { stackedDistance } = createRecordDto;
+    
+    if(!user){
+      throw new NotFoundException("유저가 존재하지 않습니다.");
+    }
+
+    const recoardsave = await this.recordsrepository.create({
+      userId,
+      stackedDistance
+    });
+
+    const save = await this.recordsrepository.save(recoardsave);
+
+    
+    return { statusCode : 201, message : "정상적으로 데이터가 기록되었습니다.", save };
   }
 
-  findAll() {
-    return `This action returns all records`;
+  // 레코드 모든 목록 조회
+  async findAll(userId : number) {
+    const user = await this.usersrepository.findOne({ where : { userId } })
+    const record = await this.recordsrepository.find() 
+
+    if(!userId){
+      throw new NotFoundException("유저가 존재하지 않습니다.");
+    }
+
+    if(!user){
+      throw new NotFoundException("유저가 존재하지 않습니다.");
+    }
+
+    return { statusCode : 201, message : "모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} record`;
+  // 레코드 상세 목록 조회
+  async findOne(recordId: number, userId : number) {
+    const record = await this.recordsrepository.findOne({ where : { recordId, userId } });
+
+    if(!userId){
+      throw new NotFoundException("유저가 존재하지 않습니다.");
+    }
+
+    if(!record || record.recordId === null || record.userId === null){
+      throw new NotFoundException("데이터가 존재하지 않습니다.");
+    }
+
+    if(userId !== record.userId){
+      throw new BadRequestException("조회할 수 있는 권한이 없습니다.");
+    }
+    
+    
+    return { statusCode : 201, message : "기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
-  update(id: number, updateRecordDto: UpdateRecordDto) {
-    return `This action updates a #${id} record`;
-  }
+  // 레코드 삭제
+  async remove(recordId: number, userId : number) {
+    const record = await this.recordsrepository.findOne({ where : { recordId, userId }})
 
-  remove(id: number) {
-    return `This action removes a #${id} record`;
+    if(!record){
+      throw new NotFoundException("기록 데이터가 존재하지 않습니다.");
+    }
+
+    await this.recordsrepository.remove(record);
+
+    
+
+    return { statusCode : 201, message : "기록 데이터가 삭제되었습니다." };
   }
 }

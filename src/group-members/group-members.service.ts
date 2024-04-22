@@ -20,117 +20,122 @@ export class GroupMembersService {
     private usersService: UsersService,
   ) {}
 
-  async checkGroupExists(groupId: number): Promise<boolean> {
-    const group = await this.groupRepository.findOne({
-      where: { groupId },
-    });
-    return !!group; // 불리언(Boolean) 타입을 강제로 반환
-    // group이 null 또는 undefined라면, 이는 데이터베이스에서 해당 groupId를 가진 그룹을 찾지 못했다는 것을 의미함
-    // !!group은 group 객체가 존재할 때 true를, 존재하지 않을 때는 false를 반환
-  }
-
-  async checkUserExists(userId: number): Promise<boolean> {
-    const user = await this.usersRepository.findOne({
-      where: { userId },
-    });
-    return !!user;
-  }
-
   /**
    * 그룹에 멤버 초대
    */
 
-  async inviteUserToGroup(groupId: number, userId : number, email: string): Promise<any> {
+  async inviteUserToGroup(groupId: number, userId: number, email: string) {
     // 그룹 존재 여부 확인
-
     const group = await this.groupRepository.findOne({
       where: { groupId },
     });
     if (!group) {
-      throw new NotFoundException(`그룹이 존재하지 않습니다.`);
+      throw new NotFoundException(`${groupId}그룹이 존재하지 않습니다.`);
     }
 
     // '사용자'가 있는지 확인하기
-    const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('유저가 존재하지 않습니다.');
+    const userToInvite = await this.usersService.findByEmail(email);
+    if (!userToInvite) {
+      throw new NotFoundException(`${email}유저가 존재하지 않습니다.`);
     }
 
-    // 사용자가 이미 그룹 멤버인지 여부 확인
-    const member = await this.groupMemberRepository.findOne({
+    // 사용자에게 보낸 초대가 있는지 확인
+    const existingInvite = await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
+        users: { userId: userToInvite.userId },
+        groups: { groupId },
       },
     });
 
-    if (member) {
-      throw new BadRequestException('유저는 이미 그룹에 초대되었습니다.');
+    if (existingInvite) {
+      if (existingInvite.isVailed) {
+        throw new BadRequestException(
+          `${userToInvite.userId}유저는 이미 ${groupId}그룹의 멤버입니다.`,
+        );
+      } else {
+        throw new BadRequestException(
+          `${userToInvite.userId}유저는 이미 ${groupId}그룹의 초대가 발송되었습니다.`,
+        );
+      }
     }
-    // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
-    // const uniqueNickname = `user_${user}_${Date.now()}`;
 
-    // 사용자를 바로 그룹 멤버로 추가X => 그냥 초대 상태만 설정
-    const memberInvite = this.groupMemberRepository.create({
-      users : { userId },
-      groups : { groupId },
-      // nickname: uniqueNickname, // 고유한 닉네임 사용
+    const newInvite = this.groupMemberRepository.create({
+      users: userToInvite, // users와 groups 필드에 엔티티의 인스턴스를 직접 할당하기 // { userId },
+      groups: group, // { groupId },
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
     });
-    await this.groupMemberRepository.save(memberInvite);
+    await this.groupMemberRepository.save(newInvite);
 
     return {
       success: true,
-      message: `${user.userId}유저에게 초대가 발송되었습니다.`,
+      message: `${userToInvite.userId}유저에게 초대가 발송되었습니다.`,
     };
   }
 
   /**
    * 유저가 그룹 초대 수락
    */
-  async acceptInvitation(groupId: number, userId : number, email: string): Promise<any> {
+
+  async acceptInvitation(
+    groupId: number,
+    userId: number,
+    email: string,
+  ): Promise<any> {
     // 그룹 존재 여부 확인
-    if (!(await this.checkGroupExists(groupId))) {
-      throw new NotFoundException(`그룹이 존재하지 않습니다.`);
+    const group = await this.groupRepository.findOne({ where: { groupId } });
+    if (!group) {
+      throw new NotFoundException(`${groupId}그룹이 존재하지 않습니다.`);
     }
 
     // 사용자가 있는지 이메일로 확인
     const user = await this.usersService.findByEmail(email);
-    if (!user) {
-      throw new NotFoundException('유저가 존재하지 않습니다.');
+    if (!user || user.userId !== userId) {
+      throw new NotFoundException(
+        `${user.userId}유저가가 존재하지 않거나 일치하지 않습니다.`,
+      );
     }
 
     // 사용자의 초대 상태 확인
-    const member = await this.groupMemberRepository.findOne({
+    const invite = await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
-        isInvited: true, // 초대가 발송된 상태인지 확인
+        userId: user.userId, // 직접적인 필드 사용으로 변경
+        groupId: groupId,
       },
     });
+    console.log('그룹멤버 초대: 이름을 바꿔서 구분해보자', invite);
 
-    if (!member) {
-      throw new NotFoundException('해당 유저는 초대받지 않았습니다.');
+    if (!invite) {
+      throw new NotFoundException(
+        `해당 ${user.userId} 유저는 초대받지 않았습니다.`,
+      );
+    }
+
+    // 이미 초대를 수락한 경우
+    if (invite.isVailed) {
+      return {
+        success: false,
+        message: `${user.userId} 유저는 이미 초대를 수락한 사용자입니다.`,
+      };
     }
 
     // 초대 수락 처리
-    member.isVailed = true; // 초대 수락 여부를 true로 설정
-    await this.groupMemberRepository.save(member);
+    invite.isVailed = true; // 초대 수락 여부를 true로 설정
+    await this.groupMemberRepository.save(invite);
 
     return {
       success: true,
-      message: `${user.userId}님이 초대를 수락했습니다.`,
+      message: `${user.userId}님이 초대를 수락, ${groupId} 그룹 멤버로 등록되었습니다.`,
     };
   }
 
-  // 그룹 멤버 존재 확인, 반환
+  /**
+   * 사용자가 그룹의 멤버인지 확인
+   **/
   async isGroupMember(groupId: number, userId: number): Promise<boolean> {
-    console.log(
-      `Checking membership for groupId: ${groupId}, userId: ${userId}`,
-    );
+    console.log(`확인하기 : groupId: ${groupId}, userId: ${userId}`);
     const member = await this.groupMemberRepository.findOne({
-      where: { groups : { groupId }, users : { userId } },
+      where: { groupId: groupId, userId: userId },
     });
     return !!member;
     // !!member: 논리 NOT 연산자(!)를 두 번 사용하여,
@@ -148,30 +153,21 @@ export class GroupMembersService {
   ): Promise<GroupMembers | undefined> {
     return await this.groupMemberRepository.findOne({
       where: {
-        users : { userId },
-        groups : { groupId },
+        users: { userId },
+        groups: { groupId },
       },
     });
   }
 
-  // 해당 그룹의 멤버 전체 조회
+  /**
+   * 해당 그룹의 멤버 전체 조회
+   * */
   async getAllGroupMembers(
     groupId: number,
     // userId: number,
   ): Promise<GroupMembers[]> {
-    // // 조회하는 유저의 그룹 찾기
-    // const joinedGroup = await this.groupMemberRepository.findOne({
-    //   where: { userId, groupId },
-    // });
-
-    // console.log('호로로로롤', groupId);
-    // console.log('깔껄깔', joinedGroup.groupId);
-    // if (groupId !== joinedGroup.groupId) {
-    //   throw new UnauthorizedException('낄낄낄');
-    // }
-
     const members = await this.groupMemberRepository.find({
-      where: { groups : { groupId } },
+      where: { groups: { groupId } },
       relations: ['users'],
     });
     if (!members.length) {
@@ -181,5 +177,21 @@ export class GroupMembersService {
     }
 
     return members;
+  }
+
+  /**
+   * 그룹과 사용자의 존재 및 멤버 여부를 확인
+   */
+  async isGroupMemberDetailed(
+    groupId: number,
+    userId: number,
+  ): Promise<GroupMembers | null> {
+    return this.groupMemberRepository.findOne({
+      where: {
+        groups: { groupId },
+        users: { userId },
+      },
+      relations: ['groups', 'users'],
+    });
   }
 }

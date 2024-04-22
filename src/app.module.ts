@@ -23,6 +23,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { RoleStrategy } from './auth/strategy/roles.strategy';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -76,6 +77,6 @@ const typeOrmModuleOptions = {
     NestjsFormDataModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, RoleStrategy],
 })
 export class AppModule {}
