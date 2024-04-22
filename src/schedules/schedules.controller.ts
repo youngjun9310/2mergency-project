@@ -97,12 +97,4 @@ export class SchedulesController {
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);
   }
-
-  // 스케줄 생성
-  @UseGuards(JWTAuthGuard)
-  @Get('/schedules_h/schedulescreate')
-  @Render('schedulescreate')
-  async schedulescreate(){
-    return;
-  }
 }
