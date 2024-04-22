@@ -20,7 +20,6 @@ export class SchedulesService {
     private groupMembersRepository: Repository<GroupMembers>,
   ) {}
 
-  /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
   async createSchedule(createScheduleDto: ScheduleDto, groupId: number, userId: number) {
     const { title, content, category, scheduleDate } = createScheduleDto;
@@ -30,7 +29,7 @@ export class SchedulesService {
     });
 
     if (!group) {
-      throw new HttpException('Group not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('그룹을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
     }
 
     const newSchedule = await this.schedulesRepository.save({
@@ -53,7 +52,7 @@ export class SchedulesService {
   }
 
   // 스케쥴 전체 조회
-  /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
+
   async getAllSchedule(groupId: number) {
     const allSchedule = await this.schedulesRepository.find({
       where: { groupId },
@@ -71,17 +70,11 @@ export class SchedulesService {
   // 스케쥴 상세 조회
   async getOneSchedule(groupId: number, scheduleId: number, userId: number) {
     await this.groupMembersRepository.findOne({
-      where: { groups: { groupId }, userId },
+      where: { groupId, userId },
     });
 
-    // if (userId !== selectUser.users.userId) {
-    //   throw {
-    //     status: HttpStatus.UNAUTHORIZED,
-    //   };
-    // }
-
     const schedule = await this.schedulesRepository.findOne({
-      where: { groups: { groupId }, userId },
+      where: { groupId, scheduleId },
     });
 
     if (!schedule) {
@@ -107,7 +100,7 @@ export class SchedulesService {
 
     await this.schedulesRepository.update(scheduleId, changeScheduleDto);
 
-    return schedule;
+    return { statausCode: 201, message: '스케쥴을 수정하였습니다.' };
   }
 
   // 스케쥴 삭제
@@ -124,7 +117,8 @@ export class SchedulesService {
     await this.schedulesRepository.delete({ scheduleId });
 
     return {
-      status: HttpStatus.OK,
+      statusCode: 200,
+      message: '스케쥴을 삭제했습니다.',
     };
   }
 }

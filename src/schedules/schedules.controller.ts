@@ -45,7 +45,7 @@ export class SchedulesController {
 
   // 스케쥴 전체 조회
   @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @ApiBearerAuth('access-token')
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {

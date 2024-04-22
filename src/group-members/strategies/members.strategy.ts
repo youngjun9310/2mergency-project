@@ -57,6 +57,7 @@ export class MembersRoleStrategy {
       return true; // 필요한 역할이 설정 x 라면 모든 사용자 접근을 허용.
     }
     const memberRole: MemberRole = groupMem.role;
+
     // 사용자의 역할이 필요한 역할 중 하나인지 확인합니다.
 
     return requiredRole.includes(memberRole);

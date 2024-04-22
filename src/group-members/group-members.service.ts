@@ -52,8 +52,8 @@ export class GroupMembersService {
     }
 
     const newInvite = this.groupMemberRepository.create({
-      users: userToInvite, // users와 groups 필드에 엔티티의 인스턴스를 직접 할당하기 // { userId },
-      groups: group, // { groupId },
+      users: userToInvite,
+      groups: group,
       isInvited: true,
       isVailed: false, // 초대 수락 여부는 false로 초기 설정
     });
@@ -89,7 +89,6 @@ export class GroupMembersService {
         groupId: groupId,
       },
     });
-    console.log('그룹멤버 초대: 이름을 바꿔서 구분해보자', invite);
 
     if (!invite) {
       throw new NotFoundException(`해당 ${user.userId} 유저는 초대받지 않았습니다.`);
