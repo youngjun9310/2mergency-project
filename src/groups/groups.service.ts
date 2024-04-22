@@ -38,7 +38,7 @@ export class GroupsService {
         isInvited: true,
       });
     } catch (error) {}
-    return groupCreate;
+    return { statusCode: 201, message: '그룹을 생성했습니다.' };
   }
 
   /** *
@@ -64,7 +64,7 @@ export class GroupsService {
   }
 
   /** *
-   * 그룹 모든 수정 *
+   * 그룹 수정 *
    **/
 
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
@@ -82,7 +82,7 @@ export class GroupsService {
       isPublic,
     });
 
-    return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 수정했습니다.' };
   }
 
   /** *
@@ -98,6 +98,6 @@ export class GroupsService {
 
     await this.groupRepository.delete(groupId);
 
-    return { statusCode: 201, message: '성공적으로 그룹을 삭제하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 삭제했습니다.' };
   }
 }
