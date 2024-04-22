@@ -4,9 +4,7 @@ import { ScheduleMembers } from './entities/schedule-member.entity'; // 가정: 
 import { Repository } from 'typeorm';
 import { Groups } from 'src/groups/entities/group.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
-import { GroupMembersService } from 'src/group-members/group-members.service';
 import { UsersService } from 'src/users/users.service';
-import { Users } from 'src/users/entities/user.entity';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 
 @Injectable()
@@ -14,12 +12,10 @@ export class ScheduleMembersService {
   constructor(
     @InjectRepository(ScheduleMembers)
     private scheduleMembersRepository: Repository<ScheduleMembers>,
-    private groupMembersService: GroupMembersService,
     @InjectRepository(Groups)
     private groupsRepository: Repository<Groups>,
     @InjectRepository(Schedules)
     private schedulesRepository: Repository<Schedules>,
-    @InjectRepository(Users) private usersRepository: Repository<Users>,
     private usersService: UsersService,
     @InjectRepository(GroupMembers)
     private groupMembersRepository: Repository<GroupMembers>,
@@ -30,7 +26,6 @@ export class ScheduleMembersService {
    */
 
   async registerScheduleMember(groupId: number, scheduleId: number, email: string) {
-    // 그룹이 있는지 먼저 확인하기
     const isGroup = await this.groupsRepository.findOne({ where: { groupId } });
     if (!isGroup) {
       throw new NotFoundException(`해당하는 그룹이 존재하지 않습니다.`);
@@ -39,7 +34,7 @@ export class ScheduleMembersService {
     // 사용자가 있는지 이메일로 확인
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      throw new NotFoundException(`${user.userId}유저가가 존재하지 않습니다.`);
+      throw new NotFoundException(`존재하지 않는 유저 입니다.`);
     }
 
     // 그룹 멤버인지 확인 및 초대 수락 여부 확인
@@ -52,19 +47,19 @@ export class ScheduleMembersService {
     });
 
     if (!isGroupMember) {
-      throw new BadRequestException(`${user.userId}사용자는 ${groupId}그룹의 멤버가 아닙니다.`);
+      throw new BadRequestException(`${user.nickname} 님은(는) 그룹의 멤버가 아닙니다.`);
     }
 
     if (!isGroupMember.isVailed) {
-      throw new BadRequestException(`${user.userId} 사용자는 ${groupId} 그룹의 초대를 아직 수락하지 않았습니다.`);
+      throw new BadRequestException(`${user.nickname} 님은(는) 초대를 수락하지 않았습니다.`);
     }
 
     // 스케줄이 있는지 확인하기
     const isSchedule = await this.schedulesRepository.findOne({
-      where: { scheduleId, groups: { groupId } },
+      where: { scheduleId, groupId },
     });
     if (!isSchedule) {
-      throw new NotFoundException(`그룹${groupId}에서 해당 스케줄${scheduleId}은 존재하지 않습니다.`);
+      throw new NotFoundException(`존재하지 않는 스케쥴입니다.`);
     }
 
     // 해당 스케줄에 사용자가 이미 등록되어 있는지 확인
@@ -73,7 +68,7 @@ export class ScheduleMembersService {
     });
 
     if (existingScheduleMember) {
-      throw new BadRequestException(`${user.userId}사용자는 이미 ${scheduleId}스케줄에 등록되어 있습니다.`);
+      throw new BadRequestException(`이미 등록되어 있는 멤버입니다.`);
     }
 
     // 스케줄 멤버를 생성하고 저장
@@ -85,11 +80,9 @@ export class ScheduleMembersService {
 
     await this.scheduleMembersRepository.save(newScheduleMember);
 
-    // 성공적으로 저장된다면 -> 성공 메세지 반환
     return {
-      success: true,
-      message: `${groupId}그룹의 ${scheduleId}스케줄에 ${user.userId}멤버 등록이 완료되었습니다.`,
-      newScheduleMember,
+      statusCode: 200,
+      message: `멤버 등록이 완료되었습니다.`,
     };
   }
 
@@ -97,26 +90,25 @@ export class ScheduleMembersService {
    * 스케줄에 등록된 멤버 전체 조회
    **/
   async findAllScheduleMembers(groupId: number, scheduleId: number) {
-    // 스케줄 멤버 조회
-    const schedule = await this.schedulesRepository.find({
-      where: { scheduleId, groups: { groupId } },
+    const schedule = await this.schedulesRepository.findOne({
+      where: { scheduleId, groupId },
       relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
     });
 
     if (!schedule) {
-      throw new NotFoundException(`해당 그룹 ${groupId}에서 스케줄 ${scheduleId}는 존재하지 않습니다.`);
+      throw new NotFoundException(`존재하지 않는 스케쥴입니다.`);
     }
-    return schedule;
+
+    const findAllScheduleMembers = await this.scheduleMembersRepository.find({
+      where: { groupId, scheduleId },
+    });
+    return findAllScheduleMembers;
   }
 
   /**
    * 스케줄에 등록된 멤버 상세 조회
    **/
-  async findOneScheduleMembers(
-    groupId: number,
-    scheduleId: number,
-    userId: number,
-  ): Promise<ScheduleMembers | undefined> {
+  async findOneScheduleMembers(groupId: number, scheduleId: number, userId: number) {
     // 스케줄이 해당 그룹에 속하는지 확인
     const schedule = await this.schedulesRepository.findOne({
       where: {
@@ -124,30 +116,36 @@ export class ScheduleMembersService {
         groups: { groupId },
       },
     });
-    // 스케줄 없으면 오류 반환
+
     if (!schedule) {
-      throw new NotFoundException('그룹에 해당 스케줄이 없습니다.');
+      throw new NotFoundException('존재하지 않는 스케쥴입니다.');
     }
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
-    return await this.scheduleMembersRepository.findOne({
-      where: { schedules: { scheduleId }, users: { userId } },
+    const findScheduleMember = await this.scheduleMembersRepository.findOne({
+      where: { scheduleId, userId },
     });
+
+    if (!findScheduleMember) {
+      throw new NotFoundException('존재하지 않는 멤버입니다.');
+    }
+    return findScheduleMember;
   }
 
-  async deleteScheduleMembers(groupId: number, scheduleId: number, email: string): Promise<void> {
+  // 스케쥴 멤버 삭제
+  async deleteScheduleMembers(groupId: number, scheduleId: number, email: string) {
     // 해당 스케줄이 -> 그룹에 속해있는지 확인
     const schedule = await this.schedulesRepository.findOne({
       where: { scheduleId, groups: { groupId } },
     });
 
     if (!schedule) {
-      throw new NotFoundException(`${groupId}그룹에 해당하는 ${scheduleId}스케줄이 없습니다.`);
+      throw new NotFoundException(`스케쥴이 존재하지 않습니다.`);
     }
 
     // 사용자가 있는지 이메일로 확인
     const user = await this.usersService.findByEmail(email);
     if (!user) {
-      throw new NotFoundException(`${user.userId}유저가가 존재하지 않습니다.`);
+      throw new NotFoundException(`존재하지 않는 유저입니다.`);
     }
 
     // 해당 스케줄에 등록된 멤버가 있는지 확인
@@ -156,12 +154,16 @@ export class ScheduleMembersService {
     });
 
     if (!member) {
-      throw new NotFoundException(`해당 ${user.userId}멤버는 그룹 스케줄에 등록된 유저가 아닙니다.`);
+      throw new NotFoundException(`존재하지 않는 멤버입니다.`);
     }
     // 멤버 삭제하기
     await this.scheduleMembersRepository.delete({
       scheduleId: scheduleId,
       userId: user.userId,
     });
+    return {
+      statusCode: 200,
+      message: '스케쥴 멤버 삭제에 성공했습니다.',
+    };
   }
 }

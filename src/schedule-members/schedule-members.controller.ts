@@ -7,7 +7,6 @@ import {
   Delete,
   HttpCode,
   HttpStatus,
-  NotFoundException,
   UseGuards,
   ParseIntPipe,
 } from '@nestjs/common';
@@ -27,8 +26,8 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 멤버 등록
-   
    */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':scheduleId/members')
@@ -49,7 +48,6 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 전체 조회
-   
    */
 
   @UseGuards(memberRolesGuard)
@@ -69,7 +67,6 @@ export class ScheduleMembersController {
    * 스케줄에 등록된 멤버 상세 조회
    
    */
-
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':scheduleId/members/:userId')
@@ -85,16 +82,7 @@ export class ScheduleMembersController {
     @Param('scheduleId') scheduleId: number,
     @Param('userId') userId: number,
   ) {
-    const member = await this.scheduleMembersService.findOneScheduleMembers(groupId, scheduleId, userId);
-
-    if (!member) {
-      throw new NotFoundException('해당 멤버를 찾을 수 없습니다.');
-    }
-
-    return {
-      message: '스케줄에 등록된 멤버 조회가 완료되었습니다.',
-      data: member,
-    };
+    return await this.scheduleMembersService.findOneScheduleMembers(groupId, scheduleId, userId);
   }
 
   /**
@@ -113,10 +101,6 @@ export class ScheduleMembersController {
     @Param('scheduleId') scheduleId: number,
     @Body('email') email: string,
   ) {
-    await this.scheduleMembersService.deleteScheduleMembers(groupId, scheduleId, email);
-
-    return {
-      message: '스케줄 멤버 삭제에 성공했습니다.',
-    };
+    return await this.scheduleMembersService.deleteScheduleMembers(groupId, scheduleId, email);
   }
 }
