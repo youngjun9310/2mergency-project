@@ -15,5 +15,4 @@ export class UpdateScheduleMemberDto extends PartialType(
     required: true,
   })
   email: string;
-  
 }

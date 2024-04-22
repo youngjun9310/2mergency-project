@@ -5,12 +5,15 @@ import { Schedules } from './entities/schedule.entity';
 import { Repository } from 'typeorm';
 import { Groups } from 'src/groups/entities/group.entity';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
+import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 
 @Injectable()
 export class SchedulesService {
   constructor(
+    @InjectRepository(ScheduleMembers)
+    private scheduleMembersRepository: Repository<ScheduleMembers>,
     @InjectRepository(Schedules)
-    private scheduleRepository: Repository<Schedules>,
+    private schedulesRepository: Repository<Schedules>,
     @InjectRepository(Groups)
     private groupsRepository: Repository<Groups>,
     @InjectRepository(GroupMembers)
@@ -24,21 +27,17 @@ export class SchedulesService {
     groupId: number,
     userId: number,
   ) {
-    console.log("userId :",userId);
-    console.log("groupId : ",groupId)
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     const group = await this.groupsRepository.findOne({
       where: { groupId },
     });
 
-    console.log("group : ",group)
-
     if (!group) {
       throw new HttpException('Group not found', HttpStatus.NOT_FOUND);
     }
 
-    const newSchedule = await this.scheduleRepository.save({
+    const newSchedule = await this.schedulesRepository.save({
       groupId,
       userId,
       title,
@@ -47,17 +46,24 @@ export class SchedulesService {
       scheduleDate,
     });
 
+    // 스케쥴을 등록하면 등록한 사람이 scheduleMemberRepository에 생성이 되어야한다.
+    await this.scheduleMembersRepository.save({
+      scheduleId: newSchedule.scheduleId,
+      userId,
+      groupId,
+    });
+
     return newSchedule;
   }
 
   // 스케쥴 전체 조회
   /** 클라이언트가 url에 접근하면 자동적으로 싹 보여줌... 그럼 파라미터는 없어도 되는 거 아닌가?**/
   async getAllSchedule(groupId: number) {
-    const allSchedule = await this.scheduleRepository.find({
-      where: { groups : { groupId } },
+    const allSchedule = await this.schedulesRepository.find({
+      where: { groupId },
     });
 
-    if (!allSchedule) {
+    if (allSchedule.length === 0) {
       throw {
         status: HttpStatus.NOT_FOUND,
       };
@@ -67,14 +73,13 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(groupId: number, scheduleId: number, userId : number) {
-    console.log("user : ", userId);
-    console.log("groupId : ",groupId);
-    console.log("scheduleId : ",scheduleId);
+  async getOneSchedule(groupId: number, scheduleId: number, userId: number) {
+    console.log('user : ', userId);
+    console.log('groupId : ', groupId);
+    console.log('scheduleId : ', scheduleId);
     const selectUser = await this.groupMembersRepository.findOne({
-      where: { groups : { groupId }, userId  },
+      where: { groups: { groupId }, userId },
     });
-    console.log("selectUser : ",selectUser);
 
     // if (userId !== selectUser.users.userId) {
     //   throw {
@@ -82,12 +87,9 @@ export class SchedulesService {
     //   };
     // }
 
-    const schedule = await this.scheduleRepository.findOne({
-      where: { groups : { groupId }, userId },
+    const schedule = await this.schedulesRepository.findOne({
+      where: { groups: { groupId }, userId },
     });
-    console.log(scheduleId);
-    console.log("schedule", schedule);
-    
 
     if (!schedule) {
       throw {
@@ -98,37 +100,26 @@ export class SchedulesService {
   }
 
   // 스케쥴 수정
-  async changeSchedule(
-    changeScheduleDto: ScheduleDto,
-    scheduleId: number,
-    // userId: number,
-  ) {
+  async changeSchedule(changeScheduleDto: ScheduleDto, scheduleId: number) {
     // 교체하고자 하는 스케쥴 1개를 찾아준다.
-    const schedule = await this.scheduleRepository.findOne({
+    const schedule = await this.schedulesRepository.findOne({
       where: { scheduleId },
     });
 
-    // if (!userId) {
-    //   throw {
-    //     status: HttpStatus.UNAUTHORIZED,
-    //   };
-    // }
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
       };
     }
 
-    await this.scheduleRepository.update(scheduleId, changeScheduleDto);
+    await this.schedulesRepository.update(scheduleId, changeScheduleDto);
 
-    return {
-      status: HttpStatus.OK,
-    };
+    return schedule;
   }
 
   // 스케쥴 삭제
   async deleteSchedule(scheduleId: number) {
-    const schedule = await this.scheduleRepository.findOne({
+    const schedule = await this.schedulesRepository.findOne({
       where: { scheduleId },
     });
 
@@ -137,7 +128,7 @@ export class SchedulesService {
         status: HttpStatus.NOT_FOUND,
       };
     }
-    await this.scheduleRepository.delete({ scheduleId });
+    await this.schedulesRepository.delete({ scheduleId });
 
     return {
       status: HttpStatus.OK,

@@ -1,3 +1,4 @@
+import { Invites } from 'src/auth/entities/invite.entity';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { Groups } from 'src/groups/entities/group.entity';
 import { Records } from 'src/records/entities/record.entity';
@@ -17,9 +18,8 @@ import {
   name: 'users',
 })
 export class Users {
-    
   @PrimaryGeneratedColumn()
-  userId : number;
+  userId: number;
 
   @Column({ type: 'varchar', nullable: true })
   profileImage?: string;
@@ -58,7 +58,7 @@ export class Users {
   deletedAt?: Date;
 
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
-  groupMembers : GroupMembers[];
+  groupMembers: GroupMembers[];
 
   @OneToMany(() => Records, (records) => records.users, { cascade: true })
   records: Records[];
