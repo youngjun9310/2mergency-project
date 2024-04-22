@@ -167,10 +167,10 @@
     function handleNavigationEnd() {
     isNavigationInProgress = false;
     }
-    
-    // 오류!!
-    document.getElementById('reset_button').addEventListener('click', handleNavigationEnd);
 
+    document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('reset_button').addEventListener('click', handleNavigationEnd);
+    });
 
     // (장소API) 주소 찾기
     map.addListener("touchstart", function (evt){
@@ -1260,30 +1260,31 @@ function moveMapTo(latitude, longitude) {
         </div>
         <div id="div1">
             <span>Groups</span>
-            <a href="/groups_h/groupcreate">그룹 만들기</a>
-            <a href="/groups/groupsall">그룹 모든 목록 조회</a>
+            <a href="/groups/groups_h/groupcreate">그룹 만들기</a>
+            <a href="/groups/groups_h/groupall">그룹 모든 목록 조회</a>
         </div>
         <div id="div1">
             <span>Auth</span>
-            <a href="/users_h/registerpage">회원가입 창</a>
-            <a href="/users_h/userEdit">유저 정보 수정</a>
-            <a href="/users">유저삭제</a>
-            <a href="/users_h/login">로그인</a>
+            <a href="/auth/users_h/registerpage">회원가입 창</a>
+            <a href="/auth/users_h/login">로그인</a>
             <a href="/auth/logout">로그아웃</a>
         </div>
         <div id="div1">
             <span>Users</span>
-            <a href="/users_h/usermypage">유저 회원 조회</a>
-            <a href="/users_h/alluser">유저 모든 목록 창</a>  
+            <a href="/users/users_h/usermypage">유저 회원 조회</a>
+            <a href="/users/users_h/userall">유저 모든 목록 창</a>
+            <a href="/users/users_h/userEdit">유저 정보 수정</a>
+            <a href="/users/userDelete">유저삭제</a>  
         </div>
         <div id="div1">
             <span>Schedules</span>
-            <a href="/schedules_h/schedulescreate">스케줄 생성</a>
+            <a href="/groups/:groupId/schedules/schedules_h/schedulecreate">스케줄 생성</a>
         </div>
         <div id="div1">
             <span>Records</span>
-            <a href="/records_h/recordcreate">기록 생성</a>
-            <a href="/records_h/recordsall">기록 모든 목록 조회</a>
+            <a href="/records/records_h/recordcreate">기록 생성</a>
+            <a href="/records/records_h/recordall">기록 모든 목록 조회</a>
+            <a href="/records/records_h/recordlist/:recordId">기록 상세 목록 조회</a>
         </div>
         <div id="wpList">
             <div class="__space_10_h"></div>

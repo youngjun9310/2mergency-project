@@ -10,6 +10,5 @@ import { UsersModule } from 'src/users/users.module';
   imports : [UsersModule, TypeOrmModule.forFeature([Records ,Users])],
   controllers: [RecordsController],
   providers: [RecordsService],
-  exports : [RecordsService]
 })
 export class RecordsModule {}

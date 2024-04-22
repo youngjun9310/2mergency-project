@@ -11,13 +11,12 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
-import _, { result } from 'lodash';
 import { AwsService } from 'src/aws/aws.service';
 import {
-  ENV_JWT_SECRET_KEY,
   ENV_PASSWORD_HASH_ROUNDS,
   ENV_ROLE_ADMIN_PASSWORD,
 } from 'src/const/env.keys';
+import { SignUpDto } from './dto/signup.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -32,14 +31,10 @@ export class AuthService {
 
   /*회원가입*/ //isOpen: boolean,
   async register(
-    nickname: string,
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    address: string,
-    isOpen: string,
+    signUpdto : SignUpDto,
     file: Express.Multer.File,
   ) {
+    const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
@@ -143,8 +138,8 @@ export class AuthService {
       where: { email },
     });
 
-    if (_.isNil(user)) {
-      throw new UnauthorizedException('이메일을 확인해주세요.');
+    if (!user) {
+      throw new UnauthorizedException('유저의 이메일을 확인해주세요.');
     }
 
     if (!(await compare(password, user.password))) {

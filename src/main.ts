@@ -5,7 +5,8 @@ import { setupSwagger } from './utils/swagger/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
-import * as hbs from 'hbs';
+import methodOverride from 'method-override';
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -17,6 +18,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.use(methodOverride('_method'))
   setupSwagger(app);
   app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public'));

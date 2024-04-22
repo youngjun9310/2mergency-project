@@ -39,6 +39,8 @@ export class RecordsService {
 
   // 레코드 상세 목록 조회
   async findOne(recordId: number, userId : number) {
+    console.log("recordId : ",recordId)
+    console.log("userId : ", userId)
     const record = await this.recordsrepository.findOne({ where : { recordId, userId } });
 
     if(!userId){

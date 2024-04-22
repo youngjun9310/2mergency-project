@@ -1,8 +1,10 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
+  Render,
   Res,
   UploadedFile,
   UseGuards,
@@ -34,12 +36,7 @@ export class AuthController {
     @UploadedFile() file: Express.Multer.File,
   ) {
     await this.authService.register(
-      signUpdto.nickname,
-      signUpdto.email,
-      signUpdto.password,
-      signUpdto.passwordConfirm,
-      signUpdto.address,
-      signUpdto.isOpen,
+      signUpdto,
       file,
     );
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
@@ -128,4 +125,39 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @Post('uploadImg')
   async uploadImg() {}
+
+
+  /** hbs 양식 */
+  // 회원가입 페이지
+  @Get('/users_h/registerpage')
+  @Render('registerpage')
+  async registerpage(){
+    return;
+  }
+
+  // 회원가입 로직(테스트버전)
+  @Post('/users_h/register')
+  async registers( 
+    signUpdto : SignUpDto,
+    @Body('file')file: Express.Multer.File ) {
+    const register = await this.authService.register(signUpdto, file);
+    
+    return {
+      register : register
+    };
+  }
+
+  // 유저 로그인
+  @Get('/users_h/login')
+  @Render('login')
+  async logins(){
+    return;
+  }
+
+  // 로그아웃
+  @UseGuards(JWTAuthGuard)
+  @Get('/logout')
+  async logout(){
+    return;
+  }
 }
