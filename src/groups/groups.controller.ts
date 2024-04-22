@@ -21,6 +21,9 @@ import {
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Groups')
@@ -56,6 +59,8 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({
     summary: '그룹 상세 조회 API',
     description: '특정 그룹의 상세 정보를 조회',
@@ -79,6 +84,8 @@ export class GroupsController {
   }
 
   // 그룹 수정 //
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({
     summary: '그룹 업데이트 API',
     description: '그룹의 목록을 수정합니다.',
@@ -97,6 +104,8 @@ export class GroupsController {
   }
 
   // 그룹 삭제 //
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹을 삭제합니다.' })
   @ApiResponse({
     description: '성공적으로 그룹을 삭제하였습니다.',
