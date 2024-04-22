@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Render,
   UseGuards,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
@@ -95,5 +96,14 @@ export class SchedulesController {
   @Delete('/:scheduleId')
   async deleteSchedule(@Param('scheduleId') scheduled: number) {
     return await this.schedulesService.deleteSchedule(scheduled);
+  }
+
+  /** hbs 양식 */
+  // 스케줄 생성
+  @UseGuards(JWTAuthGuard)
+  @Get('/schedules_h/schedulecreate')
+  @Render('schedulecreate')
+  async schedulescreate(){
+    return;
   }
 }

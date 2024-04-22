@@ -10,6 +10,7 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
+import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
 @Injectable()
 export class UsersService {
   constructor(
@@ -34,6 +35,7 @@ export class UsersService {
     updateDto: UpdateDto,
     file: Express.Multer.File,
   ) {
+    console.log('useredit: ');
     const { nickname, email, password, passwordConfirm, address, isOpen } =
       updateDto;
     const user = await this.userRepository.findOneBy({ userId });
@@ -45,11 +47,12 @@ export class UsersService {
         '비밀번호가 체크비밀번호와 일치하지 않습니다.',
       );
     }
+    console.log(password);
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(
       password,
-      this.configService.get<number>('PASSWORD_HASH_ROUNDS'),
+      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
     );
     return this.userRepository.update(userId, {
       nickname,

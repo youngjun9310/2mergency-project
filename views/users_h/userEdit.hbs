@@ -2,12 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width='device-width', initial-scale=1.0">
-    <title>회원가입</title>
-<link rel="stylesheet" href="/css/default.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유저 정보 수정</title>
+    <link rel="stylesheet" href="/css/default.css">
 </head>
 <body>
-    <form action="/auth/register" method="POST" enctype="multipart/form-data">
+     <form method="POST" action="/users?_method=PATCH" enctype="multipart/form-data">
     <div id="page">
         <input type="text" name="nickname" placeholder="닉네임">
         <input type="email" name="email" placeholder="이메일">
@@ -16,7 +16,7 @@
         <input type="text" name="address" placeholder="주소">
         <input type="text" name="isOpen" placeholder="오픈 여부" value="true">
         <input type="file" name="file" accept="image/*">
-        <button type="submit">가입하기</button>
+        <button type="submit">정보 수정하기</button>
     </div>
     </form>
     <a href="/">Home</a>

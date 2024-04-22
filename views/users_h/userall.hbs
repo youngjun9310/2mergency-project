@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 유저 조회</title>
+<link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <form action="/users/findAllUser" method="get">
+    {{#each user}}
+        <div id="page">
+            <p>userId : {{this.userId}}</p>
+            <p>email : {{this.email}}</p>
+            <p>password : {{this.password}}</p>
+            <p>nickname : {{this.nickname}}</p>
+            <p>address : {{this.address}}</p>
+            <p>createdAt : {{this.createdAt}}</p>
+            <p>updatedAt : {{this.updatedAt}}</p>
+        </div>
+        {{/each}}
+    </form>
+        <a href="/">Home</a>
+</body>
+</html>

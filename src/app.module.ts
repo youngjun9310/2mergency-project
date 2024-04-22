@@ -77,6 +77,6 @@ const typeOrmModuleOptions = {
     NestjsFormDataModule,
   ],
   controllers: [AppController],
-  providers: [AppService, RoleStrategy],
+  providers: [AppService],
 })
 export class AppModule {}

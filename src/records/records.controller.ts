@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Render } from '@nestjs/common';
 import { RecordsService } from './records.service';
 import { CreateRecordDto } from './dto/create_record.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -29,8 +29,8 @@ export class RecordsController {
   @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
   @Get()
-  async findAll(@UserInfo() users : Users) {
-    return await this.recordsService.findAll(users.userId);
+  async findAll() {
+    return await this.recordsService.findAll();
   }
 
   // 레코드 상세 목록 조회
@@ -49,5 +49,36 @@ export class RecordsController {
   @Delete(':recordId')
   async remove(@Param('recordId') recordId: number, @UserInfo() users : Users ) {
     return await this.recordsService.remove(recordId, users.userId);
+  }
+
+  /** hbs 양식 */
+  // 기록 생성
+  @UseGuards(JWTAuthGuard)
+  @Get('/records_h/recordcreate')
+  @Render('recordcreate')
+  async recordcreate(){
+    return;
+  }
+
+  // 기록 모든 목록 조회
+  @UseGuards(JWTAuthGuard)
+  @Get('/records_h/recordall')
+  @Render('recordall')
+  async recordsall(){
+    const records = await this.recordsService.findAll();
+    return {
+      record : records.record
+    };
+  }
+
+  // 기록 상세 목록 조회
+  @UseGuards(JWTAuthGuard)
+  @Get('/records_h/recordlist/:recordId')
+  @Render('recordlist')
+  async recordlist(@Param() recordId ,@UserInfo() users : Users){
+    const records = await this.recordsService.findOne(recordId ,users.userId);
+    return {
+      record : records
+    };
   }
 }

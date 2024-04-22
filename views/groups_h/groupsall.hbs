@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹 모든 목록</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <form action="/groups" method="get">
+    {{#each groups}}
+    <div id="page">
+        <p>groupId : {{this.groupId}}</p>        
+        <p>title : {{this.title}}</p>
+        <p>content : {{this.content}}</p>
+        <p>category : {{this.category}}</p>
+        <p>isPublic : {{this.isPublic}}</p>
+        <p>createdAt : {{this.createdAt}}</p>
+        <p>updatedAt : {{this.updatedAt}}</p>
+    </div>
+    {{/each}}
+    </form>
+    <a href="/">Home</a>
+</body>
+</html>
