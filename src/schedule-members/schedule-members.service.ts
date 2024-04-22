@@ -49,10 +49,6 @@ export class ScheduleMembersService {
         userId: user.userId,
       },
       select: ['userId', 'isVailed'],
-      // select: 데이터베이스에서 전체 엔티티를 가져오는 대신 필요한 특정 필드만을 명시적으로 선택하여 가져오기 위해 사용
-      // 즉, select 옵션을 통해 userId와 isVailed 필드만을 결과로 가져옴
-      // userId: 조회하고자 하는 그룹 멤버의 사용자 식별자<
-      // isVailed: 그룹 멤버의 초대 수락 상태를 나타내는 필드, 이 값이 true일 경우 사용자가 그룹 초대를 수락한 것
     });
 
     if (!isGroupMember) {
@@ -86,7 +82,6 @@ export class ScheduleMembersService {
       scheduleId,
       userId: user.userId,
     });
-    console.log('스멤 등록', newScheduleMember);
 
     await this.scheduleMembersRepository.save(newScheduleMember);
 
@@ -107,10 +102,6 @@ export class ScheduleMembersService {
       where: { scheduleId, groups: { groupId } },
       relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
     });
-    console.log(scheduleId);
-    console.log(groupId);
-
-    console.log('뿡빵뿡', schedule);
 
     if (!schedule) {
       throw new NotFoundException(`해당 그룹 ${groupId}에서 스케줄 ${scheduleId}는 존재하지 않습니다.`);
@@ -126,10 +117,6 @@ export class ScheduleMembersService {
     scheduleId: number,
     userId: number,
   ): Promise<ScheduleMembers | undefined> {
-    // findOneScheduleMembers 함수가 ScheduleMembers 타입의 객체 또는 undefined를 반환함
-    // '|' 기호 => 유니온 타입은 변수나 함수가 여러 타입 중 하나의 값을 가질 수 있음을 뜻함<
-    // 즉, ScheduleMembers 타입의 객체를 반환 or 해당하는 데이터가 없어 undefined를 반환할 수 있음!
-
     // 스케줄이 해당 그룹에 속하는지 확인
     const schedule = await this.schedulesRepository.findOne({
       where: {

@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  ConflictException,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -11,13 +6,9 @@ import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
-import _ from 'lodash';
 import { AwsService } from 'src/aws/aws.service';
-import {
-  ENV_JWT_SECRET_KEY,
-  ENV_PASSWORD_HASH_ROUNDS,
-  ENV_ROLE_ADMIN_PASSWORD,
-} from 'src/const/env.keys';
+import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
+import _ from 'lodash';
 @Injectable()
 export class AuthService {
   constructor(
@@ -31,44 +22,28 @@ export class AuthService {
   ) {}
 
   /*회원가입*/ //isOpen: boolean,
-  async register(
-    nickname: string,
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    address: string,
-    isOpen: string,
-    file: Express.Multer.File,
-  ) {
+  async register(signUpdto, file: Express.Multer.File) {
+    const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
     if (existingUser) {
-      throw new ConflictException(
-        '이미 해당 이메일로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
     }
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
     if (existingNickname) {
-      throw new ConflictException(
-        '이미 해당 닉네임으로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
     }
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException(
-        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
 
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
-    const hashedPassword = await hash(
-      password,
-      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
-    );
-    const user = await this.userRepository.save({
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+    await this.userRepository.save({
       nickname,
       email,
       password: hashedPassword,
@@ -76,55 +51,35 @@ export class AuthService {
       profileImage: profileImage,
       isOpen: srtToBoolean,
     });
-    return user;
+    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
   /*어드민 회원가입*/
-  async adminRegister(
-    nickname: string,
-    email: string,
-    password: string,
-    passwordConfirm: string,
-    adminPassword: string,
-    address: string,
-    file: Express.Multer.File,
-  ) {
+  async adminRegister(signUpdto, file: Express.Multer.File) {
+    const { nickname, email, password, passwordConfirm, adminPassword, address } = signUpdto;
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
     if (existingUser) {
-      throw new ConflictException(
-        '이미 해당 이메일로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
     }
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
     if (existingNickname) {
-      throw new ConflictException(
-        '이미 해당 닉네임으로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
     }
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException(
-        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
-    const adminPassKey = this.configService.get<string>(
-      ENV_ROLE_ADMIN_PASSWORD,
-    );
+    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
     if (adminPassword !== adminPassKey) {
-      throw new UnauthorizedException(
-        '어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
     }
 
     const profileImage = await this.awsService.imageUpload(file);
-    const hashedPassword = await hash(
-      password,
-      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
-    );
-    const user = await this.userRepository.save({
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+    await this.userRepository.save({
       nickname,
       email,
       password: hashedPassword,
@@ -133,7 +88,7 @@ export class AuthService {
       isAdmin: true,
       CertificationStatus: true,
     });
-    return user;
+    return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
   }
 
   /*로그인*/
@@ -180,14 +135,12 @@ export class AuthService {
     });
 
     if (!existingToken) {
-      throw new BadRequestException('인증 번호를 다시 입력 부탁드립니다.');
+      throw new BadRequestException('인증 번호를 다시 입력해주세요.');
     }
     const present = new Date();
 
     if (existingToken.expires < present) {
-      throw new BadRequestException(
-        '인증 번호가 만료되었습니다. 다시 요청 부탁드립니다.',
-      );
+      throw new BadRequestException('인증 번호가 만료되었습니다. 다시 요청해주세요.');
     }
 
     await this.invitesRepository.delete({ email });

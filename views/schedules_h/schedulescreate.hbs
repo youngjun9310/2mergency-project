@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스케줄 생성</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <form action="/groups/:groupId/schedules" method="post">
+        <input type="text" name="title" placeholder="스케줄 타이틀">
+        <input type="text" name="content" placeholder="스케줄 내용">
+        <input type="text" name="category" placeholder="스케줄 카테고리" value="walk">
+        <input type="text" name="scheduleDate" placeholder="스케줄 생성 날짜">
+        <button type="submit">스케줄 생성하기</button>
+        </form>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

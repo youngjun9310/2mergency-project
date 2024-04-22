@@ -49,7 +49,7 @@ export class SchedulesService {
       groupId,
     });
 
-    return newSchedule;
+    return { statusCode: 201, message: '스케쥴을 생성했습니다.' };
   }
 
   // 스케쥴 전체 조회
@@ -69,9 +69,9 @@ export class SchedulesService {
   }
 
   // 스케쥴 상세 조회
-  async getOneSchedule(groupId: number, scheduleId: number) {
+  async getOneSchedule(groupId: number, scheduleId: number, userId: number) {
     await this.groupMembersRepository.findOne({
-      where: { groups: { groupId } },
+      where: { groups: { groupId }, userId },
     });
 
     // if (userId !== selectUser.users.userId) {
@@ -81,7 +81,7 @@ export class SchedulesService {
     // }
 
     const schedule = await this.schedulesRepository.findOne({
-      where: { groups: { groupId }, scheduleId },
+      where: { groups: { groupId }, userId },
     });
 
     if (!schedule) {

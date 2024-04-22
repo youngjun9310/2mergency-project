@@ -14,7 +14,10 @@ export class GroupsService {
     private groupMembersRepository: Repository<GroupMembers>,
   ) {}
 
-  // 그룹 생성 //
+  /** *
+   * 그룹 생성 *
+   **/
+
   async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
@@ -34,18 +37,22 @@ export class GroupsService {
         isVailed: true,
         isInvited: true,
       });
-    } catch (error) {
-      console.error('에러 발생:', error);
-    }
+    } catch (error) {}
     return groupCreate;
   }
 
-  // 그룹 모든 목록 조회 //
+  /** *
+   * 그룹 모든 목록 조회 *
+   **/
+
   async findAllGroups() {
     return await this.groupRepository.find();
   }
 
-  // 그룹 상세 목록 조회 //
+  /** *
+   * 그룹 상세 목록 조회 *
+   **/
+
   async findOneGroup(groupId: number): Promise<Groups | undefined> {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
@@ -56,13 +63,16 @@ export class GroupsService {
     return groups;
   }
 
-  // 그룹 모든 수정 //
+  /** *
+   * 그룹 모든 수정 *
+   **/
+
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('그룹이 존재하지 않습니다.');
+      throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
 
     await this.groupRepository.update(groupId, {
@@ -75,7 +85,10 @@ export class GroupsService {
     return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
   }
 
-  // 그룹 삭제 //
+  /** *
+   * 그룹 삭제 *
+   **/
+
   async deleteGroup(groupId: number) {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 

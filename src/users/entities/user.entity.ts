@@ -68,10 +68,6 @@ export class Users {
   })
   schedules: Schedules[];
 
-  @OneToMany(
-    () => ScheduleMembers,
-    (scheduleMembers) => scheduleMembers.users,
-    { cascade: true },
-  )
+  @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade: true })
   scheduleMembers: ScheduleMembers[];
 }

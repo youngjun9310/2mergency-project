@@ -48,7 +48,10 @@ export class MembersRoleStrategy {
     }
 
     // 현재 경로에 필요한 역할 가져오기
-    const requiredRole = this.reflector.getAllAndOverride<MemberRole[]>('memberRoles', [context.getClass(), context.getHandler()]);
+    const requiredRole = this.reflector.getAllAndOverride<MemberRole[]>('memberRoles', [
+      context.getClass(),
+      context.getHandler(),
+    ]);
 
     if (!requiredRole) {
       return true; // 필요한 역할이 설정 x 라면 모든 사용자 접근을 허용.
