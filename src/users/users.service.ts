@@ -34,6 +34,7 @@ export class UsersService {
     updateDto: UpdateDto,
     file: Express.Multer.File,
   ) {
+    console.log('useredit: ');
     const { nickname, email, password, passwordConfirm, address, isOpen } =
       updateDto;
     const user = await this.userRepository.findOneBy({ userId });

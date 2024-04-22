@@ -25,7 +25,8 @@ async function bootstrap() {
   app.setBaseViewsDir([join(__dirname, '..', 'views'),
   join(__dirname, '..', 'views', 'groups_h'),
   join(__dirname, '..', 'views', 'users_h'),
-  join(__dirname, '..', 'views', 'schedules_h')]);
+  join(__dirname, '..', 'views', 'schedules_h'),
+  join(__dirname, '..', 'views', 'records_h')]);
 
   await app.listen(3000);
   Logger.log('Swagger 주소 : http://localhost:3000/api');

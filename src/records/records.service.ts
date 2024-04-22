@@ -31,17 +31,8 @@ export class RecordsService {
   }
 
   // 레코드 모든 목록 조회
-  async findAll(userId : number) {
-    const user = await this.usersrepository.findOne({ where : { userId } })
+  async findAll() {
     const record = await this.recordsrepository.find() 
-
-    if(!userId){
-      throw new NotFoundException("유저가 존재하지 않습니다.");
-    }
-
-    if(!user){
-      throw new NotFoundException("유저가 존재하지 않습니다.");
-    }
 
     return { statusCode : 201, message : "모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }

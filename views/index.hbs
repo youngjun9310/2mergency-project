@@ -52,6 +52,7 @@
         map : map
     });
     var tData = new Tmapv2.extension.TData();
+    var isNavigationInProgress = false;
         
         if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
@@ -159,12 +160,28 @@
         return deg * (Math.PI/180);
     }
 
+    function handleNavigationStart() {
+    isNavigationInProgress = true;
+    }
+    
+    function handleNavigationEnd() {
+    isNavigationInProgress = false;
+    }
+    
+    // 오류!!
+    document.getElementById('reset_button').addEventListener('click', handleNavigationEnd);
+
+
     // (장소API) 주소 찾기
     map.addListener("touchstart", function (evt){
-        mapload(evt);
+        if(isNavigationInProgress === false){
+            mapload(evt);
+        }
     });
     map.addListener("click", function (evt){
-        mapload(evt);
+        if(isNavigationInProgress === false){
+            mapload(evt);
+        }
     });
         function mapload(evt){
         var mapLatLng = evt.latLng;
@@ -737,7 +754,6 @@
             };
             var params = {
                 onComplete: function (result) {
-                    console.log(result);
                     var resultData = result._responseData.features;
                     //결과 출력
                     var appendHtml = `
@@ -994,6 +1010,7 @@
     
     // (경로API공통) 지도위의 경로 안내 효과 다시그림
     function routesRedrawMap() {
+        handleNavigationStart();
             drawMode = "apiRoutesPedestrian";
             routesPedestrian();
         $("#apiResult").find('._route_item_type').removeClass('__color_blue');
@@ -1001,6 +1018,7 @@
     }
 
     function routesRedrawMap2() {
+        handleNavigationStart();
             drawMode = "apiRoutesPedestrian";
             routesPedestrian2();
         $("#apiResult").find('._route_item_type').removeClass('__color_blue');
@@ -1237,17 +1255,21 @@ function moveMapTo(latitude, longitude) {
                         <button onclick="apiSearchRoutes();" >경로 검색</button>
                     </div>
                     <div class="_btn_action _btn_action-search __color_grey" id="remove_button">
-                        <button onclick="reset();">초기화</button>
+                        <button id="reset_button" onclick="reset();">초기화</button>
                     </div>
         </div>
         <div id="div1">
             <span>Groups</span>
             <a href="/groups_h/groupcreate">그룹 만들기</a>
+            <a href="/groups/groupsall">그룹 모든 목록 조회</a>
         </div>
         <div id="div1">
             <span>Auth</span>
             <a href="/users_h/registerpage">회원가입 창</a>
+            <a href="/users_h/userEdit">유저 정보 수정</a>
+            <a href="/users">유저삭제</a>
             <a href="/users_h/login">로그인</a>
+            <a href="/auth/logout">로그아웃</a>
         </div>
         <div id="div1">
             <span>Users</span>
@@ -1257,7 +1279,11 @@ function moveMapTo(latitude, longitude) {
         <div id="div1">
             <span>Schedules</span>
             <a href="/schedules_h/schedulescreate">스케줄 생성</a>
-
+        </div>
+        <div id="div1">
+            <span>Records</span>
+            <a href="/records_h/recordcreate">기록 생성</a>
+            <a href="/records_h/recordsall">기록 모든 목록 조회</a>
         </div>
         <div id="wpList">
             <div class="__space_10_h"></div>

@@ -16,5 +16,6 @@ import { Users } from 'src/users/entities/user.entity';
   ],
   controllers: [GroupsController],
   providers: [GroupsService],
+  exports : [GroupsService]
 })
 export class GroupsModule {}

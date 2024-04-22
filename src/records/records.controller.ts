@@ -29,8 +29,8 @@ export class RecordsController {
   @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
   @Get()
-  async findAll(@UserInfo() users : Users) {
-    return await this.recordsService.findAll(users.userId);
+  async findAll() {
+    return await this.recordsService.findAll();
   }
 
   // 레코드 상세 목록 조회

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>기록 모든 목록</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <form action="/records" method="get">
+    {{#each record}}
+        <div id="page">
+            <p>userId : {{this.userId}}</p>
+            <p>recordId : {{this.recordId}}</p>
+            <p>stackedDistance : {{this.stackedDistance}}</p>
+        </div>
+    {{/each}}
+    </form>
+        <a href="/">Home</a>
+</body>
+</html>
