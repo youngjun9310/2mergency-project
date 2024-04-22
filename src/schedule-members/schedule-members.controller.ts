@@ -27,7 +27,7 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 멤버 등록
-   * @returns
+   
    */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
@@ -49,7 +49,7 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 전체 조회
-   * @returns
+   
    */
 
   @UseGuards(memberRolesGuard)
@@ -67,7 +67,7 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 상세 조회
-   * @returns
+   
    */
 
   @UseGuards(memberRolesGuard)
@@ -99,7 +99,7 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 삭제
-   * @returns
+   
    */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
