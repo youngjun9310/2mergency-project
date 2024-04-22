@@ -46,7 +46,6 @@ The above copyright notice and this permission notice shall be included in all c
     <!-- CSS Just for demo purpose, don't include it in your project -->
     <link href="../../assets/css/demo.css" rel="stylesheet" />
   </head>
-
   <body>
     <div class="wrapper">
       <div
@@ -56,12 +55,8 @@ The above copyright notice and this permission notice shall be included in all c
       >
         <div class="sidebar-wrapper">
           <div class="logo">
-            <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-            </a>
-            <a
-              href="http://www.creative-tim.com"
-              class="simple-text logo-normal"
-            >
+            <a href="../dashboard.html" class="simple-text logo-mini"> </a>
+            <a href="../dashboard.html" class="simple-text logo-normal">
               2mergency
             </a>
           </div>
@@ -100,17 +95,12 @@ The above copyright notice and this permission notice shall be included in all c
               <div class="collapse" id="componentsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="../components/buttons.html">
-                      <span class="sidebar-normal">예정된운동</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="../maps/fullscreen.html">
                       <span class="sidebar-normal">운동경로탐색</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../components/panels.html">
+                    <a class="nav-link" href="../maps/fullscreen.html">
                       <span class="sidebar-normal">랜덤경로추천받기</span>
                     </a>
                   </li>
@@ -128,22 +118,17 @@ The above copyright notice and this permission notice shall be included in all c
               <div class="collapse" id="formsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="../forms/regular.html">
+                    <a class="nav-link" href="../tables/regular.html">
                       <span class="sidebar-normal">가입한그룹목록</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../forms/extended.html">
+                    <a class="nav-link" href="../group-calendar.html">
                       <span class="sidebar-normal">그룹스케줄</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../forms/validation.html">
-                      <span class="sidebar-normal">그룹생성</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="../forms/wizard.html">
+                    <a class="nav-link" href="../tables/datatables.net.html">
                       <span class="sidebar-normal">초대하기</span>
                     </a>
                   </li>
@@ -166,28 +151,22 @@ The above copyright notice and this permission notice shall be included in all c
               <div class="collapse" id="tablesExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="../tables/regular.html">
+                    <a class="nav-link" href="../tables/schedule-list.html">
                       <span class="sidebar-normal">스케줄목록</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="../tables/extended.html">
+                    <a class="nav-link" href="../forms/schedule-create.html">
                       <span class="sidebar-normal">스케줄생성</span>
                     </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="../calendar.html">
-                      <span class="sidebar-normal">일정조회</span>
+                      <span class="sidebar-normal">스케줄달력보기</span>
                     </a>
                   </li>
                 </ul>
               </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="../charts.html">
-                <i class="nc-icon nc-chart-bar-32"></i>
-                <p>활동분석</p>
-              </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
@@ -200,13 +179,8 @@ The above copyright notice and this permission notice shall be included in all c
               <div class="collapse" id="pagesExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="../components/panels.html">
-                      <span class="sidebar-normal">사용자조회</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="../pages/user.html">
-                      <span class="sidebar-normal">개인정보수정</span>
+                    <a class="nav-link" href="../pages/userInfo.html">
+                      <span class="sidebar-normal">프로필조회</span>
                     </a>
                   </li>
                 </ul>
@@ -235,7 +209,7 @@ The above copyright notice and this permission notice shall be included in all c
                   <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                 </button>
               </div>
-              <a class="navbar-brand" href="#pablo">사용자정보</a>
+              <a class="navbar-brand" href="#pablo"> 사용자프로필 </a>
             </div>
             <button
               class="navbar-toggler navbar-toggler-right"
@@ -294,7 +268,9 @@ The above copyright notice and this permission notice shall be included in all c
                     <span class="d-lg-none">알림</span>
                   </a>
                   <ul class="dropdown-menu">
-                    <a class="dropdown-item" href="#">신규 메시지가 왔습니다</a>
+                    <a class="dropdown-item" href="#"
+                      >신규 그룹초대가 왔습니다</a
+                    >
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -337,162 +313,213 @@ The above copyright notice and this permission notice shall be included in all c
         <!-- End Navbar -->
         <div class="content">
           <div class="container-fluid">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col-md-8 ml-auto mr-auto">
-                  <h4 class="card-title text-center">고양이님! 반갑습니다</h4>
-                  <br />
-                  <div class="nav-container">
-                    <ul
-                      class="nav nav-icons justify-content-center"
-                      role="tablist"
-                    >
-                      <li class="nav-item show active">
-                        <a
-                          class="nav-link"
-                          id="description-tab"
-                          href="#description-logo"
-                          role="tab"
-                          data-toggle="tab"
-                        >
-                          <i class="nc-icon nc-notes"></i>
-                          <br />
-                          자기소개
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a
-                          class="nav-link"
-                          id="location-tab"
-                          href="#map-logo"
-                          role="tab"
-                          data-toggle="tab"
-                        >
-                          <i class="nc-icon nc-pin-3"></i>
-                          <br />
-                          주요활동지역
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a
-                          class="nav-link"
-                          id="legal-info-tab"
-                          href="#legal-logo"
-                          role="tab"
-                          data-toggle="tab"
-                        >
-                          <i class="nc-icon nc-bank"></i>
-                          <br />
-                          운동목표
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a
-                          class="nav-link"
-                          id="help-tab"
-                          href="#help-logo"
-                          role="tab"
-                          data-toggle="tab"
-                        >
-                          <i class="nc-icon nc-support-17"></i>
-                          <br />
-                          선호운동목록
-                        </a>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="tab-content">
-                    <div
-                      class="tab-pane fade show active"
-                      id="description-logo"
-                      aria-labelledby="info-tab"
-                    >
+            <div class="section-image" data-image="../../assets/img/bg5.jpg" ;>
+              <!--   you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " -->
+              <div class="container">
+                <div class="row">
+                  <div class="col-md-8 col-sm-6">
+                    <form class="form" method="" action="">
                       <div class="card">
                         <div class="card-header">
-                          <h4 class="card-title">고양이님의 소개</h4>
-                          <p class="card-category">500자로 표현해보아요</p>
+                          <div class="card-header">
+                            <h4 class="card-title">프로필 수정</h4>
+                          </div>
                         </div>
                         <div class="card-body">
-                          <p>
-                            반갑습니다. 운동이 필요하다고 느끼던 차에 좋은 앱을
-                            소개받았습니다.
-                          </p>
-                          <p>함께 등산하며 건강한 일상을 만들어가요</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="tab-pane fade"
-                      id="map-logo"
-                      aria-labelledby="info-tab"
-                    >
-                      <div class="card">
-                        <div class="card-header">
-                          <h4 class="card-title">고양이님의 활동하시는 곳</h4>
-                          <p class="card-category">선호 지역을 알려드릴게요</p>
-                        </div>
-                        <div class="card-body">
-                          <p>서울시 한강</p>
-                          <p>강원시 강릉</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="tab-pane fade"
-                      id="legal-logo"
-                      aria-labelledby="info-tab"
-                    >
-                      <div class="card">
-                        <div class="card-header">
-                          <h4 class="card-title">고양이님의 운동목표</h4>
-                          <p class="card-category">
-                            올해 운동목표가 있으신가요
-                          </p>
-                        </div>
-                        <div class="card-body">
-                          <p>
-                            직장일을 하다보니 체중이 쉽게 늘어나네요 : 10kg 감량
-                          </p>
-                          <p>
-                            취미가 비슷한 분들과 함께 운동하기: 1년에 10회
-                            런닝뛰기
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                    <div
-                      class="tab-pane fade"
-                      id="help-logo"
-                      aria-labelledby="info-tab"
-                    >
-                      <div class="card">
-                        <div class="card-header">
-                          <h4 class="card-title">고양이님의 선호운동</h4>
-                          <p class="card-category">
-                            좋아하시는 운동을 공유해봐요
-                          </p>
-                        </div>
-                        <div class="card-body">
-                          <p>런닝 : 강가를 달리는 것을 좋아합니다</p>
-                          <p>
-                            산책 : 동네를 밤공기를 마시며 걷는 것도 좋아해요
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- end tab card-body -->
-                </div>
-                <!-- end col-md-8 -->
-              </div>
-              <!-- end row -->
-            </div>
-          </div>
+                          <div class="row">
+                            <div class="col-md-5 pr-1">
+                              <div class="form-group">
+                                <label>닉네임</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  disabled=""
+                                  placeholder="Company"
+                                  value="고양이"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-5 pr-1"></div>
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>이메일</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  disabled=""
+                                  placeholder="Home Address"
+                                  value="2mergency@gmail.com"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 pr-1">
+                              <div class="form-group">
+                                <label>이름</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Company"
+                                  value="홍길동"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6 pr-1">
+                              <div class="form-group">
+                                <label>전화번호</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Company"
+                                  value="01022233334"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>주소</label>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="Home Address"
+                                  value="서울시 영등포구 여의대로 108"
+                                />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row"></div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>자기소개 한마디</label>
+                                <textarea
+                                  rows="4"
+                                  cols="80"
+                                  class="form-control"
+                                  placeholder="Here can be your description"
+                                  value="안녕하세요! 함께 즐거운 운동을 하고 싶습니다"
+                                ></textarea>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>나를 표현하는태그</label>
+                                <div id="badge">
+                                  <input
+                                    type="text"
+                                    value="게임, 음악듣기, 와인, 그림"
+                                    data-role="tagsinput"
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label>성별</label>
+                                <div class="form-check form-check-radio">
+                                  <label class="form-check-label">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="exampleRadio"
+                                      id="exampleRadios1"
+                                      value="option1"
+                                    />
+                                    <span class="form-check-sign"></span>
+                                    여성
+                                  </label>
+                                  <label class="form-check-label">
+                                    <input
+                                      class="form-check-input"
+                                      type="radio"
+                                      name="exampleRadio"
+                                      id="exampleRadios2"
+                                      value="option2"
+                                      checked
+                                    />
+                                    <span class="form-check-sign"></span>
+                                    남성
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
 
-          
-
-                          
-                 
+                          <button
+                            type="submit"
+                            class="btn btn-info btn-fill pull-right"
+                          >
+                            저장
+                          </button>
+                          <div class="clearfix"></div>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="card card-user">
+                      <div class="card-header no-padding">
+                        <div class="card-image">
+                          <img
+                            src="../../assets/img/full-screen-image-3.jpg"
+                            alt="..."
+                          />
+                        </div>
+                      </div>
+                      <div class="card-body">
+                        <div class="author">
+                          <a href="#">
+                            <img
+                              class="avatar border-gray"
+                              src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"
+                              alt="..."
+                            />
+                            <h5 class="card-title">고양이</h5>
+                          </a>
+                          <p class="card-description">2mergency@gmail.com</p>
+                        </div>
+                        <p class="card-description text-center">
+                          반갑습니다! 함께 즐겁게 운동해요
+                          <br />
+                          런닝, 산책 모두 환영합니다
+                        </p>
+                      </div>
+                      <div class="card-footer">
+                        <hr />
+                        <div class="button-container text-center">
+                          <button
+                            href="#"
+                            class="btn btn-simple btn-link btn-icon"
+                          >
+                            <i class="fa fa-facebook-square"></i>
+                          </button>
+                          <button
+                            href="#"
+                            class="btn btn-simple btn-link btn-icon"
+                          >
+                            <i class="fa fa-twitter"></i>
+                          </button>
+                          <button
+                            href="#"
+                            class="btn btn-simple btn-link btn-icon"
+                          >
+                            <i class="fa fa-google-plus-square"></i>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
