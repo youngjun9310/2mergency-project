@@ -35,7 +35,6 @@ export class MembersRoleStrategy {
       where: { groupId: groupId },
     });
 
-    console.log('멤버스트렛지 group', group);
     if (!group) {
       return false;
     }
@@ -44,16 +43,12 @@ export class MembersRoleStrategy {
       where: { users: { userId: userId }, groups: { groupId } },
     });
 
-    console.log('멤버스트렛지', groupMem);
     if (!groupMem) {
       return false; // 조회된 멤버 정보가 없으면 접근을 거부합니다.
     }
 
     // 현재 경로에 필요한 역할 가져오기
-    const requiredRole = this.reflector.getAllAndOverride<MemberRole[]>(
-      'memberRoles',
-      [context.getClass(), context.getHandler()],
-    );
+    const requiredRole = this.reflector.getAllAndOverride<MemberRole[]>('memberRoles', [context.getClass(), context.getHandler()]);
 
     if (!requiredRole) {
       return true; // 필요한 역할이 설정 x 라면 모든 사용자 접근을 허용.

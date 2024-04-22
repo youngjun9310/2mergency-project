@@ -22,11 +22,7 @@ export class SchedulesService {
 
   /** 전체적으로 다시 수정해야 하거나 생각해봐야 하는 것: group안에 있는 스케쥴임....**/
   // 스케쥴 등록
-  async createSchedule(
-    createScheduleDto: ScheduleDto,
-    groupId: number,
-    userId: number,
-  ) {
+  async createSchedule(createScheduleDto: ScheduleDto, groupId: number, userId: number) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     const group = await this.groupsRepository.findOne({

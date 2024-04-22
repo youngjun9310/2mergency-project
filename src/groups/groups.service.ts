@@ -23,23 +23,17 @@ export class GroupsService {
       content,
       category,
     });
-
-    console.log('이거 뭔데', groupCreate.groupId);
-
-    console.log('그룹크리에이트 그룹 생성:', groupCreate);
     try {
       // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
       // const uniqueNickname = `user_${userId}_${user.nickname}`;
 
-      const groupMemberCreate = await this.groupMembersRepository.save({
-        groupId : groupCreate.groupId,
+      await this.groupMembersRepository.save({
+        groupId: groupCreate.groupId,
         userId,
         role: MemberRole.Main,
         isVailed: true,
         isInvited: true,
       });
-      console.log('그룹 서비스 그룹 생성', groupMemberCreate.userId);
-      console.log('그룹 서비스 그룹 생성:', groupMemberCreate.groupId);
     } catch (error) {
       console.error('에러 발생:', error);
     }

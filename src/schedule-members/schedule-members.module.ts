@@ -11,21 +11,17 @@ import { UsersModule } from 'src/users/users.module';
 import { AuthModule } from 'src/auth/auth.module';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 import { Users } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
+import { AwsService } from 'src/aws/aws.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      Schedules,
-      ScheduleMembers,
-      Groups,
-      GroupMembers,
-      Users,
-    ]),
+    TypeOrmModule.forFeature([Schedules, ScheduleMembers, Groups, GroupMembers, Users]),
     GroupMembersModule,
     UsersModule,
     AuthModule,
   ],
   controllers: [ScheduleMembersController],
-  providers: [ScheduleMembersService, MembersRoleStrategy],
+  providers: [ScheduleMembersService, UsersService, AwsService, MembersRoleStrategy],
 })
 export class ScheduleMembersModule {}
