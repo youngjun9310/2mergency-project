@@ -10,11 +10,11 @@
     <div id="page">
         <p>userId : {{ user.userId }}</p>
         <p>email : {{ user.email }}</p>
-        <p>password : {{ user.password }}</p>
         <p>nickname : {{ user.nickname }}</p>
         <p>address : {{ user.address }}</p>
         <p>createdAt : {{ user.createdAt }}</p>
         <p>updatedAt : {{ user.updatedAt }}</p>
+        <button onclick="window.location.href = '/users/users_h/userEdit';">회원 수정</button>
         <button onclick="window.location.href = '/users/users_h/userDelete';">회원 탈퇴</button>
     </div>
     <a href="/">Home</a>

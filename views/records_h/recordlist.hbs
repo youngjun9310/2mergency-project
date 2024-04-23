@@ -8,9 +8,13 @@
 </head>
 <body>
     <div id="page">
-        <p>userId : {{ record.userId }}</p>
-        <p>recordId : {{ record.recordId }}</p>
-        <p>stackedDistance : {{ record.stackedDistance }}</p>
+        <p>userId : {{ records.userId }}</p>
+        <p>recordId : {{ records.recordId }}</p>
+        <p>stackedDistance : {{ records.stackedDistance }}</p>
+        <form action="/records/{{ records.recordId }}?_method=DELETE" method="post"></form>
+        <button type="submit">기록삭제</button>
+        </form>
     </div>
+    <a href="/">Home</a>
 </body>
 </html>

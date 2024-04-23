@@ -32,5 +32,6 @@ import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.e
     AwsService,
     MembersRoleStrategy,
   ],
+  exports : [SchedulesService]
 })
 export class SchedulesModule {}

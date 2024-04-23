@@ -8,10 +8,13 @@ import { GroupMembersModule } from 'src/group-members/group-members.module';
 import { UsersModule } from 'src/users/users.module';
 import { Users } from 'src/users/entities/user.entity';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
+import { SchedulesService } from 'src/schedules/schedules.service';
+import { SchedulesModule } from 'src/schedules/schedules.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Groups, GroupMembers, Users]),
+    SchedulesModule,
     GroupMembersModule,
     UsersModule,
   ],

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹 상세 조회</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <p>groupId : {{ groups.groupId }}</p>
+        <p>title : {{ groups.title }}</p>
+        <p>content : {{ groups.content }}</p>
+        <p>category : {{ groups.category }}</p>
+        <p>isPublic : {{ groups.isPublic }}</p>
+        <p>createdAt : {{ groups.createdAt }}</p>
+        <p>updatedAt : {{ groups.updatedAt }}</p>
+        <button onclick="window.location.href = '/groups/{{ groups.groupId }}/groups_h/groupEdit';">그룹 수정</button>
+        <form action="/groups/{{ groups.groupId }}?_method=DELETE" method="post">
+            <button type="submit">그룹 삭제</button>
+        </form>
+        <button onclick="window.location.href = '/groups/{{ groups.groupId }}/schedules/schedules_h/schedulecreate';">스케줄 만들기</button>
+        <button onclick="window.location.href = '/groups/{{ groups.groupId }}/schedules/{{ scheduleId }}/schedules_h/schedulelist';">스케줄 조회하기</button>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

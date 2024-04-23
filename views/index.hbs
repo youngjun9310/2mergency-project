@@ -6,7 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=WriPLFWas18xUYsFCelxl1og5A9pHFRd2yf11y1U"></script>
 </head>
-<link rel="stylesheet" href="default.css">
+<link rel="stylesheet" href="/css/default.css">
 <body>
 <div id="maps">
     <div id="map_div" style="position: relative;">
@@ -1272,19 +1272,15 @@ function moveMapTo(latitude, longitude) {
         <div id="div1">
             <span>Users</span>
             <a href="/users/users_h/usermypage">유저 회원 조회</a>
-            <a href="/users/users_h/userall">유저 모든 목록 창</a>
-            <a href="/users/users_h/userEdit">유저 정보 수정</a>
-            <a href="/users/userDelete">유저삭제</a>  
+            <a href="/users/users_h/userall">유저 모든 목록 창 (어드민만 가능하게)</a>  
         </div>
         <div id="div1">
             <span>Schedules</span>
-            <a href="/groups/:groupId/schedules/schedules_h/schedulecreate">스케줄 생성</a>
         </div>
         <div id="div1">
             <span>Records</span>
             <a href="/records/records_h/recordcreate">기록 생성</a>
             <a href="/records/records_h/recordall">기록 모든 목록 조회</a>
-            <a href="/records/records_h/recordlist/:recordId">기록 상세 목록 조회</a>
         </div>
         <div id="wpList">
             <div class="__space_10_h"></div>
