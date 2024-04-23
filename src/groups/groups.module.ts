@@ -8,11 +8,10 @@ import { GroupMembersModule } from 'src/group-members/group-members.module';
 import { UsersModule } from 'src/users/users.module';
 import { Users } from 'src/users/entities/user.entity';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
-import { Schedules } from 'src/schedules/entities/schedule.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Groups, GroupMembers, Users, Schedules]),
+    TypeOrmModule.forFeature([Groups, GroupMembers, Users]),
     GroupMembersModule,
     UsersModule,
   ],

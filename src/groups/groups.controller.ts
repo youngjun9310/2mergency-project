@@ -141,14 +141,15 @@ export class GroupsController {
   @Render('grouplist')
   async grouplist(@Param('groupId') groupId : number, scheduleId : number){
     const groups = await this.groupsService.findOneGroup(groupId);
-    const schedules = await this.groupsService.getfind(scheduleId);
     return {
       groups : groups,
-      schedules : schedules.scheduleId
+      scheduleId : scheduleId
     };
   }
 
   // 그룹 수정
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/groups_h/groupEdit')
   @Render('groupEdit')
   async groupEditpage(@Param('groupId') groupId : number){

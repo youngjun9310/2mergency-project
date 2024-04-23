@@ -6,15 +6,12 @@ import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { Schedules } from 'src/schedules/entities/schedule.entity';
 @Injectable()
 export class GroupsService {
   constructor(
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
     @InjectRepository(GroupMembers)
-    private groupMembersRepository: Repository<GroupMembers>,
-    @InjectRepository(Schedules)
-    private schedulesRepository: Repository<Schedules>
+    private groupMembersRepository: Repository<GroupMembers>
   ) {}
 
   /** *
@@ -66,16 +63,6 @@ export class GroupsService {
 
     if (!groups) {
       throw new NotFoundException('그룹이 존재하지 않습니다.');
-    }
-
-    return groups;
-  }
-
-  async getfind(scheduleId : number) {
-    const groups = await this.schedulesRepository.findOne({ where: { scheduleId } });
-    
-    if(!groups){
-      throw new NotFoundException("그룹이 존재하지 않습니다.");
     }
 
     return groups;
