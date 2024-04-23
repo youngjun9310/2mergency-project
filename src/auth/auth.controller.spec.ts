@@ -5,6 +5,11 @@ import { MailService } from 'src/mail/mail.service';
 import { SignUpDto } from './dto/signup.dto';
 import { Response } from 'express';
 import { JWTAuthGuard } from './guard/jwt.guard';
+import { AuthService } from './auth.service';
+import { MailService } from 'src/mail/mail.service';
+import { SignUpDto } from './dto/signup.dto';
+import { Response } from 'express';
+import { JWTAuthGuard } from './guard/jwt.guard';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -14,7 +19,15 @@ describe('AuthController', () => {
   let mockResponse: Partial<Response>;
 
   // 각 테스트가 실행되기 전 매번 실행되는 함수입니다.
+  let authController: AuthController;
+  let authService: AuthService;
+  let mailService: MailService;
+  let mockFile: Express.Multer.File;
+  let mockResponse: Partial<Response>;
+
+  // 각 테스트가 실행되기 전 매번 실행되는 함수입니다.
   beforeEach(async () => {
+    // 테스트 모듈을 설정하고 컴파일, 이 모듈에는 테스트할 컨트롤러와 서비스가 포함된다.
     // 테스트 모듈을 설정하고 컴파일, 이 모듈에는 테스트할 컨트롤러와 서비스가 포함된다.
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController], // AuthController를 테스트 모듈에 등록

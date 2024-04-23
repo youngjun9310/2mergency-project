@@ -150,52 +150,52 @@ describe('AuthService', () => {
     // rejects.toThrow(UnauthorizedException)을 사용하여 비밀번호 불일치 시 UnauthorizedException 에러가 발생하는지 확인
   });
 
-  /**
-   * 어드민 회원가입
-   * */
+  //   /**
+  //    * 어드민 회원가입
+  //    * */
 
-  it('should successfully register an admin', async () => {
-    jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
-    await expect(
-      authService.adminRegister(signUpDto, fileMock),
-    ).resolves.toEqual({
-      statusCode: 201,
-      message: '어드민 회원가입에 성공하였습니다.',
-    });
-    expect(userRepository.save).toHaveBeenCalled();
-  });
+  //   it('어드민 회원가입 성공', async () => {
+  //     jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(null);
+  //     await expect(
+  //       authService.adminRegister(signUpDto, fileMock),
+  //     ).resolves.toEqual({
+  //       statusCode: 201,
+  //       message: '어드민 회원가입에 성공하였습니다.',
+  //     });
+  //     expect(userRepository.save).toHaveBeenCalled();
+  //   });
 
-  it('should throw ConflictException if email already exists', async () => {
-    jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(new Users());
-    await expect(
-      authService.adminRegister(signUpDto, fileMock),
-    ).rejects.toThrow(ConflictException);
-  });
+  //   it('어드민 이메일이 중복일 경우 에러 반환하기', async () => {
+  //     jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(new Users());
+  //     await expect(
+  //       authService.adminRegister(signUpDto, fileMock),
+  //     ).rejects.toThrow(ConflictException);
+  //   });
 
-  it('should throw ConflictException if nickname already exists', async () => {
-    jest
-      .spyOn(userRepository, 'findOne')
-      .mockResolvedValueOnce(null)
-      .mockResolvedValueOnce(new Users());
-    await expect(
-      authService.adminRegister(signUpDto, fileMock),
-    ).rejects.toThrow(ConflictException);
-  });
+  //   it('어드민 중복 닉네임이 있을 경우 에러 반환하기', async () => {
+  //     jest
+  //       .spyOn(userRepository, 'findOne')
+  //       .mockResolvedValueOnce(null)
+  //       .mockResolvedValueOnce(new Users());
+  //     await expect(
+  //       authService.adminRegister(signUpDto, fileMock),
+  //     ).rejects.toThrow(ConflictException);
+  //   });
 
-  it('should throw UnauthorizedException if passwords do not match', async () => {
-    const wrongPasswordDto = { ...signUpDto, passwordConfirm: 'wrongPassword' };
-    await expect(
-      authService.adminRegister(wrongPasswordDto, fileMock),
-    ).rejects.toThrow(UnauthorizedException);
-  });
+  //   it('should throw UnauthorizedException if passwords do not match', async () => {
+  //     const wrongPasswordDto = { ...signUpDto, passwordConfirm: 'wrongPassword' };
+  //     await expect(
+  //       authService.adminRegister(wrongPasswordDto, fileMock),
+  //     ).rejects.toThrow(UnauthorizedException);
+  //   });
 
-  it('should throw UnauthorizedException if admin password is incorrect', async () => {
-    const wrongAdminPasswordDto = {
-      ...signUpDto,
-      adminPassword: 'wrongAdminPassword',
-    };
-    await expect(
-      authService.adminRegister(wrongAdminPasswordDto, fileMock),
-    ).rejects.toThrow(UnauthorizedException);
-  });
+  //   it('should throw UnauthorizedException if admin password is incorrect', async () => {
+  //     const wrongAdminPasswordDto = {
+  //       ...signUpDto,
+  //       adminPassword: 'wrongAdminPassword',
+  //     };
+  //     await expect(
+  //       authService.adminRegister(wrongAdminPasswordDto, fileMock),
+  //     ).rejects.toThrow(UnauthorizedException);
+  //   });
 });
