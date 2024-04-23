@@ -135,7 +135,7 @@ export class AuthController {
     return;
   }
 
-  // 회원가입 로직(테스트버전)
+  // 회원가입 로직(테스트버전, 이미지 업로드 불가 문제)
   @Post('/users_h/register')
   async registers( 
     signUpdto : SignUpDto,
@@ -155,7 +155,6 @@ export class AuthController {
   }
 
   // 로그아웃
-  @UseGuards(JWTAuthGuard)
   @Get('/logout')
   async logout(){
     return;
