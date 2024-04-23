@@ -25,14 +25,12 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { SchedulesService } from 'src/schedules/schedules.service';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupsController {
-  constructor(private readonly groupsService: GroupsService,
-    private readonly schedulesService : SchedulesService
+  constructor(private readonly groupsService: GroupsService
   ) {}
 
   // 그룹 생성 //
@@ -138,13 +136,15 @@ export class GroupsController {
     };
   }
 
-  // 그룹 상세 목록 조회
+  // 그룹 상세 목록 조회, 스케줄 상세 조회
   @Get('/:groupId/groups_h/grouplist')
   @Render('grouplist')
-  async grouplist(@Param('groupId') groupId : number){
+  async grouplist(@Param('groupId') groupId : number, scheduleId : number){
     const groups = await this.groupsService.findOneGroup(groupId);
+    const schedules = await this.groupsService.getfind(scheduleId);
     return {
-      groups : groups
+      groups : groups,
+      schedules : schedules.scheduleId
     };
   }
 
@@ -156,17 +156,4 @@ export class GroupsController {
       groupId : groupId
     };
   }
-
-  // 그룹 상세 목록 조회
-  @Get('/groups/:groupId/schedules/:scheduleId/schedules_h/schedulelist')
-  @Render('schedulelist')
-  async schedulelist(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
-    const groups = await this.groupsService.findOneGroup(groupId);
-    const schedules = await this.schedulesService.getScheduleId(scheduleId);
-    return {
-      groups : groups,
-      schedules : schedules
-    };
-  }
-
 }

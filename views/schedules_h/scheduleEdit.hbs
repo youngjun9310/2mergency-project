@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스케줄 수정</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <form action="/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}?_method=PATCH" method="post">
+        <input type="text" name="title" placeholder="스케줄 제목">
+        <input type="text" name="content" placeholder="스케줄 내용">
+        <input type="text" name="category" placeholder="스케줄 카테고리" value="walk">
+        <input type="date" name="scheduleDate" placeholder="지정 날짜">
+        <button type="submit">스케줄 수정하기</button>
+        </form>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

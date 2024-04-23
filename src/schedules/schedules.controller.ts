@@ -28,8 +28,8 @@ export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Post()
   async createSchedule(
@@ -51,8 +51,8 @@ export class SchedulesController {
   }
 
   // 스케쥴 전체 조회
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
@@ -61,8 +61,8 @@ export class SchedulesController {
 
   // 스케쥴 상세 조회
   @Get('/:scheduleId')
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @ApiBearerAuth('access-token')
   async getOneSchedule(
     @Param('groupId') groupId: number,
@@ -105,6 +105,36 @@ export class SchedulesController {
   async schedulescreate(@Param('groupId') groupId : number){
     return {
       groupId : groupId
+    };
+  }
+
+  // 스케줄 전체 목록조회
+  @Get('/schedules_h/scheduleall')
+  @Render('scheduleall')
+  async scheduleall(@Param('groupId') groupId : number){
+    const schedules = await this.schedulesService.getAllSchedule(groupId);
+    return {
+      schedules : schedules
+    };
+  }
+
+  // 스케줄 상세 목록조회
+  @Get('/:scheduleId/schedules_h/schedulelist')
+  @Render('schedulelist')
+  async schedulelist(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
+    const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
+    return {
+      schedules : schedules
+    };
+  }
+
+  // 스케줄 수정
+  @Get('/:scheduleId/schedules_h/scheduleEdit')
+  @Render('scheduleEdit')
+  async scheduleEdit(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
+    const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
+    return {
+      schedules : schedules
     };
   }
 }

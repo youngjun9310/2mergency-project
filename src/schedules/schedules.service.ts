@@ -102,9 +102,9 @@ export class SchedulesService {
     return schedule;
   }
 
-  async getScheduleId(scheduleId : number){
+  async getScheduleId(groupId : number, scheduleId : number){
     const schedule = await this.schedulesRepository.findOne({
-      where: { scheduleId },
+      where: { groupId, scheduleId },
     });
     
     if (!schedule) {
