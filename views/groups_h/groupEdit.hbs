@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹 수정</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <form action="/groups/{{ groupId }}?_method=PATCH" method="post">
+        <input type="text" name="title" placeholder="그룹 제목">
+        <input type="text" name="content" placeholder="그룹 내용">
+        <input type="text" name="category" placeholder="카테고리" value="walk">
+        <input type="text" name="isPublic" placeholder="그룹 공개여부" value="true">
+        <button type="submit">그룹 수정하기</button>
+        </form>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

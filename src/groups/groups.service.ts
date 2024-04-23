@@ -68,6 +68,15 @@ export class GroupsService {
     return groups;
   }
 
+  async getfind(groupId: number, scheduleId : number) {
+    const groups = await this.groupRepository.findOne({ where: { groupId },
+    relations : ['scheduleId'] });
+    
+    console.log(scheduleId)
+
+    return groups;
+  }
+
   /** *
    * 그룹 모든 수정 *
    **/
@@ -75,7 +84,7 @@ export class GroupsService {
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
-
+    
     if (!groups) {
       throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }

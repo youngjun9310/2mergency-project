@@ -25,12 +25,15 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { SchedulesService } from 'src/schedules/schedules.service';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupsController {
-  constructor(private readonly groupsService: GroupsService) {}
+  constructor(private readonly groupsService: GroupsService,
+    private readonly schedulesService : SchedulesService
+  ) {}
 
   // 그룹 생성 //
   @ApiResponse({ description: '성공', status: 200 })
@@ -128,10 +131,42 @@ export class GroupsController {
   // 그룹 모든 목록 조회
   @Get('/groups_h/groupall')
   @Render('groupall')
-  async groupsall(){
+  async groupall(){
     const groups = await this.groupsService.findAllGroups();
     return {
       groups : groups
     };
   }
+
+  // 그룹 상세 목록 조회
+  @Get('/:groupId/groups_h/grouplist')
+  @Render('grouplist')
+  async grouplist(@Param('groupId') groupId : number){
+    const groups = await this.groupsService.findOneGroup(groupId);
+    return {
+      groups : groups
+    };
+  }
+
+  // 그룹 수정
+  @Get('/:groupId/groups_h/groupEdit')
+  @Render('groupEdit')
+  async groupEditpage(@Param('groupId') groupId : number){
+    return {
+      groupId : groupId
+    };
+  }
+
+  // 그룹 상세 목록 조회
+  @Get('/groups/:groupId/schedules/:scheduleId/schedules_h/schedulelist')
+  @Render('schedulelist')
+  async schedulelist(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
+    const groups = await this.groupsService.findOneGroup(groupId);
+    const schedules = await this.schedulesService.getScheduleId(scheduleId);
+    return {
+      groups : groups,
+      schedules : schedules
+    };
+  }
+
 }

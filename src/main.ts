@@ -22,8 +22,6 @@ async function bootstrap() {
   setupSwagger(app);
   app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public'));
-  app.useStaticAssets(join(__dirname, '..', 'public', 'css'));
-  app.useStaticAssets(join(__dirname, '..', 'public', 'js'));
   app.setBaseViewsDir([join(__dirname, '..', 'views'),
   join(__dirname, '..', 'views', 'groups_h'),
   join(__dirname, '..', 'views', 'users_h'),

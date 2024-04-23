@@ -78,8 +78,11 @@ export class SchedulesService {
     console.log('groupId : ', groupId);
     console.log('scheduleId : ', scheduleId);
     const selectUser = await this.groupMembersRepository.findOne({
-      where: { groups: { groupId }, userId },
+      where: { groupId, userId },
     });
+    console.log( "groupId : ", groupId);
+    console.log("userId : ",userId);
+    console.log(selectUser)
 
     // if (userId !== selectUser.users.userId) {
     //   throw {
@@ -88,14 +91,28 @@ export class SchedulesService {
     // }
 
     const schedule = await this.schedulesRepository.findOne({
-      where: { groups: { groupId }, userId },
+      where: { groupId, scheduleId },
     });
-
+    console.log(schedule)
     if (!schedule) {
       throw {
         status: HttpStatus.NOT_FOUND,
       };
     }
+    return schedule;
+  }
+
+  async getScheduleId(scheduleId : number){
+    const schedule = await this.schedulesRepository.findOne({
+      where: { scheduleId },
+    });
+    
+    if (!schedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+      };
+    }
+    
     return schedule;
   }
 

@@ -118,5 +118,17 @@ margin-left: 10px;
     text-align: center;
 }
 
+#page2{
+  box-shadow: 0px 0px 3px 0px;
+  padding: 5px;
+  text-align: center;
+  transition-duration: 0.3s;
+}
+#page2:hover{
+  background-color: lightgrey;
+}
+#page2:active{
+  background-color: lightslategray;
+}
 
 

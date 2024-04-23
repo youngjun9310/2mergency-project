@@ -28,8 +28,8 @@ export class SchedulesController {
   constructor(private readonly schedulesService: SchedulesService) {}
 
   // 스케쥴 생성
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Post()
   async createSchedule(
@@ -51,19 +51,18 @@ export class SchedulesController {
   }
 
   // 스케쥴 전체 조회
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Get()
   async getAllSchedule(@Param('groupId') groupId: number) {
-    console.log(groupId);
     return this.schedulesService.getAllSchedule(groupId);
   }
 
   // 스케쥴 상세 조회
   @Get('/:scheduleId')
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  // @UseGuards(memberRolesGuard)
+  // @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @ApiBearerAuth('access-token')
   async getOneSchedule(
     @Param('groupId') groupId: number,
@@ -94,8 +93,8 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Delete('/:scheduleId')
-  async deleteSchedule(@Param('scheduleId') scheduled: number) {
-    return await this.schedulesService.deleteSchedule(scheduled);
+  async deleteSchedule(@Param('scheduleId') scheduleId: number) {
+    return await this.schedulesService.deleteSchedule(scheduleId);
   }
 
   /** hbs 양식 */
@@ -103,7 +102,9 @@ export class SchedulesController {
   @UseGuards(JWTAuthGuard)
   @Get('/schedules_h/schedulecreate')
   @Render('schedulecreate')
-  async schedulescreate(){
-    return;
+  async schedulescreate(@Param('groupId') groupId : number){
+    return {
+      groupId : groupId
+    };
   }
 }
