@@ -8,9 +8,16 @@
 </head>
 <body>
     <div id="page">
-        <p>스케줄 진입</p>
-        <p></p>
-        <p></p>
+        <p>title : {{ schedules.title }}</p>
+        <p>content : {{ schedules.content }}</p>
+        <p>scheduleDate : {{ schedules.scheduleDate }}</p>
+        <p>createdAt : {{ schedules.createdAt }}</p>
+        <p>updatedAt : {{ schedules.updatedAt }}</p>
+        <button type="submit" onclick="window.location.href = '/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}/schedules_h/scheduleEdit';">스케줄 수정하기</button>
+    <form action="/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}?_method=DELETE" method="post">
+        <button type="submit">스케줄 삭제하기</button>
+    </form>
     </div>
+    <a href="/">Home</a>
 </body>
 </html>

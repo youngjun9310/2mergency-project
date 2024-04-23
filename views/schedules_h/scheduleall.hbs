@@ -6,17 +6,13 @@
     <title>스케줄 모든 목록</title>
     <link rel="stylesheet" href="/css/default.css">
 </head>
-<body>
-    <form action="/schedules">
-    <div id="page">
-        {{#each record}}
-        <div id="page">
-            <p>userId : {{this.userId}}</p>
-            <p>recordId : {{this.recordId}}</p>
-            <p>stackedDistance : {{this.stackedDistance}}</p>
+        {{#each schedules}}
+        <div id="page2" onclick="window.location.href = '/groups/{{ this.groupId }}/schedules/{{ this.scheduleId }}/schedules_h/schedulelist';">
+            <p>title : {{this.title}}</p>
+            <p>content : {{this.content}}</p>
+            <p>scheduleDate : {{this.scheduleDate}}</p>
         </div>
         {{/each}}
-    </div>
-    </form>
+        <a href="/">Home</a>
 </body>
 </html>

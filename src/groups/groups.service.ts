@@ -11,7 +11,7 @@ export class GroupsService {
   constructor(
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
     @InjectRepository(GroupMembers)
-    private groupMembersRepository: Repository<GroupMembers>,
+    private groupMembersRepository: Repository<GroupMembers>
   ) {}
 
   /** *
@@ -64,15 +64,6 @@ export class GroupsService {
     if (!groups) {
       throw new NotFoundException('그룹이 존재하지 않습니다.');
     }
-
-    return groups;
-  }
-
-  async getfind(groupId: number, scheduleId : number) {
-    const groups = await this.groupRepository.findOne({ where: { groupId },
-    relations : ['scheduleId'] });
-    
-    console.log(scheduleId)
 
     return groups;
   }
