@@ -1,4 +1,15 @@
-import { Controller, Get, Body, Patch, Delete, UseGuards, UploadedFile, UseInterceptors } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Body,
+  Patch,
+  Delete,
+  UseGuards,
+  UploadedFile,
+  UseInterceptors,
+  Render,
+  Post,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { RolesGuard } from '../auth/guard/roles.guard';
@@ -48,7 +59,57 @@ export class UsersController {
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
   @ApiBearerAuth('access-token')
   @Get('info')
-  async getUserInfo(@UserInfo() users: Users) {
-    return await this.usersService.findByEmail(users.email);
+  getUserInfo(@UserInfo() users: Users) {
+    return { 이메일: users.email, 닉네임: users.nickname };
+  }
+
+  /** hbs 양식 */
+  // 유저 모든 목록 조회
+  @UseGuards(JWTAuthGuard)
+  // @UseGuards(RolesGuard)
+  @Get('users_h/userall')
+  @Render('userall')
+  async findall() {
+    const users = await this.usersService.findAllUser();
+    return {
+      user: users,
+    };
+  }
+
+  // 유저 마이 정보 조회
+  @UseGuards(JWTAuthGuard)
+  @Get('/users_h/usermypage')
+  @Render('usermypage')
+  async users(@UserInfo() users: Users) {
+    const user = await this.usersService.findUser(users.userId);
+    return {
+      user: user,
+    };
+  }
+
+  // 유저 정보 수정
+  @UseGuards(JWTAuthGuard)
+  @Get('users_h/userEdit')
+  @Render('userEdit')
+  async userEditpage() {
+    return;
+  }
+
+  // 유저 정보 수정(로직 테스트, 수정이 안됨)
+  @UseGuards(JWTAuthGuard)
+  @Post('/userEdit')
+  async userEdit(@UserInfo() users: Users, updateDto: UpdateDto, @Body('file') file: Express.Multer.File) {
+    await this.usersService.userUpdate(users.userId, updateDto, file);
+    return {
+      message: '유저 정보가 업데이트 되었습니다.',
+    };
+  }
+
+  // 유저 회원 탈퇴
+  @UseGuards(JWTAuthGuard)
+  @Get('/users_h/userDelete')
+  @Render('userDelete')
+  async userDeletepage() {
+    return;
   }
 }

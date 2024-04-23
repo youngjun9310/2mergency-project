@@ -5,7 +5,8 @@ import { setupSwagger } from './utils/swagger/swagger';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
-import * as hbs from 'hbs';
+import methodOverride from 'method-override';
+
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
@@ -17,6 +18,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  app.use(methodOverride('_method'))
   setupSwagger(app);
   app.setViewEngine('hbs');
   app.useStaticAssets(join(__dirname, '..', 'public'));
@@ -25,7 +27,8 @@ async function bootstrap() {
   app.setBaseViewsDir([join(__dirname, '..', 'views'),
   join(__dirname, '..', 'views', 'groups_h'),
   join(__dirname, '..', 'views', 'users_h'),
-  join(__dirname, '..', 'views', 'schedules_h')]);
+  join(__dirname, '..', 'views', 'schedules_h'),
+  join(__dirname, '..', 'views', 'records_h')]);
 
   await app.listen(3000);
   Logger.log('Swagger 주소 : http://localhost:3000/api');

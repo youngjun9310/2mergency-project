@@ -33,6 +33,7 @@ export class UsersService {
     if (password !== passwordConfirm) {
       throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
+    console.log(password);
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));

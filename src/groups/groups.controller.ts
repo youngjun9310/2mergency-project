@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe, Render } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -41,8 +41,6 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({
     summary: '그룹 상세 조회 API',
     description: '특정 그룹의 상세 정보를 조회',
@@ -96,5 +94,23 @@ export class GroupsController {
   @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);
+  }
+
+  /** hbs 양식 */
+  // 그룹 생성
+  @Get('/groups_h/groupcreate')
+  @Render('groupcreate')
+  async groupcreate() {
+    return;
+  }
+
+  // 그룹 모든 목록 조회
+  @Get('/groups_h/groupall')
+  @Render('groupall')
+  async groupsall() {
+    const groups = await this.groupsService.findAllGroups();
+    return {
+      groups: groups,
+    };
   }
 }

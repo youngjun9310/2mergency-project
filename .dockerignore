@@ -1,5 +1,5 @@
-# /dockerignore
-Dockerfile
-.dockerignore
-node_modules
-dist
+# # /dockerignore
+# Dockerfile
+# .dockerignore
+# node_modules
+# dist

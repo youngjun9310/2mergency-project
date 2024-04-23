@@ -8,7 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
-import _ from 'lodash';
 @Injectable()
 export class AuthService {
   constructor(
@@ -98,8 +97,8 @@ export class AuthService {
       where: { email },
     });
 
-    if (_.isNil(user)) {
-      throw new UnauthorizedException('이메일을 확인해주세요.');
+    if (!user) {
+      throw new UnauthorizedException('유저의 이메일을 확인해주세요.');
     }
 
     if (!(await compare(password, user.password))) {

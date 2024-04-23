@@ -1,4 +1,15 @@
-import { Body, Controller, HttpCode, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Render,
+  Res,
+  UploadedFile,
+  UseGuards,
+  UseInterceptors,
+} from '@nestjs/common';
 import { Response } from 'express';
 import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -85,4 +96,36 @@ export class AuthController {
   @ApiBearerAuth('access-token')
   @Post('uploadImg')
   async uploadImg() {}
+
+  /** hbs 양식 */
+  // 회원가입 페이지
+  @Get('/users_h/registerpage')
+  @Render('registerpage')
+  async registerpage() {
+    return;
+  }
+
+  // 회원가입 로직(테스트버전)
+  @Post('/users_h/register')
+  async registers(signUpdto: SignUpDto, @Body('file') file: Express.Multer.File) {
+    const register = await this.authService.register(signUpdto, file);
+
+    return {
+      register: register,
+    };
+  }
+
+  // 유저 로그인
+  @Get('/users_h/login')
+  @Render('login')
+  async logins() {
+    return;
+  }
+
+  // 로그아웃
+  @UseGuards(JWTAuthGuard)
+  @Get('/logout')
+  async logout() {
+    return;
+  }
 }
