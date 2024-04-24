@@ -8,9 +8,9 @@
 </head>
         {{#each schedules}}
         <div id="page2" onclick="window.location.href = '/groups/{{ this.groupId }}/schedules/{{ this.scheduleId }}/schedules_h/schedulelist';">
-            <p>title : {{this.title}}</p>
-            <p>content : {{this.content}}</p>
-            <p>scheduleDate : {{this.scheduleDate}}</p>
+            <p>스케줄 제목 : {{this.title}}</p>
+            <p>스케줄 내용 : {{this.content}}</p>
+            <p>지정 날짜 : {{this.scheduleDate}}</p>
         </div>
         {{/each}}
         <a href="/">Home</a>

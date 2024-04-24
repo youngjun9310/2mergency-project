@@ -13,7 +13,7 @@ export class RecordsService {
   // 레코드 생성
   async create(userId : number, createRecordDto: CreateRecordDto) {
     const user = await this.usersrepository.findOne({ where : { userId } });
-    const { stackedDistance } = createRecordDto;
+    const { startTime, endTime ,stackedDistance } = createRecordDto;
     
     if(!user){
       throw new NotFoundException("유저가 존재하지 않습니다.");
@@ -21,6 +21,8 @@ export class RecordsService {
 
     const recoardsave = await this.recordsrepository.create({
       userId,
+      startTime,
+      endTime,
       stackedDistance
     });
 
@@ -31,8 +33,8 @@ export class RecordsService {
   }
 
   // 레코드 모든 목록 조회
-  async findAll() {
-    const record = await this.recordsrepository.find() 
+  async findAll(userId : number) {
+    const record = await this.recordsrepository.find({ where : { userId }});
 
     return { statusCode : 201, message : "모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }

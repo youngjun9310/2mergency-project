@@ -76,4 +76,15 @@ export class UsersService {
   async findByEmail(email: string) {
     return await this.userRepository.findOne({ where: { email } });
   }
+
+  /*사용자 조회(이메일)*/
+  async findId(userId : number) {
+    const users = await this.userRepository.findOne({ where: { userId } });
+
+    if (!users) {
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+    }
+
+    return users;
+  }
 }

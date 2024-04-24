@@ -9,8 +9,8 @@
 <body>
     {{#each groups}}
     <div id="page2" onclick="window.location.href = '/groups/{{ this.groupId }}/groups_h/grouplist';">       
-        <p>title : {{this.title}}</p>
-        <p>category : {{this.category}}</p>
+        <p>그룹 제목 : {{this.title}}</p>
+        <p>카테고리 : {{this.category}}</p>
     </div>
     {{/each}}
     <a href="/">Home</a>

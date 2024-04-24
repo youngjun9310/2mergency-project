@@ -12,7 +12,8 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 @ApiTags('Records')
 @Controller('records')
 export class RecordsController {
-  constructor(private readonly recordsService: RecordsService) {}
+  constructor(private readonly recordsService: RecordsService
+  ) {}
 
 
   // 레코드 생성
@@ -29,8 +30,8 @@ export class RecordsController {
   @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
   @Get()
-  async findAll() {
-    return await this.recordsService.findAll();
+  async findAll(@UserInfo() users : Users) {
+    return await this.recordsService.findAll(users.userId);
   }
 
   // 레코드 상세 목록 조회
@@ -62,8 +63,8 @@ export class RecordsController {
   // 기록 모든 목록 조회
   @Get('/records_h/recordall')
   @Render('recordall')
-  async recordsall(){
-    const records = await this.recordsService.findAll();
+  async recordsall(@UserInfo() users : Users){
+    const records = await this.recordsService.findAll(users.userId);
     return {
       record : records.record
     };
