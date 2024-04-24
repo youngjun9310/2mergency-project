@@ -3,8 +3,8 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
+  // HttpException,
+  // HttpStatus,
   Param,
   Patch,
   Post,
@@ -37,10 +37,6 @@ export class SchedulesController {
     @UserInfo() users: Users,
     @Param('groupId') groupId: number,
   ) {
-    if (!users) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    }
-
     return await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
   }
 

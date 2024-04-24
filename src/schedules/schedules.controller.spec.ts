@@ -91,7 +91,10 @@ describe('schedulesController', () => {
 
       expect(await controller.createSchedule(dto, user, group.groupId)).toBe(schedule);
     });
+  });
 
-    describe('');
+  // 스케쥴 전체 조회 테스트
+  describe('getAllSchedules', () => {
+    it('스케쥴 전체 조회', async () => {});
   });
 });
