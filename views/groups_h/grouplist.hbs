@@ -8,11 +8,11 @@
 </head>
 <body>
     <div id="page">
-        <p>title : {{ groups.title }}</p>
-        <p>content : {{ groups.content }}</p>
-        <p>category : {{ groups.category }}</p>
-        <p>createdAt : {{ groups.createdAt }}</p>
-        <p>updatedAt : {{ groups.updatedAt }}</p>
+        <p>그룹 제목 : {{ groups.title }}</p>
+        <p>그룹 내용 : {{ groups.content }}</p>
+        <p>카테고리 : {{ groups.category }}</p>
+        <p>생성 날짜 : {{ groups.createdAt }}</p>
+        <p>업데이트 날짜 : {{ groups.updatedAt }}</p>
         <button onclick="window.location.href = '/groups/{{ groups.groupId }}/groups_h/groupEdit';">그룹 수정</button>
         <form action="/groups/{{ groups.groupId }}?_method=DELETE" method="post">
             <button type="submit">그룹 삭제</button>

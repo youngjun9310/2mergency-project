@@ -43,7 +43,7 @@ export class GroupsService {
         isInvited: true,
       });
     } catch (error) {
-      // console.error('어어어어 에러 발생:', error);
+      console.error('어어어어 에러 발생:', error);
     }
     return groupCreate;
   }
@@ -82,11 +82,12 @@ export class GroupsService {
       throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
 
+    const isPublicBoolean = Boolean(isPublic === 'true');
     await this.groupRepository.update(groupId, {
       title,
       content,
       category,
-      isPublic,
+      isPublic : isPublicBoolean,
     });
 
     return { statusCode: 201, message: '성공적으로 그룹을 수정했습니다.' };

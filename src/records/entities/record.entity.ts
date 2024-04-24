@@ -10,6 +10,14 @@ export class Records {
     @PrimaryGeneratedColumn()
     recordId : number;
 
+    // 시작 시간
+    @Column({ type : 'time', nullable : true })
+    startTime : Date;
+
+    // 도착 시간
+    @Column({ type : 'time', nullable : true })
+    endTime : Date;
+
     @Column({ type : 'bigint', nullable : false, default : 0 })
     stackedDistance : bigint;
 

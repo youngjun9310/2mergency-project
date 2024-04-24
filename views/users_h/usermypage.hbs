@@ -8,7 +8,6 @@
 </head>
 <body>
     <div id="page">
-        <p>userId : {{ user.userId }}</p>
         <p>email : {{ user.email }}</p>
         <p>nickname : {{ user.nickname }}</p>
         <p>address : {{ user.address }}</p>
@@ -16,6 +15,10 @@
         <p>updatedAt : {{ user.updatedAt }}</p>
         <button onclick="window.location.href = '/users/users_h/userEdit';">회원 수정</button>
         <button onclick="window.location.href = '/users/users_h/userDelete';">회원 탈퇴</button>
+    </div>
+    <div id="page">
+        <button onclick="window.location.href = '/records/records_h/recordcreate';">기록 생성</button>
+        <button onclick="window.location.href = '/records/records_h/recordall';">나의 기록 보기</button>
     </div>
     <a href="/">Home</a>
 </body>
