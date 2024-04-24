@@ -44,17 +44,20 @@ export class Schedules {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type : 'int', name : 'groupId', nullable : false })
-  groupId : number
+  @Column({ type: 'int', name: 'groupId', nullable: false })
+  groupId: number;
 
   @ManyToOne(() => Users, (users) => users.schedules, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    referencedColumnName: 'userId',
+  })
   users: Users;
 
-  @Column({ type : 'int', name : 'userId', nullable : false })
-  userId : number
+  @Column({ type: 'int', name: 'userId', nullable: false })
+  userId: number;
 
   @OneToMany(
     () => ScheduleMembers,

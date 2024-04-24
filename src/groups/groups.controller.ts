@@ -1,24 +1,8 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  ParseIntPipe,
-  Render,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe, Render } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
@@ -30,18 +14,14 @@ import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
 @ApiTags('Groups')
 @Controller('groups')
 export class GroupsController {
-  constructor(private readonly groupsService: GroupsService
-  ) {}
+  constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @ApiBearerAuth('access-token')
   @Post()
-  async createGroup(
-    @Body() createGroupDto: CreateGroupDto,
-    @UserInfo() users: Users,
-  ) {
+  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users) {
     return await this.groupsService.createGroup(createGroupDto, users.userId, users);
   }
 
@@ -95,11 +75,10 @@ export class GroupsController {
     status: 201,
   })
   @ApiBearerAuth('access-token')
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Patch(':groupId')
-  async updateGroup(
-    @Param('groupId') groupId: number,
-    @Body() updateGroupDto: UpdateGroupDto,
-  ) {
+  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto) {
     return await this.groupsService.updateGroup(groupId, updateGroupDto);
   }
 
@@ -117,33 +96,32 @@ export class GroupsController {
     return await this.groupsService.deleteGroup(groupId);
   }
 
-
   /** hbs 양식 */
   // 그룹 생성
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate(){
+  async groupcreate() {
     return;
   }
 
   // 그룹 모든 목록 조회
   @Get('/groups_h/groupall')
   @Render('groupall')
-  async groupall(){
+  async groupsall() {
     const groups = await this.groupsService.findAllGroups();
     return {
-      groups : groups
+      groups: groups,
     };
   }
 
   // 그룹 상세 목록 조회, 스케줄 상세 조회
   @Get('/:groupId/groups_h/grouplist')
   @Render('grouplist')
-  async grouplist(@Param('groupId') groupId : number, scheduleId : number){
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number) {
     const groups = await this.groupsService.findOneGroup(groupId);
     return {
-      groups : groups,
-      scheduleId : scheduleId
+      groups: groups,
+      scheduleId: scheduleId,
     };
   }
 
@@ -152,9 +130,9 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/groups_h/groupEdit')
   @Render('groupEdit')
-  async groupEditpage(@Param('groupId') groupId : number){
+  async groupEditpage(@Param('groupId') groupId: number) {
     return {
-      groupId : groupId
+      groupId: groupId,
     };
   }
 }

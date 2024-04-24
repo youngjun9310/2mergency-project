@@ -5,7 +5,6 @@ import {
   Patch,
   Delete,
   UseGuards,
-  Req,
   UploadedFile,
   UseInterceptors,
   Render,
@@ -38,33 +37,23 @@ export class UsersController {
   @ApiOperation({ summary: '사용자 조회', description: '조회' })
   @ApiBearerAuth('access-token')
   @Get('/')
-  async findUser(@UserInfo() user: Users, @Req() req) {
-    const { userId } = req.user;
-    const userInfo = await this.usersService.findUser(userId);
-    return userInfo;
+  async findUser(@UserInfo() users: Users) {
+    return await this.usersService.findUser(users.userId);
   }
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @ApiBearerAuth('access-token')
   @Patch('')
-  async userUpdate(
-    @Body() updateDto: UpdateDto,
-    @UploadedFile() file: Express.Multer.File,
-    @Req() req,
-  ) {
-    const { userId } = req.user;
-    await this.usersService.userUpdate(userId, updateDto, file);
-    return;
+  async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @UserInfo() users: Users) {
+    return await this.usersService.userUpdate(users.userId, updateDto, file);
   }
   /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
   @ApiBearerAuth('access-token')
   @Delete('')
-  async userDelete(@Body() deleteDto: DeleteDto, @Req() req) {
-    const { userId } = req.user;
-    await this.usersService.userDelete(userId, deleteDto.password);
-    return;
+  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users) {
+    return await this.usersService.userDelete(users.userId, deleteDto.password);
   }
   /** 사용자 접속정보조회*/
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
@@ -82,17 +71,17 @@ export class UsersController {
   async findall() {
     const users = await this.usersService.findAllUser();
     return {
-      user : users
+      user: users,
     };
   }
 
   // 유저 마이 정보 조회
   @Get('/users_h/usermypage')
   @Render('usermypage')
-  async users( @UserInfo() users : Users ) {
+  async users(@UserInfo() users: Users) {
     const user = await this.usersService.findUser(users.userId);
     return {
-      user : user
+      user: user,
     };
   }
 
@@ -105,21 +94,17 @@ export class UsersController {
 
   // 유저 정보 수정(로직 테스트, 이미지 업로드 불가 문제)
   @Post('/userEdit')
-  async userEdit(
-    @UserInfo() users : Users,
-    updateDto : UpdateDto,
-    @Body('file')file: Express.Multer.File
-  ) {
+  async userEdit(@UserInfo() users: Users, updateDto: UpdateDto, @Body('file') file: Express.Multer.File) {
     await this.usersService.userUpdate(users.userId, updateDto, file);
     return {
-      message : "유저 정보가 업데이트 되었습니다."
+      message: '유저 정보가 업데이트 되었습니다.',
     };
   }
 
-   // 유저 회원 탈퇴
-   @Get('/users_h/userDelete')
-   @Render('userDelete')
-   async userDeletepage() {
-     return;
-   }
+  // 유저 회원 탈퇴
+  @Get('/users_h/userDelete')
+  @Render('userDelete')
+  async userDeletepage() {
+    return;
+  }
 }

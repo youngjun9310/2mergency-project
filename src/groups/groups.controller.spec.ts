@@ -24,12 +24,7 @@ import { GroupsController } from './groups.controller';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import {
-  NotFoundException,
-  HttpStatus,
-  BadRequestException,
-  ForbiddenException,
-} from '@nestjs/common';
+import { NotFoundException, HttpStatus, BadRequestException, ForbiddenException } from '@nestjs/common';
 import { Category } from 'src/types/Category.type';
 import { Users } from 'src/users/entities/user.entity';
 import { Groups } from './entities/group.entity';
@@ -147,15 +142,11 @@ describe('GroupsController', () => {
     it('필수 필드 누락으로 인한 그룹 생성 실패', async () => {
       const incompleteDto = new CreateGroupDto();
       // CreateGroupDto 인스턴스를 생성하되, 아무 필드도 설정하지 않음 -> 누락 상태 시뮬레이션 하는거임
-      jest
-        .spyOn(service, 'createGroup')
-        .mockRejectedValue(new Error('필수 필드가 누락되었습니다.'));
+      jest.spyOn(service, 'createGroup').mockRejectedValue(new Error('필수 필드가 누락되었습니다.'));
       // service의 createGroup 메서드가 호출될 때, Error를 반환하도록 설정
       // '필수 필드가 누락되었습니다.' 메시지와 함께 예외를 발생시킴
 
-      await expect(controller.createGroup(incompleteDto, user)).rejects.toThrow(
-        Error,
-      );
+      await expect(controller.createGroup(incompleteDto, user)).rejects.toThrow(Error);
       // controller의 createGroup 메서드를 호출하고, 예외가 발생하는지 확인. => 예외가 정상적으로 발생하는지를 검증하여, 필드 검증 로직의 존재를 확인
     });
 
@@ -166,14 +157,8 @@ describe('GroupsController', () => {
       dto.content = '유효하지 않은 그룹';
       dto.category = Category.walk;
 
-      jest
-        .spyOn(service, 'createGroup')
-        .mockRejectedValue(
-          new BadRequestException('입력값이 유효하지 않습니다.'),
-        );
-      await expect(controller.createGroup(dto, user)).rejects.toThrow(
-        BadRequestException,
-      );
+      jest.spyOn(service, 'createGroup').mockRejectedValue(new BadRequestException('입력값이 유효하지 않습니다.'));
+      await expect(controller.createGroup(dto, user)).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -242,14 +227,10 @@ describe('GroupsController', () => {
 
     // 권한이 부족하여 그룹 목록 조회가 실패하는 경우를 테스트하는 코드 블록을 정의
     it('권한 부족으로 인한 그룹 목록 조회 실패', async () => {
-      jest
-        .spyOn(service, 'findAllGroups')
-        .mockRejectedValue(new ForbiddenException('권한이 없습니다.'));
+      jest.spyOn(service, 'findAllGroups').mockRejectedValue(new ForbiddenException('권한이 없습니다.'));
       // controller의 findAllGroups 메서드를 호출할 때 예외가 발생하는지 확인.
       // 예외가 ForbiddenException 타입인지 검증
-      await expect(controller.findAllGroups()).rejects.toThrow(
-        ForbiddenException,
-      );
+      await expect(controller.findAllGroups()).rejects.toThrow(ForbiddenException);
     });
 
     /**
@@ -277,13 +258,9 @@ describe('GroupsController', () => {
       });
 
       it('그룹을 찾을 수 없다면 오류 보내기', async () => {
-        jest
-          .spyOn(service, 'findOneGroup')
-          .mockRejectedValue(new NotFoundException());
+        jest.spyOn(service, 'findOneGroup').mockRejectedValue(new NotFoundException());
 
-        await expect(controller.findOneGroup(1)).rejects.toThrow(
-          NotFoundException,
-        );
+        await expect(controller.findOneGroup(1)).rejects.toThrow(NotFoundException);
       });
     });
   });
@@ -329,13 +306,9 @@ describe('GroupsController', () => {
 
   describe('deleteGroup', () => {
     it('존재하지 않는 그룹 삭제 시도', async () => {
-      jest
-        .spyOn(service, 'deleteGroup')
-        .mockRejectedValue(new NotFoundException('그룹을 찾을 수 없습니다.'));
+      jest.spyOn(service, 'deleteGroup').mockRejectedValue(new NotFoundException('그룹을 찾을 수 없습니다.'));
 
-      await expect(controller.deleteGroup(999)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(controller.deleteGroup(999)).rejects.toThrow(NotFoundException);
     });
   });
 });

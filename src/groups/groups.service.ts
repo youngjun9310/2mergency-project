@@ -12,14 +12,14 @@ export class GroupsService {
   constructor(
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
     @InjectRepository(GroupMembers)
-    private groupMembersRepository: Repository<GroupMembers>
+    private groupMembersRepository: Repository<GroupMembers>,
   ) {}
 
   /** *
    * 그룹 생성 *
    **/
 
-  async createGroup(createGroupDto: CreateGroupDto, userId: number, users : Users) {
+  async createGroup(createGroupDto: CreateGroupDto, userId: number, users: Users) {
     const { title, content, category } = createGroupDto;
 
     const groupCreate = await this.groupRepository.save({
@@ -28,10 +28,9 @@ export class GroupsService {
       category,
     });
 
-    if(users.CertificationStatus === false){
-      throw new UnauthorizedException("이메일 인증을 진행해주세요.");
+    if (users.CertificationStatus === false) {
+      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
     }
-
     try {
       // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
       // const uniqueNickname = `user_${userId}_${user.nickname}`;
@@ -43,7 +42,6 @@ export class GroupsService {
         isVailed: true,
         isInvited: true,
       });
-
     } catch (error) {
       // console.error('어어어어 에러 발생:', error);
     }
@@ -73,13 +71,13 @@ export class GroupsService {
   }
 
   /** *
-   * 그룹 모든 수정 *
+   * 그룹 수정 *
    **/
 
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
     const { title, content, category, isPublic } = updateGroupDto;
     const groups = await this.groupRepository.findOne({ where: { groupId } });
-    
+
     if (!groups) {
       throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
@@ -91,7 +89,7 @@ export class GroupsService {
       isPublic,
     });
 
-    return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 수정했습니다.' };
   }
 
   /** *
@@ -107,6 +105,6 @@ export class GroupsService {
 
     await this.groupRepository.delete(groupId);
 
-    return { statusCode: 201, message: '성공적으로 그룹을 삭제하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 삭제했습니다.' };
   }
 }

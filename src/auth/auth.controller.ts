@@ -31,49 +31,24 @@ export class AuthController {
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
-  async register(
-    @Body() signUpdto: SignUpDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    await this.authService.register(
-      signUpdto,
-      file,
-    );
-    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+  async register(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
+    return await this.authService.register(signUpdto, file);
   }
 
   /** 어드민 회원가입*/
   @ApiOperation({ summary: '어드민 회원가입', description: '어드민 회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
-  async adminRegister(
-    @Body() signUpdto: SignUpDto,
-    @UploadedFile() file: Express.Multer.File,
-  ) {
-    await this.authService.adminRegister(
-      signUpdto.nickname,
-      signUpdto.email,
-      signUpdto.password,
-      signUpdto.passwordConfirm,
-      signUpdto.adminPassword,
-      signUpdto.address,
-      file,
-    );
-    return { statusCode: 201, message: '운영자 회원가입에 성공하였습니다.' };
+  async adminRegister(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
+    return await this.authService.adminRegister(signUpdto, file);
   }
 
   /** 로그인*/
   @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
   @HttpCode(204)
-  async login(
-    @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const accessToken = await this.authService.login(
-      loginDto.email,
-      loginDto.password,
-    );
+  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
+    const accessToken = await this.authService.login(loginDto.email, loginDto.password);
     res.cookie('authorization', `Bearer ${accessToken}`);
     return;
   }
@@ -111,11 +86,7 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('accept')
-  async userAccept(
-    @Body('email') email: string,
-    @Body('token') token: string,
-    @Res() res,
-  ) {
+  async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res) {
     await this.authService.userAccept(email, token);
     res.send('회원가입 이메일 인증을 완료했습니다.');
   }
@@ -126,24 +97,21 @@ export class AuthController {
   @Post('uploadImg')
   async uploadImg() {}
 
-
   /** hbs 양식 */
   // 회원가입 페이지
   @Get('/users_h/registerpage')
   @Render('registerpage')
-  async registerpage(){
+  async registerpage() {
     return;
   }
 
   // 회원가입 로직(테스트버전, 이미지 업로드 불가 문제)
   @Post('/users_h/register')
-  async registers( 
-    signUpdto : SignUpDto,
-    @Body('file')file: Express.Multer.File ) {
+  async registers(signUpdto: SignUpDto, @Body('file') file: Express.Multer.File) {
     const register = await this.authService.register(signUpdto, file);
-    
+
     return {
-      register : register
+      register: register,
     };
   }
 
@@ -164,13 +132,13 @@ export class AuthController {
   // 유저 로그인
   @Get('/users_h/login')
   @Render('login')
-  async logins(){
+  async logins() {
     return;
   }
 
   // 로그아웃
   @Get('/logout')
-  async logout(){
+  async logout() {
     return;
   }
 }

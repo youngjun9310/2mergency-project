@@ -3,8 +3,8 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
+  // HttpException,
+  // HttpStatus,
   Param,
   Patch,
   Post,
@@ -37,17 +37,7 @@ export class SchedulesController {
     @UserInfo() users: Users,
     @Param('groupId') groupId: number,
   ) {
-    if (!(users || users.userId)) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    }
-
-    const newSchedule = await this.schedulesService.createSchedule(
-      createScheduleDto,
-      groupId,
-      users.userId,
-    );
-
-    return newSchedule;
+    return await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
   }
 
   // 스케쥴 전체 조회
@@ -69,11 +59,7 @@ export class SchedulesController {
     @Param('scheduleId') scheduleId: number,
     @UserInfo() users: Users,
   ) {
-    return await this.schedulesService.getOneSchedule(
-      groupId,
-      scheduleId,
-      users.userId,
-    );
+    return await this.schedulesService.getOneSchedule(groupId, scheduleId, users.userId);
   }
 
   // 스케쥴 수정
@@ -81,10 +67,7 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
   @Patch('/:scheduleId')
-  changeSchedule(
-    @Param('scheduleId') scheduleId: number,
-    @Body() changeScheduleDto: ScheduleDto,
-  ) {
+  changeSchedule(@Param('scheduleId') scheduleId: number, @Body() changeScheduleDto: ScheduleDto) {
     return this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
   }
 
@@ -103,9 +86,9 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/schedules_h/schedulecreate')
   @Render('schedulecreate')
-  async schedulescreate(@Param('groupId') groupId : number){
+  async schedulescreate(@Param('groupId') groupId: number) {
     return {
-      groupId : groupId
+      groupId: groupId,
     };
   }
 
@@ -114,10 +97,10 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/schedules_h/scheduleall')
   @Render('scheduleall')
-  async scheduleall(@Param('groupId') groupId : number){
+  async scheduleall(@Param('groupId') groupId: number) {
     const schedules = await this.schedulesService.getAllSchedule(groupId);
     return {
-      schedules : schedules
+      schedules: schedules,
     };
   }
 
@@ -126,10 +109,10 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/:scheduleId/schedules_h/schedulelist')
   @Render('schedulelist')
-  async schedulelist(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
+  async schedulelist(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
     const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
     return {
-      schedules : schedules
+      schedules: schedules,
     };
   }
 
@@ -138,10 +121,10 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:scheduleId/schedules_h/scheduleEdit')
   @Render('scheduleEdit')
-  async scheduleEdit(@Param('groupId') groupId : number, @Param('scheduleId') scheduleId : number){
+  async scheduleEdit(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
     const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
     return {
-      schedules : schedules
+      schedules: schedules,
     };
   }
 }
