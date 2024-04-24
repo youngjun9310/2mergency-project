@@ -65,8 +65,6 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 상세 조회
-   
-   
    */
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
