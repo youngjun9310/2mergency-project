@@ -22,7 +22,7 @@ export class GroupsController {
   @ApiBearerAuth('access-token')
   @Post()
   async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users) {
-    return await this.groupsService.createGroup(createGroupDto, users.userId);
+    return await this.groupsService.createGroup(createGroupDto, users.userId, users);
   }
 
   // 그룹 모든 목록 조회 //
@@ -111,6 +111,28 @@ export class GroupsController {
     const groups = await this.groupsService.findAllGroups();
     return {
       groups: groups,
+    };
+  }
+
+  // 그룹 상세 목록 조회, 스케줄 상세 조회
+  @Get('/:groupId/groups_h/grouplist')
+  @Render('grouplist')
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number) {
+    const groups = await this.groupsService.findOneGroup(groupId);
+    return {
+      groups: groups,
+      scheduleId: scheduleId,
+    };
+  }
+
+  // 그룹 수정
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Get('/:groupId/groups_h/groupEdit')
+  @Render('groupEdit')
+  async groupEditpage(@Param('groupId') groupId: number) {
+    return {
+      groupId: groupId,
     };
   }
 }

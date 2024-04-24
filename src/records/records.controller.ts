@@ -53,7 +53,6 @@ export class RecordsController {
 
   /** hbs 양식 */
   // 기록 생성
-  @UseGuards(JWTAuthGuard)
   @Get('/records_h/recordcreate')
   @Render('recordcreate')
   async recordcreate(){
@@ -61,7 +60,6 @@ export class RecordsController {
   }
 
   // 기록 모든 목록 조회
-  @UseGuards(JWTAuthGuard)
   @Get('/records_h/recordall')
   @Render('recordall')
   async recordsall(){
@@ -72,13 +70,12 @@ export class RecordsController {
   }
 
   // 기록 상세 목록 조회
-  @UseGuards(JWTAuthGuard)
-  @Get('/records_h/recordlist/:recordId')
+  @Get('/:recordId/records_h/recordlist')
   @Render('recordlist')
-  async recordlist(@Param() recordId ,@UserInfo() users : Users){
-    const records = await this.recordsService.findOne(recordId ,users.userId);
+  async recordlist(@Param('recordId') recordId : number, @UserInfo() users : Users){
+    const record = await this.recordsService.findOne(recordId, users.userId);
     return {
-      record : records
+      records : record.record
     };
   }
 }

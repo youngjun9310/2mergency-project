@@ -28,16 +28,16 @@ export class MailService {
     try{
       const genToken = await this.generateRandomToken(111111,999999);
       const host = this.configService.get<string>(ENV_MAILER_HOST)
-      console.log('genToken', genToken);
       const sendOption : SendOption = {
         from: this.configService.get<string>(ENV_MAILER_EMAIL),
         to: email,
-        subject: `[${host}]인증 토큰 발송`,
+        subject: "인증 토큰 발송",
         html: `<p>아래의 인증 토큰를 입력해주세요 !</p>
         <p>인증토큰 : ${genToken.token} </p>
         <p>This link will expire on ${genToken.expires}.</p>`
       };
-      const result = await this.transporter.sendMail(sendOption);
+
+      await this.transporter.sendMail(sendOption);
       console.log('가입 토큰이 전송되었습니다');
 
       return genToken ;

@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=\, initial-scale=1.0">
+    <title>스케줄 모든 목록</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+        {{#each schedules}}
+        <div id="page2" onclick="window.location.href = '/groups/{{ this.groupId }}/schedules/{{ this.scheduleId }}/schedules_h/schedulelist';">
+            <p>title : {{this.title}}</p>
+            <p>content : {{this.content}}</p>
+            <p>scheduleDate : {{this.scheduleDate}}</p>
+        </div>
+        {{/each}}
+        <a href="/">Home</a>
+</body>
+</html>

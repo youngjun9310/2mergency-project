@@ -73,9 +73,15 @@ export class SchedulesService {
 
   // 스케쥴 상세 조회
   async getOneSchedule(groupId: number, scheduleId: number, userId: number) {
-    await this.groupMembersRepository.findOne({
-      where: { groupId, userId },
+    const selectUser = await this.groupMembersRepository.findOne({
+      where: { groups: { groupId }, userId },
     });
+
+    if (!selectUser) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+      };
+    }
 
     const schedule = await this.schedulesRepository.findOne({
       where: { groupId, scheduleId },
@@ -86,6 +92,20 @@ export class SchedulesService {
         status: HttpStatus.NOT_FOUND,
       };
     }
+    return schedule;
+  }
+
+  async getScheduleId(groupId: number, scheduleId: number) {
+    const schedule = await this.schedulesRepository.findOne({
+      where: { groupId, scheduleId },
+    });
+
+    if (!schedule) {
+      throw {
+        status: HttpStatus.NOT_FOUND,
+      };
+    }
+
     return schedule;
   }
 

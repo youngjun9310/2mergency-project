@@ -10,6 +10,7 @@ import {
   NotFoundException,
   ParseIntPipe,
   UnauthorizedException,
+  Render,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 
@@ -45,7 +46,11 @@ export class GroupMembersController {
     @Body() inviteMemberDto: InviteMemberDto,
   ) {
     const { email } = inviteMemberDto;
-    return await this.groupMembersService.inviteUserToGroup(groupId, users.userId, email);
+
+    await this.groupMembersService.inviteUserToGroup(groupId, users.userId, email);
+    return {
+      message: '초대를 완료했습니다.',
+    };
   }
 
   /**
@@ -125,5 +130,28 @@ export class GroupMembersController {
   @ApiBearerAuth('access-token')
   async getAllGroupMembers(@Param('groupId', ParseIntPipe) groupId: number): Promise<GroupMembers[]> {
     return this.groupMembersService.getAllGroupMembers(groupId);
+  }
+
+  /** hbs 양식 */
+  // 그룹 맴버 초대
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Get('/:groupId/invite/group-members_h/groupinvite')
+  @Render('groupinvite')
+  async groupinvite(@Param('groupId') groupId: number) {
+    return {
+      groupId: groupId,
+    };
+  }
+
+  // 그룹 맴버 수락
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @Get('/:groupId/accept/group-members_h/groupaccept')
+  @Render('groupaccept')
+  async groupaccept(@Param('groupId') groupId: number) {
+    return {
+      groupId: groupId,
+    };
   }
 }

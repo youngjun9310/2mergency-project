@@ -21,7 +21,13 @@ export class UsersService {
   }
   /*사용자 조회*/
   async findUser(userId: number) {
-    return await this.userRepository.findOne({ where: { userId } });
+    const user = await this.userRepository.findOne({ where: { userId } });
+
+    if (user.CertificationStatus === false) {
+      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
+    }
+
+    return user;
   }
   /*사용자 수정*/
   async userUpdate(userId: number, updateDto: UpdateDto, file: Express.Multer.File) {
@@ -33,7 +39,11 @@ export class UsersService {
     if (password !== passwordConfirm) {
       throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
-    console.log(password);
+
+    if (user.CertificationStatus === false) {
+      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
+    }
+
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));

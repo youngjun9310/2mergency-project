@@ -105,7 +105,7 @@ export class AuthController {
     return;
   }
 
-  // 회원가입 로직(테스트버전)
+  // 회원가입 로직(테스트버전, 이미지 업로드 불가 문제)
   @Post('/users_h/register')
   async registers(signUpdto: SignUpDto, @Body('file') file: Express.Multer.File) {
     const register = await this.authService.register(signUpdto, file);
@@ -113,6 +113,20 @@ export class AuthController {
     return {
       register: register,
     };
+  }
+
+  // 유저 이메일 인증요청
+  @Get('/users_h/emailsend')
+  @Render('emailsend')
+  async emailsend(){
+    return;
+  }
+  
+  // 유저 이메일 인증
+  @Get('/users_h/emailaccept')
+  @Render('emailaccept')
+  async emailaccept(){
+    return;
   }
 
   // 유저 로그인
@@ -123,7 +137,6 @@ export class AuthController {
   }
 
   // 로그아웃
-  @UseGuards(JWTAuthGuard)
   @Get('/logout')
   async logout() {
     return;

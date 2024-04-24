@@ -65,8 +65,7 @@ export class UsersController {
 
   /** hbs 양식 */
   // 유저 모든 목록 조회
-  @UseGuards(JWTAuthGuard)
-  // @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   @Get('users_h/userall')
   @Render('userall')
   async findall() {
@@ -77,7 +76,6 @@ export class UsersController {
   }
 
   // 유저 마이 정보 조회
-  @UseGuards(JWTAuthGuard)
   @Get('/users_h/usermypage')
   @Render('usermypage')
   async users(@UserInfo() users: Users) {
@@ -88,15 +86,13 @@ export class UsersController {
   }
 
   // 유저 정보 수정
-  @UseGuards(JWTAuthGuard)
   @Get('users_h/userEdit')
   @Render('userEdit')
   async userEditpage() {
     return;
   }
 
-  // 유저 정보 수정(로직 테스트, 수정이 안됨)
-  @UseGuards(JWTAuthGuard)
+  // 유저 정보 수정(로직 테스트, 이미지 업로드 불가 문제)
   @Post('/userEdit')
   async userEdit(@UserInfo() users: Users, updateDto: UpdateDto, @Body('file') file: Express.Multer.File) {
     await this.usersService.userUpdate(users.userId, updateDto, file);
@@ -106,7 +102,6 @@ export class UsersController {
   }
 
   // 유저 회원 탈퇴
-  @UseGuards(JWTAuthGuard)
   @Get('/users_h/userDelete')
   @Render('userDelete')
   async userDeletepage() {

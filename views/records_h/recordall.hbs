@@ -9,9 +9,8 @@
 <body>
     <form action="/records" method="get">
     {{#each record}}
-        <div id="page">
+        <div id="page2" onclick="window.location.href = '/records/{{this.recordId}}/records_h/recordlist';">
             <p>userId : {{this.userId}}</p>
-            <p>recordId : {{this.recordId}}</p>
             <p>stackedDistance : {{this.stackedDistance}}</p>
         </div>
     {{/each}}
