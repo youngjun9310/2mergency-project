@@ -19,6 +19,10 @@
         </form>
         <button onclick="window.location.href = '/groups/{{ groups.groupId }}/schedules/schedules_h/schedulecreate';">스케줄 만들기</button>
         <button onclick="window.location.href = '/groups/{{ groups.groupId }}/schedules/schedules_h/scheduleall';">스케줄 조회하기</button>
+        <div>
+            <button onclick="window.location.href = '/groups/{{ groups.groupId }}/invite/group-members_h/groupinvite';">이 그룹에 초대</button>
+            <button onclick="window.location.href = '/groups/{{ groups.groupId }}/accept/group-members_h/groupaccept';">그룹 맴버 수락</button>
+        </div>
     </div>
     <a href="/">Home</a>
 </body>

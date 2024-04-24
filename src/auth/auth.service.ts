@@ -134,7 +134,7 @@ export class AuthService {
   /*로그인*/
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
-      select: ['userId', 'email', 'password'],
+      select: ['userId', 'email', 'password', 'CertificationStatus'],
       where: { email },
     });
 
@@ -144,6 +144,10 @@ export class AuthService {
 
     if (!(await compare(password, user.password))) {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
+    }
+
+    if(user.CertificationStatus === false){
+      throw new UnauthorizedException("이메일 인증을 진행해주세요.");
     }
 
     const payload = { email, sub: user.userId };
@@ -157,6 +161,10 @@ export class AuthService {
 
     if (existingEmail) {
       await this.invitesRepository.delete({ email });
+    }
+
+    if (existingEmail.CertificationStatus === true) {
+      throw new UnauthorizedException("이미 이메일 인증이 완료되었습니다.");
     }
 
     const status = 'standBy';
@@ -174,6 +182,8 @@ export class AuthService {
       where: { email },
     });
 
+    console.log(existingToken);
+
     if (!existingToken) {
       throw new BadRequestException('인증 번호를 다시 입력 부탁드립니다.');
     }
@@ -188,7 +198,7 @@ export class AuthService {
     await this.invitesRepository.delete({ email });
     await this.userRepository.update({ email }, { CertificationStatus: true });
 
-    return;
+    return { statusCode: 201, message: '이메일 인증을 완료하였습니다.' };
   }
 
   /** 사용자 이미지 업로드 */

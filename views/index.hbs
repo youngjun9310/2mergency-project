@@ -99,8 +99,8 @@
 				var starty = $("#starty").val();
                 var movePosition = distance(starty, startx, lat, lon);
                 var moveDistance = moveDistance+movePosition;
-                var startx = $("#startx").val(lat);
-				var starty = $("#starty").val(lon);
+                $("#startx").val(lat);
+				$("#starty").val(lon);
                 if(marker){
                     marker.setMap(null);
                 }
@@ -110,7 +110,7 @@
 				});
         });
         $('#btnDistance').click(function() {
-            alert(`${moveDistance}km 만큼 이동하였습니다.`);
+            alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
             // 테스트 용도
             for(var a = 0; a<test.length; a++){
                 for (var i = 0; i<test[a].length; i++){
@@ -123,7 +123,7 @@
         });
         $('#btnStop').click(function() {
             navigator.geolocation.clearWatch(positionId);
-            alert(`${moveDistance}km 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
+            alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
             console.log(test);
             console.log(testx);
             console.log(testy);
