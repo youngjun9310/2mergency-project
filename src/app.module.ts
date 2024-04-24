@@ -70,7 +70,7 @@ const typeOrmModuleOptions = {
     GroupMembersModule,
     MailModule,
     AwsModule,
-    NestjsFormDataModule,
+    NestjsFormDataModule, 
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -14,7 +14,7 @@
     <link href="/assets/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <link href="/css/default.css" rel="stylesheet" />
-    <title>스케줄 생성</title>
+    <title>스케줄 수정</title>
 </head>
 <body>
     <div class="wrapper">
@@ -151,7 +151,7 @@
                                 <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                             </button>
                         </div>
-                        <a class="navbar-brand" href="#pablo">스케줄생성</a>
+                        <a class="navbar-brand" href="#pablo">스케줄수정</a>
                     </div>
                     <button
                         class="navbar-toggler navbar-toggler-right"
@@ -172,10 +172,10 @@
                             <div class="input-group">
                                 <i class="nc-icon nc-zoom-split"></i>
                                 <input
-                                    type="text"
-                                    value=""
-                                    class="form-control"
-                                    placeholder="Search..."/>
+                                type="text"
+                                value=""
+                                class="form-control"
+                                placeholder="Search..."/>
                             </div>
                             </form>
                         </ul>
@@ -236,24 +236,24 @@
                         </ul>
                     </div>
                 </div>
-            </nav>    
-        <!-- End Navbar -->
-        <div class="content">
+            </nav>
+            <!-- End Navbar -->
+            <div class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-                                <h4 class="card-title">스케줄 생성</h4>
+                                <h4 class="card-title">스케줄 수정</h4>
                             </div>
                             <div class="card-body">
-                                <form class="form-horizontal" action="/groups/{{ groupId }}/schedules" method="post">
+                                <form class="form-horizontal" action="/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}?_method=PATCH" method="post">
                                     <fieldset>
                                         <div class="form-group">
                                             <div class="row">
                                                 <label class="col-sm-2 control-label">스케줄명</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" name="title" placeholder="등록할 스케줄명을 입력해주세요" />
+                                                    <input type="text" class="form-control" name="title" value={{schedules.title}}  />
                                                 </div>
                                             </div>
                                         </div>
@@ -263,7 +263,7 @@
                                             <div class="row">
                                                 <label class="col-sm-2 control-label">스케줄일자</label>
                                                 <div class="col-md-4">
-                                                    <input id="datetimepicker" type="text" name="scheduleDate" class="form-control datetimepicker" placeholder="스케줄 생성 날짜" />
+                                                    <input id="datetimepicker" type="text" name="scheduleDate" class="form-control datetimepicker" value={{schedules.scheduleDate}}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -279,7 +279,6 @@
                                                                 class="form-check-input"
                                                                 type="radio"
                                                                 name="category" 
-                                                                placeholder="스케줄 카테고리"
                                                                 id="category"
                                                                 value="walking"/>
                                                             <span class="form-check-sign"></span>
@@ -313,6 +312,16 @@
                                                             등산
                                                         </label>
                                                     </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <fieldset>
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <label class="col-sm-2 control-label">스케줄카테고리</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" id="category" name="category" value={{schedules.category}} />
                                                 </div>
                                             </div>
                                         </div>
@@ -363,7 +372,7 @@
                         <p class="copyright text-center">
                             ©
                             <script> document.write(new Date().getFullYear()); </script>
-                            <a href="../dashboard.html">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
+                            <a href="/html/dashboard.html">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
                         </p>
                     </nav>
                 </div>

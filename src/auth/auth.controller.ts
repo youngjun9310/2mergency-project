@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   Post,
+  Redirect,
   Render,
   Res,
   UploadedFile,
@@ -151,7 +152,8 @@ export class AuthController {
   @Get('/users_h/login')
   @Render('login')
   async logins(){
-    return;
+    console.log('login start')
+    return ;
   }
 
   // 로그아웃
@@ -160,4 +162,12 @@ export class AuthController {
   async logout(){
     return;
   }
+
+  // 테스트화면
+  @Get('/user_h/welcome')
+  @Render('welcome')
+  async test(){
+    return;
+  }
+  
 }

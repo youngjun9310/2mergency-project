@@ -13,7 +13,8 @@
     <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <link href="/assets/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
     <link href="/assets/css/demo.css" rel="stylesheet" />
-    <title>로그인</title>
+    <link href="/css/default.css" rel="stylesheet" />
+    <title>첫화면</title>
 </head>
 <body>
     <div class="wrapper wrapper-full-page">
@@ -28,8 +29,7 @@
                 data-toggle="collapse"
                 aria-controls="navigation-index"
                 aria-expanded="false"
-                aria-label="Toggle navigation"
-                >
+                aria-label="Toggle navigation">
                 <span class="navbar-toggler-bar burger-lines"></span>
                 <span class="navbar-toggler-bar burger-lines"></span>
                 <span class="navbar-toggler-bar burger-lines"></span>
@@ -43,7 +43,7 @@
                     메인페이지</a>
                 </li>
                 <li class="nav-item active">
-                    <a href="/html/login.html" class="nav-link">
+                    <a href="/html/pages/login.html" class="nav-link">
                     <i class="nc-icon nc-mobile"></i>
                     로그인</a>
                 </li>
@@ -52,73 +52,107 @@
             </div>
         </nav>
         <!-- End Navbar -->
-        <div class="full-page section-image" data-color="black" data-image="/assets/img/full-screen-image-2.jpg">
-            <div class="content">
-                <div class="container">
-                    <div class="col-md-4 col-sm-6 ml-auto mr-auto">
-                        <form class="form" action="/auth/login" method="POST">
-                            <div class="card card-login card-hidden">
-                                <div class="card-header">
-                                    <h3 class="header text-center">Login</h3>
-                                </div>
-                                <div class="card-body">
-                                    <div class="card-body">
-                                        <div class="form-group">
-                                            <label>Email address</label>
-                                            <input
-                                                type="email"
-                                                name="email"
-                                                placeholder="Enter email"
-                                                class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Password</label>
-                                            <input
-                                                type="password"
-                                                name="password"
-                                                placeholder="Password"
-                                                class="form-control"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <label class="form-check-label">
-                                                    <input
-                                                        class="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        checked/>
-                                                    <span class="form-check-sign"></span>
-                                                    자동로그인
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card-footer ml-auto mr-auto">
-                                    <button type="submit" class="btn btn-warning btn-wd">Login</button>
-                                </div>
-                            </div>
-                        </form>
+        <div
+        class="full-page register-page section-image"
+        data-color="orange"
+        data-image="/assets/img/bg5.jpg">
+        <div class="content">
+          <div class="container">
+            <div class="card card-register card-plain text-center">
+              <div class="card-header">
+                <div class="row justify-content-center">
+                  <div class="col-md-8">
+                    <div class="header-text">
+                      <h2 class="card-title">
+                        2mergency 앱을 방문하신것을 환영합니다
+                      </h2>
+                      <h4 class="card-subtitle">
+                        건강한 라이프를 꿈꾸는 분들과 함께합니다
+                      </h4>
+                      <hr />
                     </div>
+                  </div>
                 </div>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-10 ml-auto">
+                    <div class="media">
+                      <div class="media-left">
+                        <div class="icon">
+                          <i class="nc-icon nc-circle-09"></i>
+                        </div>
+                      </div>
+                      <div class="media-body">
+                        <h4>자유로운 가입</h4>
+                        <p>
+                          2mergency 앱과 함께 다양한 기능을 무료로 활용하실수
+                          있습니다
+                        </p>
+                      </div>
+                    </div>
+                    <div class="media">
+                      <div class="media-left">
+                        <div class="icon">
+                          <i class="nc-icon nc-preferences-circle-rotate"></i>
+                        </div>
+                      </div>
+                      <div class="media-body">
+                        <h4>등산, 산책, 운동 메이트</h4>
+                        <p>
+                          혼자 힐링하면서 또는 그룹과 어울려 운동메이트와 함께
+                          하세요
+                        </p>
+                      </div>
+                    </div>
+                    <div class="media">
+                      <div class="media-left">
+                        <div class="icon">
+                          <i class="nc-icon nc-planet"></i>
+                        </div>
+                      </div>
+                      <div class="media-body">
+                        <h4>랜덤한 산책안내</h4>
+                        <p>
+                          원하시는 만큼 반경에서 자유롭게 산책길을 추천합니다
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-footer">
+                <div class="row">
+                  <div class="col-md-5 ml-auto">
+                    <button
+                      type="submit"
+                      class="btn btn-fill btn-neutral btn-wd">
+                      <a href="/users/user_h/registerpage.hbs" class="__2m-a-color">
+                        가입하기
+                      </a>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <!---->
             </div>
+          </div>
         </div>
-        <!-- Start footer -->
-        <footer class="footer">
-            <div class="container">
-            <nav>
-                <p class="copyright text-center">
-                ©
-                <script>
-                    document.write(new Date().getFullYear());
-                </script>
-                <a href="/html/dashboard.html">2Mergency</a>, 건강한 라이프스타일과
-                함께합니다.
-                </p>
-            </nav>
-            </div>
-        </footer>
-        <!-- End footer -->
+      </div>
+      <footer class="footer">
+        <div class="container">
+          <nav>
+            <p class="copyright text-center">
+              ©
+              <script>
+                document.write(new Date().getFullYear());
+              </script>
+              <a href="/html/dashboard.html">2Mergency</a>, 건강한 라이프스타일과
+              함께합니다.
+            </p>
+          </nav>
+        </div>
+      </footer>
     </div>
 </body>
 <script src="/assets/js/core/jquery.3.2.1.min.js" type="text/javascript"></script>

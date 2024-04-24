@@ -12,13 +12,12 @@ import { RecordsService } from './records/records.service';
 import { SchedulesService } from './schedules/schedules.service';
 import { UpdateDto } from './users/dto/update.dto';
 
-
 @ApiTags('Handlebars(HBS)')
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
   @Get('/')
-  @Render('index')
+  @Render('schedulelist')
   root() {
     return { message: 'data' };
   }
