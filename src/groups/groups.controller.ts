@@ -42,7 +42,7 @@ export class GroupsController {
     @Body() createGroupDto: CreateGroupDto,
     @UserInfo() users: Users,
   ) {
-    return await this.groupsService.createGroup(createGroupDto, users.userId);
+    return await this.groupsService.createGroup(createGroupDto, users.userId, users);
   }
 
   // 그룹 모든 목록 조회 //

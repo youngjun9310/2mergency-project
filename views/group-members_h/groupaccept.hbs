@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>그룹 맴버 초대</title>
+    <link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    <div id="page">
+        <form action="/groups/{{ groupId }}/accept" method="post">
+            <input type="email" name="email" placeholder="이메일을 작성해주세요.">
+            <button type="submit">수락하기</button>
+        </form>
+    </div>
+    <a href="/">Home</a>
+</body>
+</html>

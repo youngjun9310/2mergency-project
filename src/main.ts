@@ -24,6 +24,7 @@ async function bootstrap() {
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir([join(__dirname, '..', 'views'),
   join(__dirname, '..', 'views', 'groups_h'),
+  join(__dirname, '..', 'views', 'group-members_h'),
   join(__dirname, '..', 'views', 'users_h'),
   join(__dirname, '..', 'views', 'schedules_h'),
   join(__dirname, '..', 'views', 'records_h')]);

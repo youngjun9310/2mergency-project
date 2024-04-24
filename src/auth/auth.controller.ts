@@ -147,6 +147,20 @@ export class AuthController {
     };
   }
 
+  // 유저 이메일 인증요청
+  @Get('/users_h/emailsend')
+  @Render('emailsend')
+  async emailsend(){
+    return;
+  }
+  
+  // 유저 이메일 인증
+  @Get('/users_h/emailaccept')
+  @Render('emailaccept')
+  async emailaccept(){
+    return;
+  }
+
   // 유저 로그인
   @Get('/users_h/login')
   @Render('login')
