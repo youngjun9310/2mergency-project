@@ -644,11 +644,11 @@
                     var appendHtml = `
                         <div class="_route_item" id="box1">
                             <div class="_btn_action _btn_action-search __color_grey" onclick="watchingPosition();">
-                                <button>현재 위치 추적 시작</button>
+                                <button id="start_button" onclick="startchange()">현재 위치 추적 시작</button>
                             </div>
                             <div id="tracking_div">
                                 <button id="btnDistance">이동 거리 확인</button>
-                                <button id="btnStop">현재 위치 추적 중지</button>
+                                <button id="btnStop" onclick="endchange()">현재 위치 추적 중지</button>
                             </div>
 
                             <div class="_route_item_info">${((resultData[0].properties.totalTime) / 60).toFixed(0)}분 | ${((resultData[0].properties.totalDistance) / 1000).toFixed(1)}km</div>
@@ -759,11 +759,11 @@
                     var appendHtml = `
                         <div class="_route_item" id="box1">
                             <div class="_btn_action _btn_action-search __color_grey" onclick="watchingPosition();">
-                                <button>현재 위치 추적 시작</button>
+                                <button id="start_button" onclick="startchange()">현재 위치 추적 시작</button>
                             </div>
                             <div id="tracking_div">
                                 <button id="btnDistance">이동 거리 확인</button>
-                                <button id="btnStop">현재 위치 추적 중지</button>
+                                <button id="btnStop" onclick="endchange()">현재 위치 추적 중지</button>
                             </div>
 
                             <div class="_route_item_info">${((resultData[0].properties.totalTime) / 60).toFixed(0)}분 | ${((resultData[0].properties.totalDistance) / 1000).toFixed(1)}km</div>
@@ -857,6 +857,14 @@
         });
 
         markerArr.push(marker_p);
+    }
+
+    function startchange(){
+        document.querySelector('#start_button').innerHTML = '위치정보 추적 중';
+    }
+
+    function endchange(){
+        document.querySelector('#start_button').innerHTML = '현재 위치 추적 시작';
     }
 
     // 경유지 추가 컨트롤 함수
@@ -1276,6 +1284,7 @@ function moveMapTo(latitude, longitude) {
         </div>
         <div id="div1">
             <span>Schedules</span>
+            <button onclick="change();">testbutton</button>
         </div>
         <div id="div1">
             <span>Records</span>
