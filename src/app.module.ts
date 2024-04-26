@@ -24,7 +24,7 @@ import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 import { PositionModule } from './position/position.module';
-
+console.log('111111');
 const typeOrmModuleOptions = {
   useFactory: async (
     configService: ConfigService,
