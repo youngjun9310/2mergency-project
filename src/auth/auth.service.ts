@@ -101,7 +101,6 @@ export class AuthService {
     });
 
     return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
-    return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
   }
 
   /*로그인*/
