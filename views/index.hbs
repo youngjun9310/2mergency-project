@@ -89,6 +89,11 @@
                     $("#startx").val(position.coords.longitude);
 					$("#starty").val(position.coords.latitude);
         })}
+            var now = new Date(); // 초기 시간 설정
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var formattedTime = hours + ':' + minutes + ':' + seconds;
 
         var positionId = navigator.geolocation.watchPosition(
             function success(position) {
@@ -123,6 +128,12 @@
             }
         });
         $('#btnStop').click(function() {
+            var timers = new Date();
+            var endhours = timers.getHours().toString().padStart(2, '0');
+            var endminutes = timers.getMinutes().toString().padStart(2, '0');
+            var endseconds = timers.getSeconds().toString().padStart(2, '0');
+            var endformattedTime = endhours + ':' + endminutes + ':' + endseconds;
+
             navigator.geolocation.clearWatch(positionId);
             alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
             console.log(test);
@@ -162,18 +173,17 @@
                     console.log('Location saved successfully.');
                 }
             };
-            console.log("positionxhr : ", positionxhr)
-
             positionxhr.send(JSON.stringify({ startx, starty, endx, endy }));
-
             })};
 
             
 
             var stackedDistance = moveDistance;
+            console.log("now : ",formattedTime);
+            console.log("timer : ", endformattedTime);
 
-            const startTime = '17:00';
-            const endTime = '15:00';
+            const startTime = formattedTime;
+            const endTime = endformattedTime;
 
             const recordxhr = new XMLHttpRequest();
             recordxhr.open('POST', '/records', true);
@@ -183,10 +193,17 @@
                     console.log('Location saved successfully.');
                 }
             };
-            console.log("recordxhr : ", recordxhr)
-
             recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance }));
         });
+    }
+
+
+    function endChange() {
+        if (timer !== null) {
+            clearInterval(timer); // 타이머 중지
+            timer = null; // 타이머 변수 재설정
+            console.log("타이머가 중지되었습니다.");
+        }
     }
 
     document.getElementById('watchingPosition')
