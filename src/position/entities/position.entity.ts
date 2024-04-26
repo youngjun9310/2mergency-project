@@ -11,25 +11,17 @@ export class Position {
     positionId : number;
 
     // 시작 좌표
-    @Column({ type : 'decimal', nullable : true })
+    @Column({ type : 'decimal', nullable : false })
     startx : number;
 
-    @Column({ type : 'decimal', nullable : true })
+    @Column({ type : 'decimal', nullable : false })
     starty : number;
-
-
-    // 현재위치 좌표
-    @Column({ type : 'decimal', nullable : false })
-    latitude : number;
-
-    @Column({ type : 'decimal', nullable : false })
-    longitude : number;
     
     // 도착 좌표
-    @Column({ type : 'decimal', nullable : true })
+    @Column({ type : 'decimal', nullable : false })
     endx : number;
     
-    @Column({ type : 'decimal', nullable : true })
+    @Column({ type : 'decimal', nullable : false })
     endy : number;
 
     @CreateDateColumn({ type : 'timestamp' })
