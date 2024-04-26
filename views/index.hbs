@@ -139,6 +139,49 @@
             }
             //데이터베이스에 distance저장.
             //재시작 혹은 이전페이지.
+
+
+            lat = $("#starty").val();
+            lon = $("#startx").val();
+            
+            startx = $("#starty").val();
+            starty = $("#startx").val();
+
+            console.log(startx,starty, lat, lon) 
+
+            var latitude = lat;
+            var longitude = lon;
+
+            const positionxhr = new XMLHttpRequest();
+            positionxhr.open('POST', '/position', true);
+            positionxhr.setRequestHeader('Content-Type', 'application/json');
+            positionxhr.onreadystatechange = function () {
+                if (positionxhr.readyState === XMLHttpRequest.DONE && positionxhr.status === 200) {
+                    console.log('Location saved successfully.');
+                }
+            };
+            console.log("positionxhr : ", positionxhr)
+
+            positionxhr.send(JSON.stringify({ startx, starty ,latitude, longitude }));
+
+            
+
+            var stackedDistance = moveDistance;
+
+            const startTime = '17:00';
+            const endTime = '15:00';
+
+            const recordxhr = new XMLHttpRequest();
+            recordxhr.open('POST', '/records', true);
+            recordxhr.setRequestHeader('Content-Type', 'application/json');
+            recordxhr.onreadystatechange = function () {
+                if (recordxhr.readyState === XMLHttpRequest.DONE && recordxhr.status === 200) {
+                    console.log('Location saved successfully.');
+                }
+            };
+            console.log("recordxhr : ", recordxhr)
+
+            recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance }));
         });
     }
 
@@ -1246,6 +1289,29 @@ function moveMapTo(latitude, longitude) {
     map.setCenter(newPosition);
 }
 
+function positionsend(){
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            function(position) {
+                var latitude = position.coords.latitude; // 현재 위치의 위도
+                var longitude = position.coords.longitude;
+
+                const xhr = new XMLHttpRequest();
+                 xhr.open('POST', '/position', true);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+                    console.log('Location saved successfully.');
+                }
+            };
+            console.log("userId : ", xhr)
+            console.log("latitude : ", latitude);
+            console.log("longitude : ", longitude);
+            xhr.send(JSON.stringify({ latitude, longitude }));
+        });
+    }
+}
+
 </script>
     <div class="_map_layer_overlay">
         <div class="__space_15_h"></div>
@@ -1284,6 +1350,7 @@ function moveMapTo(latitude, longitude) {
         </div>
         <div id="div1">
             <span>Schedules</span>
+            <button onclick="positionsend()">testdd</button>
         </div>
         <div id="div1">
             <span>Records</span>

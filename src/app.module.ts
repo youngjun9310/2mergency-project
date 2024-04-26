@@ -23,6 +23,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
+import { PositionModule } from './position/position.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (
@@ -71,6 +72,7 @@ const typeOrmModuleOptions = {
     MailModule,
     AwsModule,
     NestjsFormDataModule,
+    PositionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

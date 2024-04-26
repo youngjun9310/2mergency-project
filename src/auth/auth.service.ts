@@ -141,8 +141,6 @@ export class AuthService {
       where: { email },
     });
 
-    console.log(existingToken);
-
     if (!existingToken) {
       throw new BadRequestException('인증 번호를 다시 입력해주세요.');
     }

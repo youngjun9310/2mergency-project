@@ -36,7 +36,7 @@ export class RecordsService {
   async findAll(userId : number) {
     const record = await this.recordsrepository.find({ where : { userId }});
 
-    return { statusCode : 201, message : "모든 기록 데이터 이력 조회에 성공하였습니다.", record };
+    return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
   // 레코드 상세 목록 조회
@@ -56,7 +56,7 @@ export class RecordsService {
     }
     
     
-    return { statusCode : 201, message : "기록 데이터 이력 조회에 성공하였습니다.", record };
+    return { statusCode : 200, message : "정상적으로 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
   // 레코드 삭제
@@ -67,10 +67,14 @@ export class RecordsService {
       throw new NotFoundException("기록 데이터가 존재하지 않습니다.");
     }
 
+    if(userId !== record.userId){
+      throw new BadRequestException("조회할 수 있는 권한이 없습니다.");
+    }
+
     await this.recordsrepository.remove(record);
 
     
 
-    return { statusCode : 201, message : "기록 데이터가 삭제되었습니다." };
+    return { statusCode : 201, message : "정상적으로 기록 데이터가 삭제되었습니다." };
   }
 }
