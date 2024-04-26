@@ -13,7 +13,7 @@ export class RecordsService {
   // 레코드 생성
   async create(userId : number, createRecordDto: CreateRecordDto) {
     const user = await this.usersrepository.findOne({ where : { userId } });
-    const { startTime, endTime ,stackedDistance } = createRecordDto;
+    const { startTime, endTime ,stackedDistance, startx, starty, endx, endy } = createRecordDto;
     
     if(!user){
       throw new NotFoundException("유저가 존재하지 않습니다.");
@@ -23,7 +23,11 @@ export class RecordsService {
       userId,
       startTime,
       endTime,
-      stackedDistance
+      stackedDistance,
+      startx,
+      starty,
+      endx,
+      endy
     });
 
     const save = await this.recordsrepository.save(recoardsave);

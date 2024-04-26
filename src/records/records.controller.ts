@@ -25,7 +25,7 @@ export class RecordsController {
     return await this.recordsService.create(users.userId, createRecordDto);
   }
 
-  // 레코드 모든 목록 조회
+  // 레코드 내 모든 목록 조회
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '레코드 내 모든 목록 조회 API', description: '내 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')

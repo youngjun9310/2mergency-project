@@ -1,5 +1,4 @@
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { Position } from 'src/position/entities/position.entity';
 import { Records } from 'src/records/entities/record.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
@@ -72,8 +71,4 @@ export class Users {
   @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade: true })
   scheduleMembers: ScheduleMembers[];
 
-  @OneToMany(() => Position, (position) => position.users,{
-    cascade : true
-  })
-  position : Position[];
 }

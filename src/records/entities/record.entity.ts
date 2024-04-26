@@ -21,6 +21,19 @@ export class Records {
     @Column({ type : 'bigint', nullable : false, default : 0 })
     stackedDistance : bigint;
 
+    @Column({ type : 'decimal', nullable : false })
+    startx : number;
+
+    @Column({ type : 'decimal', nullable : false })
+    starty : number;
+    
+    // 도착 좌표
+    @Column({ type : 'decimal', nullable : false })
+    endx : number;
+    
+    @Column({ type : 'decimal', nullable : false })
+    endy : number;
+
     @ManyToOne(() => Users, (users) => users.records, {
         onDelete : 'CASCADE'
     })

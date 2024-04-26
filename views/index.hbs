@@ -164,24 +164,9 @@
             startx = $("#startx").val();
             starty = $("#starty").val();
             var endx = $("#endx").val();
-            var endy = $("#endy").val();     
-
-            const positionxhr = new XMLHttpRequest();
-            positionxhr.open('POST', '/position', true);
-            positionxhr.setRequestHeader('Content-Type', 'application/json');
-            positionxhr.onreadystatechange = function () {
-                if (positionxhr.readyState === XMLHttpRequest.DONE && positionxhr.status === 200) {
-                    console.log('Location saved successfully.');
-                }
-            };
-            positionxhr.send(JSON.stringify({ startx, starty, endx, endy }));
-            })};
-
-            
+            var endy = $("#endy").val();   
 
             var stackedDistance = moveDistance;
-            console.log("now : ",formattedTime);
-            console.log("timer : ", endformattedTime);
 
             const startTime = formattedTime;
             const endTime = endformattedTime;
@@ -194,7 +179,9 @@
                     console.log('Location saved successfully.');
                 }
             };
-            recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance }));
+            recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance, startx, starty, endx, endy }));  
+
+            })};
         });
     }
 

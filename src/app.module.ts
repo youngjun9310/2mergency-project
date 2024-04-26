@@ -16,7 +16,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
-import { PositionModule } from './position/position.module';
 
 const typeOrmModuleOptions = {
   useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
@@ -30,9 +29,7 @@ const typeOrmModuleOptions = {
     entities: ['dist/**/**.entity{.ts,.js}'],
     synchronize: configService.get<boolean>(ENV_DB_SYNC),
     logging: true,
-    ssl: {
-      rejectUnauthorized: false
-    }
+
   }),
   inject: [ConfigService],
 };
@@ -66,7 +63,6 @@ const typeOrmModuleOptions = {
     MailModule,
     AwsModule,
     NestjsFormDataModule,
-    PositionModule,
   ],
   controllers: [AppController],
   providers: [AppService],
