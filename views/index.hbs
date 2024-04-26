@@ -79,7 +79,6 @@
 					map.setZoom(15);
 				});
 		}
-     
     //watchPosition
     function watchingPosition() {
         alert('위치정보 추적 시작');
@@ -91,6 +90,11 @@
                     $("#startx").val(position.coords.longitude);
 					$("#starty").val(position.coords.latitude);
         })}
+            var now = new Date(); // 초기 시간 설정
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var formattedTime = hours + ':' + minutes + ':' + seconds;
 
         var positionId = navigator.geolocation.watchPosition(
             function success(position) {
@@ -148,20 +152,6 @@
             }
             //데이터베이스에 distance저장.
             //재시작 혹은 이전페이지.
-
-
-             /// 버튼 스탑 누르면 여기에 
-
-            lat = $("#starty").val();
-            lon = $("#startx").val();
-            
-            startx = $("#starty").val();
-            starty = $("#startx").val();
-
-            console.log(startx,starty, lat, lon) 
-
-            var latitude = lat;
-            var longitude = lon;
             
             if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
@@ -178,9 +168,8 @@
 
             var stackedDistance = moveDistance;
 
-            const startTime = '17:00';
-            const endTime = '15:00';
-
+            const startTime = formattedTime;
+            const endTime = endformattedTime;
 
             const recordxhr = new XMLHttpRequest();
             recordxhr.open('POST', '/records', true);
@@ -922,31 +911,13 @@
         markerArr.push(marker_p);
     }
 
-
- var timer = null; // 타이머를 저장할 변수 선언
-
-function startChange() {
-    if (timer === null) { // 타이머가 아직 시작되지 않았다면
-        var now = new Date(); // 초기 시간 설정
-        console.log("시작 시간:", now.toLocaleTimeString()); // 콘솔에 초기 시간 출력
-
-        timer = setInterval(function() {
-            now.setMinutes(now.getMinutes() + 1); // 현재 시간에 1분 추가
-            console.log("현재 시간:", now.toLocaleTimeString()); // 콘솔에 현재 시간 출력
-        }, 60000); // 60000ms (1분)마다 함수 실행
-
-        document.querySelector('#start_button').innerHTML = '위치정보 추적 중'; // 버튼 텍스트 변경
+    function startchange(){
+        document.querySelector('#start_button').innerHTML = '위치정보 추적 중';
     }
-}
 
-function endChange() {
-    if (timer !== null) {
-        clearInterval(timer); // 타이머 중지
-        timer = null; // 타이머 변수 재설정
-        console.log("타이머가 중지되었습니다.");
-        document.querySelector('#start_button').innerHTML = '현재 위치 추적 시작'; // 버튼 텍스트 변경
+    function endchange(){
+        document.querySelector('#start_button').innerHTML = '현재 위치 추적 시작';
     }
-}
 
     // 경유지 추가 컨트롤 함수
     function onMultiButton(btn) {
@@ -1325,29 +1296,6 @@ function endChange() {
 function moveMapTo(latitude, longitude) {
     var newPosition = new Tmapv2.LatLng(latitude, longitude);
     map.setCenter(newPosition);
-}
-
-function positionsend(){
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            function(position) {
-                var latitude = position.coords.latitude; // 현재 위치의 위도
-                var longitude = position.coords.longitude;
-
-                const xhr = new XMLHttpRequest();
-                 xhr.open('POST', '/position', true);
-                xhr.setRequestHeader('Content-Type', 'application/json');
-                xhr.onreadystatechange = function () {
-                if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
-                    console.log('Location saved successfully.');
-                }
-            };
-            console.log("userId : ", xhr)
-            console.log("latitude : ", latitude);
-            console.log("longitude : ", longitude);
-            xhr.send(JSON.stringify({ latitude, longitude }));
-        });
-    }
 }
 
 </script>
