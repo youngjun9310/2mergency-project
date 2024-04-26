@@ -32,15 +32,23 @@ export class AuthController {
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
+  @Redirect('/')
   async register(
     @Body() signUpdto: SignUpDto,
     @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response
   ) {
-    await this.authService.register(
-      signUpdto,
-      file,
-    );
-    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+    try {
+      await this.authService.register(
+        signUpdto,
+        file,
+      );
+      return { url:'/auth/users_h/login', message: '회원가입에 성공하였습니다.'};
+      
+    } catch (error) {
+      res.redirect('/auth/users_h/registerpage');
+    }
+    
   }
 
   /** 어드민 회원가입*/
@@ -66,17 +74,24 @@ export class AuthController {
   /** 로그인*/
   @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
+  @Redirect('/')
   @HttpCode(204)
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response,
-  ) {
-    const accessToken = await this.authService.login(
-      loginDto.email,
-      loginDto.password,
-    );
-    res.cookie('authorization', `Bearer ${accessToken}`);
-    return;
+    @Res({ passthrough: true }) res: Response) {
+
+    try {
+      const accessToken = await this.authService.login(
+        loginDto.email,
+        loginDto.password,
+      );
+      res.cookie('authorization', `Bearer ${accessToken}`); 
+      return ;
+
+    } catch (error) {
+      res.redirect('/auth/users_h/login');
+    }
+    
   }
 
   /** 로그아웃*/
@@ -121,14 +136,15 @@ export class AuthController {
     res.send('회원가입 이메일 인증을 완료했습니다.');
   }
 
-  /** 사용자 이미지업로드 */
-  @ApiOperation({ summary: '사용자 이미지업로드', description: '이미지업로드' })
-  @ApiBearerAuth('access-token')
-  @Post('uploadImg')
-  async uploadImg() {}
-
-
   /** hbs 양식 */
+  // 첫 welcome 화면
+  @Get('/user_h/welcomePage')
+  @Render('welcomePage')
+  async userWelcome(){
+    return;
+  }
+  
+
   // 회원가입 페이지
   @Get('/users_h/registerpage')
   @Render('registerpage')
@@ -152,9 +168,9 @@ export class AuthController {
   @Get('/users_h/login')
   @Render('login')
   async logins(){
-    console.log('login start')
     return ;
   }
+
 
   // 로그아웃
   @UseGuards(JWTAuthGuard)
@@ -163,11 +179,5 @@ export class AuthController {
     return;
   }
 
-  // 테스트화면
-  @Get('/user_h/welcome')
-  @Render('welcome')
-  async test(){
-    return;
-  }
   
 }

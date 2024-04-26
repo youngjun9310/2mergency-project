@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module,forwardRef } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 import { GroupMembersController } from './group-members.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -13,7 +13,7 @@ import { MembersRoleStrategy } from './strategies/members.strategy';
   imports: [
     TypeOrmModule.forFeature([Groups, GroupMembers, Users]),
     MailModule,
-    UsersModule,
+    forwardRef (()=>UsersModule)
   ],
   controllers: [GroupMembersController],
   providers: [

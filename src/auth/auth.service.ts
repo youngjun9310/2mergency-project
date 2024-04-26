@@ -191,6 +191,4 @@ export class AuthService {
     return;
   }
 
-  /** 사용자 이미지 업로드 */
-  async uploadImg() {}
 }

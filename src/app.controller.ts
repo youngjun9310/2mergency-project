@@ -17,7 +17,7 @@ import { UpdateDto } from './users/dto/update.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
   @Get('/')
-  @Render('schedulelist')
+  @Render('index')
   root() {
     return { message: 'data' };
   }

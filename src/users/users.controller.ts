@@ -10,6 +10,8 @@ import {
   UseInterceptors,
   Render,
   Post,
+  Redirect,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
@@ -20,12 +22,19 @@ import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { GroupsService } from 'src/groups/groups.service';
+import { Response } from 'express';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly groupsService: GroupsService
+
+  ) {}
+  
   /** 전체 사용자 조회(어드민용)*/
   @ApiOperation({ summary: '전체 사용자 조회', description: '전체 조회' })
   @UseGuards(RolesGuard)
@@ -57,15 +66,25 @@ export class UsersController {
     await this.usersService.userUpdate(userId, updateDto, file);
     return;
   }
+
   /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
   @ApiBearerAuth('access-token')
   @Delete('')
-  async userDelete(@Body() deleteDto: DeleteDto, @Req() req) {
-    const { userId } = req.user;
-    await this.usersService.userDelete(userId, deleteDto.password);
-    return;
+  @Redirect('/user_h/welcomePage')
+  async userDelete(@Body() deleteDto: DeleteDto, @Req() req, @Res() res: Response) {
+
+    try {
+      const { userId } = req.user;
+      await this.usersService.userDelete(userId, deleteDto.password);
+      return;
+    } catch (error) {
+      res.redirect('/auth/users_h/usermypage');
+    }
+
+    
   }
+
   /** 사용자 접속정보조회*/
   @ApiOperation({ summary: '사용자 접속정보조회', description: '접속정보조회' })
   @ApiBearerAuth('access-token')
@@ -127,4 +146,19 @@ export class UsersController {
    async userDeletepage() {
      return;
    }
+
+   // 유저 대시보드
+  @UseGuards(JWTAuthGuard)
+  @Get('users_h/userDashboard')
+  @Render('userDashboard')
+  async userTotal() {
+    //가입한 그룹목록(테스트 목적, 전체 그룹 조회)
+    const groups = await this.groupsService.findAllGroups();
+    return {
+      groups : groups
+    };
+  }
+
+
+
 }

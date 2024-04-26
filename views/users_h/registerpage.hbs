@@ -22,7 +22,7 @@
         <nav class="navbar navbar-expand-lg navbar-transparent navbar-absolute">
             <div class="container">
                 <div class="navbar-wrapper">
-                    <a class="navbar-brand" href="#pablo">2mergency</a>
+                    <a class="navbar-brand" href="/auth/user_h/welcomePage">2mergency</a>
                     <button
                         class="navbar-toggler navbar-toggler-right"
                         type="button"
@@ -38,24 +38,14 @@
                 <div class="collapse navbar-collapse justify-content-end" id="navbar">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a href="/html/dashboard.html" class="nav-link">
+                            <a href="/users/users_h/userDashboard" class="nav-link">
                             <i class="nc-icon nc-chart-pie-35"></i>
                             메인페이지</a>
                         </li>
-                        <li class="nav-item active">
-                            <a href="/html/pages/register.html" class="nav-link">
-                            <i class="nc-icon nc-badge"></i>
-                            가입하기</a>
-                        </li>
                         <li class="nav-item">
-                            <a href="/html/pages/login.html" class="nav-link">
+                            <a href="/auth/users_h/login" class="nav-link">
                             <i class="nc-icon nc-mobile"></i>
                             로그인</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="/html/pages/lock.html" class="nav-link">
-                            <i class="nc-icon nc-key-25"></i>
-                            화면잠금</a>
                         </li>
                     </ul>
                 </div>
@@ -117,8 +107,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 mr-auto">
-                                    <form ction="/users_h/register" method="POST" enctype="multipart/form-data">
+                                <div class="col-md-4 mr-auto">      
+                                    <form action="/auth/register" method="POST" enctype="multipart/form-data">
                                         <div class="card card-plain">
                                             <div class="content">
                                                 <div class="form-group">
@@ -165,15 +155,15 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="__2m__form-label">프로필이미지</label>
-                                                    <input class="form-control"  accept="image/*" name="profileImg" type="file" id="formFile" placeholder="프로필이미지">                             
+                                                    <input class="form-control"  accept="image/*" name="profileImage" type="file" id="formFile" placeholder="프로필이미지">                             
                                                 </div>
                                                 <div class="form-group">
                                                 <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+                                                <input class="form-check-input" type="radio" name="isOpen" id="isOpen" value="true">
                                                 <label class="__2m__form-label"  for="inlineRadio1">공개활동</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="option2">
+                                                <input class="form-check-input" type="radio" name="isOpen" id="isOpen" value="false">
                                                 <label class="__2m__form-label" >비공개활동</label>
                                                 </div>
                                                 </div>
