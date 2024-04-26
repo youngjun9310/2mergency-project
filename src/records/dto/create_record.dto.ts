@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsString } from "class-validator";
 
 export class CreateRecordDto {
 
@@ -8,7 +8,7 @@ export class CreateRecordDto {
         description: 'starttime record',
         required: true,
       })
-    @IsNotEmpty({ message : "시작 시간을 기록해주세요." })
+    @IsString()
     startTime : Date;
 
     @ApiProperty({
@@ -16,7 +16,7 @@ export class CreateRecordDto {
       description: 'endtime record',
       required: true,
       })
-    @IsNotEmpty({ message : "도착 시간을 기록해주세요." })
+    @IsString()
     endTime : Date;
   
     @ApiProperty({
