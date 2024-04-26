@@ -27,18 +27,27 @@ export class RecordsController {
 
   // 레코드 모든 목록 조회
   @ApiResponse({ description: '성공', status: 200 })
-  @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
+  @ApiOperation({ summary: '레코드 내 모든 목록 조회 API', description: '내 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
-  @Get()
+  @Get('/myall')
   async findAll(@UserInfo() users : Users) {
     return await this.recordsService.findAll(users.userId);
+  }
+
+  // 레코드 모든 목록 조회
+  @ApiResponse({ description: '성공', status: 200 })
+  @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
+  @ApiBearerAuth('access-token')
+  @Get('/recordall')
+  async recordall() {
+    return await this.recordsService.recordall();
   }
 
   // 레코드 상세 목록 조회
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '레코드 상세 목록 조회 API', description: '나의 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
-  @Get(':recordId')
+  @Get('/:recordId')
   async findOne(@Param('recordId') recordId: number, @UserInfo() users : Users) {
     return await this.recordsService.findOne(recordId, users.userId);
   }
@@ -47,7 +56,7 @@ export class RecordsController {
   @ApiResponse({ description: '성공', status: 201 })
   @ApiOperation({ summary: '레코드 삭제 API', description: '나의 운동 기록을 삭제!' })
   @ApiBearerAuth('access-token')
-  @Delete(':recordId')
+  @Delete('/:recordId')
   async remove(@Param('recordId') recordId: number, @UserInfo() users : Users ) {
     return await this.recordsService.remove(recordId, users.userId);
   }

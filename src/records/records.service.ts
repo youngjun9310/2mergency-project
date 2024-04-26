@@ -32,9 +32,16 @@ export class RecordsService {
     return { statusCode : 201, message : "정상적으로 데이터가 기록되었습니다.", save };
   }
 
-  // 레코드 모든 목록 조회
+  // 레코드 내 모든 목록 조회
   async findAll(userId : number) {
     const record = await this.recordsrepository.find({ where : { userId }});
+
+    return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
+  }
+
+  // 레코드 모든 목록 조회
+  async recordall() {
+    const record = await this.recordsrepository.find();
 
     return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
