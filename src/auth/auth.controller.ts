@@ -69,7 +69,6 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '가입 토큰번호 전송',
   })
-  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res) {
@@ -83,7 +82,6 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
-  @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('accept')
   async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res) {
