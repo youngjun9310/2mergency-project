@@ -8,13 +8,15 @@ import { ConfigService } from '@nestjs/config';
 import { Invites } from './entities/invite.entity';
 import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
+import _ from 'lodash';
+
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
     @InjectRepository(Invites)
-    private invitesRepository: Repository<Invites>,
+    private readonly invitesRepository: Repository<Invites>,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
@@ -51,33 +53,43 @@ export class AuthService {
       isOpen: srtToBoolean,
     });
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
   /*어드민 회원가입*/
-  async adminRegister(signUpdto, file: Express.Multer.File) {
+  async adminRegister(signUpdto: any, file: Express.Multer.File) {
     const { nickname, email, password, passwordConfirm, adminPassword, address } = signUpdto;
+
+    // 이미 가입된 이메일 체크
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
     if (existingUser) {
       throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
     }
+
+    // 중복된 닉네임 체크
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
     if (existingNickname) {
       throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
     }
+
+    // 비밀번호 일치 여부 확인
     if (password !== passwordConfirm) {
       throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
-    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
+
+    // 어드민 가입 요청 키와 어드민 서비 키 비교하기
+    const adminPassKey = this.configService.get<string>('ENV_ROLE_ADMIN_PASSWORD');
     if (adminPassword !== adminPassKey) {
       throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
     }
 
+    // 어드민 가입 로직
     const profileImage = await this.awsService.imageUpload(file);
-    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+    const hashedPassword = await hash(password, this.configService.get<number>('ENV_ROLE_ADMIN_PASSWORD'));
     await this.userRepository.save({
       nickname,
       email,
@@ -87,6 +99,7 @@ export class AuthService {
       isAdmin: true,
       CertificationStatus: true,
     });
+
     return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
   }
 
@@ -105,8 +118,8 @@ export class AuthService {
       throw new UnauthorizedException('비밀번호를 확인해주세요.');
     }
 
-    if(user.CertificationStatus === false){
-      throw new UnauthorizedException("이메일 인증을 진행해주세요.");
+    if (user.CertificationStatus === false) {
+      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
     }
 
     const payload = { email, sub: user.userId };
@@ -123,7 +136,7 @@ export class AuthService {
     }
 
     if (existingEmail.CertificationStatus === true) {
-      throw new UnauthorizedException("이미 이메일 인증이 완료되었습니다.");
+      throw new UnauthorizedException('이미 이메일 인증이 완료되었습니다.');
     }
 
     const status = 'standBy';

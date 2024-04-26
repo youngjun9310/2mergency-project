@@ -10,11 +10,7 @@ import { Users } from 'src/users/entities/user.entity';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([Groups, GroupMembers, Users]),
-    GroupMembersModule,
-    UsersModule,
-  ],
+  imports: [TypeOrmModule.forFeature([Groups, GroupMembers, Users]), GroupMembersModule, UsersModule],
   controllers: [GroupsController],
   providers: [GroupsService, MembersRoleStrategy],
 })

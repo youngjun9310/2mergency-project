@@ -5,8 +5,20 @@ import { MailService } from 'src/mail/mail.service';
 import { SignUpDto } from './dto/signup.dto';
 import { Response } from 'express';
 import { JWTAuthGuard } from './guard/jwt.guard';
+import { AuthService } from './auth.service';
+import { MailService } from 'src/mail/mail.service';
+import { SignUpDto } from './dto/signup.dto';
+import { Response } from 'express';
+import { JWTAuthGuard } from './guard/jwt.guard';
 
 describe('AuthController', () => {
+  let authController: AuthController;
+  let authService: AuthService;
+  let mailService: MailService;
+  let mockFile: Express.Multer.File;
+  let mockResponse: Partial<Response>;
+
+  // 각 테스트가 실행되기 전 매번 실행되는 함수입니다.
   let authController: AuthController;
   let authService: AuthService;
   let mailService: MailService;
