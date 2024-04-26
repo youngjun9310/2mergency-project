@@ -39,9 +39,6 @@ const typeOrmModuleOptions = {
     entities: ['dist/**/**.entity{.ts,.js}'],
     synchronize: configService.get<boolean>(ENV_DB_SYNC),
     logging: true,
-    ssl: {
-      rejectUnauthorized: false
-    }
   }),
   inject: [ConfigService],
 };
