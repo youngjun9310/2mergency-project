@@ -62,7 +62,7 @@ jobs:
             cd /home/ubuntu/2mergency-project
 
             ### GitHub에서 최신 코드를 가져옴
-            git pull origin dev
+            git pull
 
             ## .env 파일 생성
             echo "DB_NAME=${{ secrets.DB_NAME }}" > .env
