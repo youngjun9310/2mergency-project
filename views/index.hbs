@@ -90,6 +90,7 @@
                     $("#startx").val(position.coords.longitude);
 					$("#starty").val(position.coords.latitude);
         })}
+
         var positionId = navigator.geolocation.watchPosition(
             function success(position) {
 				var lat = position.coords.latitude;
@@ -140,18 +141,19 @@
             }
             //데이터베이스에 distance저장.
             //재시작 혹은 이전페이지.
-
-
-            lat = $("#starty").val();
-            lon = $("#startx").val();
             
-            startx = $("#starty").val();
-            starty = $("#startx").val();
+            if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                  $("#endy").val(position.coords.longitude);
+    			  $("#endx").val(position.coords.latitude);
 
-            console.log(startx,starty, lat, lon) 
-
-            var latitude = lat;
-            var longitude = lon;
+            startx = $("#startx").val();
+            starty = $("#starty").val();
+            var endx = $("#endx").val();
+            var endy = $("#endy").val();     
 
             const positionxhr = new XMLHttpRequest();
             positionxhr.open('POST', '/position', true);
@@ -163,7 +165,9 @@
             };
             console.log("positionxhr : ", positionxhr)
 
-            positionxhr.send(JSON.stringify({ startx, starty ,latitude, longitude }));
+            positionxhr.send(JSON.stringify({ startx, starty, endx, endy }));
+
+            })};
 
             
 

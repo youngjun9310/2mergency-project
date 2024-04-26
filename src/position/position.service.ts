@@ -13,7 +13,7 @@ export class PositionService {
 
   // 좌표 데이터 생성
   async create(createPositionDto: CreatePositionDto, userId : number) {
-    const { startx, starty, endx, endy, latitude, longitude } = createPositionDto;
+    const { startx, starty, endx, endy } = createPositionDto;
     const user = await this.usersRepository.findOne({ where : { userId }});
 
     if(!user){
@@ -25,9 +25,7 @@ export class PositionService {
       startx,
       starty,
       endx,
-      endy,
-      latitude,
-      longitude
+      endy
     });
 
     await this.positionRepository.save(position);
