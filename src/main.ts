@@ -18,6 +18,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  console.log('11111');
   app.use(methodOverride('_method'))
   setupSwagger(app);
   app.setViewEngine('hbs');
