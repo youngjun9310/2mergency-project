@@ -156,6 +156,4 @@ export class AuthService {
     return { statusCode: 201, message: '이메일 인증을 완료하였습니다.' };
   }
 
-  /** 사용자 이미지 업로드 */
-  async uploadImg() {}
 }

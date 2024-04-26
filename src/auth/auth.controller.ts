@@ -69,7 +69,6 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '가입 토큰번호 전송',
   })
-  @ApiBearerAuth('access-token')
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res) {
     const gentoken = await this.mailService.usersendMail(email);
@@ -82,18 +81,11 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
-  @ApiBearerAuth('access-token')
   @Post('accept')
   async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res) {
     await this.authService.userAccept(email, token);
     res.send('회원가입 이메일 인증을 완료했습니다.');
   }
-
-  /** 사용자 이미지업로드 */
-  @ApiOperation({ summary: '사용자 이미지업로드', description: '이미지업로드' })
-  @ApiBearerAuth('access-token')
-  @Post('uploadImg')
-  async uploadImg() {}
 
   /** hbs 양식 */
   // 회원가입 페이지
