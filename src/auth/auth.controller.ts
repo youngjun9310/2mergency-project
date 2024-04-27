@@ -28,7 +28,7 @@ export class AuthController {
   ) {}
 
   /** 회원가입*/
-  @ApiOperation({ summary: '회원가입 API', description: '회원가입' })
+  @ApiOperation({ summary: '회원가입 API', description: '회원가입 성공' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   @ApiResponse({ status: 201, description: '회원가입 성공하였습니다.' })
@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   /** 어드민 회원가입*/
-  @ApiOperation({ summary: '어드민 회원가입 API', description: '어드민 회원가입' })
+  @ApiOperation({ summary: '어드민 회원가입 API', description: '어드민 회원가입 성공' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
   @ApiResponse({ status: 201, description: '어드민 회원가입에 성공하였습니다.' })
@@ -46,7 +46,7 @@ export class AuthController {
   }
 
   /** 로그인*/
-  @ApiOperation({ summary: '로그인 API', description: '로그인' })
+  @ApiOperation({ summary: '로그인 API', description: '로그인 성공' })
   @Post('login')
   @HttpCode(200)
   @ApiResponse({ status: 200, description: '로그인에 성공하였습니다.' })
@@ -57,7 +57,7 @@ export class AuthController {
   }
 
   /** 로그아웃*/
-  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃' })
+  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃 성공' })
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('logout')
