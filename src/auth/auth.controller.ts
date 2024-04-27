@@ -28,7 +28,7 @@ export class AuthController {
   ) {}
 
   /** 회원가입*/
-  @ApiOperation({ summary: '회원가입', description: '회원가입' })
+  @ApiOperation({ summary: '회원가입 API', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   @ApiResponse({ status: 201, description: '회원가입 성공' })
@@ -37,7 +37,7 @@ export class AuthController {
   }
 
   /** 어드민 회원가입*/
-  @ApiOperation({ summary: '어드민 회원가입', description: '어드민 회원가입' })
+  @ApiOperation({ summary: '어드민 회원가입 API', description: '어드민 회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
   @ApiResponse({ status: 201, description: '어드민 회원가입 성공' })
@@ -46,7 +46,7 @@ export class AuthController {
   }
 
   /** 로그인*/
-  @ApiOperation({ summary: '로그인', description: '로그인' })
+  @ApiOperation({ summary: '로그인 API', description: '로그인' })
   @Post('login')
   @HttpCode(204)
   @ApiResponse({ status: 204, description: '로그인 성공' })
@@ -57,7 +57,7 @@ export class AuthController {
   }
 
   /** 로그아웃*/
-  @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
+  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃' })
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('logout')
@@ -70,7 +70,7 @@ export class AuthController {
 
   /** 이메일 가입초대*/
   @ApiOperation({
-    summary: '이메일 가입초대',
+    summary: '이메일 가입초대 API',
     description: '가입 토큰번호 전송',
   })
   @Post('invite')
@@ -83,7 +83,7 @@ export class AuthController {
 
   /** 이메일 가입수락*/
   @ApiOperation({
-    summary: '이메일 가입초대',
+    summary: '이메일 가입초대 API',
     description: '이메일 가입 토큰번호 전송',
   })
   @Post('accept')
