@@ -16,8 +16,6 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
-  @ApiResponse({ description: '성공', status: 200 })
-  @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @ApiBearerAuth('access-token')
   @Post()
   async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users) {
@@ -25,7 +23,6 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
-  @Get()
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
   @ApiResponse({ description: '성공적으로 모든 그룹 목록을 조회하였습니다.', status: 200 })
@@ -34,7 +31,6 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
-  @Get(':groupId')
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 조회' })
   @ApiResponse({ description: '성공적으로 그룹 상세 정보 조회하였습니다.', status: 200 })
@@ -43,6 +39,7 @@ export class GroupsController {
   }
 
   // 그룹 수정 //
+  @UseGuards(JWTAuthGuard)
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiBearerAuth('access-token')
@@ -54,6 +51,7 @@ export class GroupsController {
   }
 
   // 그룹 삭제 //
+  @UseGuards(JWTAuthGuard)
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제' })
