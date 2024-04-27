@@ -53,6 +53,16 @@
               <div class="collapse" id="componentsExamples">
                 <ul class="nav">
                   <li class="nav-item">
+                    <a class="nav-link" href="/records/records_h/recordcreate">
+                      <span class="sidebar-normal">운동 기록 생성</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/records/records_h/recordall">
+                      <span class="sidebar-normal">운동기록</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
                     <a class="nav-link" href="/">
                       <span class="sidebar-normal">운동경로탐색</span>
                     </a>
@@ -76,18 +86,8 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/groups/{{ groups.groupId }}/schedules/schedules_h/scheduleall">
-                      <span class="sidebar-normal">그룹스케줄목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/groups/{{ groups.groupId }}/invite/group-members_h/groupinvite">
-                      <span class="sidebar-normal">그룹초대하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/groups/{{ groups.groupId }}/accept/group-members_h/groupaccept">
-                      <span class="sidebar-normal">그룹초대수락</span>
+                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                      <span class="sidebar-normal">그룹생성</span>
                     </a>
                   </li>
                 </ul>
@@ -100,11 +100,16 @@
                   사용자정보<b class="caret"></b>
                 </p>
               </a>
-              <div class="collapse" id="pagesExamples">
+              <div class="collapse show" id="pagesExamples">
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="/users/users_h/usermypage">
                       <span class="sidebar-normal">프로필조회</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/users/users_h/userEdit">
+                      <span class="sidebar-normal">프로필수정</span>
                     </a>
                   </li>
                 </ul>
@@ -296,26 +301,12 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label>공개여부</label>
-                                <div class="form-check form-check-radio">
-                                  <label class="form-check-label">
-                                    <input
-                                      class="form-check-input"
-                                      type="radio"
-                                      name="isOpen"
-                                      value="true">
-                                    <span class="form-check-sign"></span>
-                                    공개활동
-                                    </label>
-                                  <label class="form-check-label">
-                                    <input
-                                      class="form-check-input"
-                                      type="radio"
-                                      name="isOpen"
-                                      value="false">
-                                    <span class="form-check-sign"></span>
-                                    비공개활동
-                                    </label>
-                                </div>
+                                <input
+                                  type="text"
+                                  class="form-control"
+                                  name="isOpen"
+                                  value={{ users.isOpen }}
+                                />
                               </div>
                             </div>
                           </div>
