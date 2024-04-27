@@ -16,14 +16,17 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
+  @ApiOperation({ summary: '그룹 생성', description: '그룹 생성 성공' })
+  @ApiResponse({ status: 201, description: '성공적으로 그룹이 생성되었습니다.' })
   @Post('')
   @ApiBearerAuth('access-token')
-  @Post()
   async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users) {
     return await this.groupsService.createGroup(createGroupDto, users.userId);
   }
 
   // 그룹 모든 목록 조회 //
+  @ApiOperation({ summary: '모든 그룹 목록 조회', description: '모든 그룹 목록 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
   @Get('')
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
@@ -33,6 +36,8 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
+  @ApiOperation({ summary: '그룹 상세 조회', description: '그룹 상세 정보 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 조회' })
   @ApiResponse({ description: '성공적으로 그룹 상세 정보 조회하였습니다.', status: 200 })
@@ -44,9 +49,9 @@ export class GroupsController {
   @UseGuards(JWTAuthGuard)
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiOperation({ summary: '그룹 수정', description: '그룹의 목록 수정 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹을 수정하였습니다.' })
   @ApiBearerAuth('access-token')
-  @ApiOperation({ summary: '그룹 수정 API', description: '그룹 수정' })
-  @ApiResponse({ description: '성공적으로 그룹을 수정하였습니다.', status: 200 })
   @Patch(':groupId')
   async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto) {
     return await this.groupsService.updateGroup(groupId, updateGroupDto);
@@ -56,8 +61,10 @@ export class GroupsController {
   @UseGuards(JWTAuthGuard)
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제' })
-  @ApiResponse({ description: '성공적으로 그룹을 삭제하였습니다.', status: 204 })
+  @ApiOperation({ summary: '그룹 삭제', description: '그룹 삭제 성공' })
+  @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
+  @ApiBearerAuth('access-token')
+  @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);
   }
