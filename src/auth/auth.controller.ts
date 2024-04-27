@@ -28,7 +28,7 @@ export class AuthController {
   ) {}
 
   /** 회원가입*/
-  @ApiOperation({ summary: '회원가입 API', description: '회원가입 성공' })
+  @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   async register(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
@@ -36,7 +36,7 @@ export class AuthController {
   }
 
   /** 어드민 회원가입*/
-  @ApiOperation({ summary: '어드민 회원가입 API', description: '어드민 회원가입 성공' })
+  @ApiOperation({ summary: '어드민 회원가입', description: '어드민 회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
   async adminRegister(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
@@ -44,7 +44,7 @@ export class AuthController {
   }
 
   /** 로그인*/
-  @ApiOperation({ summary: '로그인 API', description: '로그인 성공' })
+  @ApiOperation({ summary: '로그인', description: '로그인' })
   @Post('login')
   @HttpCode(204)
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
@@ -54,7 +54,7 @@ export class AuthController {
   }
 
   /** 로그아웃*/
-  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃 성공' })
+  @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('logout')
