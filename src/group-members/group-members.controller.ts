@@ -38,7 +38,7 @@ export class GroupMembersController {
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '그룹에 멤버 초대', description: '그룹에 멤버 초대 성공' })
-  @ApiResponse({ status: 201, description: '초대를 완료했습니다.' })
+  @ApiResponse({ status: 201, description: '성공적으로 초대를 완료했습니다.' })
   @ApiBearerAuth('access-token')
   async inviteUserToGroup(
     @Param('groupId') groupId: number,
@@ -110,7 +110,7 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/users/:userId')
   @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회', description: '사용자의 그룹 멤버 정보 조회 성공' })
-  @ApiResponse({ status: 200, description: '그룹 멤버의 상세 정보' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹 멤버의 상세 정보를 조회하였습니다.' })
   @ApiBearerAuth('access-token')
   async findByUserAndGroup(@Param('userId') userId: number, @Param('groupId') groupId: number): Promise<GroupMembers> {
     return await this.groupMembersService.findByUserAndGroup(userId, groupId);
@@ -129,7 +129,7 @@ export class GroupMembersController {
   })
   @ApiResponse({
     status: 200,
-    description: '그룹 멤버 목록을 반환합니다.',
+    description: '성공적으로 그룹 멤버 전체 조회를 완료 하였습니다.',
     type: GroupMembers,
     isArray: true,
   })
