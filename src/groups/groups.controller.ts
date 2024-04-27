@@ -26,6 +26,7 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
   @ApiResponse({ description: '성공적으로 모든 그룹 목록을 조회하였습니다.', status: 200 })
   @Get('')
