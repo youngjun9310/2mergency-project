@@ -6,7 +6,7 @@ import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { Users } from 'src/users/entities/user.entity';
+
 @Injectable()
 export class GroupsService {
   constructor(
@@ -19,7 +19,7 @@ export class GroupsService {
    * 그룹 생성 *
    **/
 
-  async createGroup(createGroupDto: CreateGroupDto, userId: number, users: Users) {
+  async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
     const groupCreate = await this.groupRepository.save({
@@ -28,9 +28,6 @@ export class GroupsService {
       category,
     });
 
-    if (users.CertificationStatus === false) {
-      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
-    }
     try {
       // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
       // const uniqueNickname = `user_${userId}_${user.nickname}`;
