@@ -46,8 +46,8 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 수정', description: '그룹의 목록 수정 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹을 수정하였습니다.' })
-  @ApiBearerAuth('access-token')
   @Patch(':groupId')
+  @ApiBearerAuth('access-token')
   async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto) {
     return await this.groupsService.updateGroup(groupId, updateGroupDto);
   }
@@ -57,8 +57,8 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 삭제', description: '그룹 삭제 성공' })
   @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
-  @ApiBearerAuth('access-token')
   @Delete(':groupId')
+  @ApiBearerAuth('access-token')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);
   }
