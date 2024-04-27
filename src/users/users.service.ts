@@ -6,11 +6,14 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
+import { Groups } from 'src/groups/entities/group.entity';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    @InjectRepository(Groups)
+    private groupRepository : Repository<Groups>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
   ) {}
@@ -32,7 +35,7 @@ export class UsersService {
   }
   /*사용자 수정*/
   async userUpdate(userId: number, updateDto: UpdateDto, file: Express.Multer.File) {
-    const { nickname, email, password, passwordConfirm, address, isOpen } = updateDto;
+    const { email, password, passwordConfirm, address, isOpen } = updateDto;
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
@@ -49,7 +52,6 @@ export class UsersService {
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
     this.userRepository.update(userId, {
-      nickname,
       email,
       password: hashedPassword,
       address,
@@ -91,5 +93,15 @@ export class UsersService {
     }
 
     return users;
+  }
+
+  async findGroupId (groupId : number){
+    const groups = await this.groupRepository.findOne({ where : { groupId }});
+
+    if (!groups) {
+      throw new NotFoundException('그룹이 존재하지 않습니다.');
+    }
+
+    return groups
   }
 }

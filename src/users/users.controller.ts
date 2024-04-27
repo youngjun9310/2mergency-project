@@ -78,18 +78,24 @@ export class UsersController {
   // 유저 마이 정보 조회
   @Get('/users_h/usermypage')
   @Render('usermypage')
-  async users(@UserInfo() users: Users) {
+  async users(@UserInfo() users: Users, groupId : number) {
     const user = await this.usersService.findUser(users.userId);
+    const groups = await this.usersService.findGroupId(groupId);
     return {
       user: user,
+      groups : groups
     };
   }
 
   // 유저 정보 수정
   @Get('users_h/userEdit')
   @Render('userEdit')
-  async userEditpage() {
-    return;
+  async userEditpage(@UserInfo() users : Users, gorupId : number) {
+    const groups = await this.usersService.findGroupId(gorupId);
+    return {
+      users : users,
+      groups : groups
+    };
   }
 
   // 유저 정보 수정(로직 테스트, 이미지 업로드 불가 문제)
@@ -104,7 +110,11 @@ export class UsersController {
   // 유저 회원 탈퇴
   @Get('/users_h/userDelete')
   @Render('userDelete')
-  async userDeletepage() {
-    return;
+  async userDeletepage(@UserInfo() users : Users, groupId : number) {
+    const groups = await this.usersService.findGroupId(groupId);
+    return{
+      users : users,
+      groups : groups
+    };
   }
 }

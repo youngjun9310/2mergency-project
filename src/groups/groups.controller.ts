@@ -100,28 +100,33 @@ export class GroupsController {
   // 그룹 생성
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate() {
-    return;
+  async groupcreate(@UserInfo() users : Users) {
+    return{
+      users : users
+    };
   }
 
   // 그룹 모든 목록 조회
   @Get('/groups_h/groupall')
   @Render('groupall')
-  async groupsall() {
+  async groupsall(@UserInfo() users : Users, groupId : number) {
     const groups = await this.groupsService.findAllGroups();
     return {
       groups: groups,
+      users : users,
+      groupId : groupId
     };
   }
 
   // 그룹 상세 목록 조회, 스케줄 상세 조회
   @Get('/:groupId/groups_h/grouplist')
   @Render('grouplist')
-  async grouplist(@Param('groupId') groupId: number, scheduleId: number) {
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users : Users) {
     const groups = await this.groupsService.findOneGroup(groupId);
     return {
       groups: groups,
       scheduleId: scheduleId,
+      users : users
     };
   }
 
@@ -130,9 +135,10 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/groups_h/groupEdit')
   @Render('groupEdit')
-  async groupEditpage(@Param('groupId') groupId: number) {
+  async groupEditpage(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 }

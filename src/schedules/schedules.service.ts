@@ -24,9 +24,9 @@ export class SchedulesService {
   async createSchedule(createScheduleDto: ScheduleDto, groupId: number, userId: number) {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
-    // if (!userId) {
-    //   throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
-    // }
+    if (!userId) {
+      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+    }
 
     const group = await this.groupsRepository.findOne({
       where: { groupId },
