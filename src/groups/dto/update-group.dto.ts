@@ -1,10 +1,20 @@
 import { PickType } from '@nestjs/mapped-types';
 import { CreateGroupDto } from './create-group.dto';
-import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Category } from '../../types/Category.type';
 
-export class UpdateGroupDto extends PickType(CreateGroupDto, ['title', 'content', 'category']) {
+export class UpdateGroupDto extends PickType(CreateGroupDto, [
+  'title',
+  'content',
+  'category',
+]) {
   @ApiProperty({
     example: '그룹 제목',
     description: 'grouptitle',
