@@ -32,11 +32,8 @@ export class ScheduleMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':scheduleId/members')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '스케줄에 멤버 등록' })
-  @ApiResponse({
-    status: 201,
-    description: `스케줄에 멤버 등록이 완료되었습니다.`,
-  })
+  @ApiOperation({ summary: '스케줄 멤버 등록 API', description: '스케줄에 멤버 등록 성공' })
+  @ApiResponse({ status: 201, description: `성공적으로 스케줄에 멤버 등록이 완료되었습니다.` })
   @ApiBearerAuth('access-token')
   async registerScheduleMember(
     @Param('groupId', ParseIntPipe) groupId: number,
@@ -53,11 +50,8 @@ export class ScheduleMembersController {
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':scheduleId/members')
-  @ApiOperation({ summary: '특정 스케줄에 등록된 모든 멤버 조회' })
-  @ApiResponse({
-    status: 200,
-    description: '스케줄에 등록된 모든 멤버들의 목록을 반환합니다.',
-  })
+  @ApiOperation({ summary: '스케줄에 등록된 전체 멤버 조회 API', description: '스케줄에 등록된 멤버 전체 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 스케줄에 등록된 멤버 전체 조회가 완료되었습니다.' })
   @ApiBearerAuth('access-token')
   async findAllMembers(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
     return await this.scheduleMembersService.findAllScheduleMembers(groupId, scheduleId);
@@ -66,15 +60,13 @@ export class ScheduleMembersController {
   /**
    * 스케줄에 등록된 멤버 상세 조회
    */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':scheduleId/members/:userId')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '스케줄에 등록된 멤버 상세 조회' })
-  @ApiResponse({
-    status: 200,
-    description: '스케줄에 등록된 멤버 조회가 완료되었습니다.',
-  })
+  @ApiOperation({ summary: '스케줄에 등록된 멤버 상세 조회 API', description: '스케줄에 등록된 멤버 상세 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 스케줄에 등록된 멤버 조회가 완료되었습니다.' })
   @ApiBearerAuth('access-token')
   async findOneScheduleMembers(
     @Param('groupId') groupId: number,
@@ -86,15 +78,14 @@ export class ScheduleMembersController {
 
   /**
    * 스케줄에 등록된 멤버 삭제
-   
-   
    */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Delete(':scheduleId/members')
-  @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제' })
-  @ApiResponse({ status: 200, description: '스케줄 멤버 삭제에 성공했습니다.' })
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제 API', description: '스케줄에 등록된 멤버 삭제 성공' })
+  @ApiResponse({ status: 204, description: '성공적으로 스케줄에 등록된 멤버를 삭제했습니다.' })
   @ApiBearerAuth('access-token')
   async deleteScheduleMembers(
     @Param('groupId') groupId: number,
