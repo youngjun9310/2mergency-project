@@ -25,6 +25,7 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
   /** 전체 사용자 조회(어드민용)*/
   @ApiOperation({ summary: '전체 사용자 조회', description: '전체 조회' })
   @UseGuards(RolesGuard)
