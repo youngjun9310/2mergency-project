@@ -12,8 +12,6 @@ export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
-    @InjectRepository(Groups)
-    private groupRepository : Repository<Groups>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
   ) {}
@@ -93,15 +91,5 @@ export class UsersService {
     }
 
     return users;
-  }
-
-  async findGroupId (groupId : number){
-    const groups = await this.groupRepository.findOne({ where : { groupId }});
-
-    if (!groups) {
-      throw new NotFoundException('그룹이 존재하지 않습니다.');
-    }
-
-    return groups
   }
 }

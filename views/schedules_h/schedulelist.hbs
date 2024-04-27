@@ -48,6 +48,16 @@
                         </a>
                         <div class="collapse" id="componentsExamples">
                             <ul class="nav">
+                                 <li class="nav-item">
+                                    <a class="nav-link" href="/records/records_h/recordcreate">
+                                        <span class="sidebar-normal">운동 기록 생성</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/records/records_h/recordall">
+                                        <span class="sidebar-normal">운동기록</span>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/">
                                         <span class="sidebar-normal">운동경로탐색</span>
@@ -64,8 +74,13 @@
                         <div class="collapse" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groupId }}/schedules/schedules_h/scheduleall">
+                                    <a class="nav-link" href="/groups/groups_h/groupall">
                                         <span class="sidebar-normal">그룹목록</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                                        <span class="sidebar-normal">그룹생성</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -75,7 +90,7 @@
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/groups/{{ groupId }}/accept/group-members_h/groupaccept">
-                                        <span class="sidebar-normal">그룹초대수락</span>
+                                        <span class="sidebar-normal">그룹수락하기</span>
                                     </a>
                                 </li>
                             </ul>
@@ -89,12 +104,13 @@
                         <div class="collapse show" id="tablesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groupId }}/schedules/schedules_h/scheduleall">
+                                    <a class="nav-link"
+                                        href="/groups/{{ groupId }}/schedules/schedules_h/scheduleall">
                                         <span class="sidebar-normal">스케줄목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groups.groupId }}/schedules/schedules_h/schedulecreate">
+                                    <a class="nav-link" href="/groups/{{ groupId }}/schedules/schedules_h/schedulecreate">
                                         <span class="sidebar-normal">스케줄생성</span>
                                     </a>
                                 </li>
@@ -114,7 +130,7 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/pages/userInfo.html">
+                                    <a class="nav-link" href="/users/users_h/usermypage">
                                         <span class="sidebar-normal">프로필조회</span>
                                     </a>
                                 </li>
@@ -122,7 +138,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/users_h/usermypage">
+                        <a class="nav-link" href="/">
                             <i class="nc-icon nc-chart-pie-35"></i>
                             <p>홈으로</p>
                         </a>
@@ -141,7 +157,7 @@
                                 <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                             </button>
                         </div>
-                        <a class="navbar-brand" href="#pablo">스케줄 상세 목록</a>
+                        <a class="navbar-brand" href="#pablo">상세 스케줄</a>
                     </div>
                     <button
                         class="navbar-toggler navbar-toggler-right"
@@ -234,7 +250,7 @@
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">스케줄 상세조회</h4>
+                                    <h4 class="card-title">스케줄 상세 조회</h4>
                                 </div>
                                     <div class="card-body">
                                         <div id="page">
@@ -274,9 +290,9 @@
                                         </div>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-fill btn-info" onclick="window.location.href = '/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}/schedules_h/scheduleEdit';">스케줄 수정하기</button>
+                                        <button type="submit" class="btn btn-fill btn-info pull-left" onclick="window.location.href = '/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}/schedules_h/scheduleEdit';">스케줄 수정하기</button>
                                         <form action="/groups/{{ schedules.groupId }}/schedules/{{ schedules.scheduleId }}?_method=DELETE" method="post">
-                                            <button type="submit" class="btn btn-fill btn-info" >스케줄 삭제하기</button>
+                                            <button type="submit" class="btn btn-fill btn-info pull-left" style="margin-left: 5px;" >스케줄 삭제하기</button>
                                         </form>  
                                     </div>
                                 </div>
