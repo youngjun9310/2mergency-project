@@ -26,15 +26,9 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
-  @ApiOperation({
-    summary: '그룹 모든 목록 조회 API',
-    description: '그룹의 모든 목록을 조회',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹 조회를 하였습니다.',
-    status: 200,
-  })
-  @Get()
+  @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
+  @ApiResponse({ description: '성공적으로 모든 그룹 목록을 조회하였습니다.', status: 200 })
+  @Get('')
   async findAllGroups() {
     return await this.groupsService.findAllGroups();
   }
@@ -89,33 +83,33 @@ export class GroupsController {
   @UseGuards(JWTAuthGuard)
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate(@UserInfo() users : Users) {
-    return{
-      users : users
+  async groupcreate(@UserInfo() users: Users) {
+    return {
+      users: users,
     };
   }
 
   // 그룹 모든 목록 조회
   @Get('/groups_h/groupall')
   @Render('groupall')
-  async groupsall(@UserInfo() users : Users, groupId : number) {
+  async groupsall(@UserInfo() users: Users, groupId: number) {
     const groups = await this.groupsService.findAllGroups();
     return {
       groups: groups,
-      users : users,
-      groupId : groupId
+      users: users,
+      groupId: groupId,
     };
   }
 
   // 그룹 상세 목록 조회, 스케줄 상세 조회
   @Get('/:groupId/groups_h/grouplist')
   @Render('grouplist')
-  async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users : Users) {
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users: Users) {
     const groups = await this.groupsService.findOneGroup(groupId);
     return {
       groups: groups,
       scheduleId: scheduleId,
-      users : users
+      users: users,
     };
   }
 
@@ -124,10 +118,10 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/groups_h/groupEdit')
   @Render('groupEdit')
-  async groupEditpage(@Param('groupId') groupId: number, @UserInfo() users : Users) {
+  async groupEditpage(@Param('groupId') groupId: number, @UserInfo() users: Users) {
     return {
       groupId: groupId,
-      users : users
+      users: users,
     };
   }
 }
