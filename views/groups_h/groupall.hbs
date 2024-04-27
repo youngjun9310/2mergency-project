@@ -49,6 +49,16 @@
                         <div class="collapse" id="componentsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
+                                    <a class="nav-link" href="/records/records_h/recordcreate">
+                                        <span class="sidebar-normal">운동 기록 생성</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/records/records_h/recordall">
+                                        <span class="sidebar-normal">나의 운동기록</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" href="/">
                                         <span class="sidebar-normal">운동경로탐색</span>
                                     </a>
@@ -61,26 +71,11 @@
                             <i class="nc-icon nc-notes"></i>
                             <p>그룹 <b class="caret"></b></p>
                         </a>
-                        <div class="collapse" id="formsExamples">
+                        <div class="collapse show" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/groups_h/groupall">
-                                        <span class="sidebar-normal">그룹목록</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groupId }}/schedules/schedules_h/scheduleall">
-                                        <span class="sidebar-normal">그룹스케줄목록</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groupId }}/invite/group-members_h/groupinvite">
-                                        <span class="sidebar-normal">그룹초대하기</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/groups/{{ groupId }}/accept/group-members_h/groupaccept">
-                                        <span class="sidebar-normal">그룹초대수락</span>
+                                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                                        <span class="sidebar-normal">그룹생성</span>
                                     </a>
                                 </li>
                             </ul>
@@ -238,8 +233,10 @@
                                             </tr>
                                             {{/each}}
                                         </tbody>
-                                        
                                     </table>
+                                    <div class="card-footer">
+                                        <button type="submit" class="btn btn-fill btn-info" onclick="window.location.href = '/groups/groups_h/groupcreate';">그룹 생성</button>
+                                    </div>
                                     </div>
                                      
                                 </div>

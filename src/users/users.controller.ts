@@ -89,30 +89,23 @@ export class UsersController {
       user: users,
     };
   }
-
   // 유저 마이 정보 조회
   @Get('/users_h/usermypage')
   @Render('usermypage')
-  async users(@UserInfo() users: Users, groupId: number) {
+  async users(@UserInfo() users: Users) {
     const user = await this.usersService.findUser(users.userId);
-    const groups = await this.usersService.findGroupId(groupId);
     return {
       user: user,
-      groups: groups,
     };
   }
-
   // 유저 정보 수정
   @Get('users_h/userEdit')
   @Render('userEdit')
-  async userEditpage(@UserInfo() users: Users, gorupId: number) {
-    const groups = await this.usersService.findGroupId(gorupId);
+  async userEditpage(@UserInfo() users : Users) {
     return {
-      users: users,
-      groups: groups,
+      users : users,
     };
   }
-
   // 유저 정보 수정(로직 테스트, 이미지 업로드 불가 문제)
   @Post('/userEdit')
   async userEdit(@UserInfo() users: Users, updateDto: UpdateDto, @Body('file') file: Express.Multer.File) {
@@ -121,15 +114,12 @@ export class UsersController {
       message: '유저 정보가 업데이트 되었습니다.',
     };
   }
-
   // 유저 회원 탈퇴
   @Get('/users_h/userDelete')
   @Render('userDelete')
-  async userDeletepage(@UserInfo() users: Users, groupId: number) {
-    const groups = await this.usersService.findGroupId(groupId);
-    return {
-      users: users,
-      groups: groups,
+  async userDeletepage(@UserInfo() users : Users) {
+    return{
+      users : users,
     };
   }
 }

@@ -14,7 +14,7 @@
     <link href="/assets/css/light-bootstrap-dashboard.css?v=2.0.1" rel="stylesheet" />
     <link href="/assets/css/demo.css" rel="stylesheet" />
     <link href="/css/default.css" rel="stylesheet" />
-    <title>유저 상세 조회</title>
+    <title>마이페이지</title>
 </head>
 <body>
     <div class="wrapper">
@@ -59,12 +59,12 @@
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="/records/records_h/recordall">
-                          <span class="sidebar-normal">나의 운동기록</span>
+                          <span class="sidebar-normal">운동기록</span>
                       </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/">
-                      <span class="sidebar-normal">운동Map탐색</span>
+                      <span class="sidebar-normal">운동경로탐색</span>
                     </a>
                   </li>
                 </ul>
@@ -82,14 +82,9 @@
                       <span class="sidebar-normal">그룹목록</span>
                     </a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/groups/{{ groups.groupId }}/invite/group-members_h/groupinvite">
-                      <span class="sidebar-normal">그룹초대하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/groups/{{ groups.groupId }}/accept/group-members_h/groupaccept">
-                      <span class="sidebar-normal">그룹초대수락</span>
+                   <li class="nav-item">
+                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                      <span class="sidebar-normal">그룹생성</span>
                     </a>
                   </li>
                 </ul>
@@ -100,11 +95,16 @@
                 <i class="nc-icon nc-puzzle-10"></i>
                 <p>사용자정보<b class="caret"></b></p>
               </a>
-              <div class="collapse" id="pagesExamples">
+              <div class="collapse show" id="pagesExamples">
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="/users/users_h/usermypage">
                       <span class="sidebar-normal">프로필조회</span>
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/users/users_h/userEdit">
+                      <span class="sidebar-normal">프로필수정</span>
                     </a>
                   </li>
                 </ul>
@@ -282,25 +282,23 @@
                                   type="text"
                                   class="form-control"
                                   disabled=""
-                                  name="address"
-                                  value={{ user.address }}
+                                  name="isOpen"
+                                  value={{ user.isOpen }}
                                 />
                               </div>
                             </div>
                           </div>
                           <div>
                             <button
-                            type="submit"
-                            class="btn btn-info btn-fill pull-right"
+                            class="btn btn-info btn-fill pull-left"
                             onclick="location.href='/users/users_h/userEdit'"
-                            value="수정하기">수정하기
+                            >수정하기
                           </button>
                           </div>
                           <div>
                             <button
-                            type="submit"
-                            class="btn btn-info btn-fill pull-right"
-                            onclick="location.href='/users/users_h/userDelete'">
+                            class="btn btn-info btn-fill pull-left"
+                            onclick="location.href='/users/users_h/userDelete'" style="margin-left: 5px;">
                             탈퇴하기
                           </button>
                           </div>
