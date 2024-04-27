@@ -53,6 +53,7 @@ export class AuthService {
       isOpen: srtToBoolean,
     });
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
   /*어드민 회원가입*/
@@ -167,4 +168,5 @@ export class AuthService {
 
     return { statusCode: 201, message: '이메일 인증을 완료하였습니다.' };
   }
+
 }

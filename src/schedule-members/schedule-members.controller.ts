@@ -27,9 +27,11 @@ export class ScheduleMembersController {
   /**
    * 스케줄에 멤버 등록
    */
-  @Post(':scheduleId/members')
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Post(':scheduleId/members')
+  @HttpCode(HttpStatus.CREATED)
   @ApiOperation({ summary: '스케줄에 멤버 등록' })
   @ApiResponse({
     status: 201,
@@ -48,9 +50,9 @@ export class ScheduleMembersController {
    * 스케줄에 등록된 멤버 전체 조회
    */
 
-  @Get(':scheduleId/members')
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
+  @Get(':scheduleId/members')
   @ApiOperation({ summary: '특정 스케줄에 등록된 모든 멤버 조회' })
   @ApiResponse({
     status: 200,
@@ -64,9 +66,10 @@ export class ScheduleMembersController {
   /**
    * 스케줄에 등록된 멤버 상세 조회
    */
-  @Get(':scheduleId/members/:userId')
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Get(':scheduleId/members/:userId')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '스케줄에 등록된 멤버 상세 조회' })
   @ApiResponse({
     status: 200,
@@ -84,10 +87,12 @@ export class ScheduleMembersController {
   /**
    * 스케줄에 등록된 멤버 삭제
    
+   
    */
-  @Delete(':scheduleId/members')
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Delete(':scheduleId/members')
+  @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제' })
   @ApiResponse({ status: 200, description: '스케줄 멤버 삭제에 성공했습니다.' })
   @ApiBearerAuth('access-token')
