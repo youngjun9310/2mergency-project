@@ -13,7 +13,7 @@ export class CreateScheduleMemberDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: '별명을 입력해주세요.' })
   @ApiProperty({
     description: '그룹 멤버의 별명',
     example: 'nickname',

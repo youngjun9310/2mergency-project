@@ -1,13 +1,6 @@
-import {
-  IsBoolean,
-  IsEmail,
-  IsEnum,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-} from 'class-validator';
-import { MemberRole } from '../types/groupMemberRole.type';
+import { IsBoolean, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
+import { MemberRole } from '../types/groupMemberRole.type';
 
 export class CreateGroupMemberDto {
   @IsString()
@@ -21,7 +14,7 @@ export class CreateGroupMemberDto {
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: '닉네임을 입력해주세요.' })
   @ApiProperty({
     description: '그룹 멤버의 별명',
     example: 'nickname',
@@ -30,18 +23,16 @@ export class CreateGroupMemberDto {
   nickname: string;
 
   @IsBoolean()
-  @IsNotEmpty()
   @ApiProperty({
     description: '멤버의 유효성 확인 상태',
     example: true,
     required: true,
   })
-  isVailed: boolean;
+  isValid: boolean; // 이름을 'isValid'로 변경했습니다.
 
   @IsBoolean()
-  @IsNotEmpty()
   @ApiProperty({
-    description: '멤버의 유효성 확인 상태',
+    description: '멤버가 초대되었는지 여부',
     example: true,
     required: true,
   })

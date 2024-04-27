@@ -6,16 +6,16 @@ export class UpdateGroupMemberDto {
   @IsEmail()
   @IsNotEmpty({ message: '이메일이 존재하지 않습니다.' })
   @ApiProperty({
-    description: '초대할 사용자의 이메일 주소',
+    description: '그룹 멤버의 이메일 주소',
     example: 'user@example.com',
     required: true,
   })
   email: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: '닉네임을 입력해주세요.' })
   @ApiProperty({
-    description: '초대할 사용자의 별명',
+    description: '그룹 멤버의 별명',
     example: 'nickname',
     required: true,
   })
