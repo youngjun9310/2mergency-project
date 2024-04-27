@@ -52,37 +52,46 @@ export class UsersController {
     const userInfo = await this.usersService.findUser(userId);
     return userInfo;
   }
+  
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보수정', description: '수정' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @ApiBearerAuth('access-token')
-  @Patch('')
-  async userUpdate(
-    @Body() updateDto: UpdateDto,
-    @UploadedFile() file: Express.Multer.File,
-    @Req() req,
-  ) {
-    const { userId } = req.user;
-    await this.usersService.userUpdate(userId, updateDto, file);
-    return;
+  @Post('/userUpdate')
+  @Redirect('/')
+  async userUpdate( @UserInfo() users: Users,@Body() updateDto: UpdateDto,@UploadedFile() file: Express.Multer.File,groupId : number
+) {
+  
+  console.log('groupId', groupId)
+ 
+  const groups = await this.usersService.findGroupId(groupId);
+  console.log('groups', groups)
+
+  await this.usersService.userUpdate(users.userId, updateDto, file);
+
+  return {
+    users : users,
+    groups : groups,
+    url: '/users/users_h/usermypage'
+  };
   }
 
   /** 사용자 삭제*/
   @ApiOperation({ summary: '사용자 삭제', description: '삭제' })
   @ApiBearerAuth('access-token')
   @Delete('')
-  @Redirect('/user_h/welcomePage')
-  async userDelete(@Body() deleteDto: DeleteDto, @Req() req, @Res() res: Response) {
+  //@Redirect('/user_h/welcomePage')
+  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users, @Res() res: Response) {
 
     try {
-      const { userId } = req.user;
-      await this.usersService.userDelete(userId, deleteDto.password);
-      return;
+      await this.usersService.userDelete(users.userId, deleteDto.password);
+      res.redirect('/auth/users_h/welcomePage');
     } catch (error) {
-      res.redirect('/auth/users_h/usermypage');
-    }
+      const message = error.response.message
+      console.log(message)
 
-    
+      res.redirect('/users/users_h/userDelete');
+    }
   }
 
   /** 사용자 접속정보조회*/
@@ -95,8 +104,7 @@ export class UsersController {
 
   /** hbs 양식 */
   // 유저 모든 목록 조회
-  @UseGuards(JWTAuthGuard)
-  // @UseGuards(RolesGuard)
+  @UseGuards(RolesGuard)
   @Get('users_h/userall')
   @Render('userall')
   async findall() {
@@ -107,7 +115,6 @@ export class UsersController {
   }
 
   // 유저 마이 정보 조회
-  @UseGuards(JWTAuthGuard)
   @Get('/users_h/usermypage')
   @Render('usermypage')
   async users( @UserInfo() users : Users ) {
@@ -118,47 +125,37 @@ export class UsersController {
   }
 
   // 유저 정보 수정
-  @UseGuards(JWTAuthGuard)
   @Get('users_h/userEdit')
   @Render('userEdit')
-  async userEditpage() {
-    return;
-  }
-
-  // 유저 정보 수정(로직 테스트, 수정이 안됨)
-  @UseGuards(JWTAuthGuard)
-  @Post('/userEdit')
-  async userEdit(
-    @UserInfo() users : Users,
-    updateDto : UpdateDto,
-    @Body('file')file: Express.Multer.File
-  ) {
-    await this.usersService.userUpdate(users.userId, updateDto, file);
+  async userEditpage(@UserInfo() users : Users, groupId : number) {
+    const groups = await this.usersService.findGroupId(groupId);
     return {
-      message : "유저 정보가 업데이트 되었습니다."
-    };
-  }
-
-   // 유저 회원 탈퇴
-   @UseGuards(JWTAuthGuard)
-   @Get('/users_h/userDelete')
-   @Render('userDelete')
-   async userDeletepage() {
-     return;
-   }
-
-   // 유저 대시보드
-  @UseGuards(JWTAuthGuard)
-  @Get('users_h/userDashboard')
-  @Render('userDashboard')
-  async userTotal() {
-    //가입한 그룹목록(테스트 목적, 전체 그룹 조회)
-    const groups = await this.groupsService.findAllGroups();
-    return {
+      users : users,
       groups : groups
     };
   }
 
+   // 유저 회원 탈퇴
+   @Get('/users_h/userDelete')
+   @Render('userDelete')
+   async userDeletepage(@UserInfo() users : Users, groupId : number) {
+    const groups = await this.usersService.findGroupId(groupId);
+    return{
+      users : users,
+      groups : groups
+    };
+  }
 
-
+   // 유저 대시보드
+  @Get('users_h/userDashboard')
+  @Render('userDashboard')
+  async userTotal(@UserInfo() users : Users, groupId : number) {
+    //가입한 그룹목록(테스트 목적, 전체 그룹 조회)
+    const groups = await this.usersService.findGroupId(groupId);
+    return {
+      user : users,
+      groups : groups
+    };
+  }
+  
 }

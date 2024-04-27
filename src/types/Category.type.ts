@@ -1,5 +1,5 @@
 export enum Category{
-    walk = 'walk',
+    walking = 'walking',
     running = 'running',
     hiking = 'hiking'
 }

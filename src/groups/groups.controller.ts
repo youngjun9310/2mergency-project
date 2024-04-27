@@ -9,6 +9,7 @@ import {
   UseGuards,
   ParseIntPipe,
   Render,
+  Res,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
@@ -25,6 +26,7 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { Response } from 'express';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Groups')
@@ -37,11 +39,14 @@ export class GroupsController {
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @ApiBearerAuth('access-token')
   @Post()
-  async createGroup(
-    @Body() createGroupDto: CreateGroupDto,
-    @UserInfo() users: Users,
-  ) {
-    return await this.groupsService.createGroup(createGroupDto, users.userId);
+  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res: Response) {
+    
+    try {
+      await this.groupsService.createGroup(createGroupDto, users.userId, users );
+      res.render('groupall')
+    } catch (error) {
+      res.render('emailAccept')
+    }
   }
 
   // 그룹 모든 목록 조회 //
@@ -121,17 +126,45 @@ export class GroupsController {
   // 그룹 생성
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate(){
-    return;
+  async groupcreate(@UserInfo() users : Users) {
+    return{
+      users : users
+    };
   }
 
   // 그룹 모든 목록 조회
   @Get('/groups_h/groupall')
   @Render('groupall')
-  async groupsall(){
+  async groupsall(@UserInfo() users : Users, groupId : number) {
     const groups = await this.groupsService.findAllGroups();
     return {
-      groups : groups
+      groups: groups,
+      users : users,
+      groupId : groupId
+    };
+  }
+
+  // 그룹 상세 목록 조회, 스케줄 상세 조회
+  @Get('/:groupId/groups_h/grouplist')
+  @Render('grouplist')
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users : Users) {
+    const groups = await this.groupsService.findOneGroup(groupId);
+    return {
+      groups: groups,
+      scheduleId: scheduleId,
+      users : users
+    };
+  }
+
+  // 그룹 수정
+  @UseGuards(memberRolesGuard)
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @Get('/:groupId/groups_h/groupEdit')
+  @Render('groupEdit')
+  async groupEditpage(@Param('groupId') groupId: number, @UserInfo() users : Users) {
+    return {
+      groupId: groupId,
+      users : users
     };
   }
 }

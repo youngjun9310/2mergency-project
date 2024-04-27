@@ -24,8 +24,8 @@
             data-image="/assets/img/sidebar-5.jpg">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="/auth/user_h/welcomePage" class="simple-text logo-mini"> </a>
-                    <a href="/auth/user_h/welcomePage" class="simple-text logo-normal">2mergency</a>
+                    <a href="/users/user_h/userDashboard" class="simple-text logo-mini"> </a>
+                    <a href="/usersuser_h/userDashboard" class="simple-text logo-normal">2mergency</a>
                 </div>
                 <div class="user">
                     <div class="photo">
@@ -49,19 +49,14 @@
                         <div class="collapse" id="componentsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/maps/fullscreen.html">
-                                        <span class="sidebar-normal">오늘의운동기록</span>
+                                    <a class="nav-link" href="/records/records_h/recordcreate">
+                                        <span class="sidebar-normal">나의 운동 기록하기</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/maps/fullscreen.html">
-                                        <span class="sidebar-normal">운동경로탐색</span>
+                                    <a class="nav-link" href="/records/records_h/recordall">
+                                        <span class="sidebar-normal">나의 기록조회</span>
                                     </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/maps/fullscreen.html">
-                                        <span class="sidebar-normal">랜덤경로추천받기</span>
-                                    </a>    
                                 </li>
                             </ul>
                         </div>
@@ -74,53 +69,53 @@
                         <div class="collapse" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/regular.html">
+                                    <a class="nav-link" href="/groups/groups_h/groupall">
                                         <span class="sidebar-normal">가입한그룹목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/group-calendar.html">
+                                    <a class="nav-link" href="/schedules/schedules_h/scheduleall">
                                         <span class="sidebar-normal">그룹스케줄</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/datatables.net.html">
-                                        <span class="sidebar-normal">초대하기</span>
+                                    <a class="nav-link" href="/groups/groups_h/">
+                                        <span class="sidebar-normal">그룹생성하기</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/wizard.html">
-                                        <span class="sidebar-normal">받은초대</span>
+                                    <a class="nav-link" href="/group-members/{{ groups.groupId }}/invite/group-members_h/groupinvite">
+                                        <span class="sidebar-normal">그룹초대하기</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/group-members/{{ groups.groupId }}/invite/group-members_h/groupaccept">
+                                        <span class="sidebar-normal">그룹초대수락</span>
                                     </a>
                                 </li>
                             </ul>
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
-                            <i class="nc-icon nc-paper-2"></i>
-                            <p>스케줄<b class="caret"></b></p>
-                        </a>
-                        <div class="collapse show" id="tablesExamples">
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/schedule-list.html">
-                                        <span class="sidebar-normal">스케줄목록</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/schedule-create.html">
-                                        <span class="sidebar-normal">스케줄생성</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/calendar.html">
-                                        <span class="sidebar-normal">스케줄달력보기</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
+                      <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
+                        <i class="nc-icon nc-paper-2"></i>
+                        <p>지도탐색하기<b class="caret"></b></p>
+                      </a>
+                      <div class="collapse" id="tablesExamples">
+                        <ul class="nav">
+                          <li class="nav-item">
+                            <a class="nav-link" href="/records/records_h/recordTrack">
+                              <span class="sidebar-normal">운동경로탐색</span>
+                            </a>
+                          </li>
+                          <li class="nav-item">
+                            <a class="nav-link" href="/records/records_h/recordTrack">
+                              <span class="sidebar-normal">랜덤경로추천받기</span>
+                            </a>
+                          </li>
+                        </ul>
+                      </div>
+                  </li>
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
                             <i class="nc-icon nc-puzzle-10"></i>
@@ -129,7 +124,7 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/pages/userInfo.html">
+                                    <a class="nav-link" href="/users/users_h/usermypage">
                                         <span class="sidebar-normal">프로필조회</span>
                                     </a>
                                 </li>
@@ -137,7 +132,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/html/dashboard.html">
+                        <a class="nav-link" href="/users/users_h/userDashboard">
                             <i class="nc-icon nc-chart-pie-35"></i>
                             <p>홈으로</p>
                         </a>
@@ -341,74 +336,13 @@
                 </div>
               </div>
             </div>
-            <div class="row">
-                <div class="col-md-6">
-                            <div class="card table-with-links">
-                                <div class="card-header ">
-                                    <h4 class="card-title">가입한 그룹 목록 </h4>
-                                    <p class="card-category">현재 가입된 그룹입니다.</p>
-                                </div>
-                                <div class="card-body table-full-width">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                                <th class="text-center">no</th>
-                                                <th>그룹명</th>
-                                                <th>카테고리</th>
-                                                <th >가입일</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr> 
-                                                 {{#each groups}}
-                                                <td class="text-center">1</td>
-                                                <td>{{this.title}}</td>
-                                                <td>{{this.category}}</td>
-                                                <td >{{this.createdAt}}</td>
-                                                {{/each}}
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-              <div class="col-md-6">
-                <div class="card">
-                  <div class="card-header">
-                    <h4 class="card-title">운동 기록</h4>
-                    <p class="card-category">현재까지의 기록입니다</p>
-                  </div>
-                  <div class="card-body">
-                        <div class="table-responsive">
-                          <table class="table">
-                            <tbody>
-                              <tr>
-                                <td>
-                                  <div class="flag">
-                                    <img src="/assets/img/favicon.ico" />
-                                  </div>
-                                </td>
-                                <td>광화문 야간 강산책</td>
-                                <td>2024-04-22</td>
-                                <td>2mergency</td>
-                                <td>산책</td>
-                                <td class="text-right">2.39km</td>
-                                <td class="text-right">1H 09M 32Sec</td>
-                              </tr>
-                            </tbody>
-                          </table>
-                        </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- -->
-`           <div class="row">
-                <div class="col-md-6">
+
+<div class="row">
+                <div class="col-md-12">
                 <div class="card data-tables">
                     <div class="card-header">
-                    <h4 class="card-title">예정된 그룹 스케줄</h4>
-                    <p class="card-category">그룹 스케줄 일정입니다.</p>
+                    <h4 class="card-title">나의 운동 Record</h4>
+                    <p class="card-category">운동 기록 리스트입니다.</p>
                   </div>
                   <div
                     class="card-body table-striped table-no-bordered table-hover dataTable dtr-inline table-full-width"
@@ -474,7 +408,12 @@
                   </div>
                 </div>
               </div>
-            <div class="col-md-6">
+            
+            </div>
+
+
+<div class="row">
+<div class="col-md-12">
                 <div class="card bootstrap-table">
                     <div class="card-header">
                     <h4 class="card-title">등록된 개인 스케줄</h4>
@@ -531,7 +470,88 @@
                   </div>
                 </div>
               </div>
-            </div>
+              
+
+</div>
+<div class="row">
+  <div class="col-md-12">
+                <div class="card bootstrap-table">
+                    <div class="card-header">
+                    <h4 class="card-title">가입한 그룹 목록</h4>
+                    <p class="card-category">그룹 목록입니다.</p>
+                  </div>
+                  <div class="card-body table-full-width">
+                    <div class="toolbar">
+                    </div>
+                    <table id="bootstrap-table" class="table">
+                      <thead>
+                        <th data-field="state" data-checkbox="true"></th>
+                        <th
+                          data-field="id"
+                          class="text-center"
+                          data-sortable="true"
+                        >
+                          스케줄명
+                        </th>
+                        <th data-field="email" data-sortable="true">스케줄일자</th>
+                        <th data-field="category" data-sortable="true">
+                          카테고리
+                        </th>
+                        <th data-field="count" data-sortable="true">
+                          스케줄장소
+                        </th>
+                        <th data-field="region">세부사항</th>
+                        <th
+                          data-field="actions"
+                          class="td-actions text-right"
+                          data-events="operateEvents"
+                          data-formatter="operateFormatter"
+                        >
+                          비고
+                        </th>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td></td>
+                          {{#each groups}}
+                          <td class="text-center">1</td>
+                          <td>{{this.title}}</td>
+                          <td>{{this.category}}</td>
+                          <td >{{this.createdAt}}</td>
+                          {{/each}}
+                          <td></td>
+                          
+                          <td></td>
+                          <td>1</td>
+                          <td>Dakota Rice</td>
+                          <td>$36,738</td>
+                          <td>Niger</td>
+                          <td>Oud-Turnhout</td>
+                          <td></td>
+                        
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="card-footer">
+                    <hr />
+                    <div class="stats">
+                      <i class="now-ui-icons loader_refresh spin"></i> 3분전 업데이트
+                    </div>
+                  </div>
+                </div>
+              </div>
+</div>
+
+
+
+
+
+
+
+
+
+
           </div>
         </div>
         <footer class="footer">
@@ -542,8 +562,7 @@
                 <script>
                   document.write(new Date().getFullYear());
                 </script>
-                <a href="../dashboard.html">2Mergency</a>, 건강한 라이프스타일과
-                함께합니다.
+                <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
               </p>
             </nav>
           </div>

@@ -19,7 +19,7 @@ export class AppController {
   @Get('/')
   @Render('index')
   root() {
-    return { message: 'data' };
+    return { message: 'userDashboard' };
   }
 
   

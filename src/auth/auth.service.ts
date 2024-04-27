@@ -17,6 +17,7 @@ import {
   ENV_ROLE_ADMIN_PASSWORD,
 } from 'src/const/env.keys';
 import { SignUpDto } from './dto/signup.dto';
+import { MailService } from 'src/mail/mail.service';
 @Injectable()
 export class AuthService {
   constructor(
@@ -27,6 +28,7 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
+    private readonly mailService: MailService,
   ) {}
 
   /*회원가입*/ //isOpen: boolean,
@@ -39,22 +41,16 @@ export class AuthService {
       where: { email },
     });
     if (existingUser) {
-      throw new ConflictException(
-        '이미 해당 이메일로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('ExistingEmailError');
     }
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
     if (existingNickname) {
-      throw new ConflictException(
-        '이미 해당 닉네임으로 가입된 사용자가 있습니다!',
-      );
+      throw new ConflictException('ExistingNicknameError');
     }
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException(
-        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException('PasswordMatchError');
     }
 
     const profileImage = await this.awsService.imageUpload(file);
@@ -134,16 +130,23 @@ export class AuthService {
   /*로그인*/
   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
-      select: ['userId', 'email', 'password'],
+      select: ['userId', 'email', 'password', 'CertificationStatus'],
       where: { email },
     });
 
+    console.log('user',user)
     if (!user) {
-      throw new UnauthorizedException('유저의 이메일을 확인해주세요.');
+      throw new UnauthorizedException('EmailError');
+      
     }
 
     if (!(await compare(password, user.password))) {
-      throw new UnauthorizedException('비밀번호를 확인해주세요.');
+      throw new UnauthorizedException('PasswordError');
+      
+    }
+
+    if (user.CertificationStatus === false) {
+      throw new UnauthorizedException('EmailAuthError');
     }
 
     const payload = { email, sub: user.userId };
@@ -174,17 +177,14 @@ export class AuthService {
       where: { email },
     });
 
-    if (!existingToken) {
-      throw new BadRequestException('인증 번호를 다시 입력 부탁드립니다.');
-    }
-    const present = new Date();
-
-    if (existingToken.expires < present) {
-      throw new BadRequestException(
-        '인증 번호가 만료되었습니다. 다시 요청 부탁드립니다.',
-      );
+    if (!existingToken.token) {
+      throw new BadRequestException('TokenNotExistError');
     }
 
+    if (existingToken.token !== token) {
+      throw new BadRequestException('TokenNotMatch');
+    }
+    
     await this.invitesRepository.delete({ email });
     await this.userRepository.update({ email }, { CertificationStatus: true });
 

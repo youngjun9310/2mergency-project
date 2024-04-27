@@ -6,7 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
     <script src="https://apis.openapi.sk.com/tmap/jsv2?version=1&appKey=WriPLFWas18xUYsFCelxl1og5A9pHFRd2yf11y1U"></script>
 </head>
-<link rel="stylesheet" href="default.css">
+<link rel="stylesheet" href="/css/default.css">
 <body>
 <div id="maps">
     <div id="map_div" style="position: relative;">
@@ -89,6 +89,12 @@
                     $("#startx").val(position.coords.longitude);
 					$("#starty").val(position.coords.latitude);
         })}
+            var now = new Date(); // 초기 시간 설정
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var formattedTime = hours + ':' + minutes + ':' + seconds;
+
         var positionId = navigator.geolocation.watchPosition(
             function success(position) {
 				var lat = position.coords.latitude;
@@ -99,8 +105,8 @@
 				var starty = $("#starty").val();
                 var movePosition = distance(starty, startx, lat, lon);
                 var moveDistance = moveDistance+movePosition;
-                var startx = $("#startx").val(lat);
-				var starty = $("#starty").val(lon);
+                $("#startx").val(lat);
+				$("#starty").val(lon);
                 if(marker){
                     marker.setMap(null);
                 }
@@ -110,7 +116,7 @@
 				});
         });
         $('#btnDistance').click(function() {
-            alert(`${moveDistance}km 만큼 이동하였습니다.`);
+            alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
             // 테스트 용도
             for(var a = 0; a<test.length; a++){
                 for (var i = 0; i<test[a].length; i++){
@@ -122,8 +128,14 @@
             }
         });
         $('#btnStop').click(function() {
+            var timers = new Date();
+            var endhours = timers.getHours().toString().padStart(2, '0');
+            var endminutes = timers.getMinutes().toString().padStart(2, '0');
+            var endseconds = timers.getSeconds().toString().padStart(2, '0');
+            var endformattedTime = endhours + ':' + endminutes + ':' + endseconds;
+
             navigator.geolocation.clearWatch(positionId);
-            alert(`${moveDistance}km 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
+            alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
             console.log(test);
             console.log(testx);
             console.log(testy);
@@ -139,7 +151,46 @@
             }
             //데이터베이스에 distance저장.
             //재시작 혹은 이전페이지.
+            
+            if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                  $("#endy").val(position.coords.longitude);
+    			  $("#endx").val(position.coords.latitude);
+
+            startx = $("#startx").val();
+            starty = $("#starty").val();
+            var endx = $("#endx").val();
+            var endy = $("#endy").val();   
+
+            var stackedDistance = moveDistance;
+
+            const startTime = formattedTime;
+            const endTime = endformattedTime;
+
+            const recordxhr = new XMLHttpRequest();
+            recordxhr.open('POST', '/records', true);
+            recordxhr.setRequestHeader('Content-Type', 'application/json');
+            recordxhr.onreadystatechange = function () {
+                if (recordxhr.readyState === XMLHttpRequest.DONE && recordxhr.status === 200) {
+                    console.log('Location saved successfully.');
+                }
+            };
+            recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance, startx, starty, endx, endy }));  
+
+            })};
         });
+    }
+
+
+    function endChange() {
+        if (timer !== null) {
+            clearInterval(timer); // 타이머 중지
+            timer = null; // 타이머 변수 재설정
+            console.log("타이머가 중지되었습니다.");
+        }
     }
 
     document.getElementById('watchingPosition')
@@ -644,11 +695,11 @@
                     var appendHtml = `
                         <div class="_route_item" id="box1">
                             <div class="_btn_action _btn_action-search __color_grey" onclick="watchingPosition();">
-                                <button>현재 위치 추적 시작</button>
+                                <button id="start_button" onclick="startchange()">현재 위치 추적 시작</button>
                             </div>
                             <div id="tracking_div">
                                 <button id="btnDistance">이동 거리 확인</button>
-                                <button id="btnStop">현재 위치 추적 중지</button>
+                                <button id="btnStop" onclick="endchange()">현재 위치 추적 중지</button>
                             </div>
 
                             <div class="_route_item_info">${((resultData[0].properties.totalTime) / 60).toFixed(0)}분 | ${((resultData[0].properties.totalDistance) / 1000).toFixed(1)}km</div>
@@ -759,11 +810,11 @@
                     var appendHtml = `
                         <div class="_route_item" id="box1">
                             <div class="_btn_action _btn_action-search __color_grey" onclick="watchingPosition();">
-                                <button>현재 위치 추적 시작</button>
+                                <button id="start_button" onclick="startchange()">현재 위치 추적 시작</button>
                             </div>
                             <div id="tracking_div">
                                 <button id="btnDistance">이동 거리 확인</button>
-                                <button id="btnStop">현재 위치 추적 중지</button>
+                                <button id="btnStop" onclick="endchange()">현재 위치 추적 중지</button>
                             </div>
 
                             <div class="_route_item_info">${((resultData[0].properties.totalTime) / 60).toFixed(0)}분 | ${((resultData[0].properties.totalDistance) / 1000).toFixed(1)}km</div>
@@ -857,6 +908,14 @@
         });
 
         markerArr.push(marker_p);
+    }
+
+    function startchange(){
+        document.querySelector('#start_button').innerHTML = '위치정보 추적 중';
+    }
+
+    function endchange(){
+        document.querySelector('#start_button').innerHTML = '현재 위치 추적 시작';
     }
 
     // 경유지 추가 컨트롤 함수
@@ -1268,27 +1327,17 @@ function moveMapTo(latitude, longitude) {
             <a href="/auth/users_h/registerpage">회원가입 창</a>
             <a href="/auth/users_h/login">로그인</a>
             <a href="/auth/logout">로그아웃</a>
-            <a href="/auth/user_h/welcomePage">첫welcome화면</a>
-            
         </div>
         <div id="div1">
             <span>Users</span>
             <a href="/users/users_h/usermypage">유저 회원 조회</a>
-            <a href="/users/users_h/userall">유저 모든 목록 창</a>
-            <a href="/users/users_h/userEdit">유저 정보 수정</a>
-            <a href="/users/userDelete">유저삭제</a>
-            <a href="/users/users_h/userDashboard">유저대시보드</a>
-            
+            <a href="/users/users_h/userall">유저 모든 목록 창 (어드민만 가능하게)</a>  
         </div>
         <div id="div1">
             <span>Schedules</span>
-            <a href="/groups/:groupId/schedules/schedules_h/schedulecreate">스케줄 생성</a>
         </div>
         <div id="div1">
             <span>Records</span>
-            <a href="/records/records_h/recordcreate">기록 생성</a>
-            <a href="/records/records_h/recordall">기록 모든 목록 조회</a>
-            <a href="/records/records_h/recordlist/:recordId">기록 상세 목록 조회</a>
         </div>
         <div id="wpList">
             <div class="__space_10_h"></div>

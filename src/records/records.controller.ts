@@ -1,10 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, Render } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, UseGuards, Render, Res, Redirect } from '@nestjs/common';
 import { RecordsService } from './records.service';
 import { CreateRecordDto } from './dto/create_record.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { UsersService } from 'src/users/users.service';
+import { Response } from 'express';
 
 
 // 유저 토큰
@@ -12,7 +14,9 @@ import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 @ApiTags('Records')
 @Controller('records')
 export class RecordsController {
-  constructor(private readonly recordsService: RecordsService) {}
+  constructor(private readonly recordsService: RecordsService,
+    private readonly usersService: UsersService,
+  ) {}
 
 
   // 레코드 생성
@@ -20,8 +24,16 @@ export class RecordsController {
   @ApiOperation({ summary: '레코드 생성 API', description: '운동 기록을 기록!' })
   @ApiBearerAuth('access-token')
   @Post()
-  async create(@Body() createRecordDto: CreateRecordDto, @UserInfo() users : Users) {
-    return await this.recordsService.create(users.userId, createRecordDto);
+  async create(@Body() createRecordDto: CreateRecordDto, @UserInfo() users : Users, @Res() res: Response) {
+    
+    try {
+      await this.recordsService.create(users.userId, createRecordDto);
+      res.redirect('/records/records_h/recordall');
+
+    } catch (error) {
+      res.redirect('/records/records_h/recordcreate')
+    }
+
   }
 
   // 레코드 모든 목록 조회
@@ -56,17 +68,26 @@ export class RecordsController {
   @UseGuards(JWTAuthGuard)
   @Get('/records_h/recordcreate')
   @Render('recordcreate')
-  async recordcreate(){
-    return;
+  async recordcreate( @UserInfo() users : Users ){
+    const user = await this.usersService.findUser(users.userId);
+    return {
+      user : user
+    };
   }
 
   // 기록 모든 목록 조회
   @UseGuards(JWTAuthGuard)
   @Get('/records_h/recordall')
   @Render('recordall')
-  async recordsall(){
+  async recordsall( @UserInfo() users : Users ){
+    console.log('res render from create')
+    const user = await this.usersService.findUser(users.userId);
     const records = await this.recordsService.findAll();
+    console.log('users',users)
+    console.log('user',user)
+    console.log('records',records)
     return {
+      user : user,
       record : records.record
     };
   }
@@ -76,8 +97,11 @@ export class RecordsController {
   @Get('/records_h/recordlist/:recordId')
   @Render('recordlist')
   async recordlist(@Param() recordId ,@UserInfo() users : Users){
+
+    const user = await this.usersService.findUser(users.userId);
     const records = await this.recordsService.findOne(recordId ,users.userId);
     return {
+      user : user,
       record : records
     };
   }

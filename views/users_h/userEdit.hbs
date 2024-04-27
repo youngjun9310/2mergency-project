@@ -24,8 +24,8 @@
                 data-image="/assets/img/sidebar-5.jpg">
             <div class="sidebar-wrapper">
             <div class="logo">
-                <a href="/html/dashboard.html" class="simple-text logo-mini"></a>
-                <a href="/html/dashboard.html" class="simple-text logo-normal">2mergency</a>
+                <a href="/" class="simple-text logo-mini"></a>
+                <a href="/" class="simple-text logo-normal">2mergency</a>
             </div>
           <div class="user">
             <div class="photo">
@@ -36,8 +36,7 @@
                 data-toggle="collapse"
                 href="#collapseExample"
                 class="collapsed">
-                <span>고양이
-                  <b class="caret"></b>
+                <span>{{ users.nickname }}
                 </span>
               </a>
             </div>
@@ -54,13 +53,8 @@
               <div class="collapse" id="componentsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/pages/maps/fullscreen.html">
+                    <a class="nav-link" href="/">
                       <span class="sidebar-normal">운동경로탐색</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/html/pages/maps/fullscreen.html">
-                      <span class="sidebar-normal">랜덤경로추천받기</span>
                     </a>
                   </li>
                 </ul>
@@ -77,48 +71,23 @@
               <div class="collapse" id="formsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/tables/regular.html">
-                      <span class="sidebar-normal">가입한그룹목록</span>
+                    <a class="nav-link" href="/groups/groups_h/groupall">
+                      <span class="sidebar-normal">그룹목록</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/group-calendar.html">
-                      <span class="sidebar-normal">그룹스케줄</span>
+                    <a class="nav-link" href="/groups/{{ groups.groupId }}/schedules/schedules_h/scheduleall">
+                      <span class="sidebar-normal">그룹스케줄목록</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/tables/datatables.net.html">
-                      <span class="sidebar-normal">초대하기</span>
+                    <a class="nav-link" href="/groups/{{ groups.groupId }}/invite/group-members_h/groupinvite">
+                      <span class="sidebar-normal">그룹초대하기</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/forms/wizard.html">
-                      <span class="sidebar-normal">받은초대</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
-                <i class="nc-icon nc-paper-2"></i>
-                <p>스케줄<b class="caret"></b></p>
-              </a>
-              <div class="collapse" id="tablesExamples">
-                <ul class="nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/html/tables/schedule-list.html">
-                      <span class="sidebar-normal">스케줄목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/html/forms/schedule-create.html">
-                      <span class="sidebar-normal">스케줄생성</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/html/calendar.html">
-                      <span class="sidebar-normal">스케줄달력보기</span>
+                    <a class="nav-link" href="/groups/{{ groups.groupId }}/accept/group-members_h/groupaccept">
+                      <span class="sidebar-normal">그룹초대수락</span>
                     </a>
                   </li>
                 </ul>
@@ -134,7 +103,7 @@
               <div class="collapse" id="pagesExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="/html/pages/userInfo.html">
+                    <a class="nav-link" href="/users/users_h/usermypage">
                       <span class="sidebar-normal">프로필조회</span>
                     </a>
                   </li>
@@ -142,7 +111,7 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/html/dashboard.html">
+              <a class="nav-link" href="/">
                 <i class="nc-icon nc-chart-pie-35"></i>
                 <p>홈으로</p>
               </a>
@@ -266,7 +235,7 @@
                <div class="container">
                 <div class="row">
                   <div class="col-md-8 col-sm-6">
-                    <form method="POST" action="/users?_method=PATCH" enctype="multipart/form-data">
+                    <form method="POST" action="/users/userUpdate" enctype="multipart/form-data">
                       <div class="card">
                         <div class="card-header">
                           <div class="card-header">
@@ -275,39 +244,14 @@
                         </div>
                         <div class="card-body">
                           <div class="row">
-                            <div class="col-md-5 pr-1">
-                              <div class="form-group">
-                                <label>아이디</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  disabled=""
-                                  value={{ user.userId }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-5 pr-1">
-                              <div class="form-group">
-                                <label>닉네임</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  disabled=""
-                                  value={{ user.nickname }}
-                                />
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
                             <div class="col-md-6 pr-1">
                               <div class="form-group">
                                 <label>이메일</label>
                                 <input
                                   type="text"
                                   class="form-control"
-                                  value={{ user.email }}
+                                  name="email"
+                                  value={{ users.email }}
                                   />
                               </div>
                             </div>
@@ -317,9 +261,9 @@
                               <div class="form-group">
                                 <label>패스워드</label>
                                 <input
-                                  type="text"
+                                  type="password"
                                   class="form-control"
-                                  value={{ user.password }}
+                                  name="password"
                                 />
                               </div>
                             </div>
@@ -329,10 +273,10 @@
                               <div class="form-group">
                                 <label>패스워드확인</label>
                                 <input
-                                  type="text"
+                                  type="password"
                                   class="form-control"
-                                  value={{ user.password }}
-                                />
+                                  name="passwordConfirm"
+                                >
                               </div>
                             </div>
                           </div>
@@ -343,18 +287,8 @@
                                 <input
                                   type="text"
                                   class="form-control"
-                                  value={{ user.address }}/>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
-                              <div class="form-group">
-                                <label>가입일</label>
-                                <input
-                                  type="text"
-                                  class="form-control"
-                                  value={{ user.createdAt }}/>
+                                  name="address"
+                                  value= {{ users.address }} >
                               </div>
                             </div>
                           </div>
@@ -367,9 +301,7 @@
                                     <input
                                       class="form-check-input"
                                       type="radio"
-                                      disabled=""
-                                      name="exampleRadio"
-                                      id="exampleRadios1"
+                                      name="isOpen"
                                       value="true">
                                     <span class="form-check-sign"></span>
                                     공개활동
@@ -378,34 +310,27 @@
                                     <input
                                       class="form-check-input"
                                       type="radio"
-                                      disabled=""
-                                      name="exampleRadio"
-                                      id="exampleRadios2"
+                                      name="isOpen"
                                       value="false">
                                     <span class="form-check-sign"></span>
                                     비공개활동
                                     </label>
                                 </div>
                               </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-md-12">
+                              <div class="row">
+                              <div class="col-md-12">
                               <div class="form-group">
-                                <label>자기소개 한마디</label>
-                                <textarea
-                                  rows="4"
-                                  cols="80"
-                                  class="form-control"
-                                  value="안녕하세요! 함께 즐거운 운동을 하고 싶습니다"
-                                ></textarea>
-                              </div>
+                                <label class="__2m__form-label">프로필이미지</label>
+                                <input class="form-control"  accept="image/*" name="profileImage" type="file" id="formFile" placeholder="프로필이미지">                             
+                            </div>
+                            </div>
+                            </div>
                             </div>
                           </div>
                           <button
                             type="submit"
                             class="btn btn-info btn-fill pull-right"
-                            href="/users_h/usermypage"
+                            href="/users/users_h/usermypage"
                             >
                             저장
                           </button>
@@ -431,9 +356,9 @@
                               src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"
                               alt=""
                             />
-                            <h5 class="card-title">{{ user.nickname }}</h5>
+                            <h5 class="card-title">{{ users.nickname }}</h5>
                           </a>
-                          <p class="card-description">{{ user.email }}</p>
+                          <p class="card-description">{{ users.email }}</p>
                         </div>
                         <p class="card-description text-center">
                           반갑습니다! 함께 즐겁게 운동해요
@@ -476,7 +401,7 @@
                 <script>
                   document.write(new Date().getFullYear());
                 </script>
-                <a href="/users_h/userDashboard">2Mergency</a>, 건강한
+                <a href="/">2Mergency</a>, 건강한
                 라이프스타일과 함께합니다.
               </p>
             </nav>

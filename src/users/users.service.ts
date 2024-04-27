@@ -11,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
+import { Groups } from 'src/groups/entities/group.entity';
 @Injectable()
 export class UsersService {
   constructor(
@@ -18,7 +19,9 @@ export class UsersService {
     private userRepository: Repository<Users>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
+    @InjectRepository(Groups) private groupRepository: Repository<Groups>,
   ) {}
+
   /*전체 사용자 조회(어드민용)*/
   async findAllUser() {
     const user = await this.userRepository.find();
@@ -35,8 +38,8 @@ export class UsersService {
     updateDto: UpdateDto,
     file: Express.Multer.File,
   ) {
-    console.log('useredit: ');
-    const { nickname, email, password, passwordConfirm, address, isOpen } =
+    console.log('userEdit service Start')
+    const { email, password, passwordConfirm, address, isOpen } =
       updateDto;
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) {
@@ -55,7 +58,6 @@ export class UsersService {
       this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
     );
     return this.userRepository.update(userId, {
-      nickname,
       email,
       password: hashedPassword,
       address,
@@ -69,17 +71,27 @@ export class UsersService {
       select: ['password'],
       where: { userId },
     });
+
     if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
+      throw new NotFoundException('NotExistingUserError');
     }
-    if (!compare(password, user.password)) {
-      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    
+    if (!await(compare(password, user.password))) {
+      throw new UnauthorizedException('PasswordMatchError');
+
     }
     return this.userRepository.delete(userId);
   }
+  
   /*사용자 조회(이메일)*/
   async findByEmail(email: string) {
     const user = await this.userRepository.findOne({ where: { email } });
     return user;
+  }
+
+  /*그룹 아이디 조회*/
+  async findGroupId(groupId: number){
+    const groups = await this.groupRepository.findOne({ where: { groupId } });
+    return groups
   }
 }

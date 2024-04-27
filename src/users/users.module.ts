@@ -12,6 +12,7 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 import { GroupsModule,  } from 'src/groups/groups.module';
 import { GroupsService } from 'src/groups/groups.service';
+import { Groups } from 'src/groups/entities/group.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { GroupsService } from 'src/groups/groups.service';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users]),
+    TypeOrmModule.forFeature([Users, Groups]),
     AwsModule,
     GroupsModule
   ],

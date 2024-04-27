@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Repository } from 'typeorm';
@@ -6,6 +6,7 @@ import { Groups } from './entities/group.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { Users } from 'src/users/entities/user.entity';
 @Injectable()
 export class GroupsService {
   constructor(
@@ -18,7 +19,7 @@ export class GroupsService {
    * 그룹 생성 *
    **/
 
-  async createGroup(createGroupDto: CreateGroupDto, userId: number) {
+  async createGroup(createGroupDto: CreateGroupDto, userId: number, users: Users) {
     const { title, content, category } = createGroupDto;
 
     const groupCreate = await this.groupRepository.save({
@@ -27,21 +28,22 @@ export class GroupsService {
       category,
     });
 
-    console.log('그룹크리에이트트 그룹 생성:', groupCreate);
+    if (users.CertificationStatus === false) {
+      throw new UnauthorizedException('EmailAuthError');
+    }
     try {
       // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
       // const uniqueNickname = `user_${userId}_${user.nickname}`;
 
-      const groupMemberCreate = await this.groupMembersRepository.save({
+      await this.groupMembersRepository.save({
         groupId: groupCreate.groupId,
         userId,
         role: MemberRole.Main,
         isVailed: true,
         isInvited: true,
       });
-      console.log('확인: 그룹 멤버 생성:', groupMemberCreate);
     } catch (error) {
-      // console.error('어어어어 에러 발생:', error);
+      console.error('어어어어 에러 발생:', error);
     }
     return groupCreate;
   }

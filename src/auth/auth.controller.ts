@@ -32,7 +32,7 @@ export class AuthController {
   @ApiOperation({ summary: '회원가입', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
-  @Redirect('/')
+  //@Redirect('/')
   async register(
     @Body() signUpdto: SignUpDto,
     @UploadedFile() file: Express.Multer.File,
@@ -43,10 +43,14 @@ export class AuthController {
         signUpdto,
         file,
       );
-      return { url:'/auth/users_h/login', message: '회원가입에 성공하였습니다.'};
+      await this.userInvite(signUpdto.email, res)
+      res.render('login')
+      //return { url:'/auth/users_h/login', message: '회원가입에 성공하였습니다.'};
       
     } catch (error) {
-      res.redirect('/auth/users_h/registerpage');
+      //res.redirect('/auth/users_h/registerpage');
+      res.render('registerpage');
+
     }
     
   }
@@ -85,11 +89,27 @@ export class AuthController {
         loginDto.email,
         loginDto.password,
       );
+      
       res.cookie('authorization', `Bearer ${accessToken}`); 
+      
+      //res.setHeader('Set-Cookie', [`authorization= Bearer ${accessToken}`]);
+      res.render('userDashboard')
       return ;
+      
 
     } catch (error) {
-      res.redirect('/auth/users_h/login');
+      const message = error.response.message
+      
+      if(message=='EmailError'|| message=='PasswordError'){
+        console.log(message)
+        res.redirect('/auth/users_h/login')
+
+      } else if(message=='EmailAuthError'){
+        console.log(message)
+        res.redirect('/auth/users_h/emailAccept')
+        
+      }
+      
     }
     
   }
@@ -110,13 +130,12 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '가입 토큰번호 전송',
   })
-  @UseGuards(JWTAuthGuard)
-  @ApiBearerAuth('access-token')
   @Post('invite')
   async userInvite(@Body('email') email: string, @Res() res) {
     const gentoken = await this.mailService.usersendMail(email);
     await this.authService.userInvite(email, gentoken);
-    res.send('회원가입 토큰번호를 전송했습니다.');
+    //res.send('회원가입 토큰번호를 전송했습니다.');
+    return;
   }
 
   /** 이메일 가입수락*/
@@ -124,21 +143,38 @@ export class AuthController {
     summary: '이메일 가입초대',
     description: '이메일 가입 토큰번호 전송',
   })
-  @UseGuards(JWTAuthGuard)
-  @ApiBearerAuth('access-token')
   @Post('accept')
+  //@Redirect('/')
   async userAccept(
     @Body('email') email: string,
     @Body('token') token: string,
     @Res() res,
   ) {
-    await this.authService.userAccept(email, token);
-    res.send('회원가입 이메일 인증을 완료했습니다.');
+
+    try {
+
+      await this.authService.userAccept(email, token);
+      res.redirect('/auth/users_h/login')
+      //return { url:'/auth/users_h/login', message: '회원가입 이메일 인증을 완료했습니다.'};
+      
+    } catch (error) {
+      
+      const message = error.response.message
+      
+      if(message=='TokenNotExistError'){
+        console.log(message)
+        res.redirect('/auth/users_h/emailAccept')
+      } 
+
+    }
+
+
+    
   }
 
   /** hbs 양식 */
   // 첫 welcome 화면
-  @Get('/user_h/welcomePage')
+  @Get('/users_h/welcomePage')
   @Render('welcomePage')
   async userWelcome(){
     return;
@@ -179,5 +215,18 @@ export class AuthController {
     return;
   }
 
+  // 이메일가입초대
+  @Get('/users_h/emailInvite')
+  @Render('emailInvite')
+  async userEmailInvite(){
+    return;
+  }
+
+  // 이메일가입수락
+  @Get('/users_h/emailAccept')
+  @Render('emailAccept')
+  async userEmailAccept(){
+    return;
+  }
   
 }
