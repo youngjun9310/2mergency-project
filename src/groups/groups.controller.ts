@@ -26,6 +26,7 @@ export class GroupsController {
   }
 
   // 그룹 모든 목록 조회 //
+  @ApiBearerAuth('access-token')
   @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
   @ApiResponse({ description: '성공적으로 모든 그룹 목록을 조회하였습니다.', status: 200 })
   @Get('')
@@ -34,23 +35,8 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
-  @ApiOperation({
-    summary: '그룹 상세 조회 API',
-    description: '특정 그룹의 상세 정보를 조회',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹의 상세 정보를 조회하였습니다.',
-    status: 200,
-  })
-  @ApiResponse({
-    description: '그룹이 존재하지 않습니다.',
-    status: 404,
-  })
-  @ApiResponse({
-    description: '유효하지 않은 그룹 ID입니다.',
-    status: 400,
-  })
-  @Get(':groupId')
+  @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 조회' })
+  @ApiResponse({ description: '성공적으로 그룹 상세 정보 조회하였습니다.', status: 200 })
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
   }
@@ -58,6 +44,8 @@ export class GroupsController {
   // 그룹 수정 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiOperation({ summary: '그룹 수정', description: '그룹의 목록 수정 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹을 수정하였습니다.' })
   @ApiBearerAuth('access-token')
   @Patch(':groupId')
   async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto) {
@@ -67,12 +55,8 @@ export class GroupsController {
   // 그룹 삭제 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @ApiOperation({ summary: '그룹 삭제 API', description: '그룹을 삭제합니다.' })
-  @ApiResponse({
-    description: '성공적으로 그룹을 삭제하였습니다.',
-    status: 201,
-  })
-  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제' })
+  @ApiResponse({ description: '성공적으로 그룹을 삭제하였습니다.', status: 204 })
   @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);

@@ -13,7 +13,6 @@ import {
   Render,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
-
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { GroupMembers } from './entities/group-member.entity';
@@ -38,7 +37,7 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '그룹에 멤버 초대' })
+  @ApiOperation({ summary: '그룹에 멤버 초대', description: '그룹에 멤버 초대 성공' })
   @ApiResponse({ status: 201, description: '초대를 완료했습니다.' })
   @ApiBearerAuth('access-token')
   async inviteUserToGroup(
@@ -61,7 +60,7 @@ export class GroupMembersController {
 
   @Post(':groupId/accept')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '사용자가 그룹 초대를 수락' })
+  @ApiOperation({ summary: '사용자가 그룹 초대를 수락', description: '그룹 초대 수락 성공' })
   @ApiResponse({ status: 200, description: '초대를 수락했습니다.' })
   @ApiBearerAuth('access-token')
   async acceptInvitation(
@@ -84,7 +83,7 @@ export class GroupMembersController {
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members/:userId')
-  @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
+  @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인', description: '사용자가 그룹 멤버인지 확인 성공' })
   @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
   @ApiBearerAuth('access-token')
   async isGroupMember(
@@ -110,7 +109,7 @@ export class GroupMembersController {
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/users/:userId')
-  @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회' })
+  @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회', description: '사용자의 그룹 멤버 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '그룹 멤버의 상세 정보' })
   @ApiBearerAuth('access-token')
   async findByUserAndGroup(@Param('userId') userId: number, @Param('groupId') groupId: number): Promise<GroupMembers> {
@@ -124,7 +123,10 @@ export class GroupMembersController {
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members')
-  @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })
+  @ApiOperation({
+    summary: '그룹에 등록된 전체 사용자 목록 조회',
+    description: '그룹에 등록된 전체 사용자 목록 조회 성공',
+  })
   @ApiResponse({
     status: 200,
     description: '그룹 멤버 목록을 반환합니다.',
