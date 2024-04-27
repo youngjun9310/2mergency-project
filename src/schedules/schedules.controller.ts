@@ -86,9 +86,10 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/schedules_h/schedulecreate')
   @Render('schedulecreate')
-  async schedulescreate(@Param('groupId') groupId: number) {
+  async schedulescreate(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 
@@ -97,10 +98,12 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/schedules_h/scheduleall')
   @Render('scheduleall')
-  async scheduleall(@Param('groupId') groupId: number) {
+  async scheduleall(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     const schedules = await this.schedulesService.getAllSchedule(groupId);
     return {
       schedules: schedules,
+      groupId : groupId,
+      users : users
     };
   }
 
@@ -109,10 +112,12 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/:scheduleId/schedules_h/schedulelist')
   @Render('schedulelist')
-  async schedulelist(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
+  async schedulelist(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number, @UserInfo() users : Users) {
     const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
     return {
       schedules: schedules,
+      groupId : groupId,
+      users : users
     };
   }
 
@@ -121,10 +126,12 @@ export class SchedulesController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:scheduleId/schedules_h/scheduleEdit')
   @Render('scheduleEdit')
-  async scheduleEdit(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
+  async scheduleEdit(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number, @UserInfo() users : Users) {
     const schedules = await this.schedulesService.getScheduleId(groupId, scheduleId);
     return {
       schedules: schedules,
+      groupId : groupId,
+      users : users
     };
   }
 }

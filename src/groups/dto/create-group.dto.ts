@@ -25,7 +25,7 @@ export class CreateGroupDto {
     
 
     @ApiProperty({
-        example: 'walk',
+        example: 'walking',
         description: 'groupcategory',
         required: true,
       })
