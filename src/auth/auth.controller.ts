@@ -28,25 +28,28 @@ export class AuthController {
   ) {}
 
   /** 회원가입*/
-  @ApiOperation({ summary: '회원가입', description: '회원가입' })
+  @ApiOperation({ summary: '회원가입 API', description: '회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
+  @ApiResponse({ status: 201, description: '회원가입 성공' })
   async register(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
     return await this.authService.register(signUpdto, file);
   }
 
   /** 어드민 회원가입*/
-  @ApiOperation({ summary: '어드민 회원가입', description: '어드민 회원가입' })
+  @ApiOperation({ summary: '어드민 회원가입 API', description: '어드민 회원가입' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
+  @ApiResponse({ status: 201, description: '어드민 회원가입 성공' })
   async adminRegister(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
     return await this.authService.adminRegister(signUpdto, file);
   }
 
   /** 로그인*/
-  @ApiOperation({ summary: '로그인', description: '로그인' })
+  @ApiOperation({ summary: '로그인 API', description: '로그인' })
   @Post('login')
   @HttpCode(204)
+  @ApiResponse({ status: 204, description: '로그인 성공' })
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     const accessToken = await this.authService.login(loginDto.email, loginDto.password);
     res.cookie('authorization', `Bearer ${accessToken}`);
@@ -54,11 +57,12 @@ export class AuthController {
   }
 
   /** 로그아웃*/
-  @ApiOperation({ summary: '로그아웃', description: '로그아웃' })
+  @ApiOperation({ summary: '로그아웃 API', description: '로그아웃' })
   @UseGuards(JWTAuthGuard)
   @ApiBearerAuth('access-token')
   @Post('logout')
   @HttpCode(204)
+  @ApiResponse({ status: 204, description: '로그아웃 성공' })
   logOut(@Res({ passthrough: true }) res: Response) {
     res.clearCookie('authorization');
     return;
@@ -70,6 +74,7 @@ export class AuthController {
     description: '가입 토큰번호 전송',
   })
   @Post('invite')
+  @ApiResponse({ status: 200, description: '로그인 성공' })
   async userInvite(@Body('email') email: string, @Res() res) {
     const gentoken = await this.mailService.usersendMail(email);
     await this.authService.userInvite(email, gentoken);
@@ -82,6 +87,7 @@ export class AuthController {
     description: '이메일 가입 토큰번호 전송',
   })
   @Post('accept')
+  @ApiResponse({ status: 200, description: '이메일 가입 수락 성공' })
   async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res) {
     await this.authService.userAccept(email, token);
     res.send('회원가입 이메일 인증을 완료했습니다.');
