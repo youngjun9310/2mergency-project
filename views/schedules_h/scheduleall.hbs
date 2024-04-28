@@ -71,23 +71,13 @@
             <div class="collapse" id="formsExamples">
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/groups/groups_h/groupall">
-                    <span class="sidebar-normal">그룹목록</span>
-                  </a>
-                </li>
-                <li class="nav-item">
                   <a class="nav-link" href="/groups/groups_h/groupcreate">
                     <span class="sidebar-normal">그룹생성</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/groups/{{ groupId }}/invite/group-members_h/groupinvite">
-                    <span class="sidebar-normal">그룹초대하기</span>
-                  </a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="/groups/{{ groupId }}/accept/group-members_h/groupaccept">
-                    <span class="sidebar-normal">그룹초대수락</span>
+                  <a class="nav-link" href="/groups/groups_h/groupall">
+                    <span class="sidebar-normal">그룹목록</span>
                   </a>
                 </li>
               </ul>
@@ -242,8 +232,10 @@
                       {{/each}}
                     </tbody>
                   </table>
+                  <div class="card-footer">
+                      <button type="submit" class="btn btn-fill btn-info" onclick="window.location.href = '/groups/{{ groupId }}/schedules/schedules_h/schedulecreate';">스케줄 생성</button>
+                  </div>
                 </div>
-
               </div>
             </div>
           </div>

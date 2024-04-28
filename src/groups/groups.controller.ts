@@ -16,10 +16,11 @@ export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
+  @UseGuards(JWTAuthGuard)
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹 생성 성공' })
   @ApiResponse({ status: 201, description: '성공적으로 그룹이 생성되었습니다.' })
-  @Post('')
   @ApiBearerAuth('access-token')
+  @Post('')
   async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users) {
     return await this.groupsService.createGroup(createGroupDto, users.userId);
   }
@@ -27,9 +28,7 @@ export class GroupsController {
   // 그룹 모든 목록 조회 //
   @ApiOperation({ summary: '모든 그룹 목록 조회 API', description: '모든 그룹 목록 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
-  @ApiOperation({ summary: '모든 그룹 조회 API', description: '모든 그룹 목록 조회' })
   @Get('')
-  @ApiBearerAuth('access-token')
   async findAllGroups() {
     return await this.groupsService.findAllGroups();
   }
@@ -38,14 +37,12 @@ export class GroupsController {
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @Get('')
-  @ApiBearerAuth('access-token')
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
   }
 
   // 그룹 수정 //
-  @UseGuards(JWTAuthGuard)
-  @UseGuards(memberRolesGuard)
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 수정 API', description: '그룹의 목록 수정 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹을 수정하였습니다.' })
@@ -56,13 +53,12 @@ export class GroupsController {
   }
 
   // 그룹 삭제 //
-  @UseGuards(JWTAuthGuard)
-  @UseGuards(memberRolesGuard)
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제 성공' })
   @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
-  @Delete(':groupId')
   @ApiBearerAuth('access-token')
+  @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);
   }
@@ -95,7 +91,6 @@ export class GroupsController {
   @Render('grouplist')
   async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users: Users) {
     const groups = await this.groupsService.findOneGroup(groupId);
-
     return {
       groups: groups,
       scheduleId: scheduleId,
@@ -104,8 +99,7 @@ export class GroupsController {
   }
 
   // 그룹 수정
-  @UseGuards(JWTAuthGuard)
-  @UseGuards(memberRolesGuard)
+  @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/groups_h/groupEdit')
   @Render('groupEdit')

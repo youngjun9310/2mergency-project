@@ -30,8 +30,8 @@ const typeOrmModuleOptions = {
     synchronize: configService.get<boolean>(ENV_DB_SYNC),
     logging: true,
     ssl: {
-      rejectUnauthorized: false,
-    },
+      rejectUnauthorized: false
+    }
   }),
   inject: [ConfigService],
 };

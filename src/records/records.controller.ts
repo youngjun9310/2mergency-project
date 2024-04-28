@@ -65,8 +65,10 @@ export class RecordsController {
   // 기록 생성
   @Get('/records_h/recordcreate')
   @Render('recordcreate')
-  async recordcreate(){
-    return;
+  async recordcreate(@UserInfo() users : Users){
+    return{
+      users : users
+    };
   }
 
   // 기록 모든 목록 조회
@@ -75,9 +77,12 @@ export class RecordsController {
   async recordsall(@UserInfo() users : Users){
     const records = await this.recordsService.findAll(users.userId);
     return {
-      record : records.record
+      record : records.record,
+      users : users
     };
   }
+
+  
 
   // 기록 상세 목록 조회
   @Get('/:recordId/records_h/recordlist')
@@ -85,7 +90,8 @@ export class RecordsController {
   async recordlist(@Param('recordId') recordId : number, @UserInfo() users : Users){
     const record = await this.recordsService.findOne(recordId, users.userId);
     return {
-      records : record.record
+      records : record.record,
+      users : users
     };
   }
 }

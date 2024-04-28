@@ -144,9 +144,10 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/invite/group-members_h/groupinvite')
   @Render('groupinvite')
-  async groupinvite(@Param('groupId') groupId: number) {
+  async groupinvite(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 
@@ -155,9 +156,10 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/:groupId/accept/group-members_h/groupaccept')
   @Render('groupaccept')
-  async groupaccept(@Param('groupId') groupId: number) {
+  async groupaccept(@Param('groupId') groupId : number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 }
