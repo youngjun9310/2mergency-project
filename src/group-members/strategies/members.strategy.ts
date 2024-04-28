@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { MemberRole } from '../types/groupMemberRole.type';
-// import { MemberRoles } from '../decorator/memberRoles.decorator';
 import { GroupMembers } from '../entities/group-member.entity';
 
 @Injectable()
