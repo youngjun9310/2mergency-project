@@ -81,14 +81,14 @@ export class AuthService {
     }
 
     // 어드민 가입 요청 키와 어드민 서비 키 비교하기
-    const adminPassKey = this.configService.get<string>('ENV_ROLE_ADMIN_PASSWORD');
+    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
     if (adminPassword !== adminPassKey) {
       throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
     }
 
     // 어드민 가입 로직
     const profileImage = await this.awsService.imageUpload(file);
-    const hashedPassword = await hash(password, this.configService.get<number>('ENV_ROLE_ADMIN_PASSWORD'));
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_ROLE_ADMIN_PASSWORD));
     await this.userRepository.save({
       nickname,
       email,

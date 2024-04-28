@@ -43,6 +43,9 @@ export class Records {
     @Column({ type : 'int', name : 'userId', nullable : false })
     userId : number;
 
+    @Column({ type : 'varchar', nullable : false})
+    nickname : string;
+
     @CreateDateColumn({ type: 'timestamp' })
     createdAt: Date;
 

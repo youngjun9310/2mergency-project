@@ -36,7 +36,7 @@ export class GroupsController {
   // 그룹 상세 조회 //
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
-  @Get('')
+  @Get(':groupId')
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
   }
