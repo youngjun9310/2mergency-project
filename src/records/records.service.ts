@@ -31,21 +31,19 @@ export class RecordsService {
     });
 
     const save = await this.recordsrepository.save(recoardsave);
-    
+  
     return { statusCode : 201, message : "정상적으로 데이터가 기록되었습니다.", save };
   }
 
   // 레코드 모든 목록 조회
-  async findAll() {
-    const record = await this.recordsrepository.find() 
+  async recordall() {
+    const record = await this.recordsrepository.find();
 
-    return { statusCode : 201, message : "모든 기록 데이터 이력 조회에 성공하였습니다.", record };
+    return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
   // 레코드 상세 목록 조회
   async findOne(recordId: number, userId : number) {
-    console.log("recordId : ",recordId)
-    console.log("userId : ", userId)
     const record = await this.recordsrepository.findOne({ where : { recordId, userId } });
 
     if(!userId){
@@ -61,21 +59,31 @@ export class RecordsService {
     }
     
     
-    return { statusCode : 201, message : "기록 데이터 이력 조회에 성공하였습니다.", record };
+    return { statusCode : 200, message : "정상적으로 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
-  // 레코드 삭제
-  async remove(recordId: number, userId : number) {
+  // 레코드 내 모든 목록 조회
+  async findAll(userId : number) {
+    console.log('userId', userId)
+    const record = await this.recordsrepository.find({ where : { userId }});
+    console.log('record', record)
+    return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
+  }
+
+   // 레코드 삭제
+   async remove(recordId: number, userId : number) {
     const record = await this.recordsrepository.findOne({ where : { recordId, userId }})
 
     if(!record){
       throw new NotFoundException("기록 데이터가 존재하지 않습니다.");
     }
 
+    if(userId !== record.userId){
+      throw new BadRequestException("조회할 수 있는 권한이 없습니다.");
+    }
     await this.recordsrepository.remove(record);
 
-    
-
-    return { statusCode : 201, message : "기록 데이터가 삭제되었습니다." };
+    return { statusCode : 201, message : "정상적으로 기록 데이터가 삭제되었습니다." };
   }
+
 }

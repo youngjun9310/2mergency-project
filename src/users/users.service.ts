@@ -12,6 +12,7 @@ import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
 import { Groups } from 'src/groups/entities/group.entity';
+import { Records } from 'src/records/entities/record.entity';
 @Injectable()
 export class UsersService {
   constructor(
@@ -20,6 +21,7 @@ export class UsersService {
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
+    
   ) {}
 
   /*전체 사용자 조회(어드민용)*/

@@ -1,4 +1,4 @@
-import { Module, forwardRef  } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -11,8 +11,9 @@ import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
 import { GroupsModule,  } from 'src/groups/groups.module';
-import { GroupsService } from 'src/groups/groups.service';
 import { Groups } from 'src/groups/entities/group.entity';
+import { RecordsModule } from 'src/records/records.module';
+import { Records } from 'src/records/entities/record.entity';
 
 @Module({
   imports: [
@@ -24,11 +25,12 @@ import { Groups } from 'src/groups/entities/group.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users, Groups]),
+    TypeOrmModule.forFeature([Users, Groups, Records]),
     AwsModule,
-    GroupsModule
+    GroupsModule,
+    RecordsModule
   ],
-  providers: [JwtStrategy, UsersService, RoleStrategy],
+  providers: [JwtStrategy, UsersService, RoleStrategy,],
   controllers: [UsersController],
   exports: [UsersService],
 })

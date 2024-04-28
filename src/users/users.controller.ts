@@ -24,6 +24,8 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { GroupsService } from 'src/groups/groups.service';
 import { Response } from 'express';
+import { RecordsService } from 'src/records/records.service';
+
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Users')
@@ -31,7 +33,8 @@ import { Response } from 'express';
 export class UsersController {
   constructor(
     private readonly usersService: UsersService,
-    private readonly groupsService: GroupsService
+    private readonly groupsService: GroupsService,
+    private readonly recordsService: RecordsService,
 
   ) {}
   
@@ -114,14 +117,18 @@ export class UsersController {
     };
   }
 
-  // 유저 마이 정보 조회
+  // 유저 마이 정보 조회 겸 대시보드
   @Get('/users_h/usermypage')
   @Render('usermypage')
   async users( @UserInfo() users : Users ) {
-    const user = await this.usersService.findUser(users.userId);
+    const records = await this.recordsService.findAll(users.userId);
+    console.log('records', records)
+
     return {
-      user : user
+      user : users,
+      records : records.record
     };
+    
   }
 
   // 유저 정보 수정
@@ -146,11 +153,12 @@ export class UsersController {
     };
   }
 
-   // 유저 대시보드
+
+   // 커뮤니티 메인화면
   @Get('users_h/userDashboard')
   @Render('userDashboard')
   async userTotal(@UserInfo() users : Users, groupId : number) {
-    //가입한 그룹목록(테스트 목적, 전체 그룹 조회)
+    //전체 그룹목록
     const groups = await this.usersService.findGroupId(groupId);
     return {
       user : users,

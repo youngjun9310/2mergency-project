@@ -18,14 +18,11 @@
 </head>
 <body>
     <div class="wrapper">
-        <div
-            class="sidebar"
-            data-color="orange"
-            data-image="/assets/img/sidebar-5.jpg">
+        <div class="sidebar" data-color="orange" data-image="/assets/img/sidebar-5.jpg">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="/html/dashboard.html" class="simple-text logo-mini"> </a>
-                    <a href="/html/dashboard.html" class="simple-text logo-normal">2mergency</a>
+                    <a href="/users/users_h/userDashboard" class="simple-text logo-mini"> </a>
+                    <a href="/users/users_h/userDashboard" class="simple-text logo-normal">2mergency</a>
                 </div>
                 <div class="user">
                     <div class="photo">
@@ -33,16 +30,13 @@
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                            <span>고양이<b class="caret"></b></span>
+                            <span>{{ user.nickname }}<b class="caret"></b></span>
                         </a>
                     </div>
                 </div>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a
-                            class="nav-link"
-                            data-toggle="collapse"
-                            href="#componentsExamples">
+                        <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
                             <i class="nc-icon nc-pin-3"></i>
                             <p>오늘의운동<b class="caret"></b></p>
                         </a>
@@ -50,13 +44,13 @@
                             <ul class="nav">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordcreate">
-                                      <span class="sidebar-normal">나의 운동 기록하기</span>
-                                  </a>
+                                        <span class="sidebar-normal">나의 운동 기록하기</span>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordall">
-                                      <span class="sidebar-normal">나의 기록조회</span>
-                                    </a>    
+                                        <span class="sidebar-normal">나의 기록조회</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -69,23 +63,13 @@
                         <div class="collapse" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/regular.html">
+                                    <a class="nav-link" href="/groups/groups_h/groupall">
                                         <span class="sidebar-normal">가입한그룹목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/group-calendar.html">
-                                        <span class="sidebar-normal">그룹스케줄</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/datatables.net.html">
-                                        <span class="sidebar-normal">초대하기</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/wizard.html">
-                                        <span class="sidebar-normal">받은초대</span>
+                                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                                        <span class="sidebar-normal">그룹생성하기</span>
                                     </a>
                                 </li>
                             </ul>
@@ -94,23 +78,13 @@
                     <li class="nav-item">
                         <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
                             <i class="nc-icon nc-paper-2"></i>
-                            <p>스케줄<b class="caret"></b></p>
+                            <p>지도탐색하기<b class="caret"></b></p>
                         </a>
                         <div class="collapse show" id="tablesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/schedule-list.html">
-                                        <span class="sidebar-normal">스케줄목록</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/schedule-create.html">
-                                        <span class="sidebar-normal">스케줄생성</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/calendar.html">
-                                        <span class="sidebar-normal">스케줄달력보기</span>
+                                    <a class="nav-link" href="/records/records_h/recordTrack">
+                                        <span class="sidebar-normal">실시간-랜덤경로탐색</span>
                                     </a>
                                 </li>
                             </ul>
@@ -124,7 +98,7 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/pages/userInfo.html">
+                                    <a class="nav-link" href="/users/users_h/usermypage">
                                         <span class="sidebar-normal">프로필조회</span>
                                     </a>
                                 </li>
@@ -132,171 +106,147 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/html/dashboard.html">
+                        <a class="nav-link" href="/users/users_h/userDashboard">
                             <i class="nc-icon nc-chart-pie-35"></i>
-                            <p>홈으로</p>
+                            <p>커뮤니티홈</p>
                         </a>
                     </li>
                 </ul>
             </div>
         </div>
         <div class="main-panel">
-            <!-- Navbar -->
-            <nav class="navbar navbar-expand-lg">
-                <div class="container-fluid">
-                    <div class="navbar-wrapper">
-                        <div class="navbar-minimize">
-                            <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon d-none d-lg-block">
-                                <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
-                                <i class="fa fa-navicon visible-on-sidebar-mini"></i>
-                            </button>
-                        </div>
-                        <a class="navbar-brand" href="#pablo">전체그룹</a>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-minimize">
+                        <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon d-none d-lg-block">
+                            <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
+                            <i class="fa fa-navicon visible-on-sidebar-mini"></i>
+                        </button>
                     </div>
-                    <button
-                        class="navbar-toggler navbar-toggler-right"
-                        type="button"
-                        data-toggle="collapse"
-                        aria-controls="navigation-index"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation">
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                        <span class="navbar-toggler-bar burger-lines"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-end">
-                        <ul class="nav navbar-nav mr-auto">
-                            <form
-                            class="navbar-form navbar-left navbar-search-form"
-                            role="search">
+                    <a class="navbar-brand" href="#pablo">그룹 상세 조회</a>
+                </div>
+                <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+                    aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                    <span class="navbar-toggler-bar burger-lines"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end">
+                    <ul class="nav navbar-nav mr-auto">
+                        <form class="navbar-form navbar-left navbar-search-form" role="search">
                             <div class="input-group">
                                 <i class="nc-icon nc-zoom-split"></i>
-                                <input
-                                type="text"
-                                value=""
-                                class="form-control"
-                                placeholder="Search..."/>
+                                <input type="text" value="" class="form-control" placeholder="Search..."/>
                             </div>
-                            </form>
-                        </ul>
-                        <ul class="navbar-nav">
-                            <li class="dropdown nav-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
-                                    <i class="nc-icon nc-planet"></i>
+                        </form>
+                    </ul>
+                    <ul class="navbar-nav">
+                        <li class="dropdown nav-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
+                                <i class="nc-icon nc-planet"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="#">친구초대</a>
+                                <a class="dropdown-item" href="#">그룹초대</a>
+                                <a class="dropdown-item" href="#">러닝초대</a>
+                                <li class="divider"></li>
+                                <a class="dropdown-item" href="#">포인트조회</a>
+                            </ul>
+                        </li>
+                        <li class="dropdown nav-item">
+                            <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" >
+                                <i class="nc-icon nc-bell-55"></i>
+                                <span class="notification">1</span>
+                                <span class="d-lg-none">알림</span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" href="#">신규 그룹초대가 왔습니다</a>
+                            </ul>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="nc-icon nc-bullet-list-67"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#">
+                                    <i class="nc-icon nc-umbrella-13"></i> 헬프데스크
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">친구초대</a>
-                                    <a class="dropdown-item" href="#">그룹초대</a>
-                                    <a class="dropdown-item" href="#">러닝초대</a>
-                                    <li class="divider"></li>
-                                    <a class="dropdown-item" href="#">포인트조회</a>
-                                </ul>
-                            </li>
-                            <li class="dropdown nav-item">
-                                <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown" >
-                                    <i class="nc-icon nc-bell-55"></i>
-                                    <span class="notification">1</span>
-                                    <span class="d-lg-none">알림</span>
+                                <a class="dropdown-item" href="#">
+                                    <i class="nc-icon nc-settings-90"></i> 로그아웃
                                 </a>
-                                <ul class="dropdown-menu">
-                                    <a class="dropdown-item" href="#">신규 그룹초대가 왔습니다</a>
-                                </ul>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a
-                                    class="nav-link dropdown-toggle"
-                                    href="http://example.com"
-                                    id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false">
-                                    <i class="nc-icon nc-bullet-list-67"></i>
+                                <div class="divider"></div>
+                                <a href="#" class="dropdown-item text-danger">
+                                    <i class="nc-icon nc-button-power"></i> 설정
                                 </a>
-                                <div
-                                    class="dropdown-menu dropdown-menu-right"
-                                    aria-labelledby="navbarDropdownMenuLink" >
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-email-85"></i>챗팅메시지
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-umbrella-13"></i>헬프데스크
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-settings-90"></i>설정
-                                    </a>
-                                    <div class="divider"></div>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-lock-circle-open"></i>화면잠금
-                                    </a>
-                                    <a href="#" class="dropdown-item text-danger">
-                                        <i class="nc-icon nc-button-power"></i>로그아웃
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
-            </nav>
-            <!-- End Navbar -->
+            </div>
+        </nav>
+        <!-- End Navbar -->
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4 class="card-title">그룹 상세조회</h4>
+                                    <h4 class="card-title">그룹 상세 조회</h4>
                                 </div>
                                     <div class="card-body">
                                         <div id="page">
                                             <form action="/groups" method="POST" class="form-horizontal">
                                                 <fieldset>
                                                     <div class="form-group">
-                                                    <div class="row">
-                                                        <label class="col-sm-2 control-label">그룹명</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="title" value={{ groups.title }} /> {{ groups.title }}
+                                                        <div class="row">
+                                                            <label class="col-sm-2 control-label">그룹명</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" name="title" value={{ groups.title }} /> {{ groups.title }}
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </fieldset>
                                                 <fieldset>
                                                     <div class="form-group">
-                                                    <div class="row">
-                                                        <label class="col-sm-2 control-label">그룹카테고리</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="category" value={{ groups.category }} />{{ groups.category }}
+                                                        <div class="row">
+                                                            <label class="col-sm-2 control-label">그룹카테고리</label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="text" class="form-control" name="category" value={{ groups.category }} />{{ groups.category }}
+                                                                </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </fieldset>
                                                 <fieldset>
                                                     <div class="form-group">
-                                                    <div class="row">
-                                                        <label class="col-sm-2 control-label">그룹생성일</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="text" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                        <div class="row">
+                                                            <label class="col-sm-2 control-label">그룹생성일</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="text" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </fieldset>
                                                 <fieldset>
                                                     <div class="form-group">
-                                                    <div class="row">
-                                                        <label class="col-sm-2 control-label">그룹생성일</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="date" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                        <div class="row">
+                                                            <label class="col-sm-2 control-label">그룹생성일</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="date" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </fieldset>
                                                 <fieldset>
                                                     <div class="form-group">
-                                                    <div class="row">
-                                                        <label class="col-sm-2 control-label">그룹생성일</label>
-                                                        <div class="col-sm-10">
-                                                        <input type="time" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                        <div class="row">
+                                                            <label class="col-sm-2 control-label">그룹생성일</label>
+                                                            <div class="col-sm-10">
+                                                                <input type="time" class="form-control" name="createdAt" value={{ groups.createdAt }}/>{{ groups.createdAt }}
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     </div>
                                                 </fieldset>
                                                 <fieldset>
@@ -386,8 +336,7 @@
             <footer class="footer">
                 <div class="container">
                     <nav>
-                        <p class="copyright text-center">
-                            ©
+                        <p class="copyright text-center">©
                             <script>document.write(new Date().getFullYear());</script>
                             <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
                         </p>

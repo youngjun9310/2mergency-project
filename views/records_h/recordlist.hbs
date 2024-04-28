@@ -18,40 +18,34 @@
 </head>
 <body>
 <div class="wrapper">
-      <div
-        class="sidebar"
-        data-color="orange"
-        data-image="/assets/img/sidebar-5.jpg">
-        <div class="sidebar-wrapper">
-          <div class="logo">
-            <a href="/users/users_h/userDashboard" class="simple-text logo-mini"> </a>
-            <a href="/users/users_h/userDashboard" class="simple-text logo-normal">2mergency</a>
+  <div class="sidebar" data-color="orange" data-image="/assets/img/sidebar-5.jpg">
+    <div class="sidebar-wrapper">
+      <div class="logo">
+        <a href="/users/users_h/userDashboard" class="simple-text logo-mini"> </a>
+        <a href="/users/users_h/userDashboard" class="simple-text logo-normal">2mergency</a>
+      </div>
+        <div class="user">
+          <div class="photo">
+            <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"/>
           </div>
-          <div class="user">
-            <div class="photo">
-              <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"/>
-            </div>
-            <div class="info">
-              <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                <span>{{ user.nickname }}<b class="caret"></b></span>
-              </a>
-            </div>
+          <div class="info">
+            <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+              <span>{{ user.nickname }}<b class="caret"></b></span>
+            </a>
           </div>
+        </div>
           <ul class="nav">
             <li class="nav-item">
-              <a
-                class="nav-link"
-                data-toggle="collapse"
-                href="#componentsExamples">
+              <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
                 <i class="nc-icon nc-pin-3"></i>
                 <p>오늘의운동<b class="caret"></b></p>
               </a>
               <div class="collapse" id="componentsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                      <a class="nav-link" href="/records/records_h/recordcreate">
-                          <span class="sidebar-normal">나의 운동 기록하기</span>
-                      </a>
+                    <a class="nav-link" href="/records/records_h/recordcreate">
+                      <span class="sidebar-normal">나의 운동 기록하기</span>
+                    </a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="/records/records_h/recordall">
@@ -74,23 +68,8 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/schedules/schedules_h/scheduleGroup">
-                      <span class="sidebar-normal">그룹스케줄목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="/groups/groups_h/groupcreate">
                       <span class="sidebar-normal">그룹생성하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/invite/group-members_h/groupinvite">
-                      <span class="sidebar-normal">그룹초대하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/accept/group-members_h/groupaccept">
-                      <span class="sidebar-normal">그룹초대수락</span>
                     </a>
                   </li>
                 </ul>
@@ -105,16 +84,11 @@
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">운동경로탐색</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">랜덤경로추천받기</span>
+                      <span class="sidebar-normal">실시간-랜덤경로탐색</span>
                     </a>
                   </li>
                 </ul>
-              </div>
+             </div>
             </li>
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#pagesExamples">

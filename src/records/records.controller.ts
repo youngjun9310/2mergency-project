@@ -5,9 +5,7 @@ import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagg
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
-import { UsersService } from 'src/users/users.service';
 import { Response } from 'express';
-
 
 // 유저 토큰
 @UseGuards(JWTAuthGuard)
@@ -15,9 +13,7 @@ import { Response } from 'express';
 @Controller('records')
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService,
-    private readonly usersService: UsersService,
   ) {}
-
 
   // 레코드 생성
   @ApiResponse({ description: '성공', status: 201 })
@@ -29,20 +25,27 @@ export class RecordsController {
     try {
       await this.recordsService.create(users.userId, createRecordDto);
       res.redirect('/records/records_h/recordall');
-
     } catch (error) {
       res.redirect('/records/records_h/recordcreate')
     }
+  }
 
+  /// 레코드 내 모든 목록 조회
+  @ApiResponse({ description: '성공', status: 200 })
+  @ApiOperation({ summary: '레코드 내 모든 목록 조회 API', description: '내 모든 운동 기록들을 조회!' })
+  @ApiBearerAuth('access-token')
+  @Get('/myall')
+  async findAll(@UserInfo() users : Users) {
+    return await this.recordsService.findAll(users.userId);
   }
 
   // 레코드 모든 목록 조회
   @ApiResponse({ description: '성공', status: 200 })
   @ApiOperation({ summary: '레코드 모든 목록 조회 API', description: '사람들의 모든 운동 기록들을 조회!' })
   @ApiBearerAuth('access-token')
-  @Get()
-  async findAll() {
-    return await this.recordsService.findAll();
+  @Get('/recordall')
+  async recordall() {
+    return await this.recordsService.recordall();
   }
 
   // 레코드 상세 목록 조회
@@ -69,9 +72,8 @@ export class RecordsController {
   @Get('/records_h/recordcreate')
   @Render('recordcreate')
   async recordcreate( @UserInfo() users : Users ){
-    const user = await this.usersService.findUser(users.userId);
     return {
-      user : user
+      user : users
     };
   }
 
@@ -80,14 +82,11 @@ export class RecordsController {
   @Get('/records_h/recordall')
   @Render('recordall')
   async recordsall( @UserInfo() users : Users ){
-    console.log('res render from create')
-    const user = await this.usersService.findUser(users.userId);
-    const records = await this.recordsService.findAll();
-    console.log('users',users)
-    console.log('user',user)
-    console.log('records',records)
+  
+    const records = await this.recordsService.findAll(users.userId);
+
     return {
-      user : user,
+      user : users,
       record : records.record
     };
   }
@@ -96,13 +95,23 @@ export class RecordsController {
   @UseGuards(JWTAuthGuard)
   @Get('/records_h/recordlist/:recordId')
   @Render('recordlist')
-  async recordlist(@Param() recordId ,@UserInfo() users : Users){
+  async recordlist(@Param() recordId , @UserInfo() users : Users){
 
-    const user = await this.usersService.findUser(users.userId);
     const records = await this.recordsService.findOne(recordId ,users.userId);
     return {
-      user : user,
+      user : users,
       record : records
     };
+  }
+
+  // 지도 MAP 초기작업
+   /** hbs 양식 */
+  // 첫 welcome 화면
+  @Get('/records_h/recordTrack')
+  @Render('recordTrack')
+  async recordTrack(@UserInfo() users : Users){
+    return {
+      user: users
+    }
   }
 }

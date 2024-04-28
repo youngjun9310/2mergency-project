@@ -17,12 +17,9 @@
     <title>그룹 멤버 초대</title>
 </head>
 <body>
-    <div class="wrapper">
-      <div
-        class="sidebar"
-        data-color="orange"
-        data-image="/assets/img/sidebar-5.jpg">
-        <div class="sidebar-wrapper">
+  <div class="wrapper">
+    <div class="sidebar" data-color="orange" data-image="/assets/img/sidebar-5.jpg">
+      <div class="sidebar-wrapper">
           <div class="logo">
             <a href="/auth/user_h/userDashboard" class="simple-text logo-mini"> </a>
             <a href="/auth/user_h/userDashboard" class="simple-text logo-normal">2mergency</a>
@@ -61,10 +58,7 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse show" href="#formsExamples">
                 <i class="nc-icon nc-notes"></i>
-                <p>
-                  그룹
-                  <b class="caret"></b>
-                </p>
+                <p>그룹<b class="caret"></b></p>
               </a>
               <div class="collapse" id="formsExamples">
                 <ul class="nav">
@@ -74,23 +68,8 @@
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/schedules/schedules_h/scheduleGroup">
-                      <span class="sidebar-normal">그룹스케줄목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="/groups/groups_h/groupcreate">
                       <span class="sidebar-normal">그룹생성하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/invite/group-members_h/groupinvite">
-                      <span class="sidebar-normal">그룹초대하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/accept/group-members_h/groupaccept">
-                      <span class="sidebar-normal">그룹초대수락</span>
                     </a>
                   </li>
                 </ul>
@@ -105,12 +84,7 @@
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">운동경로탐색</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">랜덤경로추천받기</span>
+                      <span class="sidebar-normal">실시간-랜덤경로탐색</span>
                     </a>
                   </li>
                 </ul>
@@ -133,9 +107,9 @@
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/auth/users_h/userDashboard">
+              <a class="nav-link" href="/users/users_h/userDashboard">
                 <i class="nc-icon nc-chart-pie-35"></i>
-                <p>홈으로</p>
+                <p>커뮤니티홈</p>
               </a>
             </li>
           </ul>
@@ -147,47 +121,31 @@
           <div class="container-fluid">
             <div class="navbar-wrapper">
               <div class="navbar-minimize">
-                <button
-                  id="minimizeSidebar"
-                  class="btn btn-warning btn-fill btn-round btn-icon d-none d-lg-block">
+                <button id="minimizeSidebar" class="btn btn-warning btn-fill btn-round btn-icon d-none d-lg-block">
                   <i class="fa fa-ellipsis-v visible-on-sidebar-regular"></i>
                   <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                 </button>
               </div>
               <a class="navbar-brand" href="#pablo">그룹 멤버 초대</a>
             </div>
-            <button
-              class="navbar-toggler navbar-toggler-right"
-              type="button"
-              data-toggle="collapse"
-              aria-controls="navigation-index"
-              aria-expanded="false"
-              aria-label="Toggle navigation">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+              aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-bar burger-lines"></span>
               <span class="navbar-toggler-bar burger-lines"></span>
               <span class="navbar-toggler-bar burger-lines"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end">
               <ul class="nav navbar-nav mr-auto">
-                <form
-                  class="navbar-form navbar-left navbar-search-form"
-                  role="search">
+                <form class="navbar-form navbar-left navbar-search-form" role="search">
                   <div class="input-group">
                     <i class="nc-icon nc-zoom-split"></i>
-                    <input
-                      type="text"
-                      value=""
-                      class="form-control"
-                      placeholder="Search..."/>
+                    <input type="text" value="" class="form-control" placeholder="Search..."/>
                   </div>
                 </form>
               </ul>
               <ul class="navbar-nav">
                 <li class="dropdown nav-item">
-                  <a
-                    href="#"
-                    class="dropdown-toggle nav-link"
-                    data-toggle="dropdown">
+                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <i class="nc-icon nc-planet"></i>
                   </a>
                   <ul class="dropdown-menu">
@@ -199,32 +157,21 @@
                   </ul>
                 </li>
                 <li class="dropdown nav-item">
-                  <a
-                    href="#"
-                    class="dropdown-toggle nav-link"
-                    data-toggle="dropdown">
+                  <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown">
                     <i class="nc-icon nc-bell-55"></i>
                     <span class="notification">1</span>
                     <span class="d-lg-none">알림</span>
                   </a>
                   <ul class="dropdown-menu">
-                    <a class="dropdown-item" href="#"
-                      >신규 그룹초대가 왔습니다</a>
+                    <a class="dropdown-item" href="#">신규 그룹초대가 왔습니다</a>
                   </ul>
                 </li>
                 <li class="nav-item dropdown">
-                  <a
-                    class="nav-link dropdown-toggle"
-                    href="http://example.com"
-                    id="navbarDropdownMenuLink"
-                    data-toggle="dropdown"
-                    aria-haspopup="true"
-                    aria-expanded="false">
+                  <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <i class="nc-icon nc-bullet-list-67"></i>
                   </a>
-                  <div
-                    class="dropdown-menu dropdown-menu-right"
-                    aria-labelledby="navbarDropdownMenuLink">
+                  <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#">
                       <i class="nc-icon nc-umbrella-13"></i> 헬프데스크
                     </a>
@@ -264,7 +211,7 @@
                               </div>
                                <div>
                                 <button type="submit" class="btn btn-info btn-fill pull-right"
-                                onclick="location.href='/groups/groups_h/groupall'">초대하기</button>
+                                  onclick="location.href='/groups/groups_h/groupall'">초대하기</button>
                                </div>
                             </div>
                           </div>
@@ -296,19 +243,13 @@
                       <div class="card-footer">
                         <hr />
                         <div class="button-container text-center">
-                          <button
-                            href="#"
-                            class="btn btn-simple btn-link btn-icon">
+                          <button href="#" class="btn btn-simple btn-link btn-icon">
                             <i class="fa fa-facebook-square"></i>
                           </button>
-                          <button
-                            href="#"
-                            class="btn btn-simple btn-link btn-icon">
+                          <button href="#" class="btn btn-simple btn-link btn-icon">
                             <i class="fa fa-twitter"></i>
                           </button>
-                          <button
-                            href="#"
-                            class="btn btn-simple btn-link btn-icon">
+                          <button href="#" class="btn btn-simple btn-link btn-icon">
                             <i class="fa fa-google-plus-square"></i>
                           </button>
                         </div>
@@ -323,8 +264,7 @@
         <footer class="footer">
           <div class="container">
             <nav>
-              <p class="copyright text-center">
-                ©
+              <p class="copyright text-center">©
                 <script>document.write(new Date().getFullYear());</script>
                 <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
               </p>
