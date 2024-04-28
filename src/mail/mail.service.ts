@@ -49,24 +49,6 @@ export class MailService {
 
   }
 
-  async groupsendMail(email : string, token : number, nickname : string) {
-    try {
-
-      const sendOption : SendOption = {
-        from: this.configService.get<string>(ENV_MAILER_EMAIL), 
-        to: email,
-        subject: `${nickname}님이 그룹 초대를 보냈습니다`,
-        html: `<h1> 그룹에 당신을 초대하였습니다. </h1> <br>
-        <p> 인증번호를 입력해주세요! : ${token} </p>`,
-      };
-
-      await this.transporter.sendMail(sendOption);
-      console.log('메일이 전송되었습니다')
-    } catch (error) {
-      console.error('메일 전송 중 오류가 발생했습니다:', error);
-    }
-  }
-
   async generateRandomToken(min: number, max: number){
     const token = Math.floor(Math.random()* (max - min + 1))+min;
     const expires = new Date();

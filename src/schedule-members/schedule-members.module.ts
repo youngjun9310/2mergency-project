@@ -13,13 +13,14 @@ import { MembersRoleStrategy } from 'src/group-members/strategies/members.strate
 import { Users } from 'src/users/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { AwsService } from 'src/aws/aws.service';
+import { Records } from 'src/records/entities/record.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Schedules, ScheduleMembers, Groups, GroupMembers, Users]),
+    TypeOrmModule.forFeature([Schedules, ScheduleMembers, Groups, GroupMembers, Users, Records]),
     GroupMembersModule,
     UsersModule,
-    AuthModule,
+    AuthModule
   ],
   controllers: [ScheduleMembersController],
   providers: [ScheduleMembersService, UsersService, AwsService, MembersRoleStrategy],

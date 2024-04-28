@@ -13,5 +13,6 @@ import { MembersRoleStrategy } from 'src/group-members/strategies/members.strate
   imports: [TypeOrmModule.forFeature([Groups, GroupMembers, Users]), GroupMembersModule, UsersModule],
   controllers: [GroupsController],
   providers: [GroupsService, MembersRoleStrategy],
+  exports : [GroupsService]
 })
 export class GroupsModule {}

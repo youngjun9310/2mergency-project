@@ -6,19 +6,20 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
-import { Groups } from 'src/groups/entities/group.entity';
+import { Records } from 'src/records/entities/record.entity';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    @InjectRepository(Records)
+    private recordsRepository : Repository<Records>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
   ) {}
 
   /*전체 사용자 조회(어드민용)*/
   async findAllUser() {
-    return await this.userRepository.find();
     return await this.userRepository.find();
   }
   /*사용자 조회*/
@@ -57,7 +58,6 @@ export class UsersService {
       isOpen: srtToBoolean,
     });
     return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
-    return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
   }
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
@@ -73,12 +73,9 @@ export class UsersService {
     }
     this.userRepository.delete(userId);
     return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };
-    this.userRepository.delete(userId);
-    return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };
   }
   /*사용자 조회(이메일)*/
   async findByEmail(email: string) {
-    return await this.userRepository.findOne({ where: { email } });
     return await this.userRepository.findOne({ where: { email } });
   }
 
@@ -91,5 +88,16 @@ export class UsersService {
     }
 
     return users;
+  }
+
+  /*recordId 조회*/
+  async findrecord(userId : number){
+    const records = await this.recordsRepository.find({ where : { userId }});
+
+    if(!records){
+      throw new NotFoundException("기록 데이터가 존재하지 않습니다.");
+    }
+
+    return records;
   }
 }

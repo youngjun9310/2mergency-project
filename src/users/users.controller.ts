@@ -90,8 +90,10 @@ export class UsersController {
   @Render('usermypage')
   async users(@UserInfo() users: Users) {
     const user = await this.usersService.findUser(users.userId);
+    const records = await this.usersService.findrecord(users.userId);
     return {
       user: user,
+      records : records
     };
   }
 
