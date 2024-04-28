@@ -183,7 +183,7 @@
                       width="100%" style="width: 100%">
                       <thead>
                         <tr>
-                          <th class="disabled-sorting text-center">ID</th>
+                          <th class="disabled-sorting text-center">회원명</th>
                           <th class="disabled-sorting text-center">시작 시간</th>
                           <th class="disabled-sorting text-center">도착 시간</th>
                           <th class="disabled-sorting text-center">거리</th>
@@ -195,7 +195,7 @@
                       </thead>
                       <tfoot>
                         <tr>
-                          <th class="text-center">ID</th>
+                          <th class="text-center">Nickname</th>
                           <th class="text-center">StartTime</th>
                           <th class="text-center">EndTime</th>
                           <th class="text-center">Distance</th>
@@ -208,7 +208,7 @@
                       <tbody>
                         {{#each record}}
                         <tr onclick="window.location.href = '/records/{{ this.recordId }}/records_h/recordlist';">
-                          <td class="text-center">{{ this.recordId }}</td>
+                          <td class="text-center">{{ this.nickname }}</td>
                           <td class="text-center">{{ this.startTime }}</td>
                           <td class="text-center">{{ this.endTime }}</td>
                           <td class="text-center">{{ this.stackedDistance }}</td>
