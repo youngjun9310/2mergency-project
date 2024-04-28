@@ -58,4 +58,5 @@ export class CreateRecordDto {
     })
   @IsNotEmpty({ message : "도착위치 y값을 작성해주세요." })
   endy : number;
+  
 }

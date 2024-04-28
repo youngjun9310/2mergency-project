@@ -1,5 +1,5 @@
 import { Users } from "src/users/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
 @Entity({
     name : 'records'
@@ -42,5 +42,11 @@ export class Records {
 
     @Column({ type : 'int', name : 'userId', nullable : false })
     userId : number;
+
+    @CreateDateColumn({ type: 'timestamp' })
+    createdAt: Date;
+
+    @UpdateDateColumn({ type: 'timestamp' })
+    updatedAt: Date;
 
 }
