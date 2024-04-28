@@ -14,7 +14,6 @@ import { Users } from 'src/users/entities/user.entity';
 import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
 import { JwtStrategy } from './strategy/jwt.strategy';
 import { RoleStrategy } from './strategy/roles.strategy';
-import { RolesGuard } from './guard/roles.guard';
 
 @Module({
   imports: [
