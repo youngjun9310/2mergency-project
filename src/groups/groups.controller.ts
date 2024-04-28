@@ -44,7 +44,7 @@ export class GroupsController {
   // 그룹 수정 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @ApiOperation({ summary: '그룹 수정', description: '그룹의 목록 수정 성공' })
+  @ApiOperation({ summary: '그룹 수정 API', description: '그룹의 목록 수정 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹을 수정하였습니다.' })
   @Patch(':groupId')
   @ApiBearerAuth('access-token')
@@ -57,6 +57,7 @@ export class GroupsController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제 성공' })
   @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
+  @ApiBearerAuth('access-token')
   @Delete(':groupId')
   async deleteGroup(@Param('groupId') groupId: number) {
     return await this.groupsService.deleteGroup(groupId);

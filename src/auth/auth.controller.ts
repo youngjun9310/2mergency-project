@@ -31,6 +31,7 @@ export class AuthController {
   @ApiOperation({ summary: '회원가입 API', description: '회원가입 성공' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
+  @ApiResponse({ status: 201, description: '회원가입 성공하였습니다.' })
   async register(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
     return await this.authService.register(signUpdto, file);
   }
