@@ -222,6 +222,7 @@
                       <thead>
                         
                         <th data-field="state" data-checkbox="true"></th>
+                        <th data-field="recordId" class="text-center" data-sortable="true" >비고</th>
                         <th data-field="startTime" class="text-center" data-sortable="true" >시작시간</th>
                         <th data-field="endTime" class="text-center" data-sortable="true">도착시간</th>
                         <th data-field="stackedDistance" class="text-center" data-sortable="true">거리</th>
@@ -234,6 +235,7 @@
                       <tbody onclick="window.location.href = '/records/{{ this.recordId }}/records_h/recordlist';">
                         <tr>
                           <td></td>
+                          <td>{{this.recordId}}</td>
                           <td>{{this.startTime}}</td>
                           <td>{{this.endTime}}</td>
                           <td>{{this.stackedDistance}}</td>

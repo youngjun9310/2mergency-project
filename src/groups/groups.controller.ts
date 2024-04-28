@@ -28,7 +28,6 @@ export class GroupsController {
   // 그룹 모든 목록 조회 //
   @ApiOperation({ summary: '모든 그룹 목록 조회 API', description: '모든 그룹 목록 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
-  @ApiBearerAuth('access-token')
   @Get('')
   async findAllGroups() {
     return await this.groupsService.findAllGroups();
@@ -37,7 +36,6 @@ export class GroupsController {
   // 그룹 상세 조회 //
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
-  @ApiBearerAuth('access-token')
   @Get('')
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
