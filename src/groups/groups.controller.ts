@@ -68,10 +68,8 @@ export class GroupsController {
   @UseGuards(JWTAuthGuard)
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate(@UserInfo() users: Users) {
-    return {
-      users: users,
-    };
+  async groupcreate() {
+    return;
   }
 
   // 그룹 모든 목록 조회

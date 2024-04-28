@@ -321,7 +321,7 @@
                           </tfoot>
                           <tbody>
                             {{#each records}}
-                            <tr onclick="/">
+                            <tr onclick="window.location.href = '/records/{{ this.recordId }}/records_h/recordlist';">
                               <td class="text-center">{{ this.startTime }}</td>
                               <td class="text-center">{{ this.endTime }}</td>
                               <td class="text-center">{{ this.stackedDistance }}</td>
