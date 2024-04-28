@@ -43,7 +43,7 @@ export class GroupsService {
         isInvited: true,
       });
     } catch (error) {
-      console.error('어어어어 에러 발생:', error);
+      console.error('Error', error);
     }
     return groupCreate;
   }

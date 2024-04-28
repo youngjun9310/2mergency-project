@@ -38,34 +38,32 @@ export class UsersService {
   async userUpdate(
     userId: number,
     updateDto: UpdateDto,
-    file: Express.Multer.File,
-  ) {
-    console.log('userEdit service Start')
-    const { email, password, passwordConfirm, address, isOpen } =
-      updateDto;
-    const user = await this.userRepository.findOneBy({ userId });
-    if (!user) {
-      throw new NotFoundException('사용자를 찾을 수 없습니다.');
-    }
-    if (password !== passwordConfirm) {
-      throw new UnauthorizedException(
-        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
+    file: Express.Multer.File,) {
+      const { email, password, passwordConfirm, address, isOpen } =
+        updateDto;
+      const user = await this.userRepository.findOneBy({ userId });
+      if (!user) {
+        throw new NotFoundException('사용자를 찾을 수 없습니다.');
+      }
+      if (password !== passwordConfirm) {
+        throw new UnauthorizedException(
+          '비밀번호가 체크비밀번호와 일치하지 않습니다.',
+        );
+      }
+      const profileImage = await this.awsService.imageUpload(file);
+      const srtToBoolean = Boolean(isOpen === 'true');
+      const hashedPassword = await hash(
+        password,
+        this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
       );
-    }
-    console.log(password);
-    const profileImage = await this.awsService.imageUpload(file);
-    const srtToBoolean = Boolean(isOpen === 'true');
-    const hashedPassword = await hash(
-      password,
-      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
-    );
-    return this.userRepository.update(userId, {
-      email,
-      password: hashedPassword,
-      address,
-      profileImage,
-      isOpen: srtToBoolean,
-    });
+
+      return this.userRepository.update(userId, {
+        email,
+        password: hashedPassword,
+        address,
+        profileImage,
+        isOpen: srtToBoolean,
+      });
   }
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
@@ -80,8 +78,8 @@ export class UsersService {
     
     if (!await(compare(password, user.password))) {
       throw new UnauthorizedException('PasswordMatchError');
-
     }
+    
     return this.userRepository.delete(userId);
   }
   

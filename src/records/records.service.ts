@@ -29,9 +29,8 @@ export class RecordsService {
       endx,
       endy
     });
-
     const save = await this.recordsrepository.save(recoardsave);
-  
+
     return { statusCode : 201, message : "정상적으로 데이터가 기록되었습니다.", save };
   }
 
@@ -56,17 +55,14 @@ export class RecordsService {
 
     if(userId !== record.userId){
       throw new BadRequestException("조회할 수 있는 권한이 없습니다.");
-    }
-    
-    
+    }   
     return { statusCode : 200, message : "정상적으로 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 
   // 레코드 내 모든 목록 조회
   async findAll(userId : number) {
-    console.log('userId', userId)
     const record = await this.recordsrepository.find({ where : { userId }});
-    console.log('record', record)
+    
     return { statusCode : 200, message : "정상적으로 모든 기록 데이터 이력 조회에 성공하였습니다.", record };
   }
 

@@ -82,9 +82,7 @@ export class RecordsController {
   @Get('/records_h/recordall')
   @Render('recordall')
   async recordsall( @UserInfo() users : Users ){
-  
     const records = await this.recordsService.findAll(users.userId);
-
     return {
       user : users,
       record : records.record
@@ -96,7 +94,6 @@ export class RecordsController {
   @Get('/records_h/recordlist/:recordId')
   @Render('recordlist')
   async recordlist(@Param() recordId , @UserInfo() users : Users){
-
     const records = await this.recordsService.findOne(recordId ,users.userId);
     return {
       user : users,

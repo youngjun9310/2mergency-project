@@ -62,21 +62,14 @@ export class UsersController {
   @ApiBearerAuth('access-token')
   @Post('/userUpdate')
   @Redirect('/')
-  async userUpdate( @UserInfo() users: Users,@Body() updateDto: UpdateDto,@UploadedFile() file: Express.Multer.File,groupId : number
-) {
-  
-  console.log('groupId', groupId)
- 
-  const groups = await this.usersService.findGroupId(groupId);
-  console.log('groups', groups)
-
-  await this.usersService.userUpdate(users.userId, updateDto, file);
-
-  return {
-    users : users,
-    groups : groups,
-    url: '/users/users_h/usermypage'
-  };
+  async userUpdate( @UserInfo() users: Users,@Body() updateDto: UpdateDto,@UploadedFile() file: Express.Multer.File,groupId : number) {
+    const groups = await this.usersService.findGroupId(groupId);
+    await this.usersService.userUpdate(users.userId, updateDto, file);
+    return {
+      users : users,
+      groups : groups,
+      url: '/users/users_h/usermypage'
+    };
   }
 
   /** 사용자 삭제*/
@@ -85,7 +78,6 @@ export class UsersController {
   @Delete('')
   //@Redirect('/user_h/welcomePage')
   async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users, @Res() res: Response) {
-
     try {
       await this.usersService.userDelete(users.userId, deleteDto.password);
       res.redirect('/auth/users_h/welcomePage');
@@ -117,13 +109,11 @@ export class UsersController {
     };
   }
 
-  // 유저 마이 정보 조회 겸 대시보드
+  // 유저 메인화면
   @Get('/users_h/usermypage')
   @Render('usermypage')
   async users( @UserInfo() users : Users ) {
     const records = await this.recordsService.findAll(users.userId);
-    console.log('records', records)
-
     return {
       user : users,
       records : records.record
@@ -159,10 +149,12 @@ export class UsersController {
   @Render('userDashboard')
   async userTotal(@UserInfo() users : Users, groupId : number) {
     //전체 그룹목록
-    const groups = await this.usersService.findGroupId(groupId);
+    const groups = await this.groupsService.findAllGroups();
+    const records = await this.recordsService.recordall();
     return {
       user : users,
-      groups : groups
+      groups : groups,
+      records : records.record
     };
   }
   
