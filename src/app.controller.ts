@@ -14,7 +14,7 @@ export class AppController {
     private readonly recordservice : RecordsService
   ) {}
   @Get('/')
-  @Render('welcomepage')
+  @Render('welcomePage')
   root() {
     return { message: 'data' };
   }
