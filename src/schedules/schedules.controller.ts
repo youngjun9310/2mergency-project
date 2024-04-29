@@ -164,10 +164,10 @@ export class SchedulesController {
     try {
       await this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
 
-      return res.status(201).send(`
+      res.status(201).send(`
       <script>
           alert("스케줄 수정 완료");
-          window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll;
+          window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll';
       </script>
       `);
 
@@ -203,7 +203,7 @@ export class SchedulesController {
     try {
       await this.schedulesService.deleteSchedule(scheduleId);
 
-      res.status(204).send(`
+      res.status(201).send(`
       <script>
           alert("스케줄 삭제 완료");
           window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll';

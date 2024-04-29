@@ -143,7 +143,7 @@ export class GroupsController {
     try {
       await this.groupsService.deleteGroup(groupId);
 
-      res.status(204).send(`
+      res.status(201).send(`
       <script>
           alert("그룹 삭제 완료");
           window.location.href = '/groups/groups_h/groupAll';
