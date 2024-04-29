@@ -12,3 +12,6 @@ pm2 start npm --name "2mergency-project" -- run start
 
 # PM2 설정 저장 (서버 재시작시 앱 자동 시작을 위함) ###
 pm2 save
+
+
+# git action test

@@ -316,18 +316,17 @@
 
 
 
+    
     {{#each user}}
         <div id="page">
             <form action="/users/findAllUser" method="get"></form>
             <p>userId : {{this.userId}}</p>
             <p>email : {{this.email}}</p>
+            <p>password : {{this.password}}</p>
             <p>nickname : {{this.nickname}}</p>
             <p>address : {{this.address}}</p>
             <p>createdAt : {{this.createdAt}}</p>
             <p>updatedAt : {{this.updatedAt}}</p>
-            </form>
-            <button onclick="window.location.href = '/users/users_h/userEdit';">유저 정보 수정하기</button>
-            <button onclick="window.location.href = '/users/users_h/userDelete';">유저 정보 삭제하기</button>
         </div>
         {{/each}}
         <a href="/">Home</a>

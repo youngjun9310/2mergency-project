@@ -47,6 +47,5 @@ export class UpdateGroupDto extends PickType(CreateGroupDto, [
     required: false,
   })
   @IsOptional()
-  @IsBoolean()
-  isPublic?: boolean;
+  isPublic?: string;
 }

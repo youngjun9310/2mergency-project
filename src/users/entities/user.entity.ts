@@ -1,6 +1,4 @@
-import { Invites } from 'src/auth/entities/invite.entity';
 import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { Groups } from 'src/groups/entities/group.entity';
 import { Records } from 'src/records/entities/record.entity';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
 import { Schedules } from 'src/schedules/entities/schedule.entity';
@@ -60,16 +58,17 @@ export class Users {
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
   groupMembers: GroupMembers[];
 
-  @OneToMany(() => Records, (records) => records.users, { cascade: true })
+  @OneToMany(() => Records, (records) => records.users, {
+    cascade: true,
+  })
   records: Records[];
 
-  @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade: true })
+  @OneToMany(() => Schedules, (schedules) => schedules.users, {
+    cascade: true,
+  })
   schedules: Schedules[];
 
-  @OneToMany(
-    () => ScheduleMembers,
-    (scheduleMembers) => scheduleMembers.users,
-    { cascade: true },
-  )
+  @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade: true })
   scheduleMembers: ScheduleMembers[];
+
 }

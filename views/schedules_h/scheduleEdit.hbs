@@ -24,8 +24,8 @@
             data-image="/assets/img/sidebar-5.jpg">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="/html/dashboard.html" class="simple-text logo-mini"> </a>
-                    <a href="/html/dashboard.html" class="simple-text logo-normal">2mergency</a>
+                    <a href="/" class="simple-text logo-mini"> </a>
+                    <a href="/" class="simple-text logo-normal">2mergency</a>
                 </div>
                 <div class="user">
                     <div class="photo">
@@ -33,7 +33,7 @@
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                            <span>고양이<b class="caret"></b></span>
+                            <span>{{ users.nickname }}
                         </a>
                     </div>
                 </div>
@@ -50,13 +50,18 @@
                             <ul class="nav">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordcreate">
-                                      <span class="sidebar-normal">나의 운동 기록하기</span>
-                                  </a>
+                                        <span class="sidebar-normal">운동 기록 생성</span>
+                                    </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordall">
-                                      <span class="sidebar-normal">나의 기록조회</span>
-                                    </a>    
+                                        <span class="sidebar-normal">운동기록</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/">
+                                        <span class="sidebar-normal">운동경로탐색</span>
+                                    </a>
                                 </li>
                             </ul>
                         </div>
@@ -69,23 +74,13 @@
                         <div class="collapse" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/regular.html">
-                                        <span class="sidebar-normal">가입한그룹목록</span>
+                                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                                        <span class="sidebar-normal">그룹생성</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/group-calendar.html">
-                                        <span class="sidebar-normal">그룹스케줄</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/datatables.net.html">
-                                        <span class="sidebar-normal">초대하기</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/wizard.html">
-                                        <span class="sidebar-normal">받은초대</span>
+                                    <a class="nav-link" href="/groups/groups_h/groupall">
+                                        <span class="sidebar-normal">그룹목록</span>
                                     </a>
                                 </li>
                             </ul>
@@ -99,12 +94,12 @@
                         <div class="collapse show" id="tablesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/tables/schedule-list.html">
+                                    <a class="nav-link" href="/groups/{{ schedules.groupId }}/schedules/schedules_h/scheduleall">
                                         <span class="sidebar-normal">스케줄목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/forms/schedule-create.html">
+                                    <a class="nav-link" href="/groups/{{ groupId }}/schedules/schedules_h/schedulecreate">
                                         <span class="sidebar-normal">스케줄생성</span>
                                     </a>
                                 </li>
@@ -124,7 +119,7 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/html/pages/userInfo.html">
+                                    <a class="nav-link" href="/users/users_h/usermypage">
                                         <span class="sidebar-normal">프로필조회</span>
                                     </a>
                                 </li>
@@ -132,7 +127,7 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/html/dashboard.html">
+                        <a class="nav-link" href="/">
                             <i class="nc-icon nc-chart-pie-35"></i>
                             <p>홈으로</p>
                         </a>
@@ -253,7 +248,7 @@
                                             <div class="row">
                                                 <label class="col-sm-2 control-label">스케줄명</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" name="title" value={{schedules.title}}  />
+                                                    <input type="text" class="form-control" name="title" value={{ schedules.title }}  />
                                                 </div>
                                             </div>
                                         </div>
@@ -264,54 +259,6 @@
                                                 <label class="col-sm-2 control-label">스케줄일자</label>
                                                 <div class="col-md-4">
                                                     <input id="datetimepicker" type="text" name="scheduleDate" class="form-control datetimepicker" value={{schedules.scheduleDate}}/>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <fieldset>
-                                        <div class="form-group">
-                                            <div class="row">
-                                            <label class="col-sm-2 control-label">카테고리</label>
-                                                <div class="col-sm-10">
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="radio"
-                                                                name="category" 
-                                                                id="category"
-                                                                value="walking"/>
-                                                            <span class="form-check-sign"></span>
-                                                            산책
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input
-                                                                class="form-check-input"
-                                                                type="radio"
-                                                                name="category" 
-                                                                placeholder="스케줄 카테고리"
-                                                                id="category"
-                                                                value="running" />
-                                                            <span class="form-check-sign"></span>
-                                                            러닝
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check form-check-radio">
-                                                        <label class="form-check-label">
-                                                            <input
-                                                            class="form-check-input"
-                                                            type="radio"
-                                                            name="category" 
-                                                            placeholder="스케줄 카테고리"
-                                                            id="category"
-                                                            value="mountclimbing"
-                                                            checked/>
-                                                            <span class="form-check-sign"></span>
-                                                            등산
-                                                        </label>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -332,7 +279,7 @@
                                             <div class="row">
                                                 <label class="col-sm-2 control-label">스케줄장소</label>
                                                 <div class="col-sm-10">
-                                                    <input type="text" class="form-control" id="location" name="location" placeholder="예정된 스케줄 장소를 기입해주세요" />
+                                                    <input type="text" class="form-control" placeholder="예정된 스케줄 장소를 기입해주세요" />
                                                 </div>
                                             </div>
                                         </div>
@@ -349,14 +296,14 @@
                                                         class="form-control"
                                                         name="content" 
                                                         placeholder="스케줄 세부사항을 입력하세요"
-                                                        value="">
+                                                        >
                                                     </textarea>
                                                 </div>
                                             </div>
                                         </div>
                                     </fieldset>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-fill btn-info">생성하기</button>
+                                        <button type="submit" class="btn btn-fill btn-info">수정하기</button>
                                     </div>
                                 </form>
                             </div>
@@ -372,7 +319,7 @@
                         <p class="copyright text-center">
                             ©
                             <script> document.write(new Date().getFullYear()); </script>
-                            <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
+                            <a href="/">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
                         </p>
                     </nav>
                 </div>

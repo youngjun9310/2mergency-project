@@ -24,22 +24,29 @@
         data-image="/assets/img/sidebar-5.jpg">
         <div class="sidebar-wrapper">
           <div class="logo">
-            <a href="/auth/user_h/userDashboard" class="simple-text logo-mini"> </a>
-            <a href="/auth/user_h/userDashboard" class="simple-text logo-normal">2mergency</a>
+            <a href="/" class="simple-text logo-mini"> </a>
+            <a href="/" class="simple-text logo-normal">2mergency</a>
           </div>
           <div class="user">
             <div class="photo">
               <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"/>
             </div>
             <div class="info">
-              <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                <span>{{ user.nickname }}<b class="caret"></b></span>
+              <a
+                data-toggle="collapse"
+                href="#collapseExample"
+                class="collapsed">
+                <span>{{ users.nickname }}
+                </span>
               </a>
             </div>
           </div>
           <ul class="nav">
             <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+              <a
+                class="nav-link"
+                data-toggle="collapse"
+                href="#componentsExamples">
                 <i class="nc-icon nc-pin-3"></i>
                 <p>오늘의운동<b class="caret"></b></p>
               </a>
@@ -47,13 +54,18 @@
                 <ul class="nav">
                   <li class="nav-item">
                       <a class="nav-link" href="/records/records_h/recordcreate">
-                        <span class="sidebar-normal">나의 운동 기록하기</span>
-                    </a>
+                          <span class="sidebar-normal">운동 기록 생성</span>
+                      </a>
                   </li>
                   <li class="nav-item">
                       <a class="nav-link" href="/records/records_h/recordall">
-                        <span class="sidebar-normal">나의 기록조회</span>
-                      </a>    
+                          <span class="sidebar-normal">운동기록</span>
+                      </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/">
+                      <span class="sidebar-normal">운동경로탐색</span>
+                    </a>
                   </li>
                 </ul>
               </div>
@@ -69,48 +81,13 @@
               <div class="collapse" id="formsExamples">
                 <ul class="nav">
                   <li class="nav-item">
-                    <a class="nav-link" href="/groups/groups_h/groupall">
-                      <span class="sidebar-normal">가입한그룹목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/schedules/schedules_h/scheduleGroup">
-                      <span class="sidebar-normal">그룹스케줄목록</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
                     <a class="nav-link" href="/groups/groups_h/groupcreate">
-                      <span class="sidebar-normal">그룹생성하기</span>
+                      <span class="sidebar-normal">그룹생성</span>
                     </a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/invite/group-members_h/groupinvite">
-                      <span class="sidebar-normal">그룹초대하기</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/group-members/{{groupId}}/accept/group-members_h/groupaccept">
-                      <span class="sidebar-normal">그룹초대수락</span>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
-                <i class="nc-icon nc-paper-2"></i>
-                <p>지도탐색하기<b class="caret"></b></p>
-              </a>
-              <div class="collapse" id="tablesExamples">
-                <ul class="nav">
-                  <li class="nav-item">
-                    <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">운동경로탐색</span>
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="/records/records_h/recordTrack">
-                      <span class="sidebar-normal">랜덤경로추천받기</span>
+                    <a class="nav-link" href="/groups/groups_h/groupall">
+                      <span class="sidebar-normal">그룹목록</span>
                     </a>
                   </li>
                 </ul>
@@ -119,21 +96,28 @@
             <li class="nav-item">
               <a class="nav-link" data-toggle="collapse" href="#pagesExamples">
                 <i class="nc-icon nc-puzzle-10"></i>
-                <p>사용자정보<b class="caret"></b>
+                <p>
+                  사용자정보
+                  <b class="caret"></b>
                 </p>
               </a>
-              <div class="collapse" id="pagesExamples">
+              <div class="collapse show" id="pagesExamples">
                 <ul class="nav">
                   <li class="nav-item">
                     <a class="nav-link" href="/users/users_h/usermypage">
                       <span class="sidebar-normal">프로필조회</span>
                     </a>
                   </li>
+                  <li class="nav-item">
+                    <a class="nav-link" href="/users/users_h/userEdit">
+                      <span class="sidebar-normal">프로필수정</span>
+                    </a>
+                  </li>
                 </ul>
               </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/auth/users_h/userDashboard">
+              <a class="nav-link" href="/">
                 <i class="nc-icon nc-chart-pie-35"></i>
                 <p>홈으로</p>
               </a>
@@ -154,7 +138,7 @@
                   <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                 </button>
               </div>
-              <a class="navbar-brand" href="#pablo"> 사용자 삭제 </a>
+              <a class="navbar-brand" href="#pablo"> 사용자프로필 </a>
             </div>
             <button
               class="navbar-toggler navbar-toggler-right"
@@ -226,14 +210,20 @@
                     class="dropdown-menu dropdown-menu-right"
                     aria-labelledby="navbarDropdownMenuLink">
                     <a class="dropdown-item" href="#">
+                      <i class="nc-icon nc-email-85"></i> 챗팅메시지
+                    </a>
+                    <a class="dropdown-item" href="#">
                       <i class="nc-icon nc-umbrella-13"></i> 헬프데스크
                     </a>
                     <a class="dropdown-item" href="#">
-                      <i class="nc-icon nc-settings-90"></i> 로그아웃
+                      <i class="nc-icon nc-settings-90"></i> 설정
                     </a>
                     <div class="divider"></div>
+                    <a class="dropdown-item" href="#">
+                      <i class="nc-icon nc-lock-circle-open"></i> 화면잠금
+                    </a>
                     <a href="#" class="dropdown-item text-danger">
-                      <i class="nc-icon nc-button-power"></i> 설정
+                      <i class="nc-icon nc-button-power"></i> 로그아웃
                     </a>
                   </div>
                 </li>
@@ -260,13 +250,22 @@
                             <div class="col-md-7 pr-1">
                               <div class="form-group">
                                 <label>패스워드</label>
-                                <input type="password" name="password" placeholder="비밀번호 입력" class="form-control" /> 
+                                <input
+                                   type="password"
+                                   name="password" 
+                                   placeholder="비밀번호 입력"
+                                  class="form-control"
+                                /> 
                               </div>
                                <div>
-                                <button type="submit" class="btn btn-info btn-fill pull-right"
-                                onclick="location.href='/users/user_h/userDelete'"> 탈퇴하기</button>
-                               </div>
+                            <button
+                            type="submit"
+                            class="btn btn-info btn-fill pull-right">
+                            탈퇴하기
+                          </button>
+                                </div>
                             </div>
+                            
                           </div>
                         </form>
                         </div>
@@ -276,16 +275,23 @@
                     <div class="card card-user">
                       <div class="card-header no-padding">
                         <div class="card-image">
-                          <img src="/assets/img/full-screen-image-3.jpg" alt="..." />
+                          <img
+                            src="/assets/img/full-screen-image-3.jpg"
+                            alt="..."
+                          />
                         </div>
                       </div>
                       <div class="card-body">
                         <div class="author">
                           <a href="#">
-                            <img class="avatar border-gray" src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png" alt="..." />
-                            <h5 class="card-title"> {{ user.nickname }}</h5>
+                            <img
+                              class="avatar border-gray"
+                              src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"
+                              alt="..."
+                            />
+                            <h5 class="card-title"> {{ users.nickname }}</h5>
                           </a>
-                            <p class="card-description">{{ user.email }}</p>
+                          <p class="card-description">{{ users.email }}</p>
                         </div>
                         <p class="card-description text-center">
                           반갑습니다! 함께 즐겁게 운동해요
@@ -325,8 +331,11 @@
             <nav>
               <p class="copyright text-center">
                 ©
-                <script>document.write(new Date().getFullYear());</script>
-                <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
+                <script>
+                  document.write(new Date().getFullYear());
+                </script>
+                <a href="/">2Mergency</a>, 건강한
+                라이프스타일과 함께합니다.
               </p>
             </nav>
           </div>

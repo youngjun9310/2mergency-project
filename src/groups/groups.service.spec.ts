@@ -99,7 +99,6 @@ describe('GroupsService', () => {
         users: null, // 실제 연관 관계를 설정하기 전은 null로 가정한다.
         groups: null,
       };
-
       // 모의 저장소의 save 함수가 위에서 정의된 결과 데이터를 반환하도록 설정
       // mocking 기능을 사용하여 테스트 동안 groupRepository와 groupMembersRepository의 save 메소드 호출 결과를 사전에 정의된 값으로 설정한다.
       // 즉, 이를 통해 실제 데이터베이스 작업을 수행하지 않고도 해당 메소드 호출이 예상대로 동작하는지 테스트할 수 있음

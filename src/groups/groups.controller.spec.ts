@@ -1,24 +1,3 @@
-// import { Test, TestingModule } from '@nestjs/testing';
-// import { GroupsController } from './groups.controller';
-// import { GroupsService } from './groups.service';
-
-// describe('GroupsController', () => {
-//   let controller: GroupsController;
-
-//   beforeEach(async () => {
-//     const module: TestingModule = await Test.createTestingModule({
-//       controllers: [GroupsController],
-//       providers: [GroupsService],
-//     }).compile();
-
-//     controller = module.get<GroupsController>(GroupsController);
-//   });
-
-//   it('should be defined', () => {
-//     expect(controller).toBeDefined();
-//   });
-// });
-
 import { Test, TestingModule } from '@nestjs/testing';
 import { GroupsController } from './groups.controller';
 import { GroupsService } from './groups.service';
@@ -29,10 +8,43 @@ import {
   HttpStatus,
   BadRequestException,
   ForbiddenException,
+  ExecutionContext,
+  CanActivate,
 } from '@nestjs/common';
 import { Category } from 'src/types/Category.type';
 import { Users } from 'src/users/entities/user.entity';
 import { Groups } from './entities/group.entity';
+import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
+import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+
+// MockMembersRoleStrategy 클래스는 MembersRoleStrategy의 목업/가짜 구현.
+// 이 클래스는 실제 복잡한 로직을 수행하지 않고, 단순화된 로직으로 테스트를 지원
+class MockMembersRoleStrategy {
+  // validate 메소드는 사용자 ID와 그룹 ID를 받아서,
+  // 사용자가 해당 그룹에 접근할 수 있는지 여부를 판단하는 메소드.
+  // 여기서는 실제 데이터베이스 조회나 복잡한 로직 대신 항상 true를 반환하여,
+  // 모든 접근을 허용하도록 설정.
+  // 이는 테스트 중에 특정 조건이나 상황을 제어하기 위해 사용.
+  async validate(userId: number, groupId: number, context: ExecutionContext) {
+    // 테스트 시나리오에 따라 다른 결과를 반환하도록 설정
+    return true; // 모든 요청을 허용하도록 간단하게 설정
+  }
+}
+
+// MockMemberRolesGuard 클래스는 memberRolesGuard의 목업(가짜)
+// 이 가드는 API 엔드포인트에 대한 접근 제어를 담당
+class MockMemberRolesGuard implements CanActivate {
+  // MembersRoleStrategy 인스턴스를 생성자를 통해 받음.
+  // 여기서는 목업 전략을 사용하여 실제 전략의 복잡한 로직을 대체함
+  constructor(private strategy: MembersRoleStrategy) {}
+
+  // canActivate 메소드는 요청이 특정 조건을 충족하는지 여부를 판단하여 접근을 허용할지 결정.
+  // 목업 구현에서는 복잡한 조건 검사 대신 항상 true를 반환하며, 테스트 중에 모든 요청을 허용하도록 설정
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    // 직접 로직을 목업으로 대체
+    return true; // 항상 접근 허용
+  }
+}
 
 // describe 함수는 Jest에서 제공하는 테스트 스위트를 정의하는 함수.
 // test suite (테스트 스위트)는 테스트 케이스(여기서 이것은 하나의 메소드를 테스트하기 위한 테스트 메소드를 의미)들을 하나로 묶은 것 ->그리고 그것은 자신의 테스트 케이스들을 실행함
@@ -72,6 +84,24 @@ describe('GroupsController', () => {
             updateGroup: jest.fn(),
             deleteGroup: jest.fn(),
           },
+        },
+        // 테스트 설정에서 MembersRoleStrategy 클래스를 주입하려고 할 때,
+        // 실제 MembersRoleStrategy 대신 MockMembersRoleStrategy를 사용하도록 설정.
+        // 이는 실제 MembersRoleStrategy의 복잡한 로직을 모방하는 간단한 버전으로,
+        // 외부 서비스 호출이나 데이터베이스 접근 없이 테스트를 할 수 있게 해준다.
+        {
+          provide: MembersRoleStrategy, // 의존성 주입 시스템에게 MembersRoleStrategy 토큰을 사용할 것을 알려줌
+          useClass: MockMembersRoleStrategy, // 실제로 주입될 클래스는 MockMembersRoleStrategy
+        },
+
+        // memberRolesGuard가 테스트 중에 사용될 때,
+        // 실제 memberRolesGuard 대신 MockMemberRolesGuard를 사용하도록 설정.
+        // MockMemberRolesGuard는 주로 특정 조건(예: 사용자 인증, 역할 검증)을 검사하는
+        // canActivate 메서드를 간단하게 모방, 모든 요청을 허용하도록 설정할 수 있다.
+        // 이를 통해 가드의 내부 로직을 신경 쓰지 않고 테스트할 수 있음.
+        {
+          provide: memberRolesGuard,
+          useClass: MockMemberRolesGuard,
         },
       ],
     }).compile();
@@ -147,15 +177,11 @@ describe('GroupsController', () => {
     it('필수 필드 누락으로 인한 그룹 생성 실패', async () => {
       const incompleteDto = new CreateGroupDto();
       // CreateGroupDto 인스턴스를 생성하되, 아무 필드도 설정하지 않음 -> 누락 상태 시뮬레이션 하는거임
-      jest
-        .spyOn(service, 'createGroup')
-        .mockRejectedValue(new Error('필수 필드가 누락되었습니다.'));
+      jest.spyOn(service, 'createGroup').mockRejectedValue(new Error('필수 필드가 누락되었습니다.'));
       // service의 createGroup 메서드가 호출될 때, Error를 반환하도록 설정
       // '필수 필드가 누락되었습니다.' 메시지와 함께 예외를 발생시킴
 
-      await expect(controller.createGroup(incompleteDto, user)).rejects.toThrow(
-        Error,
-      );
+      await expect(controller.createGroup(incompleteDto, user)).rejects.toThrow(Error);
       // controller의 createGroup 메서드를 호출하고, 예외가 발생하는지 확인. => 예외가 정상적으로 발생하는지를 검증하여, 필드 검증 로직의 존재를 확인
     });
 
@@ -166,14 +192,8 @@ describe('GroupsController', () => {
       dto.content = '유효하지 않은 그룹';
       dto.category = Category.walk;
 
-      jest
-        .spyOn(service, 'createGroup')
-        .mockRejectedValue(
-          new BadRequestException('입력값이 유효하지 않습니다.'),
-        );
-      await expect(controller.createGroup(dto, user)).rejects.toThrow(
-        BadRequestException,
-      );
+      jest.spyOn(service, 'createGroup').mockRejectedValue(new BadRequestException('입력값이 유효하지 않습니다.'));
+      await expect(controller.createGroup(dto, user)).rejects.toThrow(BadRequestException);
     });
   });
 
@@ -242,14 +262,10 @@ describe('GroupsController', () => {
 
     // 권한이 부족하여 그룹 목록 조회가 실패하는 경우를 테스트하는 코드 블록을 정의
     it('권한 부족으로 인한 그룹 목록 조회 실패', async () => {
-      jest
-        .spyOn(service, 'findAllGroups')
-        .mockRejectedValue(new ForbiddenException('권한이 없습니다.'));
+      jest.spyOn(service, 'findAllGroups').mockRejectedValue(new ForbiddenException('권한이 없습니다.'));
       // controller의 findAllGroups 메서드를 호출할 때 예외가 발생하는지 확인.
       // 예외가 ForbiddenException 타입인지 검증
-      await expect(controller.findAllGroups()).rejects.toThrow(
-        ForbiddenException,
-      );
+      await expect(controller.findAllGroups()).rejects.toThrow(ForbiddenException);
     });
 
     /**
@@ -277,13 +293,9 @@ describe('GroupsController', () => {
       });
 
       it('그룹을 찾을 수 없다면 오류 보내기', async () => {
-        jest
-          .spyOn(service, 'findOneGroup')
-          .mockRejectedValue(new NotFoundException());
+        jest.spyOn(service, 'findOneGroup').mockRejectedValue(new NotFoundException());
 
-        await expect(controller.findOneGroup(1)).rejects.toThrow(
-          NotFoundException,
-        );
+        await expect(controller.findOneGroup(1)).rejects.toThrow(NotFoundException);
       });
     });
   });
@@ -329,13 +341,9 @@ describe('GroupsController', () => {
 
   describe('deleteGroup', () => {
     it('존재하지 않는 그룹 삭제 시도', async () => {
-      jest
-        .spyOn(service, 'deleteGroup')
-        .mockRejectedValue(new NotFoundException('그룹을 찾을 수 없습니다.'));
+      jest.spyOn(service, 'deleteGroup').mockRejectedValue(new NotFoundException('그룹을 찾을 수 없습니다.'));
 
-      await expect(controller.deleteGroup(999)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(controller.deleteGroup(999)).rejects.toThrow(NotFoundException);
     });
   });
 });

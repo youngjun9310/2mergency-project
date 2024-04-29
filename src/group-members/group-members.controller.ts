@@ -14,7 +14,6 @@ import {
   Res,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
-
 import { MemberRole } from './types/groupMemberRole.type';
 import { MemberRoles } from './decorator/memberRoles.decorator';
 import { GroupMembers } from './entities/group-member.entity';
@@ -35,12 +34,13 @@ export class GroupMembersController {
   /**
    * 그룹에 멤버 초대
    */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Post(':groupId/invite')
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '그룹에 멤버 초대' })
-  @ApiResponse({ status: 201, description: '초대를 완료했습니다.' })
+  @ApiOperation({ summary: '그룹에 멤버 초대 API', description: '그룹에 멤버 초대 성공' })
+  @ApiResponse({ status: 201, description: '성공적으로 초대를 완료했습니다.' })
   @ApiBearerAuth('access-token')
   async inviteUserToGroup(
     @Param('groupId') groupId: number,
@@ -62,7 +62,7 @@ export class GroupMembersController {
 
   @Post(':groupId/accept')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '사용자가 그룹 초대를 수락' })
+  @ApiOperation({ summary: '사용자가 그룹 초대를 수락 API', description: '그룹 초대 수락 성공' })
   @ApiResponse({ status: 200, description: '초대를 수락했습니다.' })
   @ApiBearerAuth('access-token')
   async acceptInvitation(
@@ -81,10 +81,11 @@ export class GroupMembersController {
   /**
    * 사용자가 그룹의 멤버인지 확인
    * **/
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get(':groupId/members/:userId')
-  @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인' })
+  @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인 API', description: '사용자가 그룹 멤버인지 확인 성공' })
   @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
   @ApiBearerAuth('access-token')
   async isGroupMember(
@@ -106,11 +107,12 @@ export class GroupMembersController {
   /**
    * 특정 사용자의 그룹 멤버 정보 조회
    * */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/users/:userId')
-  @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회' })
-  @ApiResponse({ status: 200, description: '그룹 멤버의 상세 정보' })
+  @ApiOperation({ summary: '사용자와 그룹의 관련된 정보 조회 API', description: '사용자의 그룹 멤버 정보 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹 멤버의 상세 정보를 조회하였습니다.' })
   @ApiBearerAuth('access-token')
   async findByUserAndGroup(@Param('userId') userId: number, @Param('groupId') groupId: number): Promise<GroupMembers> {
     return await this.groupMembersService.findByUserAndGroup(userId, groupId);
@@ -119,13 +121,17 @@ export class GroupMembersController {
   /**
    * 해당 그룹의 멤버 전체 조회
    * */
+
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get(':groupId/members')
-  @ApiOperation({ summary: '그룹에 등록된 전체 사용자 목록 조회' })
+  @ApiOperation({
+    summary: '그룹에 등록된 전체 사용자 목록 조회 API',
+    description: '그룹에 등록된 전체 사용자 목록 조회 성공',
+  })
   @ApiResponse({
     status: 200,
-    description: '그룹 멤버 목록을 반환합니다.',
+    description: '성공적으로 그룹 멤버 전체 조회를 완료 하였습니다.',
     type: GroupMembers,
     isArray: true,
   })
@@ -140,9 +146,10 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
   @Get('/:groupId/invite/group-members_h/groupinvite')
   @Render('groupinvite')
-  async groupinvite(@Param('groupId') groupId: number) {
+  async groupinvite(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 
@@ -151,9 +158,10 @@ export class GroupMembersController {
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/:groupId/accept/group-members_h/groupaccept')
   @Render('groupaccept')
-  async groupaccept(@Param('groupId') groupId: number) {
+  async groupaccept(@Param('groupId') groupId : number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
+      users : users
     };
   }
 }

@@ -71,7 +71,7 @@ export class GroupsService {
   }
 
   /** *
-   * 그룹 모든 수정 *
+   * 그룹 수정 *
    **/
 
   async updateGroup(groupId: number, updateGroupDto: UpdateGroupDto) {
@@ -82,14 +82,15 @@ export class GroupsService {
       throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
 
+    const isPublicBoolean = Boolean(isPublic === 'true');
     await this.groupRepository.update(groupId, {
       title,
       content,
       category,
-      isPublic,
+      isPublic : isPublicBoolean,
     });
 
-    return { statusCode: 201, message: '성공적으로 그룹을 수정하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 수정했습니다.' };
   }
 
   /** *
@@ -105,6 +106,6 @@ export class GroupsService {
 
     await this.groupRepository.delete(groupId);
 
-    return { statusCode: 201, message: '성공적으로 그룹을 삭제하였습니다.' };
+    return { statusCode: 201, message: '성공적으로 그룹을 삭제했습니다.' };
   }
 }

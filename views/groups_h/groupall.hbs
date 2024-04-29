@@ -18,25 +18,31 @@
 </head>
 <body>
     <div class="wrapper">
-        <div class="sidebar" data-color="orange" data-image="/assets/img/sidebar-5.jpg">
+        <div
+            class="sidebar"
+            data-color="orange"
+            data-image="/assets/img/sidebar-5.jpg">
             <div class="sidebar-wrapper">
                 <div class="logo">
-                    <a href="/users/users_h/userDashboard" class="simple-text logo-mini"> </a>
-                    <a href="/users/users_h/userDashboard" class="simple-text logo-normal">2mergency</a>
+                    <a href="/" class="simple-text logo-mini"> </a>
+                    <a href="/" class="simple-text logo-normal">2mergency</a>
                 </div>
                 <div class="user">
                     <div class="photo">
-                        <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png"/>
+                        <img src="https://cdn.icon-icons.com/icons2/1362/PNG/512/artboard-10_89054.png" />
                     </div>
                     <div class="info">
                         <a data-toggle="collapse" href="#collapseExample" class="collapsed">
-                            <span>{{ user.nickname }}<b class="caret"></b></span>
+                            <span>{{ users.nickname }}
                         </a>
                     </div>
                 </div>
                 <ul class="nav">
                     <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#componentsExamples">
+                        <a
+                            class="nav-link"
+                            data-toggle="collapse"
+                            href="#componentsExamples">
                             <i class="nc-icon nc-pin-3"></i>
                             <p>오늘의운동<b class="caret"></b></p>
                         </a>
@@ -44,12 +50,17 @@
                             <ul class="nav">
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordcreate">
-                                        <span class="sidebar-normal">나의 운동 기록하기</span>
+                                        <span class="sidebar-normal">운동 기록 생성</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/records/records_h/recordall">
-                                        <span class="sidebar-normal">나의 기록조회</span>
+                                        <span class="sidebar-normal">운동기록</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/">
+                                        <span class="sidebar-normal">운동경로탐색</span>
                                     </a>
                                 </li>
                             </ul>
@@ -60,31 +71,11 @@
                             <i class="nc-icon nc-notes"></i>
                             <p>그룹 <b class="caret"></b></p>
                         </a>
-                        <div class="collapse" id="formsExamples">
+                        <div class="collapse show" id="formsExamples">
                             <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/groups/groups_h/groupall">
-                                    <span class="sidebar-normal">가입한그룹목록</span>
-                                    </a>
-                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link" href="/groups/groups_h/groupcreate">
-                                    <span class="sidebar-normal">그룹생성하기</span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" data-toggle="collapse" href="#tablesExamples">
-                            <i class="nc-icon nc-paper-2"></i>
-                            <p>지도탐색하기<b class="caret"></b></p>
-                        </a>
-                        <div class="collapse" id="tablesExamples">
-                            <ul class="nav">
-                                <li class="nav-item">
-                                    <a class="nav-link" href="/records/records_h/recordTrack">
-                                    <span class="sidebar-normal">실시간-랜덤경로탐색</span>
+                                        <span class="sidebar-normal">그룹생성</span>
                                     </a>
                                 </li>
                             </ul>
@@ -106,9 +97,9 @@
                         </div>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/users/users_h/userDashboard">
+                        <a class="nav-link" href="/">
                             <i class="nc-icon nc-chart-pie-35"></i>
-                            <p>커뮤니티홈</p>
+                            <p>홈으로</p>
                         </a>
                     </li>
                 </ul>
@@ -125,21 +116,32 @@
                                 <i class="fa fa-navicon visible-on-sidebar-mini"></i>
                             </button>
                         </div>
-                        <a class="navbar-brand" href="#pablo">전체 그룹 조회</a>
+                        <a class="navbar-brand" href="#pablo">전체그룹</a>
                     </div>
-                    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <button
+                        class="navbar-toggler navbar-toggler-right"
+                        type="button"
+                        data-toggle="collapse"
+                        aria-controls="navigation-index"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation">
                         <span class="navbar-toggler-bar burger-lines"></span>
                         <span class="navbar-toggler-bar burger-lines"></span>
                         <span class="navbar-toggler-bar burger-lines"></span>
                     </button>
                     <div class="collapse navbar-collapse justify-content-end">
                         <ul class="nav navbar-nav mr-auto">
-                            <form class="navbar-form navbar-left navbar-search-form" role="search">
-                                <div class="input-group">
-                                    <i class="nc-icon nc-zoom-split"></i>
-                                    <input type="text" value="" class="form-control" placeholder="Search..."/>
-                                </div>
+                            <form
+                            class="navbar-form navbar-left navbar-search-form"
+                            role="search">
+                            <div class="input-group">
+                                <i class="nc-icon nc-zoom-split"></i>
+                                <input
+                                type="text"
+                                value=""
+                                class="form-control"
+                                placeholder="Search..."/>
+                            </div>
                             </form>
                         </ul>
                         <ul class="navbar-nav">
@@ -166,20 +168,33 @@
                                 </ul>
                             </li>
                             <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a
+                                    class="nav-link dropdown-toggle"
+                                    href="http://example.com"
+                                    id="navbarDropdownMenuLink"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
                                     <i class="nc-icon nc-bullet-list-67"></i>
                                 </a>
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+                                <div
+                                    class="dropdown-menu dropdown-menu-right"
+                                    aria-labelledby="navbarDropdownMenuLink" >
                                     <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-umbrella-13"></i> 헬프데스크
+                                        <i class="nc-icon nc-email-85"></i>챗팅메시지
                                     </a>
                                     <a class="dropdown-item" href="#">
-                                        <i class="nc-icon nc-settings-90"></i> 로그아웃
+                                        <i class="nc-icon nc-umbrella-13"></i>헬프데스크
+                                    </a>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="nc-icon nc-settings-90"></i>설정
                                     </a>
                                     <div class="divider"></div>
+                                    <a class="dropdown-item" href="#">
+                                        <i class="nc-icon nc-lock-circle-open"></i>화면잠금
+                                    </a>
                                     <a href="#" class="dropdown-item text-danger">
-                                        <i class="nc-icon nc-button-power"></i> 설정
+                                        <i class="nc-icon nc-button-power"></i>로그아웃
                                     </a>
                                 </div>
                             </li>
@@ -191,39 +206,77 @@
             <div class="content">
                 <div class="container-fluid">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="card regular-table-with-color">
-                                <div class="card-header">
-                                    <h4 class="card-title">전체 그룹목록</h4>
-                                    <p class="card-category">현재 전체 그룹 목록입니다.</p>
-                                </div> 
-                                <div class="card-body table-full-width table-responsive">
-                                    {{#each groups}}
-                                    <table class="table table-hover">
-                                        <thead>
-                                            <th>그룹명</th>
-                                            <th>카테고리</th>
-                                        </thead>
-                                        <tbody>
-                                            <tr class="success" onclick="window.location.href = '/groups/{{ this.groupId }}/groups_h/grouplist';">
-                                            <td>{{this.title}}</td>
-                                            <td> {{this.category}}</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                     {{/each}}
-                                </div>
-                            </div>
+                  <div class="col-md-12">
+                    <div class="card data-tables">
+                      <div class="card-header">
+                        <h4 class="card-title">전체 그룹 목록</h4>
+                          <p class="card-category">현재 전체 그룹 목록입니다.</p>
+                      </div>
+                      <div class="card-body table-striped table-no-bordered table-hover dataTable dtr-inline table-full-width">
+                        <div class="toolbar"></div>
+                        <div class="fresh-datatables">
+                        <table id="datatables" class="table table-striped table-no-bordered table-hover"
+                          cellspacing="0" width="100%" style="width: 100%">
+                          <thead>
+                            <tr >
+                              <th class="disabled-sorting text-center info">No</th>
+                              <th class="disabled-sorting text-center success" >그룹명</th>
+                              <th class="disabled-sorting text-center danger">카테고리</th>
+                              <th class="disabled-sorting text-right info">비고</th>
+                            </tr>
+                          </thead>
+                          <tfoot>
+                            <tr>
+                              <th class="text-center">No</th>
+                              <th class="text-center">GroupName</th>
+                              <th class="text-center">Category</th>
+                              <th class="text-right">Etc</th>
+                            </tr>
+                          </tfoot>
+                          <tbody>
+                            {{#each groups}}
+                            <tr onclick="window.location.href = '/groups/{{ this.groupId }}/groups_h/grouplist';">
+                              <td class="text-center">{{ this.groupId }}</td>
+                              <td class="text-center">{{ this.title }}</td>
+                              <td class="text-center">{{ this.category }}</td>
+                              <td class="text-right">
+                                <a href="#" class="btn btn-link btn-info like">
+                                  <i class="fa fa-heart"></i>
+                                </a>
+                                <a href="#" class="btn btn-link btn-warning edit">
+                                  <i class="fa fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-link btn-danger remove">
+                                  <i class="fa fa-times"></i>
+                                </a>
+                              </td>
+                            </tr>
+                             {{/each}}
+                          </tbody>
+                            </table>
+                          </div>
+                          <div class="card-footer">
+                            <button type="submit" class="btn btn-fill btn-info" onclick="window.location.href = '/groups/groups_h/groupcreate';">
+                            그룹 생성</button>
+                          <hr />
+                          <div class="stats">
+                            <i class="now-ui-icons loader_refresh spin"></i> 모두 함께 즐겁게 걷고 달려보아요!
+                          </div>
                         </div>
+                      </div>
                     </div>
+                  </div>
+                </div>    
                 </div>
+            </div>
             </div>
             <footer class="footer">
                 <div class="container">
                     <nav>
-                        <p class="copyright text-center">©
+                        <p class="copyright text-center">
+                            ©
                             <script>document.write(new Date().getFullYear());</script>
-                            <a href="/auth/user_h/welcomePage">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
+                            <a href="/">2Mergency</a>, 건강한 라이프스타일과 함께합니다.
                         </p>
                     </nav>
                 </div>
@@ -252,4 +305,54 @@
 <script src="/assets/js/plugins/fullcalendar.min.js"></script>
 <script src="/assets/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
 <script src="/assets/js/demo.js"></script>
+<script type="text/javascript">
+      $(document).ready(function () {
+      $('#datatables').DataTable({
+        pagingType: 'full_numbers',
+        lengthMenu: [
+          [10, 25, 50, -1],
+          [10, 25, 50, 'All'],
+        ],
+        responsive: true,
+        language: {
+          search: '_INPUT_',
+          searchPlaceholder: 'Search records',
+        },
+      });
+
+      var table = $('#datatables').DataTable();
+
+      // Edit record
+      table.on('click', '.edit', function () {
+        $tr = $(this).closest('tr');
+
+        if ($tr.hasClass('child')) {
+          $tr = $tr.prev('.parent');
+        }
+
+        var data = table.row($tr).data();
+        alert(
+          'You press on Row: ' +
+            data[0] +
+            ' ' +
+            data[1] +
+            ' ' +
+            data[2] +
+            "'s row.",
+        );
+      });
+
+      // Delete a record
+      table.on('click', '.remove', function (e) {
+        $tr = $(this).closest('tr');
+        table.row($tr).remove().draw();
+        e.preventDefault();
+      });
+
+      //Like record
+      table.on('click', '.like', function () {
+        alert('You clicked on Like button');
+      });
+    });
+  </script>
 </html>
