@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>전체 유저 조회</title>
+<link rel="stylesheet" href="/css/default.css">
+</head>
+<body>
+    
+    {{#each user}}
+        <div id="page">
+            <form action="/users/findAllUser" method="get"></form>
+            <p>userId : {{this.userId}}</p>
+            <p>이메일 : {{this.email}}</p>
+            <p>닉네임 : {{this.nickname}}</p>
+            <p>주소 : {{this.address}}</p>
+            <p>생성 날짜 : {{this.createdAt}}</p>
+            <p>업데이트 날짜 : {{this.updatedAt}}</p>
+            </form>
+            <button onclick="window.location.href = '/users/users_h/userEdit';">유저 정보 수정하기</button>
+            <button onclick="window.location.href = '/users/users_h/userDelete';">유저 정보 삭제하기</button>
+        </div>
+        {{/each}}
+        <a href="/">Home</a>
+</body>
+</html>
