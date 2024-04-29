@@ -23,9 +23,6 @@ export class GroupMembers {
   })
   role: MemberRole;
 
-  @Column({ type: 'varchar', nullable: false, unique: true })
-  nickname: string;
-
   @Column({ type: 'boolean', nullable: false, default: false })
   isVailed: boolean;
 
@@ -35,7 +32,7 @@ export class GroupMembers {
   @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
   users: Users;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', name: 'userId', nullable: false })
   userId: number;
 
   @ManyToOne(() => Groups, (groups) => groups.groupMembers, {
@@ -44,7 +41,7 @@ export class GroupMembers {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', name: 'groupId', nullable: false })
   groupId: number;
 
   // 'isInvited' 초대가 발송된 상태 표시 => 초대된 상태면 isInvited=true

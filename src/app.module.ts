@@ -11,23 +11,14 @@ import { ScheduleMembersModule } from './schedule-members/schedule-members.modul
 import { RecordsModule } from './records/records.module';
 import { GroupMembersModule } from './group-members/group-members.module';
 import { MailModule } from './mail/mail.module';
-import {
-  ENV_DB_HOST,
-  ENV_DB_NAME,
-  ENV_DB_PASSWORD,
-  ENV_DB_PORT,
-  ENV_DB_SYNC,
-  ENV_DB_USERNAME,
-} from './const/env.keys';
+import { ENV_DB_HOST, ENV_DB_NAME, ENV_DB_PASSWORD, ENV_DB_PORT, ENV_DB_SYNC, ENV_DB_USERNAME } from './const/env.keys';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AwsModule } from './aws/aws.module';
 import { NestjsFormDataModule } from 'nestjs-form-data';
 
 const typeOrmModuleOptions = {
-  useFactory: async (
-    configService: ConfigService,
-  ): Promise<TypeOrmModuleOptions> => ({
+  useFactory: async (configService: ConfigService): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
     type: 'postgres',
     username: configService.get<string>(ENV_DB_USERNAME),
@@ -38,6 +29,9 @@ const typeOrmModuleOptions = {
     entities: ['dist/**/**.entity{.ts,.js}'],
     synchronize: configService.get<boolean>(ENV_DB_SYNC),
     logging: true,
+    ssl: {
+      rejectUnauthorized: false
+    }
   }),
   inject: [ConfigService],
 };

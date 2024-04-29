@@ -4,6 +4,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import _ from 'lodash';
 import { UsersService } from 'src/users/users.service';
 import { ConfigService } from '@nestjs/config';
+import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
           return token ? token.replace(/^Bearer\s/, '') : null;
         },
       ]),
-      secretOrKey: configService.get<string>('JWT_SECRET_KEY'),
+      secretOrKey: configService.get<string>(ENV_JWT_SECRET_KEY),
     });
   }
 
@@ -27,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userService.findByEmail(payload.email);
 
     if (_.isNil(user)) {
-      throw new NotFoundException('해당하는 사용자를 찾을 수 없습니다.');
+      throw new NotFoundException('ExpiredSession');
     }
     return user;
   }

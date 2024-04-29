@@ -12,6 +12,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Users } from 'src/users/entities/user.entity';
 import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
+import { JwtStrategy } from './strategy/jwt.strategy';
+import { RoleStrategy } from './strategy/roles.strategy';
 
 @Module({
   imports: [
@@ -35,7 +37,7 @@ import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
   ],
 
   controllers: [AuthController],
-  providers: [AuthService],
-  exports : [AuthService]
+  providers: [JwtStrategy, AuthService, RoleStrategy],
+  exports: [AuthService],
 })
 export class AuthModule {}

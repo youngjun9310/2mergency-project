@@ -16,9 +16,8 @@ import {
   name: 'users',
 })
 export class Users {
-    
-    @PrimaryGeneratedColumn()
-    userId : number;
+  @PrimaryGeneratedColumn()
+  userId: number;
 
   @Column({ type: 'varchar', nullable: true })
   profileImage?: string;
@@ -57,18 +56,19 @@ export class Users {
   deletedAt?: Date;
 
   @OneToMany(() => GroupMembers, (groupMembers) => groupMembers.users)
-  groupMembers : GroupMembers[];
+  groupMembers: GroupMembers[];
 
-  @OneToMany(() => Records, (records) => records.users, { cascade: true })
+  @OneToMany(() => Records, (records) => records.users, {
+    cascade: true,
+  })
   records: Records[];
 
-  @OneToMany(() => Schedules, (schedules) => schedules.users, { cascade: true })
+  @OneToMany(() => Schedules, (schedules) => schedules.users, {
+    cascade: true,
+  })
   schedules: Schedules[];
 
-  @OneToMany(
-    () => ScheduleMembers,
-    (scheduleMembers) => scheduleMembers.users,
-    { cascade: true },
-  )
+  @OneToMany(() => ScheduleMembers, (scheduleMembers) => scheduleMembers.users, { cascade: true })
   scheduleMembers: ScheduleMembers[];
+
 }

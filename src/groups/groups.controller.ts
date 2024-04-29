@@ -7,116 +7,214 @@ import {
   Param,
   Delete,
   UseGuards,
-  Req,
   ParseIntPipe,
+  Render,
+  Res,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
+import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { Response } from 'express';
 
-// @UseGuards(memberRolesGuard)
+@ApiTags('Groups')
 @Controller('groups')
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 
   // 그룹 생성 //
-  @ApiTags('groups')
-  @ApiResponse({ description: '성공', status: 200 })
-  @ApiOperation({ summary: '그룹 생성 API', description: '그룹을 생성한다.' })
   @UseGuards(JWTAuthGuard)
-  @Post()
-  async createGroup(
-    @Body() createGroupDto: CreateGroupDto,
-    @UserInfo() users: Users,
-  ) {
-    return await this.groupsService.createGroup(createGroupDto, users.userId);
+  @ApiOperation({ summary: '그룹 생성 API', description: '그룹 생성 성공' })
+  @ApiResponse({ status: 201, description: '성공적으로 그룹이 생성되었습니다.' })
+  @ApiBearerAuth('access-token')
+  @Post('')
+  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res: Response) {
+    try {
+      await this.groupsService.createGroup(createGroupDto, users.userId);
+
+      res.status(201).send(`
+      <script>
+        alert("그룹 생성이 완료되었습니다.");
+        window.location.href = '/groups/groups_h/groupAll';
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 그룹 모든 목록 조회 //
-  // @UseGuards(memberRolesGuard)
-  // @MemberRoles(MemberRole.Main)
-  @ApiTags('groups')
-  @ApiOperation({
-    summary: '그룹 모든 목록 조회 API',
-    description: '그룹의 모든 목록을 조회',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹 조회를 하였습니다.',
-    status: 200,
-  })
-  @UseGuards(JWTAuthGuard)
-  @Get()
+  @ApiOperation({ summary: '모든 그룹 목록 조회 API', description: '모든 그룹 목록 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
+  @Get('')
   async findAllGroups() {
-    return await this.groupsService.findAllGroups();
+      return await this.groupsService.findAllGroups();
   }
 
   // 그룹 상세 조회 //
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @ApiTags('groups')
-  @ApiOperation({
-    summary: '그룹 상세 조회 API',
-    description: '특정 그룹의 상세 정보를 조회',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹의 상세 정보를 조회하였습니다.',
-    status: 200,
-  })
-  @ApiResponse({
-    description: '그룹이 존재하지 않습니다.',
-    status: 404,
-  })
-  @ApiResponse({
-    description: '유효하지 않은 그룹 ID입니다.',
-    status: 400,
-  })
-  @UseGuards(JWTAuthGuard)
+  @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @Get(':groupId')
-  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
-    return this.groupsService.findOneGroup(groupId);
+  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number, @Res() res: Response) {
+    try {
+      await this.groupsService.findOneGroup(groupId);
+    } catch (error) {
+      const errorMsg = error.messagel;
+
+      if (errorMsg === 'NotGroupError') {
+        res.status(404).send(`
+        <script>
+          alert("그룹 존재하지 않습니다");
+          window.location.href = '/groups/groups_h/groupAll';
+        </script>
+        `);
+      }
+    }
   }
 
   // 그룹 수정 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Main)
-  @ApiTags('groups')
-  @ApiOperation({
-    summary: '그룹 업데이트 API',
-    description: '그룹의 목록을 수정합니다.',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹을 수정하였습니다.',
-    status: 201,
-  })
-  @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiOperation({ summary: '그룹 수정 API', description: '그룹의 목록 수정 성공' })
+  @ApiResponse({ status: 201, description: '성공적으로 그룹을 수정하였습니다.' })
   @Patch(':groupId')
-  async updateGroup(
-    @Param('groupId') groupId: number,
-    @Body() updateGroupDto: UpdateGroupDto,
-  ) {
-    return await this.groupsService.updateGroup(groupId, updateGroupDto);
+  @ApiBearerAuth('access-token')
+  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto, @Res() res: Response) {
+    try {
+      await this.groupsService.updateGroup(groupId, updateGroupDto);
+
+      res.status(201).send(`
+      <script>
+          alert("그룹 수정 완료");
+          window.location.href = '/groups/groups_h/groupAll';
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 그룹 삭제 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
-  @MemberRoles(MemberRole.Main)
-  @ApiTags('groups')
-  @ApiOperation({ summary: '그룹 삭제 API', description: '그룹을 삭제합니다.' })
-  @ApiResponse({
-    description: '성공적으로 그룹을 삭제하였습니다.',
-    status: 201,
-  })
+  @MemberRoles(MemberRole.Admin, MemberRole.Main)
+  @ApiOperation({ summary: '그룹 삭제 API', description: '그룹 삭제 성공' })
+  @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
+  @ApiBearerAuth('access-token')
+  @Delete(':groupId')
+  async deleteGroup(@Param('groupId') groupId: number, @Res() res: Response) {
+    try {
+      await this.groupsService.deleteGroup(groupId);
+
+      res.status(204).send(`
+      <script>
+          alert("그룹 삭제 완료");
+          window.location.href = '/groups/groups_h/groupAll';
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
+  }
+
+  /** hbs 양식 */
+  // 그룹 생성
+  @UseGuards(JWTAuthGuard)
+  @Get('/groups_h/groupCreate')
+  @Render('groupCreate')
+  async groupcreate(@UserInfo() users: Users) {
+    return {
+      users: users,
+    };
+  }
+
+  // 그룹 모든 목록 조회
+  @Get('/groups_h/groupAll')
+  @Render('groupAll')
+  async groupsall(@UserInfo() users: Users, groupId: number) {
+    const groups = await this.groupsService.findAllGroups();
+    return {
+      groups: groups,
+      users: users,
+      groupId: groupId,
+    };
+  }
+
+  // 그룹 상세 목록 조회, 스케줄 상세 조회
+  @Get('/:groupId/groups_h/groupList')
+  @Render('groupList')
+  async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users: Users) {
+    const groups = await this.groupsService.findOneGroup(groupId);
+    return {
+      groups: groups,
+      scheduleId: scheduleId,
+      users: users,
+    };
+  }
+
+  // 그룹 수정
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Delete(':groupId')
-  async deleteGroup(@Param('groupId') groupId: number) {
-    return await this.groupsService.deleteGroup(groupId);
+  @Get('/:groupId/groups_h/groupEdit')
+  @Render('groupEdit')
+  async groupEditpage(@Param('groupId') groupId: number, @UserInfo() users: Users) {
+    return {
+      groupId: groupId,
+      users: users,
+    };
   }
 }
+

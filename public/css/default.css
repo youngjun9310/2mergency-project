@@ -1,0 +1,141 @@
+/* Geolocation css */
+#maps{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+}
+
+button{
+  background-color: whitesmoke;
+  border: 0.1px solid lightgrey;
+  transition-duration: 0.3s;
+  color: black;
+  padding: 4px;
+  border-radius: 5px;
+}
+
+button:hover{
+  background-color: lightgrey;
+}
+
+button:active{
+  background-color: grey;
+}
+
+#trakingBox{
+  box-shadow: 0px 0px 3px 0px lightgrey;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px;
+}
+
+#div1{
+  box-shadow: 0px 0px 3px 0px black;
+  border-radius: 5px;
+  width: 1200px;
+  text-align: center;
+  margin: 5px auto 5px auto;
+  border: 0.1px solid lightgrey;
+  display: block;
+}
+
+#div2{
+padding: 5px;
+}
+
+#search_button{
+  padding-bottom: 5px;
+}
+
+#remove_button{
+  padding: 5px;
+}
+
+#stopover{
+  box-shadow: 0px 0px 3px 0px lightgrey;
+  width: 1200px;
+  text-align: center;
+  margin: 5px auto 5px auto;
+  border-radius: 5px;
+  display: block;
+}
+
+#content{
+  padding: 5px;
+  box-shadow: 0px 0px 3px 0px lightgrey;
+  text-align: center;
+  border-radius: 5px;
+  display: block;
+}
+
+#explanation{
+  background-color: white;
+  box-shadow: 0px 0px 3px 0px black;
+  border-radius: 5px;
+  width: 150px;
+  text-align: center;
+  display: inline-block;
+}
+
+._search_item{
+  padding: 5px;
+  box-shadow: 0px 0px 3px 0px lightgrey;
+  text-align: center;
+  border-radius: 5px;
+  display: block;
+}
+
+#footer{
+  width: 500px;
+  margin: 5px auto 10px auto;
+  box-shadow: 0px 0px 3px 0px lightgrey;
+  border-radius: 5px;
+}
+
+#footer_button{
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#tracking_div{
+padding: 5px;
+}
+
+.__disable_text{
+margin-left: 10px;
+}
+
+.col-sm-10 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+
+
+/* Crud css */
+#page{
+    box-shadow: 0px 0px 3px 0px;
+    padding: 5px;
+    text-align: center;
+}
+
+#page2{
+  box-shadow: 0px 0px 3px 0px;
+  padding: 5px;
+  text-align: center;
+  transition-duration: 0.3s;
+}
+#page2:hover{
+  background-color: lightgrey;
+}
+#page2:active{
+  background-color: lightslategray;
+}
+
+

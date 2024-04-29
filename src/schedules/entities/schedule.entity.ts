@@ -20,9 +20,6 @@ export class Schedules {
   @PrimaryGeneratedColumn()
   scheduleId: number;
 
-  @Column({ type: 'int' })
-  userId: number;
-
   @Column({ type: 'enum', enum: Category, nullable: false })
   category: Category;
 
@@ -47,14 +44,20 @@ export class Schedules {
   @JoinColumn({ name: 'groupId', referencedColumnName: 'groupId' })
   groups: Groups;
 
-  @Column({ type: 'int' })
+  @Column({ type: 'int', name: 'groupId', nullable: false })
   groupId: number;
 
   @ManyToOne(() => Users, (users) => users.schedules, {
     onDelete: 'CASCADE',
   })
-  @JoinColumn({ name: 'userId', referencedColumnName: 'userId' })
+  @JoinColumn({
+    name: 'userId',
+    referencedColumnName: 'userId',
+  })
   users: Users;
+
+  @Column({ type: 'int', name: 'userId', nullable: false })
+  userId: number;
 
   @OneToMany(
     () => ScheduleMembers,
