@@ -293,47 +293,5 @@ export class SchedulesController {
     };
   }
 
-  // 스케쥴 수정
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @ApiBearerAuth('access-token')
-  @Post('/:scheduleId/page')
-  @ApiOperation({ summary: '스케줄 수정 API', description: '스케줄 수정 성공' })
-  @ApiResponse({ status: 201, description: '성공적으로 스케줄을 수정 하였습니다.' })
-  async SchedulelistEdit(
-    @Param('scheduleId') scheduleId: number,
-    @Body() changeScheduleDto: ScheduleDto,
-    @Res() res: Response,
-    @Param('groupId') groupId : number
-  ) {
-    try {
-      await this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
-
-      return res.status(201).send(`
-      <script>
-          alert("스케줄 수정 완료");
-          window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll;
-      </script>
-      `);
-
-    } catch (error) {
-      const errorMsg = error.message;
-
-      if (errorMsg === 'ExpiredSession') {
-        res.status(404).send(`
-          <script>
-            alert("해당 사용자가 존재하지 않습니다.");
-            window.location.href = '/auth/users_h/login';
-          </script>
-        `);
-      } else if(errorMsg === "Unauthorized"){
-        res.status(401).send(`
-          <script>
-            alert("로그인을 해주세요.");
-            window.location.href = '/auth/users_h/login';
-          </script>
-        `);
-      }
-    }
-  }
+  
 }
