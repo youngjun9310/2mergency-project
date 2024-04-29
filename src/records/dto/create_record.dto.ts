@@ -32,6 +32,7 @@ export class CreateRecordDto {
       description: 'start x location',
       required: false,
     })
+  @IsOptional()
   startx : number;
 
   @ApiProperty({
@@ -39,6 +40,7 @@ export class CreateRecordDto {
       description: 'start y location',
       required: false,
     })
+  @IsOptional()
   starty : number;
 
   @ApiProperty({
@@ -46,6 +48,7 @@ export class CreateRecordDto {
       description: 'end x location',
       required: false,
     })
+  @IsOptional()
   endx : number;
 
   @ApiProperty({
@@ -53,6 +56,7 @@ export class CreateRecordDto {
       description: 'end y location',
       required: false,
     })
+  @IsOptional()
   endy : number;
   
 }
