@@ -234,8 +234,7 @@
                                                         <label class="col-sm-2 control-label">그룹명</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" class="form-control" name="title"
-                                                                value={{ groups.title }} />
-                                                                {{ groups.title }}
+                                                                 value="{{ groups.title }}"/>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -246,7 +245,7 @@
                                                         <label class="col-sm-2 control-label">그룹카테고리</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" class="form-control" name="category"
-                                                                value={{ groups.category }} />
+                                                                value="{{ groups.category }}" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -257,10 +256,9 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <label class="col-sm-2 control-label">그룹소개</label>
-                                                        <div class="col-sm-5">
-                                                            <textarea rows="4" cols="80" name="content" value={{
-                                                                groups.content }} class="form-control">{{ groups.content }}
-                                                                </textarea>
+                                                        <div class="col-sm-10">
+                                                            <input rows="4" name="content" class="form-control" value="{{
+                                                                groups.content }}"/> 
                                                         </div>
                                                     </div>
                                                 </div>
