@@ -40,8 +40,9 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
+
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+      throw new UnauthorizedException('PasswordError');
     }
 
     if (user.CertificationStatus === false) {
@@ -58,7 +59,7 @@ export class UsersService {
       profileImage,
       isOpen: srtToBoolean,
     });
-    return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
+    return { statusCode: 204, message: '회원 정보를 수정하였습니다.' };
   }
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {
@@ -69,8 +70,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
-    if (!compare(password, user.password)) {
-      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    if (!(await compare(password, user.password))) {
+      throw new UnauthorizedException('PasswordError');
     }
     this.userRepository.delete(userId);
     return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };

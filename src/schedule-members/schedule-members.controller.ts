@@ -11,7 +11,6 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { ScheduleMembersService } from './schedule-members.service';
-// import { UpdateScheduleMemberDto } from './dto/update-schedule-member.dto';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
@@ -40,7 +39,7 @@ export class ScheduleMembersController {
     @Param('scheduleId', ParseIntPipe) scheduleId: number,
     @Body('email') email: string,
   ) {
-    return this.scheduleMembersService.registerScheduleMember(groupId, scheduleId, email);
+    return await this.scheduleMembersService.registerScheduleMember(groupId, scheduleId, email);
   }
 
   /**

@@ -25,11 +25,8 @@ export class AuthService {
 
   /*회원가입*/ 
   async register(signUpdto: SignUpDto, file: Express.Multer.File, gentoken: { token: number; expires: Date }) {
-    console.log('signUpdte', signUpdto)
-    console.log('gentoken', gentoken)
     const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
     
-    console.log('register service email search start')
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
@@ -37,7 +34,7 @@ export class AuthService {
     if (existingUser) {
       throw new ConflictException('ExistingEmailError');
     }
-    console.log('register service nickname search start')
+
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
@@ -55,7 +52,6 @@ export class AuthService {
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
     
-    console.log('register service tokennumber save start')
     //인증번호 DB 저장
     await this.invitesRepository.save({
       email,
@@ -75,7 +71,7 @@ export class AuthService {
       isOpen: srtToBoolean,
     });
     
-    console.log('register service info save end')
+   
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
@@ -126,8 +122,8 @@ export class AuthService {
     return { statusCode: 201, message: '어드민 회원가입에 성공하였습니다.' };
   }
 
-  /*로그인*/
-  async login(email: string, password: string) {
+   /*로그인*/
+   async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
       select: ['userId', 'email', 'password', 'CertificationStatus'],
       where: { email },
@@ -148,26 +144,20 @@ export class AuthService {
     const payload = { email, sub: user.userId };
     const accessToken = this.jwtService.sign(payload);
     return accessToken;
-
   }
 
   /** 이메일 가입수락*/
   async userAccept(email: string, token: string) {
 
-    console.log('email accept  start')
     const existingToken = await this.invitesRepository.findOne({
       where: { email },
     });
 
-    console.log('existingToken',existingToken)
 
     //해당 이메일-토큰 부재
     if (!existingToken) {
       throw new BadRequestException('EmailNotExistError');
     }
-
-    console.log("existingToken.token",existingToken.token)
-    console.log("token", token)
 
     // 저장된 토큰-입력받은 토큰 비교
     if (existingToken.token !== token) {

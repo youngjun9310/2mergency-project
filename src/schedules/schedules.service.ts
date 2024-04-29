@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { ScheduleDto } from './dto/create-schedule.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Schedules } from './entities/schedule.entity';
@@ -62,10 +62,10 @@ export class SchedulesService {
       where: { groupId },
     });
 
-    if (allSchedule.length === 0) {
-      throw {
-        status: HttpStatus.NOT_FOUND,
-      };
+    console.log(allSchedule)
+
+    if (allSchedule === null) {
+      throw new NotFoundException("NotScheduleError");
     }
 
     return allSchedule;
@@ -141,7 +141,7 @@ export class SchedulesService {
     await this.schedulesRepository.delete({ scheduleId });
 
     return {
-      statusCode: 200,
+      statusCode: 204,
       message: '스케쥴을 삭제했습니다.',
     };
   }

@@ -144,8 +144,8 @@ export class GroupMembersController {
   // 그룹 맴버 초대
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Get('/:groupId/invite/group-members_h/groupinvite')
-  @Render('groupinvite')
+  @Get('/:groupId/invite/group-members_h/groupInvite')
+  @Render('groupInvite')
   async groupinvite(@Param('groupId') groupId: number, @UserInfo() users : Users) {
     return {
       groupId: groupId,
@@ -156,8 +156,8 @@ export class GroupMembersController {
   // 그룹 맴버 수락
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
-  @Get('/:groupId/accept/group-members_h/groupaccept')
-  @Render('groupaccept')
+  @Get('/:groupId/accept/group-members_h/groupAccept')
+  @Render('groupAccept')
   async groupaccept(@Param('groupId') groupId : number, @UserInfo() users : Users) {
     return {
       groupId: groupId,

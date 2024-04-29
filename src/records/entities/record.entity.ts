@@ -21,17 +21,17 @@ export class Records {
     @Column({ type : 'bigint', nullable : false, default : 0 })
     stackedDistance : bigint;
 
-    @Column({ type : 'decimal', nullable : false })
+    @Column({ type : 'decimal', nullable : false, default : 0 })
     startx : number;
 
-    @Column({ type : 'decimal', nullable : false })
+    @Column({ type : 'decimal', nullable : false, default : 0 })
     starty : number;
     
     // 도착 좌표
-    @Column({ type : 'decimal', nullable : false })
+    @Column({ type : 'decimal', nullable : false, default : 0 })
     endx : number;
     
-    @Column({ type : 'decimal', nullable : false })
+    @Column({ type : 'decimal', nullable : false, default : 0 })
     endy : number;
 
     @ManyToOne(() => Users, (users) => users.records, {

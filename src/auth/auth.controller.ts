@@ -40,15 +40,13 @@ export class AuthController {
     
     try {
 
-  console.log('register start')
+
   //이메일 인증번호 전송
   const gentoken = await this.mailService.usersendMail(signUpdto.email);
   
-  console.log('register save start')
   //회원정보 DB 저장
   await this.authService.register( signUpdto, file, gentoken);
 
-  console.log('register res start')
   res.status(200).send(
       `<script>
           alert("회원가입에 성공하였습니다.");
@@ -60,38 +58,38 @@ export class AuthController {
       const errorMsg = error.message;
 
       if (errorMsg === 'ExistingEmailError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("해당 이메일은 사용중입니다.");
-            window.location.href = '/auth/users_h/registerpage';
+            window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'ExistingNicknameError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("해당 닉네임은 사용중입니다.");
-            window.location.href = '/auth/users_h/registerpage';
+            window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'PasswordMatchError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("비밀번호가 일치하지 않습니다.");
-            window.location.href = '/auth/users_h/registerpage';
+            window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'EmailSendError') {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("고객센터로 문의부탁드립니다.");
-            window.location.href = '/auth/users_h/registerpage';
+            window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("회원가입을 다시 해주시기 바랍니다.");
-            window.location.href = '/auth/users_h/registerpage';
+            window.location.href = '/auth/users_h/register';
           </script>
         `);
       }
@@ -170,7 +168,7 @@ export class AuthController {
       const user = await this.authService.login(loginDto.email, loginDto.password);
 
       res.cookie('authorization', `Bearer ${user}`);
-      res.status(302).send(`
+      res.status(200).send(`
             <script>
               alert("로그인 성공");
               window.location.href = '/Dashboard';
@@ -181,28 +179,28 @@ export class AuthController {
       const errorMsg = error.message;
 
       if (errorMsg === 'NotExistingUser') {
-        res.status(302).send(`
+        res.status(404).send(`
           <script>
             alert("해당 사용자가 존재하지 않습니다");
             window.location.href = '/auth/users_h/login';
           </script>
         `);
       } else if (errorMsg === 'PasswordError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("비밀번호를 다시 확인해주시기바랍니다.");
             window.location.href = '/auth/users_h/login';
           </script>
         `);
       } else if (errorMsg === 'EmailAuthError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("이메일 인증이 필요합니다.");
-            window.location.href = '/auth/users_h/emailaccept';
+            window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("로그인을 다시 시도해주십시오.");
             window.location.href = '/auth/users_h/login';
@@ -233,10 +231,9 @@ export class AuthController {
   @Post('accept')
   async userAccept( @Body('email') email: string, @Body('token') token: string, @Res() res: Response ){
     try {
-      console.log("userAccept controller start")
       await this.authService.userAccept(email, token);
 
-      res.status(302).send(`
+      res.status(200).send(`
           <script>
             alert("이메일인증에 성공했습니다.");
             window.location.href = '/auth/users_h/login';
@@ -247,21 +244,21 @@ export class AuthController {
       const errorMsg = error.message;
       
       if(errorMsg ==='EmailNotExistError'){
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("이메일을 다시 입력해주시기 바랍니다.");
-            window.location.href = '/auth/users_h/emailaccept';
+            window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else if(errorMsg ==='TokenNotMatch'){
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("토큰을 다시 입력해주시기 바랍니다.");
-            window.location.href = '/auth/users_h/emailaccept';
+            window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("고객센터에 문의해주십시오.");
             window.location.href = '/auth/users_h/login';
@@ -269,7 +266,6 @@ export class AuthController {
         `);
       }
     }
-    
   }
 
   /** hbs 양식 */
@@ -281,22 +277,22 @@ export class AuthController {
   }
   
   // 회원가입 페이지
-  @Get('/users_h/registerpage')
-  @Render('registerpage')
+  @Get('/users_h/register')
+  @Render('register')
   async registerpage() {
     return;
   }
 
   // 유저 이메일 인증요청
   @Get('/users_h/emailsend')
-  @Render('emailsend')
+  @Render('emailSend')
   async emailsend() {
     return;
   }
 
   // 유저 이메일 인증
-  @Get('/users_h/emailaccept')
-  @Render('emailaccept')
+  @Get('/users_h/emailAccept')
+  @Render('emailAccept')
   async emailaccept() {
     return;
   }

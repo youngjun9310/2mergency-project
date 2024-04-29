@@ -85,7 +85,7 @@ export class RecordsService {
 
     
 
-    return { statusCode : 201, message : "정상적으로 기록 데이터가 삭제되었습니다." };
+    return { statusCode : 204, message : "정상적으로 기록 데이터가 삭제되었습니다." };
   }
 
 }
