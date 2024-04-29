@@ -17,6 +17,6 @@ import { MembersRoleStrategy } from 'src/group-members/strategies/members.strate
   ],
   controllers: [GroupsController],
   providers: [GroupsService, MembersRoleStrategy],
-  exports :[GroupsService]
+  exports : [GroupsService]
 })
 export class GroupsModule {}

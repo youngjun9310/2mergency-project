@@ -6,14 +6,14 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
-import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
 import { Groups } from 'src/groups/entities/group.entity';
-import { Records } from 'src/records/entities/record.entity';
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(Users)
     private userRepository: Repository<Users>,
+    @InjectRepository(Records)
+    private recordsRepository : Repository<Records>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
     @InjectRepository(Groups) private groupRepository: Repository<Groups>,
@@ -24,7 +24,6 @@ export class UsersService {
   /*전체 사용자 조회(어드민용)*/
   async findAllUser() {
     return await this.userRepository.find();
-
   }
   /*사용자 조회*/
   async findUser(userId: number) {
@@ -95,8 +94,7 @@ export class UsersService {
   
   /*사용자 조회(이메일)*/
   async findByEmail(email: string) {
-    const user = await this.userRepository.findOne({ where: { email } });
-    return user;
+    return await this.userRepository.findOne({ where: { email } });
   }
 
   /*사용자 조회(아이디)*/
@@ -110,9 +108,14 @@ export class UsersService {
     return users;
   }
 
-  /*그룹 아이디 조회*/
-  async findGroupId(groupId: number){
-    const groups = await this.groupRepository.findOne({ where: { groupId } });
-    return groups
+  /*recordId 조회*/
+  async findrecord(userId : number){
+    const records = await this.recordsRepository.find({ where : { userId }});
+
+    if(!records){
+      throw new NotFoundException("기록 데이터가 존재하지 않습니다.");
+    }
+
+    return records;
   }
 }

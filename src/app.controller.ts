@@ -10,28 +10,23 @@ import { RecordsService } from './records/records.service';
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService,
-    private readonly groupsService: GroupsService,
-    private readonly recordsService: RecordsService,) {}
+    private readonly groupsService : GroupsService,
+    private readonly recordservice : RecordsService
+  ) {}
   @Get('/')
-  @Render('index')
+  @Render('welcomepage')
   root() {
     return { message: 'data' };
   }
 
-  @Get('/welcomepage')
-  @Render('welcomepage')
-  welcomepage() {
-    return { message: 'data' };
-  }
-
-  @Get('/users_h/userDashboard')
-  @Render('userDashboard')
-  async mainpage() {
+  @Get('/Dashboard')
+  @Render('Dashboard')
+  async Dashboard() {
     const groups = await this.groupsService.findAllGroups();
-      const records = await this.recordsService.recordall();
-    return {
+    const records = await this.recordservice.recordall();
+    return { 
       groups : groups,
       records : records.record
-    };
+     };
   }
 }

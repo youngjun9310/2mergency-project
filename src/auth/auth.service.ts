@@ -11,7 +11,7 @@ import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env
 import _ from 'lodash';
 import { SignUpDto } from './dto/signup.dto';
 import { MailService } from 'src/mail/mail.service';
-import { Response } from 'express'
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -75,7 +75,7 @@ export class AuthService {
       where: { nickname },
     });
     if (existingNickname) {
-      throw new ConflictException('이미 해당 닉네임으로 가입된 사용자가 있습니다!');
+      throw new ConflictException('');
     }
 
     // 비밀번호 일치 여부 확인
@@ -84,14 +84,14 @@ export class AuthService {
     }
 
     // 어드민 가입 요청 키와 어드민 서비 키 비교하기
-    const adminPassKey = this.configService.get<string>('ENV_ROLE_ADMIN_PASSWORD');
+    const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
     if (adminPassword !== adminPassKey) {
       throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
     }
 
     // 어드민 가입 로직
     const profileImage = await this.awsService.imageUpload(file);
-    const hashedPassword = await hash(password, this.configService.get<number>('ENV_ROLE_ADMIN_PASSWORD'));
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_ROLE_ADMIN_PASSWORD));
     await this.userRepository.save({
       nickname,
       email,
@@ -106,25 +106,18 @@ export class AuthService {
   }
 
   /*로그인*/
-  async login(email: string, password: string, res: Response) {
+  async login(email: string, password: string) {
     const user = await this.userRepository.findOne({
       select: ['userId', 'email', 'password', 'CertificationStatus'],
       where: { email },
     });
+
     if (!user) {
-      throw new UnauthorizedException('EmailError');
+      throw new UnauthorizedException('NotExistingUser');
     }
 
     if (!(await compare(password, user.password))) { 
-      res.status(302).send(`
-      <script>
-        alert("비밀번호 오류");
-        window.location.href = '/auth/users_h/registerpage';
-      </script>
-    `);
-
       throw new UnauthorizedException('PasswordError');
-    
     }
 
     if (user.CertificationStatus === false) {
@@ -134,6 +127,7 @@ export class AuthService {
     const payload = { email, sub: user.userId };
     const accessToken = this.jwtService.sign(payload);
     return accessToken;
+
   }
 
   /** 이메일 가입초대*/

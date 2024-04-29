@@ -13,7 +13,6 @@ import { UsersModule } from 'src/users/users.module';
   controllers: [RecordsController],
   providers: [RecordsService],
   exports : [RecordsService]
-
 })
 
 export class RecordsModule {}

@@ -121,11 +121,12 @@ export class UsersController {
   @UseGuards(JWTAuthGuard)
   @Get('/users_h/usermypage')
   @Render('usermypage')
-  async users( @UserInfo() users : Users ) {
-    const records = await this.recordsService.findAll(users.userId);
+  async users(@UserInfo() users: Users) {
+    const user = await this.usersService.findUser(users.userId);
+    const records = await this.usersService.findrecord(users.userId);
     return {
-      user : users,
-      records : records.record
+      user: user,
+      records : records
     };
     
   }

@@ -12,6 +12,7 @@ import { MailService } from 'src/mail/mail.service';
 import { AwsService } from 'src/aws/aws.service';
 import { MembersRoleStrategy } from 'src/group-members/strategies/members.strategy';
 import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
+import { Records } from 'src/records/entities/record.entity';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.e
       GroupMembers,
       Users,
       ScheduleMembers,
+      Records
     ]),
   ],
   controllers: [SchedulesController],

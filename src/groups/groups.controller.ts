@@ -52,23 +52,8 @@ export class GroupsController {
   }
 
   // 그룹 상세 조회 //
-  @ApiOperation({
-    summary: '그룹 상세 조회 API',
-    description: '특정 그룹의 상세 정보를 조회',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹의 상세 정보를 조회하였습니다.',
-    status: 200,
-  })
-  @ApiResponse({
-    description: '그룹이 존재하지 않습니다.',
-    status: 404,
-  })
-  @ApiResponse({
-    description: '유효하지 않은 그룹 ID입니다.',
-    status: 400,
-  })
-  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
+  @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @Get(':groupId')
   async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
     return this.groupsService.findOneGroup(groupId);
@@ -110,10 +95,8 @@ export class GroupsController {
   @UseGuards(JWTAuthGuard)
   @Get('/groups_h/groupcreate')
   @Render('groupcreate')
-  async groupcreate(@UserInfo() users: Users) {
-    return {
-      users: users,
-    };
+  async groupcreate() {
+    return;
   }
 
   // 그룹 모든 목록 조회

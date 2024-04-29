@@ -49,7 +49,7 @@ export class AuthController {
     } catch (error) {
       //res.redirect('/auth/users_h/registerpage');
       res.render('registerpage');
-
+     
     }
     
   }
@@ -71,14 +71,52 @@ export class AuthController {
   @ApiResponse({ status: 200, description: '로그인에 성공하였습니다.' })
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     
-      const accessToken = await this.authService.login( loginDto.email,loginDto.password,res );
+    try {
+            const accessToken = await this.authService.login( loginDto.email,loginDto.password );
 
-      res.status(302).send(`
-      <script>
-        alert("로그인 성공");
-        window.location.href = '/auth/users_h/registerpage';
-      </script>
-    `);
+            res.status(302).send(`
+            <script>
+              alert("로그인 성공");
+              window.location.href = '/auth/users_h/registerpage';
+            </script>
+          `);
+
+    } catch (error) {
+        const errorMsg = error.message
+        console.log('error',error);
+        console.log('error.message',error.message);
+
+        if(errorMsg==="NotExistingUser") {
+          res.status(302).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+        } else if(errorMsg==="PasswordError") {
+          res.status(302).send(`
+          <script>
+            alert("비밀번호를 다시 확인해주시기바랍니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+        } else if(errorMsg==="EmailAuthError") {
+          res.status(302).send(`
+          <script>
+            alert("이메일 인증이 필요합니다.");
+            window.location.href = '/auth/users_h/emailaccept';
+          </script>
+        `);
+        } else {
+          res.status(302).send(`
+          <script>
+            alert("로그인을 다시 시도해주십시오.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+        }
+    }
+      
     
   }
 

@@ -10,9 +10,6 @@ import { RoleStrategy } from 'src/auth/strategy/roles.strategy';
 import { ENV_JWT_SECRET_KEY } from 'src/const/env.keys';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from 'src/auth/strategy/jwt.strategy';
-import { GroupsModule,  } from 'src/groups/groups.module';
-import { Groups } from 'src/groups/entities/group.entity';
-import { RecordsModule } from 'src/records/records.module';
 import { Records } from 'src/records/entities/record.entity';
 
 @Module({
@@ -25,7 +22,7 @@ import { Records } from 'src/records/entities/record.entity';
       }),
       inject: [ConfigService],
     }),
-    TypeOrmModule.forFeature([Users, Groups, Records]),
+    TypeOrmModule.forFeature([Users, Records]),
     AwsModule,
     GroupsModule,
     RecordsModule
