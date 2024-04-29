@@ -64,7 +64,7 @@ export class UsersController {
 
   /** 사용자 수정*/
   @ApiOperation({ summary: '사용자 정보 수정 API', description: '사용자 정보 수정 성공' })
-  @ApiResponse({ status: 200, description: '성공적으로 사용자 정보를 수정하였습니다.' })
+  @ApiResponse({ status: 201, description: '성공적으로 사용자 정보를 수정하였습니다.' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @ApiBearerAuth('access-token')
   @Patch('')
