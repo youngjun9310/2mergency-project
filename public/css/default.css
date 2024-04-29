@@ -108,6 +108,13 @@ padding: 5px;
 margin-left: 10px;
 }
 
+.col-sm-10 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
 
 
 
