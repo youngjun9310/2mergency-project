@@ -11,6 +11,7 @@ import {
   ParseIntPipe,
   UnauthorizedException,
   Render,
+  Res,
 } from '@nestjs/common';
 import { GroupMembersService } from './group-members.service';
 import { MemberRole } from './types/groupMemberRole.type';
@@ -22,12 +23,16 @@ import { memberRolesGuard } from './guard/members.guard';
 import { UserInfo } from 'src/auth/decorator/userInfo.decorator';
 import { Users } from 'src/users/entities/user.entity';
 import { InviteMemberDto } from './dto/invite-member.dto';
+import { Response } from 'express';
+import { UsersService } from 'src/users/users.service';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('GroupMember')
 @Controller('groups')
 export class GroupMembersController {
-  constructor(private readonly groupMembersService: GroupMembersService) {}
+  constructor(private readonly groupMembersService: GroupMembersService,
+    private readonly usersService: UsersService
+  ) {}
 
   /**
    * 그룹에 멤버 초대
@@ -44,14 +49,31 @@ export class GroupMembersController {
     @Param('groupId') groupId: number,
     @UserInfo() users: Users,
     @Body() inviteMemberDto: InviteMemberDto,
+    @Res({ passthrough: true }) res: Response,
   ) {
     const { email } = inviteMemberDto;
 
-    await this.groupMembersService.inviteUserToGroup(groupId, users.userId, email);
-    return {
-      message: '초대를 완료했습니다.',
-    };
-  }
+    try {
+      await this.groupMembersService.inviteUserToGroup(groupId, users.userId, email);
+      res.status(302).send(`
+      <script>
+        alert("${inviteMemberDto.email}으로 초대가 발송되었습니다.");
+        window.location.href = '/groups/groups_h/groupAll';
+      </script>
+    `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg)
+        res.status(302).send(`
+            <script>
+              alert(\`${error.message}\`);
+              window.location.href = '/groups/groups_h/groupAll';
+            </script>
+          `);
+        }
+      }
+
 
   /**
    * 유저가 그룹 초대 수락
@@ -67,39 +89,42 @@ export class GroupMembersController {
     @Param('groupId', ParseIntPipe) groupId: number,
     @UserInfo() currentUser: Users,
     @Body('email') email: string,
+    @Res({ passthrough: true }) res: Response,
   ): Promise<any> {
-    if (currentUser.email !== email) {
-      throw new UnauthorizedException(
-        `${email} 주소가 현재 로그인한 사용자의 이메일${currentUser.email}과 일치하지 않습니다.`,
-      );
+    try {
+      await this.usersService.findByEmail(email);
+
+      if (currentUser.email !== email) {
+        throw new UnauthorizedException(
+          `${email} 주소가 현재 로그인한 사용자의 이메일${currentUser.email}과 일치하지 않습니다.`,
+        );
+      }
+
+      const result = await this.groupMembersService.acceptInvitation(groupId, currentUser.userId, email);
+
+      if (result) {
+        res.status(302).send(`
+          <script>
+           alert(\`${result.message}\`);
+            window.location.href = '/groups/groups_h/groupAll';
+          </script>
+        `);
+      } else {
+        res.status(302).send(`
+          <script>
+            alert(\`${result.message}\`);
+            window.location.href = '/groups/groups_h/groupAll';
+          </script>
+        `);
+      }
+    } catch (error) {
+      res.status(302).send(`
+        <script>
+          alert(\`${error.message}\`);
+          window.location.href = '/groups/groups_h/groupAll';
+        </script>
+      `);
     }
-    return this.groupMembersService.acceptInvitation(groupId, currentUser.userId, email);
-  }
-
-  /**
-   * 사용자가 그룹의 멤버인지 확인
-   * **/
-
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Get(':groupId/members/:userId')
-  @ApiOperation({ summary: '사용자가 그룹의 멤버인지 확인 API', description: '사용자가 그룹 멤버인지 확인 성공' })
-  @ApiResponse({ status: 200, description: '사용자는 그룹의 멤버입니다.' })
-  @ApiBearerAuth('access-token')
-  async isGroupMember(
-    @Param('groupId', ParseIntPipe) groupId: number,
-    @Param('userId', ParseIntPipe) userId: number,
-  ): Promise<any> {
-    const memberDetails = await this.groupMembersService.isGroupMemberDetailed(groupId, userId);
-
-    if (!memberDetails) {
-      throw new NotFoundException(`해당 사용자 또는 그룹이 데이터 베이스에 존재하지 않습니다.`);
-    }
-
-    if (!memberDetails.groups || !memberDetails.users) {
-      throw new NotFoundException(`해당 사용자 또는 그룹이 정보의 연결이 데이터베이스에 완전히 형성되지 않았습니다.`);
-    }
-    return { message: `${userId}는 그룹 ${groupId}의 멤버입니다.` };
   }
 
   /**
@@ -152,8 +177,6 @@ export class GroupMembersController {
   }
 
   // 그룹 맴버 수락
-  @UseGuards(memberRolesGuard)
-  @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @Get('/:groupId/accept/group-members_h/groupAccept')
   @Render('groupAccept')
   async groupaccept(@Param('groupId') groupId : number, @UserInfo() users : Users) {
