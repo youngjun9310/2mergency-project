@@ -3,12 +3,11 @@ import {
   Controller,
   Delete,
   Get,
-  // HttpException,
-  // HttpStatus,
   Param,
   Patch,
   Post,
   Render,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { SchedulesService } from './schedules.service';
@@ -20,6 +19,7 @@ import { memberRolesGuard } from 'src/group-members/guard/members.guard';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
 import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Response } from 'express';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Schedules')
@@ -38,8 +38,29 @@ export class SchedulesController {
     @Body() createScheduleDto: ScheduleDto,
     @UserInfo() users: Users,
     @Param('groupId') groupId: number,
+    @Res() res: Response,
   ) {
-    return await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
+    try {
+      await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
+
+      res.status(201).send(`
+      <script>
+        alert("스케줄 생성이 완료되었습니다.");
+        window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll';
+      </script>
+    `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 스케쥴 전체 조회
@@ -49,12 +70,35 @@ export class SchedulesController {
   @Get('')
   @ApiOperation({ summary: '스케줄 전체 조회 API', description: '스케줄 전체 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 스케줄 전체 조회를 완료했습니다.' })
-  async getAllSchedule(@Param('groupId') groupId: number) {
-    return this.schedulesService.getAllSchedule(groupId);
+  async getAllSchedule(@Param('groupId') groupId: number, @Res() res: Response) {
+    try {
+      await this.schedulesService.getAllSchedule(groupId);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'NotScheduleError') {
+        res.status(404).send(`
+        <script>
+            alert("스케줄이 존재하지 않습니다.");
+            window.location.href = '/groups/${groupId}/groups_h/groupList';
+        </script>
+        `);
+      } else if (error) {
+        const errorMsg = error.message;
+
+        if (errorMsg === 'ExpiredSession') {
+          res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+        }
+      }
+    }
   }
 
   // 스케쥴 상세 조회
-
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
   @ApiBearerAuth('access-token')
@@ -65,8 +109,22 @@ export class SchedulesController {
     @Param('groupId') groupId: number,
     @Param('scheduleId') scheduleId: number,
     @UserInfo() users: Users,
+    @Res() res: Response,
   ) {
-    return await this.schedulesService.getOneSchedule(groupId, scheduleId, users.userId);
+    try {
+      await this.schedulesService.getOneSchedule(groupId, scheduleId, users.userId);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 스케쥴 수정
@@ -75,9 +133,35 @@ export class SchedulesController {
   @ApiBearerAuth('access-token')
   @Patch('/:scheduleId')
   @ApiOperation({ summary: '스케줄 수정 API', description: '스케줄 수정 성공' })
-  @ApiResponse({ status: 200, description: '성공적으로 스케줄을 수정 하였습니다.' })
-  changeSchedule(@Param('scheduleId') scheduleId: number, @Body() changeScheduleDto: ScheduleDto) {
-    return this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
+  @ApiResponse({ status: 201, description: '성공적으로 스케줄을 수정 하였습니다.' })
+  async changeSchedule(
+    @Param('scheduleId') scheduleId: number,
+    @Body() changeScheduleDto: ScheduleDto,
+    @Res() res: Response,
+    @Param('groupId') groupId : number
+  ) {
+    try {
+      await this.schedulesService.changeSchedule(changeScheduleDto, scheduleId);
+
+      return res.status(201).send(`
+      <script>
+          alert("스케줄 수정 완료");
+          window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll;
+      </script>
+      `);
+
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 스케쥴 삭제
@@ -87,8 +171,28 @@ export class SchedulesController {
   @Delete('/:scheduleId')
   @ApiOperation({ summary: '스케줄 삭제 API', description: '스케줄 삭제 성공' })
   @ApiResponse({ status: 204, description: '성공적으로 스케줄을 삭제 하였습니다.' })
-  async deleteSchedule(@Param('scheduleId') scheduleId: number) {
-    return await this.schedulesService.deleteSchedule(scheduleId);
+  async deleteSchedule(@Param('scheduleId') scheduleId: number, @Res() res: Response, @Param('groupId') groupId : number) {
+    try {
+      await this.schedulesService.deleteSchedule(scheduleId);
+
+      res.status(201).send(`
+      <script>
+          alert("스케줄 삭제 완료");
+          window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll;
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   /** hbs 양식 */

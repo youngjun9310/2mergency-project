@@ -1,4 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe, Render, Res } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UseGuards,
+  ParseIntPipe,
+  Render,
+  Res,
+} from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -22,44 +34,75 @@ export class GroupsController {
   @ApiResponse({ status: 201, description: '성공적으로 그룹이 생성되었습니다.' })
   @ApiBearerAuth('access-token')
   @Post('')
-  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res : Response) {
+  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res: Response) {
+    try {
       await this.groupsService.createGroup(createGroupDto, users.userId);
 
       res.status(201).send(`
       <script>
-      alert("그룹 생성이 완료되었습니다.");
-      window.location.href = '/groups/groups_h/groupall';
+        alert("그룹 생성이 완료되었습니다.");
+        window.location.href = '/groups/groups_h/groupAll';
       </script>
       `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 그룹 모든 목록 조회 //
   @ApiOperation({ summary: '모든 그룹 목록 조회 API', description: '모든 그룹 목록 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
   @Get('')
-  async findAllGroups() {
-      return await this.groupsService.findAllGroups();
+  async findAllGroups(@Res() res: Response) {
+    try {
+      await this.groupsService.findAllGroups();
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   // 그룹 상세 조회 //
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @Get(':groupId')
-  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number, @Res() res : Response) {
-    try{
-
+  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number, @Res() res: Response) {
+    try {
       await this.groupsService.findOneGroup(groupId);
-
-    } catch (error){
+    } catch (error) {
       const errorMsg = error.messagel;
 
-      if(errorMsg === "NotGroupError"){
+      if (errorMsg === 'NotGroupError') {
         res.status(200).send(`
         <script>
-        alert("그룹 생성이 완료되었습니다.");
-        window.location.href = '/groups/groups_h/groupall';
+          alert("그룹 존재하지 않습니다");
+          window.location.href = '/groups/groups_h/groupAll';
         </script>
-        `)
+        `);
+      } else if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -71,21 +114,26 @@ export class GroupsController {
   @ApiResponse({ status: 201, description: '성공적으로 그룹을 수정하였습니다.' })
   @Patch(':groupId')
   @ApiBearerAuth('access-token')
-  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto, @Res() res : Response) {
-    try{
-
+  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto, @Res() res: Response) {
+    try {
       await this.groupsService.updateGroup(groupId, updateGroupDto);
 
-    } catch (error){
-      const errorMsg = error.messagel;
+      res.status(201).send(`
+      <script>
+          alert("그룹 수정 완료");
+          window.location.href = '/groups/groups_h/groupAll';
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
 
-      if(errorMsg === "NotGroupError"){
-        res.status(201).send(`
-        <script>
-        alert("그룹 수정이 완료되었습니다.");
-        window.location.href = '/groups/groups_h/groupall';
-        </script>
-        `)
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -97,22 +145,44 @@ export class GroupsController {
   @ApiResponse({ status: 204, description: '성공적으로 그룹을 삭제하였습니다.' })
   @ApiBearerAuth('access-token')
   @Delete(':groupId')
-  async deleteGroup(@Param('groupId') groupId: number) {
-    return await this.groupsService.deleteGroup(groupId);
+  async deleteGroup(@Param('groupId') groupId: number, @Res() res: Response) {
+    try {
+      await this.groupsService.deleteGroup(groupId);
+
+      res.status(201).send(`
+      <script>
+          alert("그룹 삭제 완료");
+          window.location.href = '/groups/groups_h/groupAll';
+      </script>
+      `);
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   /** hbs 양식 */
   // 그룹 생성
   @UseGuards(JWTAuthGuard)
-  @Get('/groups_h/groupcreate')
-  @Render('groupcreate')
-  async groupcreate() {
-    return;
+  @Get('/groups_h/groupCreate')
+  @Render('groupCreate')
+  async groupcreate(@UserInfo() users: Users) {
+    return {
+      users: users,
+    };
   }
 
   // 그룹 모든 목록 조회
-  @Get('/groups_h/groupall')
-  @Render('groupall')
+  @Get('/groups_h/groupAll')
+  @Render('groupAll')
   async groupsall(@UserInfo() users: Users, groupId: number) {
     const groups = await this.groupsService.findAllGroups();
     return {
@@ -123,8 +193,8 @@ export class GroupsController {
   }
 
   // 그룹 상세 목록 조회, 스케줄 상세 조회
-  @Get('/:groupId/groups_h/grouplist')
-  @Render('grouplist')
+  @Get('/:groupId/groups_h/groupList')
+  @Render('groupList')
   async grouplist(@Param('groupId') groupId: number, scheduleId: number, @UserInfo() users: Users) {
     const groups = await this.groupsService.findOneGroup(groupId);
     return {
@@ -146,3 +216,4 @@ export class GroupsController {
     };
   }
 }
+

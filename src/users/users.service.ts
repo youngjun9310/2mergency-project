@@ -7,6 +7,7 @@ import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
 import { Records } from 'src/records/entities/record.entity';
+import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
 @Injectable()
 export class UsersService {
   constructor(
@@ -27,7 +28,7 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { userId } });
 
     if (user.CertificationStatus === false) {
-      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
+      throw new UnauthorizedException('EmailAuthError');
     }
 
     return user;
@@ -39,8 +40,9 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
+
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+      throw new UnauthorizedException('PasswordError');
     }
 
     if (user.CertificationStatus === false) {
@@ -49,7 +51,7 @@ export class UsersService {
 
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
-    const hashedPassword = await hash(password, this.configService.get<number>('PASSWORD_HASH_ROUNDS'));
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
     this.userRepository.update(userId, {
       email,
       password: hashedPassword,
@@ -68,8 +70,8 @@ export class UsersService {
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
-    if (!compare(password, user.password)) {
-      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
+    if (!(await compare(password, user.password))) {
+      throw new UnauthorizedException('PasswordError');
     }
     this.userRepository.delete(userId);
     return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };

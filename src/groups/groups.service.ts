@@ -22,6 +22,8 @@ export class GroupsService {
   async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
+    
+
     const groupCreate = await this.groupRepository.save({
       title,
       content,
@@ -70,7 +72,7 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('NotGroupError');
+      throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
     }
 
     const isPublicBoolean = Boolean(isPublic === 'true');

@@ -35,12 +35,12 @@
             <div class="collapse show" id="componentsExamples">
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/records/records_h/recordmylist">
+                  <a class="nav-link" href="/records/records_h/recordMylist">
                     <span class="sidebar-normal">내 운동기록</span>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="/records/records_h/recordcreate">
+                  <a class="nav-link" href="/records/records_h/recordCreate">
                     <span class="sidebar-normal">운동 기록 생성</span>
                   </a>
                 </li>
@@ -60,7 +60,7 @@
             <div class="collapse" id="formsExamples">
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/groups/groups_h/groupall">
+                  <a class="nav-link" href="/groups/groups_h/groupAll">
                     <span class="sidebar-normal">그룹목록</span>
                   </a>
                 </li>
@@ -75,7 +75,7 @@
             <div class="collapse" id="pagesExamples">
               <ul class="nav">
                 <li class="nav-item">
-                  <a class="nav-link" href="/users/users_h/usermypage">
+                  <a class="nav-link" href="/users/users_h/userMypage">
                     <span class="sidebar-normal">프로필조회</span>
                   </a>
                 </li>
@@ -207,7 +207,7 @@
                       </tfoot>
                       <tbody>
                         {{#each record}}
-                        <tr onclick="window.location.href = '/records/{{ this.recordId }}/records_h/recordlist';">
+                        <tr onclick="window.location.href = '/records/{{ this.recordId }}/records_h/recordList';">
                           <td class="text-center">{{ this.nickname }}</td>
                           <td class="text-center">{{ this.startTime }}</td>
                           <td class="text-center">{{ this.endTime }}</td>
@@ -225,7 +225,7 @@
                     <div class="stats">
                       <p></p>
                       <button type="submit" class="btn btn-fill btn-info"
-                        onclick="window.location.href = '/records/records_h/recordcreate';">기록 생성</button>
+                        onclick="window.location.href = '/records/records_h/recordCreate';">기록 생성</button>
                     </div>
                   </div>
                 </div>

@@ -45,17 +45,17 @@
                         <div class="collapse" id="componentsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/records/records_h/recordmylist">
+                                    <a class="nav-link" href="/records/records_h/recordMylist">
                                         <span class="sidebar-normal">내 운동기록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/records/records_h/recordall">
+                                    <a class="nav-link" href="/records/records_h/recordAll">
                                         <span class="sidebar-normal">전국 운동기록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/records/records_h/recordcreate">
+                                    <a class="nav-link" href="/records/records_h/recordCreate">
                                         <span class="sidebar-normal">운동 기록 생성</span>
                                     </a>
                                 </li>
@@ -75,12 +75,12 @@
                         <div class="collapse" id="formsExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/groups_h/groupall">
+                                    <a class="nav-link" href="/groups/groups_h/groupAll">
                                         <span class="sidebar-normal">그룹목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/groups/groups_h/groupcreate">
+                                    <a class="nav-link" href="/groups/groups_h/groupCreate">
                                         <span class="sidebar-normal">그룹생성</span>
                                     </a>
                                 </li>
@@ -96,13 +96,13 @@
                             <ul class="nav">
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                        href="/groups/{{ schedules.groupId }}/schedules/schedules_h/scheduleall">
+                                        href="/groups/{{ schedules.groupId }}/schedules/schedules_h/scheduleAll">
                                         <span class="sidebar-normal">스케줄목록</span>
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link"
-                                        href="/groups/{{ groupId }}/schedules/schedules_h/schedulecreate">
+                                        href="/groups/{{ groupId }}/schedules/schedules_h/scheduleCreate">
                                         <span class="sidebar-normal">스케줄생성</span>
                                     </a>
                                 </li>
@@ -117,7 +117,7 @@
                         <div class="collapse" id="pagesExamples">
                             <ul class="nav">
                                 <li class="nav-item">
-                                    <a class="nav-link" href="/users/users_h/usermypage">
+                                    <a class="nav-link" href="/users/users_h/userMypage">
                                         <span class="sidebar-normal">프로필조회</span>
                                     </a>
                                 </li>
@@ -274,7 +274,7 @@
                                             </div>
                                         </fieldset>
                                         <div class="card-footer">
-                                            <button type="submit" class="btn btn-fill btn-info">수정하기</button>
+                                            <button type="submit" class="btn btn-fill btn-info" onclick="window.location.href = '/groups/{{ schedules.groupId }}/schedules/schedules_h/scheduleAll';">수정하기</button>
                                         </div>
                                     </form>
                                 </div>

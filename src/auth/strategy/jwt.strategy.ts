@@ -28,7 +28,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     const user = await this.userService.findByEmail(payload.email);
 
     if (_.isNil(user)) {
-      throw new NotFoundException('해당하는 사용자를 찾을 수 없습니다.');
+      throw new NotFoundException('ExpiredSession');
     }
     return user;
   }

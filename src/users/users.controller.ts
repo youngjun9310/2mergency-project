@@ -9,6 +9,7 @@ import {
   UseInterceptors,
   Render,
   Post,
+  Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
@@ -19,6 +20,7 @@ import { UpdateDto } from './dto/update.dto';
 import { DeleteDto } from './dto/delete.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
+import { Response } from 'express';
 
 @UseGuards(JWTAuthGuard)
 @ApiTags('Users')
@@ -41,8 +43,23 @@ export class UsersController {
   @ApiResponse({ status: 200, description: '성공적으로 사용자 정보를 조회하였습니다.' })
   @ApiBearerAuth('access-token')
   @Get('/')
-  async findUser(@UserInfo() users: Users) {
-    return await this.usersService.findUser(users.userId);
+  async findUser(@UserInfo() users: Users, @Res() res : Response) {
+    try{
+
+      await this.usersService.findUser(users.userId);
+
+    } catch (error){
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   /** 사용자 수정*/
@@ -51,8 +68,37 @@ export class UsersController {
   @UseInterceptors(FileInterceptor('profileImage'))
   @ApiBearerAuth('access-token')
   @Patch('')
-  async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @UserInfo() users: Users) {
-    return await this.usersService.userUpdate(users.userId, updateDto, file);
+  async userUpdate(@Body() updateDto: UpdateDto, @UploadedFile() file: Express.Multer.File, @UserInfo() users: Users, @Res() res : Response) {
+    try{
+
+      await this.usersService.userUpdate(users.userId, updateDto, file);
+      
+      res.status(201).send(`
+      <script>
+          alert("회원 수정 완료");
+          window.location.href = '/users/users_h/userEdit';
+      </script>
+      `);
+
+    } catch (error){
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if(errorMsg === "PasswordError"){
+        res.status(401).send(`
+          <script>
+            alert("패스워드가 일치하지 않습니다.");
+            window.location.href = '/users/users_h/userEdit';
+          </script>
+        `);
+      }
+    }
   }
 
   /** 사용자 삭제*/
@@ -60,8 +106,37 @@ export class UsersController {
   @ApiResponse({ status: 204, description: '성공적으로 사용자를 삭제 하였습니다.' })
   @ApiBearerAuth('access-token')
   @Delete('')
-  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users) {
-    return await this.usersService.userDelete(users.userId, deleteDto.password);
+  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users, @Res() res : Response) {
+    try{
+
+      await this.usersService.userDelete(users.userId, deleteDto.password);
+
+      res.status(201).send(`
+      <script>
+          alert("회원 탈퇴 완료");
+          window.location.href = '/Dashboard';
+      </script>
+      `);
+
+    } catch (error){
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExpiredSession') {
+        res.status(404).send(`
+          <script>
+            alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if(errorMsg === "PasswordError"){
+        res.status(401).send(`
+          <script>
+            alert("패스워드가 일치하지 않습니다.");
+            window.location.href = '/users/users_h/userDelete';
+          </script>
+        `);
+      }
+    }
   }
 
   /** 사용자 접속정보조회*/
@@ -76,8 +151,8 @@ export class UsersController {
   /** hbs 양식 */
   // 유저 모든 목록 조회
   @UseGuards(RolesGuard)
-  @Get('users_h/userall')
-  @Render('userall')
+  @Get('users_h/userAll')
+  @Render('userAll')
   async findall() {
     const users = await this.usersService.findAllUser();
     return {
@@ -86,8 +161,8 @@ export class UsersController {
   }
 
   // 유저 마이 정보 조회
-  @Get('/users_h/usermypage')
-  @Render('usermypage')
+  @Get('/users_h/userMypage')
+  @Render('userMypage')
   async users(@UserInfo() users: Users) {
     const user = await this.usersService.findUser(users.userId);
     const records = await this.usersService.findrecord(users.userId);
@@ -103,15 +178,6 @@ export class UsersController {
   async userEditpage(@UserInfo() users: Users) {
     return {
       users: users,
-    };
-  }
-
-  // 유저 정보 수정(로직 테스트, 이미지 업로드 불가 문제)
-  @Post('/userEdit')
-  async userEdit(@UserInfo() users: Users, updateDto: UpdateDto, @Body('file') file: Express.Multer.File) {
-    await this.usersService.userUpdate(users.userId, updateDto, file);
-    return {
-      message: '유저 정보가 업데이트 되었습니다.',
     };
   }
 

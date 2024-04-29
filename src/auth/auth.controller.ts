@@ -32,8 +32,67 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
   @ApiResponse({ status: 201, description: '회원가입 성공하였습니다.' })
-  async register(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
-    return await this.authService.register(signUpdto, file);
+  async register(
+    @Body() signUpdto: SignUpDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response ) {
+    
+    try {
+
+
+  //이메일 인증번호 전송
+  const gentoken = await this.mailService.usersendMail(signUpdto.email);
+  
+  //회원정보 DB 저장
+  await this.authService.register( signUpdto, file, gentoken);
+
+  res.status(200).send(
+      `<script>
+          alert("회원가입에 성공하였습니다.");
+          window.location.href = '/auth/users_h/login';
+        </script>`
+      );
+
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExistingEmailError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 이메일은 사용중입니다.");
+            window.location.href = '/auth/users_h/register';
+          </script>
+        `);
+      } else if (errorMsg === 'ExistingNicknameError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 닉네임은 사용중입니다.");
+            window.location.href = '/auth/users_h/register';
+          </script>
+        `);
+      } else if (errorMsg === 'PasswordMatchError') {
+        res.status(302).send(`
+          <script>
+            alert("비밀번호가 일치하지 않습니다.");
+            window.location.href = '/auth/users_h/register';
+          </script>
+        `);
+      } else if (errorMsg === 'EmailSendError') {
+        res.status(302).send(`
+          <script>
+            alert("고객센터로 문의부탁드립니다.");
+            window.location.href = '/auth/users_h/register';
+          </script>
+        `);
+      } else {
+        res.status(302).send(`
+          <script>
+            alert("회원가입을 다시 해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/register';
+          </script>
+        `);
+      }
+    }  
   }
 
   /** 어드민 회원가입*/
@@ -49,16 +108,16 @@ export class AuthController {
   @ApiOperation({ summary: '로그인 API', description: '로그인 성공' })
   @Post('login')
   @HttpCode(200)
-  //@Redirect('/')
   @ApiResponse({ status: 200, description: '로그인에 성공하였습니다.' })
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     try {
-      await this.authService.login(loginDto.email, loginDto.password);
+      const user = await this.authService.login(loginDto.email, loginDto.password);
 
-      res.status(302).send(`
+      res.cookie('authorization', `Bearer ${user}`);
+      res.status(200).send(`
             <script>
               alert("로그인 성공");
-              window.location.href = '/auth/users_h/registerpage';
+              window.location.href = '/Dashboard';
             </script>
           `);
 
@@ -66,28 +125,28 @@ export class AuthController {
       const errorMsg = error.message;
 
       if (errorMsg === 'NotExistingUser') {
-        res.status(302).send(`
+        res.status(404).send(`
           <script>
             alert("해당 사용자가 존재하지 않습니다");
             window.location.href = '/auth/users_h/login';
           </script>
         `);
       } else if (errorMsg === 'PasswordError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("비밀번호를 다시 확인해주시기바랍니다.");
             window.location.href = '/auth/users_h/login';
           </script>
         `);
       } else if (errorMsg === 'EmailAuthError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("이메일 인증이 필요합니다.");
-            window.location.href = '/auth/users_h/emailaccept';
+            window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("로그인을 다시 시도해주십시오.");
             window.location.href = '/auth/users_h/login';
@@ -109,59 +168,71 @@ export class AuthController {
     return;
   }
 
-  /** 이메일 가입초대*/
-  @ApiOperation({
-    summary: '이메일 가입초대 API',
-    description: '가입 토큰번호 전송',
-  })
-  @Post('invite')
-  @ApiResponse({ status: 200, description: '이메일 가입 초대에 성공하였습니다.' })
-  async userInvite(@Body('email') email: string, @Res() res) {
-    const gentoken = await this.mailService.usersendMail(email);
-    await this.authService.userInvite(email, gentoken);
-    res.send('회원가입 토큰번호를 전송했습니다.');
-  }
-
   /** 이메일 가입수락*/
   @ApiOperation({
     summary: '이메일 가입초대 API',
     description: '이메일 가입 토큰번호 전송',
   })
-  @Post('accept')
   @ApiResponse({ status: 200, description: '이메일 가입 수락에 성공하였습니다.' })
-  async userAccept(@Body('email') email: string, @Body('token') token: string, @Res() res) {
-    await this.authService.userAccept(email, token);
-    res.send('회원가입 이메일 인증을 완료했습니다.');
+  @Post('accept')
+  async userAccept( @Body('email') email: string, @Body('token') token: string, @Res() res: Response ){
+    try {
+      console.log("userAccept controller start")
+      await this.authService.userAccept(email, token);
+
+      res.status(200).send(`
+          <script>
+            alert("이메일인증에 성공했습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+
+    } catch (error) {
+      const errorMsg = error.message;
+      
+      if(errorMsg ==='EmailNotExistError'){
+        res.status(302).send(`
+          <script>
+            alert("이메일을 다시 입력해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/emailAccept';
+          </script>
+        `);
+      } else if(errorMsg ==='TokenNotMatch'){
+        res.status(302).send(`
+          <script>
+            alert("토큰을 다시 입력해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/emailAccept';
+          </script>
+        `);
+      } else {
+        res.status(302).send(`
+          <script>
+            alert("고객센터에 문의해주십시오.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
+    }
   }
 
   /** hbs 양식 */
   // 회원가입 페이지
-  @Get('/users_h/registerpage')
-  @Render('registerpage')
+  @Get('/users_h/register')
+  @Render('register')
   async registerpage() {
     return;
   }
 
-  // 회원가입 로직(테스트버전, 이미지 업로드 불가 문제)
-  @Post('/users_h/register')
-  async registers(signUpdto: SignUpDto, @Body('file') file: Express.Multer.File) {
-    const register = await this.authService.register(signUpdto, file);
-
-    return {
-      register: register,
-    };
-  }
-
   // 유저 이메일 인증요청
   @Get('/users_h/emailsend')
-  @Render('emailsend')
+  @Render('emailSend')
   async emailsend() {
     return;
   }
 
   // 유저 이메일 인증
-  @Get('/users_h/emailaccept')
-  @Render('emailaccept')
+  @Get('/users_h/emailAccept')
+  @Render('emailAccept')
   async emailaccept() {
     return;
   }
