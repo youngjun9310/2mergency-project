@@ -280,80 +280,54 @@
 <script src="/assets/js/light-bootstrap-dashboard.js?v=2.0.1" type="text/javascript"></script>
 <script src="/assets/js/demo.js"></script>
 <script type="text/javascript">
-  var $table = $('#bootstrap-table');
+  $(document).ready(function () {
+      $('#datatables').DataTable({
+        pagingType: 'full_numbers',
+        lengthMenu: [
+          [10, 25, 50, -1],
+          [10, 25, 50, 'All'],
+        ],
+        responsive: true,
+        language: {
+          search: '_INPUT_',
+          searchPlaceholder: 'Search records',
+        },
+      });
 
-  function operateFormatter(value, row, index) {
-    return [
-      '<a rel="tooltip" title="View" class="btn btn-link btn-info table-action view" href="javascript:void(0)">',
-      '<i class="fa fa-image"></i>',
-      '</a>',
-      '<a rel="tooltip" title="Edit" class="btn btn-link btn-warning table-action edit" href="javascript:void(0)">',
-      '<i class="fa fa-edit"></i>',
-      '</a>',
-      '<a rel="tooltip" title="Remove" class="btn btn-link btn-danger table-action remove" href="javascript:void(0)">',
-      '<i class="fa fa-remove"></i>',
-      '</a>',
-    ].join('');
-  }
+      var table = $('#datatables').DataTable();
 
-  $().ready(function () {
-    window.operateEvents = {
-      'click .view': function (e, value, row, index) {
-        info = JSON.stringify(row);
+      // Edit record
+      table.on('click', '.edit', function () {
+        $tr = $(this).closest('tr');
 
-        swal('You click view icon, row: ', info);
-        console.log(info);
-      },
-      'click .edit': function (e, value, row, index) {
-        info = JSON.stringify(row);
+        if ($tr.hasClass('child')) {
+          $tr = $tr.prev('.parent');
+        }
 
-        swal('You click edit icon, row: ', info);
-        console.log(info);
-      },
-      'click .remove': function (e, value, row, index) {
-        console.log(row);
-        $table.bootstrapTable('remove', {
-          field: 'id',
-          values: [row.id],
-        });
-      },
-    };
+        var data = table.row($tr).data();
+        alert(
+          'You press on Row: ' +
+            data[0] +
+            ' ' +
+            data[1] +
+            ' ' +
+            data[2] +
+            "'s row.",
+        );
+      });
 
-    $table.bootstrapTable({
-      toolbar: '.toolbar',
-      clickToSelect: true,
-      showRefresh: true,
-      search: true,
-      showToggle: true,
-      showColumns: true,
-      pagination: true,
-      searchAlign: 'left',
-      pageSize: 8,
-      clickToSelect: false,
-      pageList: [8, 10, 25, 50, 100],
+      // Delete a record
+      table.on('click', '.remove', function (e) {
+        $tr = $(this).closest('tr');
+        table.row($tr).remove().draw();
+        e.preventDefault();
+      });
 
-      formatShowingRows: function (pageFrom, pageTo, totalRows) {
-        //do nothing here, we don't want to show the text "showing x of y from..."
-      },
-      formatRecordsPerPage: function (pageNumber) {
-        return pageNumber + ' rows visible';
-      },
-      icons: {
-        refresh: 'fa fa-refresh',
-        toggle: 'fa fa-th-list',
-        columns: 'fa fa-columns',
-        detailOpen: 'fa fa-plus-circle',
-        detailClose: 'fa fa-minus-circle',
-      },
+      //Like record
+      table.on('click', '.like', function () {
+        alert('You clicked on Like button');
+      });
     });
-
-    //activate the tooltips after the data table is initialized
-    $('[rel="tooltip"]').tooltip();
-
-    $(window).resize(function () {
-      $table.bootstrapTable('resetView');
-    });
-  });
 </script>
 
 </html>

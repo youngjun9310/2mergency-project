@@ -1,16 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  UseGuards,
-  ParseIntPipe,
-  Render,
-  Res,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, ParseIntPipe, Render, Res } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -33,14 +21,16 @@ export class GroupsController {
   @ApiOperation({ summary: '그룹 생성 API', description: '그룹 생성 성공' })
   @ApiResponse({ status: 201, description: '성공적으로 그룹이 생성되었습니다.' })
   @ApiBearerAuth('access-token')
-  @Post()
-  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res: Response) {
-    try {
-      await this.groupsService.createGroup(createGroupDto, users.userId, users );
-      res.render('groupall')
-    } catch (error) {
-      res.render('emailAccept')
-    }
+  @Post('')
+  async createGroup(@Body() createGroupDto: CreateGroupDto, @UserInfo() users: Users, @Res() res : Response) {
+      await this.groupsService.createGroup(createGroupDto, users.userId);
+
+      res.status(201).send(`
+      <script>
+      alert("그룹 생성이 완료되었습니다.");
+      window.location.href = '/groups/groups_h/groupall';
+      </script>
+      `);
   }
 
   // 그룹 모든 목록 조회 //
@@ -48,32 +38,56 @@ export class GroupsController {
   @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
   @Get('')
   async findAllGroups() {
-    return await this.groupsService.findAllGroups();
+      return await this.groupsService.findAllGroups();
   }
 
   // 그룹 상세 조회 //
   @ApiOperation({ summary: '그룹 상세 조회 API', description: '그룹 상세 정보 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 그룹의 상세 정보를 조회하였습니다.' })
   @Get(':groupId')
-  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number) {
-    return this.groupsService.findOneGroup(groupId);
+  async findOneGroup(@Param('groupId', ParseIntPipe) groupId: number, @Res() res : Response) {
+    try{
+
+      await this.groupsService.findOneGroup(groupId);
+
+    } catch (error){
+      const errorMsg = error.messagel;
+
+      if(errorMsg === "NotGroupError"){
+        res.status(200).send(`
+        <script>
+        alert("그룹 생성이 완료되었습니다.");
+        window.location.href = '/groups/groups_h/groupall';
+        </script>
+        `)
+      }
+    }
   }
 
   // 그룹 수정 //
   @UseGuards(JWTAuthGuard, memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @ApiOperation({
-    summary: '그룹 업데이트 API',
-    description: '그룹의 목록을 수정합니다.',
-  })
-  @ApiResponse({
-    description: '성공적으로 그룹을 수정하였습니다.',
-    status: 201,
-  })
-  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: '그룹 수정 API', description: '그룹의 목록 수정 성공' })
+  @ApiResponse({ status: 201, description: '성공적으로 그룹을 수정하였습니다.' })
   @Patch(':groupId')
-  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto) {
-    return await this.groupsService.updateGroup(groupId, updateGroupDto);
+  @ApiBearerAuth('access-token')
+  async updateGroup(@Param('groupId') groupId: number, @Body() updateGroupDto: UpdateGroupDto, @Res() res : Response) {
+    try{
+
+      await this.groupsService.updateGroup(groupId, updateGroupDto);
+
+    } catch (error){
+      const errorMsg = error.messagel;
+
+      if(errorMsg === "NotGroupError"){
+        res.status(201).send(`
+        <script>
+        alert("그룹 수정이 완료되었습니다.");
+        window.location.href = '/groups/groups_h/groupall';
+        </script>
+        `)
+      }
+    }
   }
 
   // 그룹 삭제 //

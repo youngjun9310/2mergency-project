@@ -28,13 +28,6 @@ export class GroupsService {
       category,
     });
 
-    if (users.CertificationStatus === false) {
-      throw new UnauthorizedException('EmailAuthError');
-    }
-    try {
-      // 고유한 닉네임 생성 -> 사용자 ID와 현재 시간을 결합
-      // const uniqueNickname = `user_${userId}_${user.nickname}`;
-
       await this.groupMembersRepository.save({
         groupId: groupCreate.groupId,
         userId,
@@ -42,9 +35,7 @@ export class GroupsService {
         isVailed: true,
         isInvited: true,
       });
-    } catch (error) {
-      console.error('Error', error);
-    }
+
     return groupCreate;
   }
 
@@ -64,7 +55,7 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('그룹이 존재하지 않습니다.');
+      throw new NotFoundException('NotGroupError');
     }
 
     return groups;
@@ -79,7 +70,7 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
+      throw new NotFoundException('NotGroupError');
     }
 
     const isPublicBoolean = Boolean(isPublic === 'true');
