@@ -57,35 +57,35 @@ export class AuthController {
       const errorMsg = error.message;
 
       if (errorMsg === 'ExistingEmailError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("해당 이메일은 사용중입니다.");
             window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'ExistingNicknameError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("해당 닉네임은 사용중입니다.");
             window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'PasswordMatchError') {
-        res.status(302).send(`
+        res.status(401).send(`
           <script>
             alert("비밀번호가 일치하지 않습니다.");
             window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else if (errorMsg === 'EmailSendError') {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("고객센터로 문의부탁드립니다.");
             window.location.href = '/auth/users_h/register';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("회원가입을 다시 해주시기 바랍니다.");
             window.location.href = '/auth/users_h/register';
@@ -146,7 +146,7 @@ export class AuthController {
           </script>
         `);
       } else {
-        res.status(401).send(`
+        res.status(400).send(`
           <script>
             alert("로그인을 다시 시도해주십시오.");
             window.location.href = '/auth/users_h/login';
@@ -191,21 +191,21 @@ export class AuthController {
       const errorMsg = error.message;
       
       if(errorMsg ==='EmailNotExistError'){
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("이메일을 다시 입력해주시기 바랍니다.");
             window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else if(errorMsg ==='TokenNotMatch'){
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("토큰을 다시 입력해주시기 바랍니다.");
             window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
       } else {
-        res.status(302).send(`
+        res.status(400).send(`
           <script>
             alert("고객센터에 문의해주십시오.");
             window.location.href = '/auth/users_h/login';

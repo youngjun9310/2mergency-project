@@ -58,6 +58,13 @@ export class UsersController {
             window.location.href = '/auth/users_h/login';
           </script>
         `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -97,6 +104,13 @@ export class UsersController {
             window.location.href = '/users/users_h/userEdit';
           </script>
         `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -133,6 +147,13 @@ export class UsersController {
           <script>
             alert("패스워드가 일치하지 않습니다.");
             window.location.href = '/users/users_h/userDelete';
+          </script>
+        `);
+      } else if(errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
           </script>
         `);
       }

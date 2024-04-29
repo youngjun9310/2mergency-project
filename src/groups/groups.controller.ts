@@ -54,6 +54,13 @@ export class GroupsController {
             window.location.href = '/auth/users_h/login';
           </script>
         `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -62,21 +69,8 @@ export class GroupsController {
   @ApiOperation({ summary: '모든 그룹 목록 조회 API', description: '모든 그룹 목록 조회 성공' })
   @ApiResponse({ status: 200, description: '성공적으로 모든 그룹 목록이 조회되었습니다.' })
   @Get('')
-  async findAllGroups(@Res() res: Response) {
-    try {
-      await this.groupsService.findAllGroups();
-    } catch (error) {
-      const errorMsg = error.message;
-
-      if (errorMsg === 'ExpiredSession') {
-        res.status(404).send(`
-          <script>
-            alert("해당 사용자가 존재하지 않습니다.");
-            window.location.href = '/auth/users_h/login';
-          </script>
-        `);
-      }
-    }
+  async findAllGroups() {
+      return await this.groupsService.findAllGroups();
   }
 
   // 그룹 상세 조회 //
@@ -90,18 +84,11 @@ export class GroupsController {
       const errorMsg = error.messagel;
 
       if (errorMsg === 'NotGroupError') {
-        res.status(200).send(`
+        res.status(404).send(`
         <script>
           alert("그룹 존재하지 않습니다");
           window.location.href = '/groups/groups_h/groupAll';
         </script>
-        `);
-      } else if (errorMsg === 'ExpiredSession') {
-        res.status(404).send(`
-          <script>
-            alert("해당 사용자가 존재하지 않습니다.");
-            window.location.href = '/auth/users_h/login';
-          </script>
         `);
       }
     }
@@ -134,6 +121,13 @@ export class GroupsController {
             window.location.href = '/auth/users_h/login';
           </script>
         `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
       }
     }
   }
@@ -149,7 +143,7 @@ export class GroupsController {
     try {
       await this.groupsService.deleteGroup(groupId);
 
-      res.status(201).send(`
+      res.status(204).send(`
       <script>
           alert("그룹 삭제 완료");
           window.location.href = '/groups/groups_h/groupAll';
@@ -162,6 +156,13 @@ export class GroupsController {
         res.status(404).send(`
           <script>
             alert("해당 사용자가 존재하지 않습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      } else if (errorMsg === "Unauthorized"){
+        res.status(401).send(`
+          <script>
+            alert("로그인을 해주세요.");
             window.location.href = '/auth/users_h/login';
           </script>
         `);

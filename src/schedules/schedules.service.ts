@@ -141,7 +141,7 @@ export class SchedulesService {
     await this.schedulesRepository.delete({ scheduleId });
 
     return {
-      statusCode: 200,
+      statusCode: 204,
       message: '스케쥴을 삭제했습니다.',
     };
   }

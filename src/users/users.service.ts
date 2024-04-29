@@ -59,7 +59,7 @@ export class UsersService {
       profileImage,
       isOpen: srtToBoolean,
     });
-    return { statusCode: 201, message: '회원 정보를 수정하였습니다.' };
+    return { statusCode: 204, message: '회원 정보를 수정하였습니다.' };
   }
   /*사용자 삭제*/
   async userDelete(userId: number, password: string) {

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString } from "class-validator";
 
 export class CreateRecordDto {
 
@@ -32,7 +32,6 @@ export class CreateRecordDto {
       description: 'start x location',
       required: false,
     })
-  @IsNotEmpty({ message : "현재위치 x값을 작성해주세요." })
   startx : number;
 
   @ApiProperty({
@@ -40,7 +39,6 @@ export class CreateRecordDto {
       description: 'start y location',
       required: false,
     })
-  @IsNotEmpty({ message : "현재위치 y값을 작성해주세요." })
   starty : number;
 
   @ApiProperty({
@@ -48,7 +46,6 @@ export class CreateRecordDto {
       description: 'end x location',
       required: false,
     })
-  @IsNotEmpty({ message : "도착위치 x값을 작성해주세요." })
   endx : number;
 
   @ApiProperty({
@@ -56,7 +53,6 @@ export class CreateRecordDto {
       description: 'end y location',
       required: false,
     })
-  @IsNotEmpty({ message : "도착위치 y값을 작성해주세요." })
   endy : number;
   
 }
