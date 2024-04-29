@@ -32,26 +32,70 @@ export class AuthController {
   @ApiOperation({ summary: '회원가입 API', description: '회원가입 성공' })
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('register')
-  //@Redirect('/')
   @ApiResponse({ status: 201, description: '회원가입 성공하였습니다.' })
-  async register(@Body() signUpdto: SignUpDto,
-  @UploadedFile() file: Express.Multer.File,
-  @Res() res: Response) {
-    try {
-      await this.authService.register(
-        signUpdto,
-        file,
-      );
-      await this.userInvite(signUpdto.email, res)
-      res.render('login')
-      //return { url:'/auth/users_h/login', message: '회원가입에 성공하였습니다.'};
-      
-    } catch (error) {
-      //res.redirect('/auth/users_h/registerpage');
-      res.render('registerpage');
-     
-    }
+  async register(
+    @Body() signUpdto: SignUpDto,
+    @UploadedFile() file: Express.Multer.File,
+    @Res() res: Response ) {
     
+    try {
+
+  console.log('register start')
+  //이메일 인증번호 전송
+  const gentoken = await this.mailService.usersendMail(signUpdto.email);
+  
+  console.log('register save start')
+  //회원정보 DB 저장
+  await this.authService.register( signUpdto, file, gentoken);
+
+  console.log('register res start')
+  res.status(200).send(
+      `<script>
+          alert("회원가입에 성공하였습니다.");
+          window.location.href = '/auth/users_h/login';
+        </script>`
+      );
+
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExistingEmailError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 이메일은 사용중입니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'ExistingNicknameError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 닉네임은 사용중입니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'PasswordMatchError') {
+        res.status(302).send(`
+          <script>
+            alert("비밀번호가 일치하지 않습니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'EmailSendError') {
+        res.status(302).send(`
+          <script>
+            alert("고객센터로 문의부탁드립니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else {
+        res.status(302).send(`
+          <script>
+            alert("회원가입을 다시 해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      }
+    }  
   }
 
   /** 어드민 회원가입*/
@@ -59,8 +103,61 @@ export class AuthController {
   @UseInterceptors(FileInterceptor('profileImage'))
   @Post('adminRegister')
   @ApiResponse({ status: 201, description: '어드민 회원가입에 성공하였습니다.' })
-  async adminRegister(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File) {
-    return await this.authService.adminRegister(signUpdto, file);
+  async adminRegister(@Body() signUpdto: SignUpDto, @UploadedFile() file: Express.Multer.File,@Res() res: Response) {
+    
+    try {
+      await this.authService.adminRegister(
+        signUpdto,
+        file,
+      );
+
+      res.status(200).send(`
+          <script>
+            alert("회원가입에 성공하였습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+
+    } catch (error) {
+      const errorMsg = error.message;
+
+      if (errorMsg === 'ExistingEmailError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 이메일은 사용중입니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'ExistingNicknameError') {
+        res.status(302).send(`
+          <script>
+            alert("해당 닉네임은 사용중입니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'PasswordMatchError') {
+        res.status(302).send(`
+          <script>
+            alert("비밀번호가 일치하지 않습니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      } else if (errorMsg === 'AdminKeyError') {
+        res.status(302).send(`
+          <script>
+            alert("어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      }  else {
+        res.status(302).send(`
+          <script>
+            alert("회원가입을 다시 해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/registerpage';
+          </script>
+        `);
+      }
+    }
   }
 
   /** 로그인*/
@@ -70,8 +167,9 @@ export class AuthController {
   @ApiResponse({ status: 200, description: '로그인에 성공하였습니다.' })
   async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
     try {
-      await this.authService.login(loginDto.email, loginDto.password);
+      const user = await this.authService.login(loginDto.email, loginDto.password);
 
+      res.cookie('authorization', `Bearer ${user}`);
       res.status(302).send(`
             <script>
               alert("로그인 성공");
@@ -126,20 +224,6 @@ export class AuthController {
     return;
   }
 
-  /** 이메일 가입초대*/
-  @ApiOperation({
-    summary: '이메일 가입초대 API',
-    description: '가입 토큰번호 전송',
-  })
-  @Post('invite')
-  @ApiResponse({ status: 200, description: '이메일 가입 초대에 성공하였습니다.' })
-  async userInvite(@Body('email') email: string, @Res() res) {
-    const gentoken = await this.mailService.usersendMail(email);
-    await this.authService.userInvite(email, gentoken);
-    //res.send('회원가입 토큰번호를 전송했습니다.');
-    return;
-  }
-
   /** 이메일 가입수락*/
   @ApiOperation({
     summary: '이메일 가입초대 API',
@@ -147,20 +231,42 @@ export class AuthController {
   })
   @ApiResponse({ status: 200, description: '이메일 가입 수락에 성공하였습니다.' })
   @Post('accept')
-  //@Redirect('/')
-  async userAccept( @Body('email') email: string, @Body('token') token: string, @Res() res ){
+  async userAccept( @Body('email') email: string, @Body('token') token: string, @Res() res: Response ){
     try {
       await this.authService.userAccept(email, token);
-      //res.send('회원가입 이메일 인증을 완료했습니다.');
-      res.redirect('/auth/users_h/login')
-      //return { url:'/auth/users_h/login', message: '회원가입 이메일 인증을 완료했습니다.'}; 
+
+      res.status(302).send(`
+          <script>
+            alert("이메일인증에 성공했습니다.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+
     } catch (error) {
-      const message = error.response.message
+      const errorMsg = error.message;
       
-      if(message=='TokenNotExistError'){
-        console.log(message)
-        res.redirect('/auth/users_h/emailAccept')
-      } 
+      if(errorMsg ==='EmailNotExistError'){
+        res.status(302).send(`
+          <script>
+            alert("이메일을 다시 입력해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/emailaccept';
+          </script>
+        `);
+      } else if(errorMsg ==='TokenNotMatch'){
+        res.status(302).send(`
+          <script>
+            alert("토큰을 다시 입력해주시기 바랍니다.");
+            window.location.href = '/auth/users_h/emailaccept';
+          </script>
+        `);
+      } else {
+        res.status(302).send(`
+          <script>
+            alert("고객센터에 문의해주십시오.");
+            window.location.href = '/auth/users_h/login';
+          </script>
+        `);
+      }
     }
     
   }
@@ -178,16 +284,6 @@ export class AuthController {
   @Render('registerpage')
   async registerpage() {
     return;
-  }
-
-  // 회원가입 로직(테스트버전, 이미지 업로드 불가 문제)
-  @Post('/users_h/register')
-  async registers(signUpdto: SignUpDto, @Body('file') file: Express.Multer.File) {
-    const register = await this.authService.register(signUpdto, file);
-
-    return {
-      register: register,
-    };
   }
 
   // 유저 이메일 인증요청
@@ -215,20 +311,6 @@ export class AuthController {
   @UseGuards(JWTAuthGuard)
   @Get('/logout')
   async logout() {
-    return;
-  }
-
-  // 이메일가입초대
-  @Get('/users_h/emailInvite')
-  @Render('emailInvite')
-  async userEmailInvite(){
-    return;
-  }
-
-  // 이메일가입수락
-  @Get('/users_h/emailAccept')
-  @Render('emailAccept')
-  async userEmailAccept(){
     return;
   }
   

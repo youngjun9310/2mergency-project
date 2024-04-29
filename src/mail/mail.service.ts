@@ -37,19 +37,21 @@ export class MailService {
 
       await this.transporter.sendMail(sendOption);
       console.log('가입 토큰이 전송되었습니다');
+      console.log('mail service end')
 
       return genToken ;
 
     }catch(error){
       console.log('send error', error)
-      throw new BadRequestException('가입 토큰 전송 중 오류가 발생했습니다.');
+      throw new BadRequestException('EmailSendError');
     }
   }
 
   async generateRandomToken(min: number, max: number){
     const token = Math.floor(Math.random()* (max - min + 1))+min;
     const expires = new Date();
-    expires.setMinutes(expires.getMinutes() +5); //5분 후 토큰 만료
+    //5분 후 토큰 만료
+    expires.setMinutes(expires.getMinutes() +5); 
     
     return {token,expires};
   }

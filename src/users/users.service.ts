@@ -6,7 +6,8 @@ import { compare, hash } from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { UpdateDto } from './dto/update.dto';
 import { AwsService } from 'src/aws/aws.service';
-import { Groups } from 'src/groups/entities/group.entity';
+import { Records } from 'src/records/entities/record.entity';
+import { ENV_PASSWORD_HASH_ROUNDS } from 'src/const/env.keys';
 @Injectable()
 export class UsersService {
   constructor(
@@ -16,10 +17,7 @@ export class UsersService {
     private recordsRepository : Repository<Records>,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
-    @InjectRepository(Groups) private groupRepository: Repository<Groups>,
-    
   ) {}
-
 
   /*전체 사용자 조회(어드민용)*/
   async findAllUser() {
@@ -30,42 +28,30 @@ export class UsersService {
     const user = await this.userRepository.findOne({ where: { userId } });
 
     if (user.CertificationStatus === false) {
-      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
+      throw new UnauthorizedException('EmailAuthError');
     }
 
     return user;
   }
   /*사용자 수정*/
-  async userUpdate(
-    userId: number,
-    updateDto: UpdateDto,
-    file: Express.Multer.File,
-  ) {
-    console.log('useredit: ');
-    const { nickname, email, password, passwordConfirm, address, isOpen } =
-      updateDto;
+  async userUpdate(userId: number, updateDto: UpdateDto, file: Express.Multer.File) {
+    const { email, password, passwordConfirm, address, isOpen } = updateDto;
     const user = await this.userRepository.findOneBy({ userId });
     if (!user) {
       throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException(
-        '비밀번호가 체크비밀번호와 일치하지 않습니다.',
-      );
+      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
     }
-    
+
     if (user.CertificationStatus === false) {
       throw new UnauthorizedException('이메일 인증을 진행해주세요.');
     }
 
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
-    const hashedPassword = await hash(
-      password,
-      this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS),
-    );
+    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
     this.userRepository.update(userId, {
-      nickname,
       email,
       password: hashedPassword,
       address,
@@ -80,24 +66,21 @@ export class UsersService {
       select: ['password'],
       where: { userId },
     });
-
     if (!user) {
-      throw new NotFoundException('NotExistingUserError');
+      throw new NotFoundException('사용자를 찾을 수 없습니다.');
     }
-    
-    if (!await(compare(password, user.password))) {
-      throw new UnauthorizedException('PasswordMatchError');
+    if (!compare(password, user.password)) {
+      throw new UnauthorizedException('비밀번호가 일치하지 않습니다.');
     }
     this.userRepository.delete(userId);
     return { statusCode: 200, message: '회원 탈퇴가 정상 처리 되었습니다.' };
   }
-  
   /*사용자 조회(이메일)*/
   async findByEmail(email: string) {
     return await this.userRepository.findOne({ where: { email } });
   }
 
-  /*사용자 조회(아이디)*/
+  /*사용자 조회(이메일)*/
   async findId(userId : number) {
     const users = await this.userRepository.findOne({ where: { userId } });
 

@@ -98,18 +98,6 @@ export class RecordsController {
     };
   }
 
-  // 기록 모든 목록 조회
-  @UseGuards(JWTAuthGuard)
-  @Get('/records_h/recordall')
-  @Render('recordall')
-  async recordlistall(@UserInfo() users : Users){
-    const records = await this.recordsService.recordall();
-    return {
-      user : users,
-      record : records.record
-    };
-  }
-
   // 기록 상세 목록 조회
   @UseGuards(JWTAuthGuard)
   @Get('/:recordId/records_h/recordlist')

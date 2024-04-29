@@ -10,7 +10,6 @@ import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
 import _ from 'lodash';
 import { SignUpDto } from './dto/signup.dto';
-import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -22,31 +21,51 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
-    private readonly mailService: MailService,
   ) {}
 
-  /*회원가입*/ //isOpen: boolean,
-  async register(signUpdto, file: Express.Multer.File) {
+  /*회원가입*/ 
+  async register(signUpdto: SignUpDto, file: Express.Multer.File, gentoken: { token: number; expires: Date }) {
+    console.log('signUpdte', signUpdto)
+    console.log('gentoken', gentoken)
     const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
+    
+    console.log('register service email search start')
     const existingUser = await this.userRepository.findOne({
       where: { email },
     });
+
     if (existingUser) {
       throw new ConflictException('ExistingEmailError');
     }
+    console.log('register service nickname search start')
     const existingNickname = await this.userRepository.findOne({
       where: { nickname },
     });
+
     if (existingNickname) {
       throw new ConflictException('ExistingNicknameError');
     }
+
     if (password !== passwordConfirm) {
       throw new UnauthorizedException('PasswordMatchError');
     }
 
+    console.log('register service image  start')
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+    
+    console.log('register service tokennumber save start')
+    //인증번호 DB 저장
+    await this.invitesRepository.save({
+      email,
+      token: gentoken.token.toString(),
+      expires: gentoken.expires,
+      status:'standBy',
+    });
+
+
+    //회원정보 DB저장
     await this.userRepository.save({
       nickname,
       email,
@@ -55,11 +74,13 @@ export class AuthService {
       profileImage: profileImage,
       isOpen: srtToBoolean,
     });
+    
+    console.log('register service info save end')
     return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
   }
 
   /*어드민 회원가입*/
-  async adminRegister(signUpdto: any, file: Express.Multer.File) {
+  async adminRegister(signUpdto: SignUpDto, file: Express.Multer.File) {
     const { nickname, email, password, passwordConfirm, adminPassword, address } = signUpdto;
 
     // 이미 가입된 이메일 체크
@@ -67,7 +88,7 @@ export class AuthService {
       where: { email },
     });
     if (existingUser) {
-      throw new ConflictException('이미 해당 이메일로 가입된 사용자가 있습니다!');
+      throw new ConflictException('ExistingEmailError');
     }
 
     // 중복된 닉네임 체크
@@ -75,18 +96,18 @@ export class AuthService {
       where: { nickname },
     });
     if (existingNickname) {
-      throw new ConflictException('');
+      throw new ConflictException('ExistingNicknameError');
     }
 
     // 비밀번호 일치 여부 확인
     if (password !== passwordConfirm) {
-      throw new UnauthorizedException('비밀번호가 체크비밀번호와 일치하지 않습니다.');
+      throw new UnauthorizedException('PasswordMatchError');
     }
 
     // 어드민 가입 요청 키와 어드민 서비 키 비교하기
     const adminPassKey = this.configService.get<string>(ENV_ROLE_ADMIN_PASSWORD);
     if (adminPassword !== adminPassKey) {
-      throw new UnauthorizedException('어드민 가입요청 키가 어드민 서버키와 일치하지 않습니다.');
+      throw new UnauthorizedException('AdminKeyError');
     }
 
     // 어드민 가입 로직
@@ -130,45 +151,31 @@ export class AuthService {
 
   }
 
-  /** 이메일 가입초대*/
-  async userInvite(email: string, gentoken: { token: number; expires: Date }) {
-    const existingEmail = await this.userRepository.findOneBy({ email });
-
-    if (existingEmail) {
-      await this.invitesRepository.delete({ email });
-    }
-
-    if (existingEmail.CertificationStatus === true) {
-      throw new UnauthorizedException('이미 이메일 인증이 완료되었습니다.');
-    }
-
-    const status = 'standBy';
-    await this.invitesRepository.save({
-      email,
-      token: gentoken.token.toString(),
-      expires: gentoken.expires,
-      status,
-    });
-  }
-
   /** 이메일 가입수락*/
   async userAccept(email: string, token: string) {
+
+    console.log('email accept  start')
     const existingToken = await this.invitesRepository.findOne({
       where: { email },
     });
 
-    if (!existingToken.token) {
-      throw new BadRequestException('TokenNotExistError');
-    }
-    const present = new Date();
+    console.log('existingToken',existingToken)
 
+    //해당 이메일-토큰 부재
+    if (!existingToken) {
+      throw new BadRequestException('EmailNotExistError');
+    }
+
+    // 저장된 토큰-입력받은 토큰 비교
     if (existingToken.token !== token) {
       throw new BadRequestException('TokenNotMatch');
     }
 
+    console.log('email accept delete start')
     await this.invitesRepository.delete({ email });
     await this.userRepository.update({ email }, { CertificationStatus: true });
 
+    console.log('email accept update end')
     return { statusCode: 201, message: '이메일 인증을 완료하였습니다.' };
   }
 

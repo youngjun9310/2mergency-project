@@ -24,10 +24,8 @@ import { Records } from 'src/records/entities/record.entity';
     }),
     TypeOrmModule.forFeature([Users, Records]),
     AwsModule,
-    GroupsModule,
-    RecordsModule
   ],
-  providers: [JwtStrategy, UsersService, RoleStrategy,],
+  providers: [JwtStrategy, UsersService, RoleStrategy],
   controllers: [UsersController],
   exports: [UsersService],
 })
