@@ -6,6 +6,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
 import cookieParser from 'cookie-parser';
 import methodOverride from 'method-override';
+//import { HttpExceptionFilter } from './filter/httpExceptionFilter'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -18,6 +19,7 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+  //app.useGlobalFilters(new HttpExceptionFilter());
   app.use(methodOverride('_method'))
   setupSwagger(app);
   app.setViewEngine('hbs');

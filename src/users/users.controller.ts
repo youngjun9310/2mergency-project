@@ -8,7 +8,6 @@ import {
   UploadedFile,
   UseInterceptors,
   Render,
-  Post,
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
@@ -58,7 +57,7 @@ export class UsersController {
             window.location.href = '/auth/users_h/login';
           </script>
         `);
-      }
+      } 
     }
   }
 
@@ -83,9 +82,7 @@ export class UsersController {
             window.location.href = '/auth/users_h/login';
           </script>
         `);
-      } else if(errorMsg === ""){
-
-      }
+      } 
     }
   }
 
@@ -94,8 +91,16 @@ export class UsersController {
   @ApiResponse({ status: 204, description: '성공적으로 사용자를 삭제 하였습니다.' })
   @ApiBearerAuth('access-token')
   @Delete('')
-  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users) {
-    return await this.usersService.userDelete(users.userId, deleteDto.password);
+  async userDelete(@Body() deleteDto: DeleteDto, @UserInfo() users: Users, @Res() res: Response) {
+    await this.usersService.userDelete(users.userId, deleteDto.password);
+
+    res.status(200).send(`
+        <script>
+          alert("탈퇴하였습니다.");
+          window.location.href = '/auth/users_h/login';
+        </script>
+      `);
+
   }
 
   /** 사용자 접속정보조회*/
