@@ -25,7 +25,6 @@ export class MailService {
 
     try{
       const genToken = await this.generateRandomToken(111111,999999);
-      const host = this.configService.get<string>(ENV_MAILER_HOST)
       const sendOption : SendOption = {
         from: this.configService.get<string>(ENV_MAILER_EMAIL),
         to: email,

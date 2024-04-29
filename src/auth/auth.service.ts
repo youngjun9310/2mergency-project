@@ -166,6 +166,9 @@ export class AuthService {
       throw new BadRequestException('EmailNotExistError');
     }
 
+    console.log("existingToken.token",existingToken.token)
+    console.log("token", token)
+
     // 저장된 토큰-입력받은 토큰 비교
     if (existingToken.token !== token) {
       throw new BadRequestException('TokenNotMatch');

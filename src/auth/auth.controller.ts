@@ -233,6 +233,7 @@ export class AuthController {
   @Post('accept')
   async userAccept( @Body('email') email: string, @Body('token') token: string, @Res() res: Response ){
     try {
+      console.log("userAccept controller start")
       await this.authService.userAccept(email, token);
 
       res.status(302).send(`
