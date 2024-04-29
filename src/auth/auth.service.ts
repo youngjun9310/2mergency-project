@@ -110,20 +110,21 @@ export class AuthService {
     });
 
     if (!user) {
-      throw new UnauthorizedException('유저의 이메일을 확인해주세요.');
+      throw new UnauthorizedException('NotExistingUser');
     }
 
-    if (!(await compare(password, user.password))) {
-      throw new UnauthorizedException('비밀번호를 확인해주세요.');
+    if (!(await compare(password, user.password))) { 
+      throw new UnauthorizedException('PasswordError');
     }
 
     if (user.CertificationStatus === false) {
-      throw new UnauthorizedException('이메일 인증을 진행해주세요.');
+      throw new UnauthorizedException('EmailAuthError');
     }
 
     const payload = { email, sub: user.userId };
     const accessToken = this.jwtService.sign(payload);
     return accessToken;
+
   }
 
   /** 이메일 가입초대*/
