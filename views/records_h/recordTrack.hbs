@@ -988,8 +988,8 @@
                             </div>
                         `;
                         // $("#apiResult").append(appendHtml);
-                        writeApiResultHtml("apiRoutesPedestrian", appendHtml);
-                        if (drawMode === "apiRoutesPedestrian") {
+                        writeApiResultHtml("apiRoutesPedestrian2", appendHtml);
+                        if (drawMode === "apiRoutesPedestrian2") {
                             //기존 그려진 라인 & 마커가 있다면 초기화
                             reset();
                             // 시작마커설정
@@ -1245,10 +1245,10 @@
 
         function routesRedrawMap2() {
             handleNavigationStart();
-                drawMode = "apiRoutesPedestrian";
+                drawMode = "apiRoutesPedestrian2";
                 routesPedestrian2();
             $("#apiResult").find('._route_item_type').removeClass('__color_blue');
-            $("#apiResult").find('#'+'apiRoutesPedestrian').find('._route_item_type').addClass('__color_blue');
+            $("#apiResult").find('#'+'apiRoutesPedestrian2').find('._route_item_type').addClass('__color_blue');
         }
         // (경로API공통) 도착지의 좌표를 설정한다.
         function enterDest(type, address, x, y) {
