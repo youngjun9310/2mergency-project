@@ -44,12 +44,12 @@ export class AuthController {
   const gentoken = await this.mailService.usersendMail(signUpdto.email);
   
   //회원정보 DB 저장
-  await this.authService.register( signUpdto, file, gentoken);
+  await this.authService.register( signUpdto, file);
 
   res.status(200).send(
       `<script>
           alert("회원가입에 성공하였습니다.");
-          window.location.href = '/auth/users_h/login';
+          window.location.href = '/auth/users_h/emailAccept';
         </script>`
       );
 

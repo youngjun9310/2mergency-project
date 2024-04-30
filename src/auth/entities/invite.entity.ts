@@ -13,9 +13,6 @@ export class Invites {
   @Column({ type: 'varchar', nullable: false })
   token: string;
 
-  @Column({ type: 'timestamp', nullable: false })
-  expires: Date;
-
   @Column({ type: 'varchar', nullable: false })
   status: string;
 
