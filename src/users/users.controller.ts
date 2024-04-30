@@ -82,7 +82,7 @@ export class UsersController {
       res.status(201).send(`
       <script>
           alert("회원 수정 완료");
-          window.location.href = '/users/users_h/userEdit';
+          window.location.href = '/users/users_h/userMypage';
       </script>
       `);
 
