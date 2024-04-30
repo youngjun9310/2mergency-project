@@ -10,6 +10,7 @@ import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
 import _ from 'lodash';
 import { SignUpDto } from './dto/signup.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -21,58 +22,61 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
+    private readonly mailService : MailService
   ) {}
 
-  /*회원가입*/ 
-  async register(signUpdto: SignUpDto, file: Express.Multer.File, gentoken: { token: number; expires: Date }) {
-    const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
-    
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
+ /*회원가입*/ 
+ async register(signUpdto: SignUpDto, file: Express.Multer.File ) {
+  const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
+  
+  const existingUser = await this.userRepository.findOne({
+    where: { email },
+  });
 
-    if (existingUser) {
-      throw new ConflictException('ExistingEmailError');
-    }
-
-    const existingNickname = await this.userRepository.findOne({
-      where: { nickname },
-    });
-
-    if (existingNickname) {
-      throw new ConflictException('ExistingNicknameError');
-    }
-
-    if (password !== passwordConfirm) {
-      throw new UnauthorizedException('PasswordMatchError');
-    }
-
-    const profileImage = await this.awsService.imageUpload(file);
-    const srtToBoolean = Boolean(isOpen === 'true');
-    const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
-    
-    //인증번호 DB 저장
-    await this.invitesRepository.save({
-      email,
-      token: gentoken.token.toString(),
-      expires: gentoken.expires,
-      status:'standBy',
-    });
-
-
-    //회원정보 DB저장
-    await this.userRepository.save({
-      nickname,
-      email,
-      password: hashedPassword,
-      address,
-      profileImage: profileImage,
-      isOpen: srtToBoolean,
-    });
-    
-    console.log('register service info save end')
-    return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+  if (existingUser) {
+    throw new ConflictException('ExistingEmailError');
   }
+
+  const existingNickname = await this.userRepository.findOne({
+    where: { nickname },
+  });
+
+  if (existingNickname) {
+    throw new ConflictException('ExistingNicknameError');
+  }
+
+  if (password !== passwordConfirm) {
+    throw new UnauthorizedException('PasswordMatchError');
+  }
+
+  const profileImage = await this.awsService.imageUpload(file);
+  const srtToBoolean = Boolean(isOpen === 'true');
+  const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
+
+  //이메일 인증번호 전송
+  const gentoken = await this.mailService.usersendMail(signUpdto.email);
+
+  //인증번호 DB 저장
+  await this.invitesRepository.save({
+    email,
+    token: gentoken,
+    status:'standBy',
+  });
+
+
+  //회원정보 DB저장
+  await this.userRepository.save({
+    nickname,
+    email,
+    password: hashedPassword,
+    address,
+    profileImage: profileImage,
+    isOpen: srtToBoolean,
+  });
+  
+ 
+  return { statusCode: 201, message: '회원가입에 성공하였습니다.' };
+}
 
   /*어드민 회원가입*/
   async adminRegister(signUpdto: any, file: Express.Multer.File) {

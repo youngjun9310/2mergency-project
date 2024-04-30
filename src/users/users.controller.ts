@@ -8,7 +8,6 @@ import {
   UploadedFile,
   UseInterceptors,
   Render,
-  Post,
   Res,
 } from '@nestjs/common';
 import { UsersService } from './users.service';

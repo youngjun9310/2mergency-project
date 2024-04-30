@@ -32,8 +32,7 @@ export class MailService {
         to: email,
         subject: "인증 토큰 발송",
         html: `<p>아래의 인증 토큰를 입력해주세요 !</p>
-        <p>인증토큰 : ${genToken.token} </p>
-        <p>This link will expire on ${genToken.expires}.</p>`
+        <p>인증토큰 : ${genToken} </p>`
       };
 
       await this.transporter.sendMail(sendOption);
@@ -50,8 +49,6 @@ export class MailService {
 
   async generateRandomToken(min: number, max: number){
     const token = Math.floor(Math.random()* (max - min + 1))+min;
-    const expires = new Date();
-    expires.setHours(expires.getMinutes() +5); //5분 후 토큰 만료
-    return {token,expires};
+    return token.toString();
   }
 }
