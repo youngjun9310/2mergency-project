@@ -255,109 +255,92 @@
         }
         //watchPosition
         function watchingPosition() {
-            alert('위치정보 추적 시작');
-            if (navigator.geolowatchingPositioncation) {
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              var lat = position.coords.latitude;
-              var lon = position.coords.longitude;
-              $("#startx").val(position.coords.longitude);
-              $("#starty").val(position.coords.latitude);
-            })}
-                var now = new Date(); // 초기 시간 설정
-                var hours = now.getHours().toString().padStart(2, '0');
-                var minutes = now.getMinutes().toString().padStart(2, '0');
-                var seconds = now.getSeconds().toString().padStart(2, '0');
-                var formattedTime = hours + ':' + minutes + ':' + seconds;
+        alert('위치정보 추적 시작');
+         if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                    $("#startx").val(position.coords.longitude);
+					$("#starty").val(position.coords.latitude);
+                    $("#departurex").val(position.coords.longitude);
+					$("#departurey").val(position.coords.latitude);
+        })}
+            var now = new Date(); // 초기 시간 설정
+            var hours = now.getHours().toString().padStart(2, '0');
+            var minutes = now.getMinutes().toString().padStart(2, '0');
+            var seconds = now.getSeconds().toString().padStart(2, '0');
+            var formattedTime = hours + ':' + minutes + ':' + seconds;
 
-            var positionId = navigator.geolocation.watchPosition(
-                function success(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-                    $("#nowx").val(position.coords.longitude);
-            $("#nowy").val(position.coords.latitude);
-                    var startx = $("#startx").val();
-            var starty = $("#starty").val();
-                    var movePosition = distance(starty, startx, lat, lon);
-                    var moveDistance = moveDistance+movePosition;
-                    $("#startx").val(lat);
-            $("#starty").val(lon);
-                    if(marker){
-                        marker.setMap(null);
-                    }
-                    marker = new Tmapv2.Marker({
-            position : new Tmapv2.LatLng(lat,lon),
-            map : map
-            });
-            });
-            $('#btnDistance').click(function() {
-                alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
-                // 테스트 용도
-                for(var a = 0; a<test.length; a++){
-                    for (var i = 0; i<test[a].length; i++){
-                        for (var j = 0; j<test[a][i].geometry.length; j++){
-                            testx.push(test[a][i].geometry[j].x);
-                            testy.push(test[a][i].geometry[j].y);
-                        }
-                    }
+        var positionId = navigator.geolocation.watchPosition(
+            function success(position) {
+				var lat = position.coords.latitude;//현재위치
+				var lon = position.coords.longitude;//현재위치
+                $("#nowx").val(lon); // 현재위치를 저장
+				$("#nowy").val(lat); // 현재위치를 저장
+                var departurex = $("#departurex").val(); // 출발위치
+				var departurey = $("#departurey").val(); // 출발위치
+                console.log("현재위치", lon, lat, "이전위치", departurey, departurex);
+                var movePosition = distance(departurex, departurey, lat, lon);
+                var moveDistance = moveDistance+movePosition;
+                $("#departurex").val(lat);
+				$("#departurey").val(lon);
+                if(marker){
+                    marker.setMap(null);
                 }
-            });
-            $('#btnStop').click(function() {
-                var timers = new Date();
-                var endhours = timers.getHours().toString().padStart(2, '0');
-                var endminutes = timers.getMinutes().toString().padStart(2, '0');
-                var endseconds = timers.getSeconds().toString().padStart(2, '0');
-                var endformattedTime = endhours + ':' + endminutes + ':' + endseconds;
+                marker = new Tmapv2.Marker({
+				position : new Tmapv2.LatLng(lat,lon),
+				map : map
+				});
+        });
+        $('#btnDistance').click(function() {
+            alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
+        });
 
-                navigator.geolocation.clearWatch(positionId);
-                alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
-                console.log(test);
-                console.log(testx);
-                console.log(testy);
-                for (var i = 0; i<testx.length; i++){
-                    var lon1 = testx[i];
-                    var lat1 = testy[i];
-                    var lon2 = testx[i+1];
-                    var lat2 = testy[i+1];
-                    if(lon1 === lon2 && lat1 === lat2){
-                        continue;
-                    }
-                    console.log(distance(lat1, lon1, lat2, lon2));
+        $('#btnStop').click(function() {
+            var timers = new Date();
+            var endhours = timers.getHours().toString().padStart(2, '0');
+            var endminutes = timers.getMinutes().toString().padStart(2, '0');
+            var endseconds = timers.getSeconds().toString().padStart(2, '0');
+            var endformattedTime = endhours + ':' + endminutes + ':' + endseconds;
+
+            navigator.geolocation.clearWatch(positionId);
+            alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
+
+            //데이터베이스에 distance저장.
+            //재시작 혹은 이전페이지.
+            
+            if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				function(position) {
+					var lat = position.coords.latitude;
+					var lon = position.coords.longitude;
+                  $("#endy").val(position.coords.longitude);
+    			  $("#endx").val(position.coords.latitude);
+
+            startx = $("#startx").val();
+            starty = $("#starty").val();
+            var endx = $("#endx").val();
+            var endy = $("#endy").val();   
+
+            var stackedDistance = moveDistance;
+
+            const startTime = formattedTime;
+            const endTime = endformattedTime;
+
+            const recordxhr = new XMLHttpRequest();
+            recordxhr.open('POST', '/records', true);
+            recordxhr.setRequestHeader('Content-Type', 'application/json');
+            recordxhr.onreadystatechange = function () {
+                if (recordxhr.readyState === XMLHttpRequest.DONE && recordxhr.status === 200) {
+                    console.log('Location saved successfully.');
                 }
-                //데이터베이스에 distance저장.
-                //재시작 혹은 이전페이지.
-                
-                if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            function(position) {
-              var lat = position.coords.latitude;
-              var lon = position.coords.longitude;
-                      $("#endy").val(position.coords.longitude);
-                $("#endx").val(position.coords.latitude);
+            };
+            recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance, startx, starty, endx, endy }));  
 
-                startx = $("#startx").val();
-                starty = $("#starty").val();
-                var endx = $("#endx").val();
-                var endy = $("#endy").val();   
-
-                var stackedDistance = moveDistance;
-
-                const startTime = formattedTime;
-                const endTime = endformattedTime;
-
-                const recordxhr = new XMLHttpRequest();
-                recordxhr.open('POST', '/records', true);
-                recordxhr.setRequestHeader('Content-Type', 'application/json');
-                recordxhr.onreadystatechange = function () {
-                    if (recordxhr.readyState === XMLHttpRequest.DONE && recordxhr.status === 200) {
-                        console.log('Location saved successfully.');
-                    }
-                };
-                recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance, startx, starty, endx, endy }));  
-
-                })};
-            });
-        }
+            })};
+        });
+    }
 
 
         document.getElementById('watchingPosition')
@@ -1473,7 +1456,7 @@
                 목적지
             </button>
             <div id="div2" class="_btn_action _btn_action-search __color_grey">
-                <button onclick="apiSearchRoutes2();" >랜덤 경로 검색</button>
+                <button onclick="apiSearchRoutes2();" >랜덤 목적지 검색</button>
             </div>
             <div class="__space_10_w"></div>
                     <div class="_btn_action _btn_action-search __color_grey" id="search_button">
