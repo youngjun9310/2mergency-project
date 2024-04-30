@@ -256,12 +256,12 @@
         //watchPosition
         function watchingPosition() {
             alert('위치정보 추적 시작');
-            if (navigator.geolocation) {
+            if (navigator.geolowatchingPositioncation) {
           navigator.geolocation.getCurrentPosition(
             function(position) {
               var lat = position.coords.latitude;
               var lon = position.coords.longitude;
-                        $("#startx").val(position.coords.longitude);
+              $("#startx").val(position.coords.longitude);
               $("#starty").val(position.coords.latitude);
             })}
                 var now = new Date(); // 초기 시간 설정
@@ -861,7 +861,7 @@
                         //결과 출력
                         var appendHtml = `
                             <div class="_route_item" id="trakingBox">
-                                <div class="_btn_action _btn_action-search __color_grey">
+                                <div class="_btn_action _btn_action-search __color_grey" onclick = "watchingPosition();">
                                     <button id="start_button" onclick="startchange()">현재 위치 추적 시작</button>
                                 </div>
                                 <div id="tracking_div">
