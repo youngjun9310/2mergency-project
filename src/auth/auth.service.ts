@@ -10,6 +10,7 @@ import { AwsService } from 'src/aws/aws.service';
 import { ENV_PASSWORD_HASH_ROUNDS, ENV_ROLE_ADMIN_PASSWORD } from 'src/const/env.keys';
 import _ from 'lodash';
 import { SignUpDto } from './dto/signup.dto';
+import { MailService } from 'src/mail/mail.service';
 
 @Injectable()
 export class AuthService {
@@ -21,10 +22,11 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly awsService: AwsService,
+    private readonly mailService: MailService,
   ) {}
 
   /*회원가입*/ 
-  async register(signUpdto: SignUpDto, file: Express.Multer.File, gentoken: { token: number; expires: Date }) {
+  async register(signUpdto: SignUpDto, file: Express.Multer.File ) {
     const { nickname, email, password, passwordConfirm, address, isOpen } = signUpdto;
     
     const existingUser = await this.userRepository.findOne({
@@ -47,16 +49,17 @@ export class AuthService {
       throw new UnauthorizedException('PasswordMatchError');
     }
 
-    console.log('register service image  start')
     const profileImage = await this.awsService.imageUpload(file);
     const srtToBoolean = Boolean(isOpen === 'true');
     const hashedPassword = await hash(password, this.configService.get<number>(ENV_PASSWORD_HASH_ROUNDS));
-    
+
+    //이메일 인증번호 전송
+    const gentoken = await this.mailService.usersendMail(signUpdto.email);
+
     //인증번호 DB 저장
     await this.invitesRepository.save({
       email,
-      token: gentoken.token.toString(),
-      expires: gentoken.expires,
+      token: gentoken,
       status:'standBy',
     });
 
@@ -164,11 +167,9 @@ export class AuthService {
       throw new BadRequestException('TokenNotMatch');
     }
 
-    console.log('email accept delete start')
     await this.invitesRepository.delete({ email });
     await this.userRepository.update({ email }, { CertificationStatus: true });
 
-    console.log('email accept update end')
     return { statusCode: 201, message: '이메일 인증을 완료하였습니다.' };
   }
 

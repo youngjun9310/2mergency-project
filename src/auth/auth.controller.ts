@@ -16,7 +16,6 @@ import { AuthService } from './auth.service';
 import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { SignUpDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { MailService } from 'src/mail/mail.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { JWTAuthGuard } from './guard/jwt.guard';
 
@@ -25,7 +24,7 @@ import { JWTAuthGuard } from './guard/jwt.guard';
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly mailService: MailService,
+   
   ) {}
 
   /** 회원가입*/
@@ -40,12 +39,8 @@ export class AuthController {
     
     try {
 
-
-  //이메일 인증번호 전송
-  const gentoken = await this.mailService.usersendMail(signUpdto.email);
-  
   //회원정보 DB 저장
-  await this.authService.register( signUpdto, file, gentoken);
+  await this.authService.register( signUpdto, file);
 
   res.status(200).send(
       `<script>
@@ -112,7 +107,7 @@ export class AuthController {
       res.status(200).send(`
           <script>
             alert("회원가입에 성공하였습니다.");
-            window.location.href = '/auth/users_h/login';
+            window.location.href = '/auth/users_h/emailAccept';
           </script>
         `);
 
