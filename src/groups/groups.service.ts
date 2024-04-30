@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
-import { CreateGroupDto } from './dto/create-group.dto';
-import { UpdateGroupDto } from './dto/update-group.dto';
-import { Repository } from 'typeorm';
-import { Groups } from './entities/group.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
+import { CreateGroupDto } from "./dto/create-group.dto";
+import { UpdateGroupDto } from "./dto/update-group.dto";
+import { Repository } from "typeorm";
+import { Groups } from "./entities/group.entity";
+import { InjectRepository } from "@nestjs/typeorm";
+import { GroupMembers } from "src/group-members/entities/group-member.entity";
+import { MemberRole } from "src/group-members/types/groupMemberRole.type";
 
 @Injectable()
 export class GroupsService {
@@ -22,21 +22,19 @@ export class GroupsService {
   async createGroup(createGroupDto: CreateGroupDto, userId: number) {
     const { title, content, category } = createGroupDto;
 
-    
-
     const groupCreate = await this.groupRepository.save({
       title,
       content,
       category,
     });
 
-      await this.groupMembersRepository.save({
-        groupId: groupCreate.groupId,
-        userId,
-        role: MemberRole.Main,
-        isVailed: true,
-        isInvited: true,
-      });
+    await this.groupMembersRepository.save({
+      groupId: groupCreate.groupId,
+      userId,
+      role: MemberRole.Main,
+      isVailed: true,
+      isInvited: true,
+    });
 
     return groupCreate;
   }
@@ -57,7 +55,7 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('NotGroupError');
+      throw new NotFoundException("NotGroupError");
     }
 
     return groups;
@@ -72,18 +70,18 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('해당 그룹이 존재하지 않습니다.');
+      throw new NotFoundException("해당 그룹이 존재하지 않습니다.");
     }
 
-    const isPublicBoolean = Boolean(isPublic === 'true');
+    const isPublicBoolean = Boolean(isPublic === "true");
     await this.groupRepository.update(groupId, {
       title,
       content,
       category,
-      isPublic : isPublicBoolean,
+      isPublic: isPublicBoolean,
     });
 
-    return { statusCode: 201, message: '성공적으로 그룹을 수정했습니다.' };
+    return { statusCode: 201, message: "성공적으로 그룹을 수정했습니다." };
   }
 
   /** *
@@ -94,11 +92,11 @@ export class GroupsService {
     const groups = await this.groupRepository.findOne({ where: { groupId } });
 
     if (!groups) {
-      throw new NotFoundException('그룹이 존재하지 않습니다.');
+      throw new NotFoundException("그룹이 존재하지 않습니다.");
     }
 
     await this.groupRepository.delete(groupId);
 
-    return { statusCode: 201, message: '성공적으로 그룹을 삭제했습니다.' };
+    return { statusCode: 201, message: "성공적으로 그룹을 삭제했습니다." };
   }
 }

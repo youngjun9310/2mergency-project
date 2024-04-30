@@ -285,17 +285,17 @@
 				$("#nowy").val(lat); // 현재위치를 저장
                 var departurex = $("#departurex").val(); // 출발위치
 				var departurey = $("#departurey").val(); // 출발위치
-                console.log("현재위치", lon, lat, "이전위치", departurex, departurey);
+
                 var movePosition = distance(departurey, departurex, lat, lon);
-                console.log(typeof(movePosition), movePosition);
+
                 var moveDistance = $("#moveDistance").val();
                 moveDistance = Number(moveDistance);
-                console.log(typeof(moveDistance), moveDistance);
+
                 var moveDistance = moveDistance+movePosition;
                 $("#moveDistance").val(moveDistance);
                 $("#departurex").val(lon);
 				$("#departurey").val(lat);
-                console.log(typeof(moveDistance), moveDistance);
+
                 if(marker){
                     marker.setMap(null);
                 }
@@ -834,8 +834,7 @@
                 var starty = $("#starty").val();
                 var endx = $("#endx").val();
                 var endy = $("#endy").val();
-                console.log(startx)
-                console.log(starty)
+
                 var startLatLng = new Tmapv2.LatLng(starty, startx);
                 var endLatLng = new Tmapv2.LatLng(endy, endx);
                 // 경유지 좌표 파라미터 생성

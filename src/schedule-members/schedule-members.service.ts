@@ -1,11 +1,11 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { ScheduleMembers } from './entities/schedule-member.entity'; // 가정: ScheduleMembers 엔티티 경로
-import { Repository } from 'typeorm';
-import { Groups } from 'src/groups/entities/group.entity';
-import { Schedules } from 'src/schedules/entities/schedule.entity';
-import { UsersService } from 'src/users/users.service';
-import { GroupMembers } from 'src/group-members/entities/group-member.entity';
+import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { ScheduleMembers } from "./entities/schedule-member.entity"; // 가정: ScheduleMembers 엔티티 경로
+import { Repository } from "typeorm";
+import { Groups } from "src/groups/entities/group.entity";
+import { Schedules } from "src/schedules/entities/schedule.entity";
+import { UsersService } from "src/users/users.service";
+import { GroupMembers } from "src/group-members/entities/group-member.entity";
 
 @Injectable()
 export class ScheduleMembersService {
@@ -43,7 +43,7 @@ export class ScheduleMembersService {
         groupId: groupId,
         userId: user.userId,
       },
-      select: ['userId', 'isVailed'],
+      select: ["userId", "isVailed"],
     });
 
     if (!isGroupMember) {
@@ -92,7 +92,7 @@ export class ScheduleMembersService {
   async findAllScheduleMembers(groupId: number, scheduleId: number) {
     const schedule = await this.schedulesRepository.findOne({
       where: { scheduleId, groupId },
-      relations: ['scheduleMembers', 'scheduleMembers.users'], // 필요하다면 사용자 정보도 같이 로드
+      relations: ["scheduleMembers", "scheduleMembers.users"], // 필요하다면 사용자 정보도 같이 로드
     });
 
     if (!schedule) {
@@ -118,7 +118,7 @@ export class ScheduleMembersService {
     });
 
     if (!schedule) {
-      throw new NotFoundException('존재하지 않는 스케쥴입니다.');
+      throw new NotFoundException("존재하지 않는 스케쥴입니다.");
     }
     // 스케줄이 있으면 => 등록된 멤버를 userId로 조회
     const findScheduleMember = await this.scheduleMembersRepository.findOne({
@@ -126,7 +126,7 @@ export class ScheduleMembersService {
     });
 
     if (!findScheduleMember) {
-      throw new NotFoundException('존재하지 않는 멤버입니다.');
+      throw new NotFoundException("존재하지 않는 멤버입니다.");
     }
     return findScheduleMember;
   }
@@ -163,7 +163,7 @@ export class ScheduleMembersService {
     });
     return {
       statusCode: 200,
-      message: '스케쥴 멤버 삭제에 성공했습니다.',
+      message: "스케쥴 멤버 삭제에 성공했습니다.",
     };
   }
 }

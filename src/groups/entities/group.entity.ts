@@ -30,10 +30,10 @@ export class Groups {
   @Column({ type: 'boolean', nullable: false, default: true })
   isPublic: boolean;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 
   @OneToMany(() => Schedules, (schedules) => schedules.groups, {

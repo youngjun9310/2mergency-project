@@ -231,7 +231,7 @@
                                                         <label class="col-sm-2 control-label">스케줄명</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" class="form-control" name="title"
-                                                                value={{ schedules.title }} />
+                                                                disabled="" value={{ schedules.title }} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -242,7 +242,7 @@
                                                         <label class="col-sm-2 control-label">스케줄내용</label>
                                                         <div class="col-sm-10">
                                                             <input type="text" class="form-control" name="content"
-                                                                value={{ schedules.content }} />
+                                                                disabled="" value={{ schedules.content }} />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -253,7 +253,18 @@
                                                         <label class="col-sm-2 control-label">스케줄일자</label>
                                                         <div class="col-sm-10">
                                                             <input type="date" class="form-control" name="scheduleDate"
-                                                                value={{ schedules.scheduleDate }}>
+                                                                disabled="" value={{ schedules.scheduleDate }}>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <div class="row">
+                                                        <label class="col-sm-2 control-label">스케줄생성일</label>
+                                                        <div class="col-sm-10">
+                                                            <input type="createdAt" class="form-control" name="scheduleDate"
+                                                                disabled="" value={{ schedules.createdAt }}>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { GroupMembers } from './entities/group-member.entity';
-import { Repository } from 'typeorm';
-import { Groups } from 'src/groups/entities/group.entity';
-import { UsersService } from 'src/users/users.service';
-import { Users } from 'src/users/entities/user.entity';
+import { Injectable, NotFoundException, BadRequestException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { GroupMembers } from "./entities/group-member.entity";
+import { Repository } from "typeorm";
+import { Groups } from "src/groups/entities/group.entity";
+import { UsersService } from "src/users/users.service";
+import { Users } from "src/users/entities/user.entity";
 
 @Injectable()
 export class GroupMembersService {
@@ -148,12 +148,12 @@ export class GroupMembersService {
     });
 
     if (!findGroup) {
-      throw new NotFoundException('존재하지 않는 그룹입니다.');
+      throw new NotFoundException("존재하지 않는 그룹입니다.");
     }
 
     const members = await this.groupMemberRepository.find({
       where: { groupId },
-      relations: ['users'],
+      relations: ["users"],
     });
     if (!members) {
       throw new NotFoundException(` ${findGroup.title} 그룹에 해당하는 멤버가 없습니다.`);
@@ -171,7 +171,7 @@ export class GroupMembersService {
         groups: { groupId },
         users: { userId },
       },
-      relations: ['groups', 'users'],
+      relations: ["groups", "users"],
     });
   }
 }
