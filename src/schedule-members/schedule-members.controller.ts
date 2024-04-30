@@ -9,17 +9,17 @@ import {
   HttpStatus,
   UseGuards,
   ParseIntPipe,
-} from '@nestjs/common';
-import { ScheduleMembersService } from './schedule-members.service';
-import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { MemberRoles } from 'src/group-members/decorator/memberRoles.decorator';
-import { MemberRole } from 'src/group-members/types/groupMemberRole.type';
-import { JWTAuthGuard } from 'src/auth/guard/jwt.guard';
-import { memberRolesGuard } from 'src/group-members/guard/members.guard';
+} from "@nestjs/common";
+import { ScheduleMembersService } from "./schedule-members.service";
+import { ApiBearerAuth, ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { MemberRoles } from "src/group-members/decorator/memberRoles.decorator";
+import { MemberRole } from "src/group-members/types/groupMemberRole.type";
+import { JWTAuthGuard } from "src/auth/guard/jwt.guard";
+import { memberRolesGuard } from "src/group-members/guard/members.guard";
 
 @UseGuards(JWTAuthGuard)
-@ApiTags('ScheduleMember')
-@Controller('/groups/:groupId/schedules')
+@ApiTags("ScheduleMember")
+@Controller("/groups/:groupId/schedules")
 export class ScheduleMembersController {
   constructor(private readonly scheduleMembersService: ScheduleMembersService) {}
 
@@ -29,15 +29,15 @@ export class ScheduleMembersController {
 
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Post(':scheduleId/members')
+  @Post(":scheduleId/members")
   @HttpCode(HttpStatus.CREATED)
-  @ApiOperation({ summary: '스케줄 멤버 등록 API', description: '스케줄에 멤버 등록 성공' })
+  @ApiOperation({ summary: "스케줄 멤버 등록 API", description: "스케줄에 멤버 등록 성공" })
   @ApiResponse({ status: 201, description: `성공적으로 스케줄에 멤버 등록이 완료되었습니다.` })
-  @ApiBearerAuth('access-token')
+  @ApiBearerAuth("access-token")
   async registerScheduleMember(
-    @Param('groupId', ParseIntPipe) groupId: number,
-    @Param('scheduleId', ParseIntPipe) scheduleId: number,
-    @Body('email') email: string,
+    @Param("groupId", ParseIntPipe) groupId: number,
+    @Param("scheduleId", ParseIntPipe) scheduleId: number,
+    @Body("email") email: string,
   ) {
     return await this.scheduleMembersService.registerScheduleMember(groupId, scheduleId, email);
   }
@@ -48,11 +48,11 @@ export class ScheduleMembersController {
 
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main, MemberRole.User)
-  @Get(':scheduleId/members')
-  @ApiOperation({ summary: '스케줄에 등록된 전체 멤버 조회 API', description: '스케줄에 등록된 멤버 전체 조회 성공' })
-  @ApiResponse({ status: 200, description: '성공적으로 스케줄에 등록된 멤버 전체 조회가 완료되었습니다.' })
-  @ApiBearerAuth('access-token')
-  async findAllMembers(@Param('groupId') groupId: number, @Param('scheduleId') scheduleId: number) {
+  @Get(":scheduleId/members")
+  @ApiOperation({ summary: "스케줄에 등록된 전체 멤버 조회 API", description: "스케줄에 등록된 멤버 전체 조회 성공" })
+  @ApiResponse({ status: 200, description: "성공적으로 스케줄에 등록된 멤버 전체 조회가 완료되었습니다." })
+  @ApiBearerAuth("access-token")
+  async findAllMembers(@Param("groupId") groupId: number, @Param("scheduleId") scheduleId: number) {
     return await this.scheduleMembersService.findAllScheduleMembers(groupId, scheduleId);
   }
 
@@ -62,15 +62,15 @@ export class ScheduleMembersController {
 
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Get(':scheduleId/members/:userId')
+  @Get(":scheduleId/members/:userId")
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: '스케줄에 등록된 멤버 상세 조회 API', description: '스케줄에 등록된 멤버 상세 조회 성공' })
-  @ApiResponse({ status: 200, description: '성공적으로 스케줄에 등록된 멤버 조회가 완료되었습니다.' })
-  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: "스케줄에 등록된 멤버 상세 조회 API", description: "스케줄에 등록된 멤버 상세 조회 성공" })
+  @ApiResponse({ status: 200, description: "성공적으로 스케줄에 등록된 멤버 조회가 완료되었습니다." })
+  @ApiBearerAuth("access-token")
   async findOneScheduleMembers(
-    @Param('groupId') groupId: number,
-    @Param('scheduleId') scheduleId: number,
-    @Param('userId') userId: number,
+    @Param("groupId") groupId: number,
+    @Param("scheduleId") scheduleId: number,
+    @Param("userId") userId: number,
   ) {
     return await this.scheduleMembersService.findOneScheduleMembers(groupId, scheduleId, userId);
   }
@@ -81,15 +81,15 @@ export class ScheduleMembersController {
 
   @UseGuards(memberRolesGuard)
   @MemberRoles(MemberRole.Admin, MemberRole.Main)
-  @Delete(':scheduleId/members')
+  @Delete(":scheduleId/members")
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: '스케줄에 등록된 멤버 삭제 API', description: '스케줄에 등록된 멤버 삭제 성공' })
-  @ApiResponse({ status: 204, description: '성공적으로 스케줄에 등록된 멤버를 삭제했습니다.' })
-  @ApiBearerAuth('access-token')
+  @ApiOperation({ summary: "스케줄에 등록된 멤버 삭제 API", description: "스케줄에 등록된 멤버 삭제 성공" })
+  @ApiResponse({ status: 204, description: "성공적으로 스케줄에 등록된 멤버를 삭제했습니다." })
+  @ApiBearerAuth("access-token")
   async deleteScheduleMembers(
-    @Param('groupId') groupId: number,
-    @Param('scheduleId') scheduleId: number,
-    @Body('email') email: string,
+    @Param("groupId") groupId: number,
+    @Param("scheduleId") scheduleId: number,
+    @Body("email") email: string,
   ) {
     return await this.scheduleMembersService.deleteScheduleMembers(groupId, scheduleId, email);
   }

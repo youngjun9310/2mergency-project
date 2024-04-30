@@ -198,6 +198,7 @@
                                                     <th class="disabled-sorting text-center info">No</th>
                                                     <th class="disabled-sorting text-center success">그룹명</th>
                                                     <th class="disabled-sorting text-center danger">카테고리</th>
+                                                    <th class="disabled-sorting text-center info">생성일</th>
                                                 </tr>
                                             </thead>
                                             <tfoot>
@@ -205,6 +206,7 @@
                                                     <th class="text-center">No</th>
                                                     <th class="text-center">GroupName</th>
                                                     <th class="text-center">Category</th>
+                                                    <th class="text-center">CreateDate</th>
                                                 </tr>
                                             </tfoot>
                                             <tbody>
@@ -214,6 +216,7 @@
                                                     <td class="text-center">{{ this.groupId }}</td>
                                                     <td class="text-center">{{ this.title }}</td>
                                                     <td class="text-center">{{ this.category }}</td>
+                                                    <td class="text-center">{{ this.createdAt }}</td>
                                                 </tr>
                                                 {{/each}}
                                             </tbody>

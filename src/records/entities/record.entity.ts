@@ -46,10 +46,10 @@ export class Records {
     @Column({ type : 'varchar', nullable : false})
     nickname : string;
 
-    @CreateDateColumn({ type: 'timestamp' })
+    @CreateDateColumn({ type: 'date' })
     createdAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamp' })
+    @UpdateDateColumn({ type: 'date' })
     updatedAt: Date;
 
 }

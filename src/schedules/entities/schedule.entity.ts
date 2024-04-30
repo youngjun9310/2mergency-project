@@ -32,10 +32,10 @@ export class Schedules {
   @Column({ type: 'date', nullable: false })
   scheduleDate: Date;
 
-  @CreateDateColumn({ type: 'timestamp' })
+  @CreateDateColumn({ type: 'date' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'date' })
   updatedAt: Date;
 
   @ManyToOne(() => Groups, (groups) => groups.schedules, {

@@ -255,8 +255,33 @@
                                                 <div class="row">
                                                     <label class="col-sm-2 control-label">스케줄카테고리</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="category"
-                                                            name="category" value={{schedules.category}} />
+                                                        <div class="form-check form-check-radio">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="category" placeholder="스케줄 카테고리"
+                                                                    value="walking" />
+                                                                <span class="form-check-sign"></span>
+                                                                산책
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-radio">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="category" placeholder="스케줄 카테고리"
+                                                                    id="exampleRadios2" value="running" />
+                                                                <span class="form-check-sign"></span>
+                                                                러닝
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check form-check-radio">
+                                                            <label class="form-check-label">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="category" placeholder="스케줄 카테고리"
+                                                                    value="hiking" />
+                                                                <span class="form-check-sign"></span>
+                                                                등산
+                                                            </label>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

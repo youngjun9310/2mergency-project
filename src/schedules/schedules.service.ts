@@ -1,11 +1,11 @@
-import { HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
-import { ScheduleDto } from './dto/create-schedule.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Schedules } from './entities/schedule.entity';
-import { Repository } from 'typeorm';
-import { Groups } from 'src/groups/entities/group.entity';
-import { GroupMembers } from 'src/group-members/entities/group-member.entity';
-import { ScheduleMembers } from 'src/schedule-members/entities/schedule-member.entity';
+import { HttpException, HttpStatus, Injectable, NotFoundException } from "@nestjs/common";
+import { ScheduleDto } from "./dto/create-schedule.dto";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Schedules } from "./entities/schedule.entity";
+import { Repository } from "typeorm";
+import { Groups } from "src/groups/entities/group.entity";
+import { GroupMembers } from "src/group-members/entities/group-member.entity";
+import { ScheduleMembers } from "src/schedule-members/entities/schedule-member.entity";
 
 @Injectable()
 export class SchedulesService {
@@ -25,7 +25,7 @@ export class SchedulesService {
     const { title, content, category, scheduleDate } = createScheduleDto;
 
     if (!userId) {
-      throw new HttpException('User not found', HttpStatus.UNAUTHORIZED);
+      throw new HttpException("User not found", HttpStatus.UNAUTHORIZED);
     }
 
     const group = await this.groupsRepository.findOne({
@@ -33,7 +33,7 @@ export class SchedulesService {
     });
 
     if (!group) {
-      throw new HttpException('그룹을 찾을 수 없습니다.', HttpStatus.NOT_FOUND);
+      throw new HttpException("그룹을 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
     }
 
     const newSchedule = await this.schedulesRepository.save({
@@ -52,7 +52,7 @@ export class SchedulesService {
       groupId,
     });
 
-    return { statusCode: 201, message: '스케쥴을 생성했습니다.' };
+    return { statusCode: 201, message: "스케쥴을 생성했습니다." };
   }
 
   // 스케쥴 전체 조회
@@ -61,8 +61,6 @@ export class SchedulesService {
     const allSchedule = await this.schedulesRepository.find({
       where: { groupId },
     });
-
-    console.log(allSchedule)
 
     if (allSchedule === null) {
       throw new NotFoundException("NotScheduleError");
@@ -124,7 +122,7 @@ export class SchedulesService {
 
     await this.schedulesRepository.update(scheduleId, changeScheduleDto);
 
-    return { statausCode: 201, message: '스케쥴을 수정하였습니다.' };
+    return { statausCode: 201, message: "스케쥴을 수정하였습니다." };
   }
 
   // 스케쥴 삭제
@@ -142,7 +140,7 @@ export class SchedulesService {
 
     return {
       statusCode: 201,
-      message: '스케쥴을 삭제했습니다.',
+      message: "스케쥴을 삭제했습니다.",
     };
   }
 }
