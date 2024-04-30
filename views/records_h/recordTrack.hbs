@@ -259,6 +259,7 @@
          if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				function(position) {
+                    $("#moveDistance").val(0); 
 					var lat = position.coords.latitude;
 					var lon = position.coords.longitude;
                     $("#startx").val(lon);
@@ -280,11 +281,17 @@
 				$("#nowy").val(lat); // 현재위치를 저장
                 var departurex = $("#departurex").val(); // 출발위치
 				var departurey = $("#departurey").val(); // 출발위치
-                console.log("현재위치", lon, lat, "이전위치", departurey, departurex);
-                var movePosition = distance(departurex, departurey, lat, lon);
+                console.log("현재위치", lon, lat, "이전위치", departurex, departurey);
+                var movePosition = distance(departurey, departurex, lat, lon);
+                console.log(typeof(movePosition), movePosition);
+                var moveDistance = $("#moveDistance").val();
+                moveDistance = Number(moveDistance);
+                console.log(typeof(moveDistance), moveDistance);
                 var moveDistance = moveDistance+movePosition;
-                $("#departurex").val(lat);
-				$("#departurey").val(lon);
+                $("#moveDistance").val(moveDistance);
+                $("#departurex").val(lon);
+				$("#departurey").val(lat);
+                console.log(typeof(moveDistance), moveDistance);
                 if(marker){
                     marker.setMap(null);
                 }
@@ -773,6 +780,9 @@
                     var longitude = position.coords.longitude; // 현재 위치의 경도
             var startx = $("#startx").val(latitude);
             var starty = $("#starty").val(longitude);
+
+            console.log("start lat : ", starty);
+            console.log("start long : ", startx);
             
             let one = prompt('원하는 주변 거리 범위를 입력해주세요.', 250);
             if(one !== 0 && one >= 250){
@@ -787,10 +797,16 @@
             const rlng = rlat / Math.cos(latitude * d2r);
 
             const theta = Math.PI * (Math.random() * 2);
-            const x = latitude + (rlat * Math.sin(theta));
-            const y = longitude + (rlng * Math.cos(theta));
+            const x = longitude + (rlat * Math.sin(theta));
+            const y = latitude + (rlng * Math.cos(theta));
             var endx = $("#endx").val(x);
             var endy = $("#endy").val(y);
+
+            console.log(x)
+            console.log(y)
+
+            console.log("끝 long : ", endx)
+            console.log("끝 lat : ", endy)
 
             if(startx === "" || starty === "" || endx === "" || endy === "") {
                 alert("정확한 주소를 입력하세요.");
@@ -819,6 +835,8 @@
                 var starty = $("#starty").val();
                 var endx = $("#endx").val();
                 var endy = $("#endy").val();
+                console.log(startx)
+                console.log(starty)
                 var startLatLng = new Tmapv2.LatLng(starty, startx);
                 var endLatLng = new Tmapv2.LatLng(endy, endx);
                 // 경유지 좌표 파라미터 생성
@@ -934,8 +952,8 @@
                 starty = $("#starty").val();
                 var endx = $("#endx").val();
                 var endy = $("#endy").val();
-                var startLatLng = new Tmapv2.LatLng(startx, starty);
-                var endLatLng = new Tmapv2.LatLng(endx, endy);
+                var startLatLng = new Tmapv2.LatLng(starty, startx);
+                var endLatLng = new Tmapv2.LatLng(endy, endx);
                 // 경유지 좌표 파라미터 생성
                 var viaPoints = [];
                 $(".waypoint_input").each(function(idx) {
@@ -977,7 +995,7 @@
                             reset();
                             // 시작마커설정
                             markerStart = new Tmapv2.Marker({
-                                position: new Tmapv2.LatLng(startx, starty),
+                                position: new Tmapv2.LatLng(starty, startx),
                                 // icon: "http://topopen.tmap.co.kr/imgs/start.png",
                                 iconHTML: `
                                 <div class='_t_marker' style="position:relative;" >
@@ -992,7 +1010,7 @@
                             });
                             // 도착마커설정
                             markerEnd = new Tmapv2.Marker({
-                                position: new Tmapv2.LatLng(endx, endy),
+                                position: new Tmapv2.LatLng(endy, endx),
                                 // icon: "http://topopen.tmap.co.kr/imgs/arrival.png",
                                 iconHTML: `
                                 <div class='_t_marker' style="position:relative;" >
