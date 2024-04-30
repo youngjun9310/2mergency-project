@@ -261,10 +261,10 @@
 				function(position) {
 					var lat = position.coords.latitude;
 					var lon = position.coords.longitude;
-                    $("#startx").val(position.coords.longitude);
-					$("#starty").val(position.coords.latitude);
-                    $("#departurex").val(position.coords.longitude);
-					$("#departurey").val(position.coords.latitude);
+                    $("#startx").val(lon);
+					$("#starty").val(lat);
+                    $("#departurex").val(lon);
+					$("#departurey").val(lat);
         })}
             var now = new Date(); // 초기 시간 설정
             var hours = now.getHours().toString().padStart(2, '0');
