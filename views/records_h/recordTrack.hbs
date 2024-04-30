@@ -306,10 +306,12 @@
         });
         $('#btnDistance').click(function() {
             var moveDistance = $("#moveDistance").val();
-            alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
+            var moveDistance = Math.round(moveDistance*1000);
+            alert(`${moveDistance}m 만큼 이동하였습니다.`);
         });
         $('#btnStop').click(function() {
             var moveDistance = $("#moveDistance").val();
+            var moveDistance = Math.round(moveDistance*1000);
             var timers = new Date();
             var endhours = timers.getHours().toString().padStart(2, '0');
             var endminutes = timers.getMinutes().toString().padStart(2, '0');
@@ -317,7 +319,7 @@
             var endformattedTime = endhours + ':' + endminutes + ':' + endseconds;
 
             navigator.geolocation.clearWatch(positionId);
-            alert(`${moveDistance*1000}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
+            alert(`${moveDistance}m 만큼 이동 하였으며, 위치정보 추적을 해제합니다.`);
 
             //데이터베이스에 distance저장.
             //재시작 혹은 이전페이지.
@@ -327,8 +329,8 @@
 				function(position) {
 					var lat = position.coords.latitude;
 					var lon = position.coords.longitude;
-                  $("#endy").val(position.coords.longitude);
-    			  $("#endx").val(position.coords.latitude);
+                  $("#endx").val(position.coords.longitude);
+    			  $("#endy").val(position.coords.latitude);
 
             startx = $("#startx").val();
             starty = $("#starty").val();
@@ -350,6 +352,7 @@
             };
             recordxhr.send(JSON.stringify({ startTime, endTime ,stackedDistance, startx, starty, endx, endy }));  
 
+            window.location.reload();
             })};
         });
     }
@@ -783,11 +786,8 @@
                 function(position) {
                     var latitude = position.coords.latitude; // 현재 위치의 위도
                     var longitude = position.coords.longitude; // 현재 위치의 경도
-            var startx = $("#startx").val(latitude);
-            var starty = $("#starty").val(longitude);
-
-            console.log("start lat : ", starty);
-            console.log("start long : ", startx);
+            var startx = $("#startx").val(longitude);
+            var starty = $("#starty").val(latitude);
             
             let one = prompt('원하는 주변 거리 범위를 입력해주세요.', 250);
             if(one !== 0 && one >= 250){
@@ -795,7 +795,7 @@
             const d2r = Math.PI / 180;
             const r2d = 180 / Math.PI;
 
-            const earth_rad = 6378000; // 지구 반지름 근사값
+            const earth_rad = 6378000; // 지구 반지름a 근사값
 
             let r = Math.random() * radius;
             const rlat = (r / earth_rad) * r2d;
@@ -806,12 +806,6 @@
             const y = latitude + (rlng * Math.cos(theta));
             var endx = $("#endx").val(x);
             var endy = $("#endy").val(y);
-
-            console.log(x)
-            console.log(y)
-
-            console.log("끝 long : ", endx)
-            console.log("끝 lat : ", endy)
 
             if(startx === "" || starty === "" || endx === "" || endy === "") {
                 alert("정확한 주소를 입력하세요.");
