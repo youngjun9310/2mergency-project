@@ -36,7 +36,7 @@ export class AuthController {
     try {
 
       //이메일 인증번호 전송
-      await this.mailService.usersendMail(signUpdto.email);
+      const gentoken = await this.mailService.usersendMail(signUpdto.email);
 
       //회원정보 DB 저장
       await this.authService.register(signUpdto, file);
