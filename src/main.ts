@@ -31,6 +31,6 @@ async function bootstrap() {
 
   await app.listen(3000);
   Logger.log('Swagger 주소 : http://localhost:3000/api');
-  Logger.log('html 주소 : http://localhost:3000');
+  Logger.log('서버 주소 : https://2mergency.com/');
 }
 bootstrap();

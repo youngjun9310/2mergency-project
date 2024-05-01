@@ -149,8 +149,8 @@ export class AuthController {
   }
 
   /** 로그아웃*/
-  @ApiOperation({ summary: "로그아웃 API", description: "로그아웃 성공" })
   @UseGuards(JWTAuthGuard)
+  @ApiOperation({ summary: "로그아웃 API", description: "로그아웃 성공" })
   @ApiBearerAuth("access-token")
   @Post("logout")
   @HttpCode(204)
@@ -162,7 +162,7 @@ export class AuthController {
 
   /** 이메일 가입수락*/
   @ApiOperation({
-    summary: "이메일 가입초대 API",
+    summary: "이메일 가입수락 API",
     description: "이메일 가입 토큰번호 전송",
   })
   @ApiResponse({ status: 200, description: "이메일 가입 수락에 성공하였습니다." })
