@@ -13,7 +13,7 @@ import { Response } from "express";
 export class RecordsController {
   constructor(private readonly recordsService: RecordsService) {}
 
-  // 레코드 생성
+  // 기록 생성
   @UseGuards(JWTAuthGuard)
   @ApiResponse({ description: "성공", status: 201 })
   @ApiOperation({
@@ -33,7 +33,7 @@ export class RecordsController {
       `);
   }
 
-  // 내 레코드 모든 목록 조회
+  // 내 기록 모든 목록 조회
   @UseGuards(JWTAuthGuard)
   @ApiResponse({ description: "성공", status: 200 })
   @ApiOperation({
@@ -48,7 +48,7 @@ export class RecordsController {
     res.status(200);
   }
 
-  // 레코드 모든 목록 조회
+  // 기록 모든 목록 조회
   @ApiResponse({ description: "성공", status: 200 })
   @ApiOperation({
     summary: "레코드 모든 목록 조회 API",
@@ -62,7 +62,7 @@ export class RecordsController {
     res.status(200);
   }
 
-  // 레코드 상세 목록 조회
+  // 기록 상세 목록 조회
   @UseGuards(JWTAuthGuard)
   @ApiResponse({ description: "성공", status: 200 })
   @ApiOperation({
@@ -77,7 +77,7 @@ export class RecordsController {
     res.status(200);
   }
 
-  // 레코드 삭제
+  // 기록 삭제
   @UseGuards(JWTAuthGuard)
   @ApiResponse({ description: "성공", status: 201 })
   @ApiOperation({
