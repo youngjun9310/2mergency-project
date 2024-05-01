@@ -194,11 +194,6 @@
           <input type="hidden" id="nowy" />
           <input type="hidden" id="endx" />
           <input type="hidden" id="endy" />
-          <input type="hidden" id="moveDistance"/>
-          <input type="hidden" id="departurex" /> 
-          <input type="hidden" id="departurey" /> 
-          <input type="hidden" id="arrivalx" /> 
-          <input type="hidden" id="arrivaly"/> 
         </div>
       </div>
       <script>
@@ -221,6 +216,7 @@
         var markerPoint = [];
         var markerArr = [], lineArr = [], labelArr = [];
         var nowPosition = [];
+        var moveDistance = 0;
         var testDistance = [0, 0, 0, 0, 0];
         var test = [];
         var testx = [];
@@ -305,11 +301,10 @@
 				});
         });
         $('#btnDistance').click(function() {
-            var moveDistance = $("#moveDistance").val();
             alert(`${moveDistance*1000}m 만큼 이동하였습니다.`);
         });
+
         $('#btnStop').click(function() {
-            var moveDistance = $("#moveDistance").val();
             var timers = new Date();
             var endhours = timers.getHours().toString().padStart(2, '0');
             var endminutes = timers.getMinutes().toString().padStart(2, '0');
