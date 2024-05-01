@@ -29,7 +29,7 @@ export class SchedulesController {
     @Param("groupId") groupId: number,
     @Res() res: Response,
   ) {
-    await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
+      await this.schedulesService.createSchedule(createScheduleDto, groupId, users.userId);
 
     res.status(201).send(`
       <script>
@@ -37,6 +37,7 @@ export class SchedulesController {
         window.location.href = '/groups/${groupId}/schedules/schedules_h/scheduleAll';
       </script>
     `);
+    
   }
 
   // 스케쥴 전체 조회
